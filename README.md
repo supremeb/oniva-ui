@@ -1,13 +1,13 @@
 # oniva-ui
 
-**Live demo: https://supremeb.github.io/oniva-ui/** · Built by [Oniva](https://www.oniva.ai) · [GitHub](https://github.com/supremeb/oniva-ui)
+**Live: https://design.oniva.ai** (mirror: https://supremeb.github.io/oniva-ui/) · Built by [Oniva](https://www.oniva.ai) · [GitHub](https://github.com/supremeb/oniva-ui)
 
 ![Landing, light](apps/docs/public/screenshots/landing-light.png)
 ![Landing hero, dark (live WebGPU shader bound to the accent tokens)](apps/docs/public/screenshots/landing-hero-dark.png)
 ![Landing showcase: prompt to dashboard, built from real components](apps/docs/public/screenshots/landing-showcase.png)
 
-| Dashboard template | AI chat template |
-| --- | --- |
+| Dashboard template                                                         | AI chat template                                                       |
+| -------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
 | ![Dashboard template](apps/docs/public/screenshots/template-dashboard.png) | ![AI chat template](apps/docs/public/screenshots/template-ai-chat.png) |
 
 React design system for dashboards and agent interfaces. Original, MIT-licensed, styled with

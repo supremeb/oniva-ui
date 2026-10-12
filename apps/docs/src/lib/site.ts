@@ -4,7 +4,7 @@ export const SITE = {
   name: 'oniva/ui',
   url: 'https://www.oniva.ai',
   github: 'https://github.com/supremeb/oniva-ui',
-  live: 'https://supremeb.github.io/oniva-ui/',
+  live: 'https://design.oniva.ai/',
 };
 
 const countBy = (cat: string) => demoModules.filter((m) => m.meta.category === cat).length;
