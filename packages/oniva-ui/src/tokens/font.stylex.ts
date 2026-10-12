@@ -1,0 +1,45 @@
+import * as stylex from '@stylexjs/stylex';
+
+export const font = stylex.defineVars({
+  sans: "'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif",
+  mono: "'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace",
+
+  size11: '11px',
+  size12: '12px',
+  size13: '13px',
+  size14: '14px',
+  size16: '16px',
+  size18: '18px',
+  size20: '20px',
+  size24: '24px',
+  size32: '32px',
+  size40: '40px',
+  size48: '48px',
+  size56: '56px',
+  size64: '64px',
+  size72: '72px',
+
+  lh11: '15px',
+  lh12: '16px',
+  lh13: '18px',
+  lh14: '20px',
+  lh16: '22px',
+  lh18: '24px',
+  lh20: '26px',
+  lh24: '34px',
+  lh32: '44px',
+  lh40: '54px',
+  lh48: '64px',
+  lh56: '72px',
+  lh64: '80px',
+  lh72: '84px',
+
+  weightRegular: '400',
+  weightMedium: '500',
+  weightSemibold: '600',
+  weightBold: '700',
+
+  trackCaption: '0.15px',
+  trackLabel: '0.3px',
+  trackHero: '-0.02em',
+});
