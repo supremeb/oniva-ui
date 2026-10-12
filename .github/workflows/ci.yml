@@ -28,14 +28,21 @@ jobs:
       - run: npm run build
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
-      - run: npm run e2e
+      - name: e2e (base /, reuses the docs build from `npm run build`)
+        run: npm run e2e
+        env:
+          E2E_REUSE_BUILD: '1'
+      - name: Rebuild docs at GitHub Pages base path
+        run: npm run build -w @oniva-ui/docs
+        env:
+          BASE_PATH: /oniva-ui/
       - name: e2e at GitHub Pages base path
         run: npm run e2e
         env:
           BASE_PATH: /oniva-ui/
           E2E_REUSE_BUILD: '1'
       - uses: actions/upload-artifact@v4
-        if: failure()
+        if: always()
         with:
           name: playwright-report
           path: |

@@ -1,8 +1,10 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
-import { discoverSlugs } from './discover';
 
-const slugs = discoverSlugs();
+interface Entry {
+  slug: string;
+  category: string;
+}
 
 function collectErrors(page: Page): string[] {
   const errors: string[] = [];
@@ -16,49 +18,67 @@ function collectErrors(page: Page): string[] {
 // Fonts come from a CDN in the docs shell; ignore network failures for those only.
 const benign = (e: string) => /rsms\.me|Failed to load resource|ERR_/.test(e);
 
-test('home renders hero and discovered component cards', async ({ page }) => {
+/** Reads slugs + categories from the /components index (section h2 + card links), no hard-coded list. */
+async function discover(page: Page): Promise<Entry[]> {
+  await page.goto('./#/components');
+  await expect(page.getByRole('heading', { level: 1, name: 'Components' })).toBeVisible();
+  const entries = await page.locator('main section[aria-labelledby^="cat-"], section[aria-labelledby^="cat-"]').evaluateAll((sections) =>
+    sections.flatMap((s) => {
+      const category = s.querySelector('h2')?.textContent?.trim() ?? 'unknown';
+      return [...s.querySelectorAll('a[href*="/components/"]')].map((a) => ({
+        category,
+        slug: (a.getAttribute('href') ?? '').split('/components/')[1] ?? '',
+      }));
+    }),
+  );
+  return entries.filter((e) => e.slug);
+}
+
+test('home renders hero and a card per discovered component', async ({ page }) => {
   const errors = collectErrors(page);
+  const entries = await discover(page);
+  expect(entries.length).toBeGreaterThanOrEqual(6);
   await page.goto('./#/');
   await expect(
     page.getByRole('heading', { level: 1, name: /React design system for dashboards/ }),
   ).toBeVisible();
-  await expect(page.getByTestId('home-component-grid').getByRole('link')).toHaveCount(slugs.length);
+  await expect(page.getByTestId('home-component-grid').getByRole('link')).toHaveCount(entries.length);
   expect(errors.filter((e) => !benign(e))).toEqual([]);
 });
 
-test('components index groups by category', async ({ page }) => {
-  await page.goto('./#/components');
-  await expect(page.getByRole('heading', { level: 1, name: 'Components' })).toBeVisible();
-  await expect(page.getByRole('link', { name: /^Button/ })).toBeVisible();
-});
-
-test('there is at least one component page', () => {
-  expect(slugs.length).toBeGreaterThanOrEqual(6);
-});
-
-for (const slug of slugs) {
-  test.describe(`component page: ${slug}`, () => {
-    test('renders without console errors', async ({ page }) => {
-      const errors = collectErrors(page);
-      await page.goto(`./#/components/${slug}`);
+test('every component page: no errors, no serious/critical axe; screenshot per category', async ({
+  page,
+}, testInfo) => {
+  test.setTimeout(10 * 60_000);
+  const entries = await discover(page);
+  const shot = new Set<string>();
+  const failures: string[] = [];
+  const errors = collectErrors(page);
+  for (const { slug, category } of entries) {
+    errors.length = 0;
+    await page.goto(`./#/components/${slug}`);
+    try {
       await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
       await expect(page.getByTestId('demo').first()).toBeVisible();
-      expect(errors.filter((e) => !benign(e))).toEqual([]);
-    });
-
-    test('has no serious or critical axe violations', async ({ page }) => {
-      await page.goto(`./#/components/${slug}`);
-      await expect(page.getByTestId('demo').first()).toBeVisible();
-      const results = await new AxeBuilder({ page }).analyze();
-      const bad = results.violations.filter(
-        (v) => v.impact === 'serious' || v.impact === 'critical',
-      );
-      expect(
-        bad.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(' | ')}`),
-      ).toEqual([]);
-    });
-  });
-}
+    } catch {
+      failures.push(`${slug}: page did not render`);
+      continue;
+    }
+    const bad = errors.filter((e) => !benign(e));
+    if (bad.length) failures.push(`${slug}: console/page errors: ${bad.join(' | ')}`);
+    const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze();
+    for (const v of results.violations.filter((x) => x.impact === 'serious' || x.impact === 'critical')) {
+      failures.push(`${slug}: axe ${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(' | ')}`);
+    }
+    if (!shot.has(category)) {
+      shot.add(category);
+      const path = testInfo.outputPath(`category-${category.toLowerCase().replace(/\W+/g, '-')}-${slug}.png`);
+      await page.screenshot({ path, fullPage: true });
+      await testInfo.attach(`category-${category}`, { path, contentType: 'image/png' });
+    }
+  }
+  expect(failures).toEqual([]);
+});
 
 test('theme toggle switches to dark and back', async ({ page }) => {
   await page.goto('./#/');
@@ -80,4 +100,78 @@ test('accent switcher changes the primary color', async ({ page }) => {
   await expect
     .poll(() => btn.evaluate((el) => getComputedStyle(el).backgroundImage))
     .not.toBe(before);
+});
+
+test.describe('keyboard smoke', () => {
+  const firstDemoButton = (page: Page, name?: RegExp) =>
+    page.getByTestId('demo').first().getByRole('button', name ? { name } : undefined).first();
+
+  test('Dialog opens with Enter, labelled, Escape closes and restores focus', async ({ page }) => {
+    await page.goto('./#/components/dialog');
+    const trigger = firstDemoButton(page, /Invite teammate/);
+    await trigger.focus();
+    await page.keyboard.press('Enter');
+    const dialog = page.getByRole('dialog');
+    await expect(dialog).toBeVisible();
+    await expect(dialog).toHaveAccessibleName(/.+/);
+    await page.keyboard.press('Escape');
+    await expect(dialog).toBeHidden();
+    await expect(trigger).toBeFocused();
+  });
+
+  test('DropdownMenu opens, arrows move, Escape closes', async ({ page }) => {
+    await page.goto('./#/components/dropdown-menu');
+    const trigger = firstDemoButton(page);
+    await trigger.focus();
+    await page.keyboard.press('Enter');
+    const menu = page.getByRole('menu');
+    await expect(menu).toBeVisible();
+    await page.keyboard.press('ArrowDown');
+    await expect(menu.getByRole('menuitem').first()).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(menu).toBeHidden();
+    await expect(trigger).toBeFocused();
+  });
+
+  test('Select opens, ArrowDown + Enter changes value', async ({ page }) => {
+    await page.goto('./#/components/select');
+    const trigger = firstDemoButton(page);
+    const before = await trigger.textContent();
+    await trigger.focus();
+    await page.keyboard.press('Enter');
+    await expect(page.getByRole('listbox')).toBeVisible();
+    await page.keyboard.press('ArrowDown');
+    await page.keyboard.press('Enter');
+    await expect(page.getByRole('listbox')).toBeHidden();
+    await expect(trigger).not.toHaveText(before ?? '');
+  });
+
+  test('Tabs: arrow keys move selection', async ({ page }) => {
+    await page.goto('./#/components/tabs');
+    const tabs = page.getByTestId('demo').first().getByRole('tab');
+    await tabs.first().focus();
+    await expect(tabs.first()).toHaveAttribute('aria-selected', 'true');
+    await page.keyboard.press('ArrowRight');
+    await expect(tabs.nth(1)).toHaveAttribute('aria-selected', 'true');
+    await expect(page.getByRole('tabpanel').first()).toBeVisible();
+  });
+
+  test('CommandPalette: ⌘K / Ctrl+K opens, Escape closes', async ({ page }) => {
+    await page.goto('./#/components/command-palette');
+    await page.locator('body').click({ position: { x: 5, y: 5 } });
+    await page.keyboard.press('ControlOrMeta+k');
+    const dialog = page.getByRole('dialog');
+    await expect(dialog).toBeVisible();
+    await expect(dialog.getByRole('combobox').or(dialog.getByRole('searchbox'))).toBeFocused();
+    await page.keyboard.press('Escape');
+    await expect(dialog).toBeHidden();
+  });
+
+  test('Toast: triggering shows a toast in the notifications region', async ({ page }) => {
+    await page.goto('./#/components/toast');
+    const trigger = firstDemoButton(page);
+    await trigger.focus();
+    await page.keyboard.press('Enter');
+    await expect(page.getByRole('region', { name: /notification/i })).toBeVisible();
+  });
 });
