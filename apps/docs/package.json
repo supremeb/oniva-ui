@@ -16,7 +16,8 @@
     "react": "^19.2.0",
     "react-aria-components": "~1.22.1",
     "react-dom": "^19.2.0",
-    "react-router-dom": "^7.18.4"
+    "react-router-dom": "^7.18.4",
+    "shaders": "^4.0.4"
   },
   "devDependencies": {
     "@stylexjs/unplugin": "0.19.1",

@@ -52,6 +52,9 @@ export function App() {
   const [theme, setTheme] = usePersisted<ThemeMode>('oniva-theme', 'light', THEMES);
   const [accent, setAccent] = usePersisted<AccentName>('oniva-accent', 'blue', ACCENTS);
   const { pathname } = useLocation();
+  const isDark =
+    theme === 'dark' ||
+    (theme === 'system' && typeof window !== 'undefined' && !!window.matchMedia?.('(prefers-color-scheme: dark)').matches);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -69,7 +72,13 @@ export function App() {
           path="/"
           element={
             <main id="main">
-              <Home />
+              <Home
+                theme={theme}
+                accent={accent}
+                isDark={isDark}
+                onAccentChange={setAccent}
+                onThemeChange={setTheme}
+              />
             </main>
           }
         />

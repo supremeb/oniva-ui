@@ -3,7 +3,8 @@
 **Live demo: https://supremeb.github.io/oniva-ui/** · Built by [Oniva](https://www.oniva.ai) · [GitHub](https://github.com/supremeb/oniva-ui)
 
 ![Landing, light](apps/docs/public/screenshots/landing-light.png)
-![Landing, dark](apps/docs/public/screenshots/landing-dark.png)
+![Landing hero, dark (live WebGPU shader bound to the accent tokens)](apps/docs/public/screenshots/landing-hero-dark.png)
+![Landing showcase: prompt to dashboard, built from real components](apps/docs/public/screenshots/landing-showcase.png)
 
 | Dashboard template | AI chat template |
 | --- | --- |
