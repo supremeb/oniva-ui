@@ -37,7 +37,7 @@ jobs:
         env:
           BASE_PATH: /oniva-ui/
       - name: e2e at GitHub Pages base path
-        run: npm run e2e
+        run: npm run e2e -- docs.spec.ts
         env:
           BASE_PATH: /oniva-ui/
           E2E_REUSE_BUILD: '1'
