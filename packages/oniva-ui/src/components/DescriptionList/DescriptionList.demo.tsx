@@ -4,7 +4,7 @@ import { DescriptionItem, DescriptionList } from './DescriptionList';
 
 const demo: DemoModule = {
   meta: {
-    title: 'Description List',
+    title: 'Description list',
     slug: 'description-list',
     category: 'Data display',
     description:

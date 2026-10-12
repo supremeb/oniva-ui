@@ -18,8 +18,8 @@ import { ChartTooltip, type ChartTooltipRow } from '../ChartTooltip/ChartTooltip
 const styles = stylex.create({
   root: {
     boxSizing: 'border-box',
-    color: colors.text,
-    fontFamily: font.sans,
+    color: colors['--oniva-color-text'],
+    fontFamily: font['--oniva-font-sans'],
     position: 'relative',
     width: '100%',
   },
@@ -46,6 +46,8 @@ export interface TooltipContent {
 /** Spread onto an SVG element to make it a hover/focus target that shows a tooltip. */
 export interface TipBind {
   tabIndex: 0;
+  role: 'graphics-symbol';
+  'aria-roledescription': 'data point';
   'aria-label'?: string;
   onPointerMove: (e: PointerEvent<SVGElement>) => void;
   onPointerLeave: () => void;
@@ -111,6 +113,8 @@ export function ChartFrame({
   const bind = useCallback(
     (data: TooltipContent | null, ariaLabel?: string): TipBind => ({
       tabIndex: 0,
+      role: 'graphics-symbol',
+      'aria-roledescription': 'data point',
       'aria-label': ariaLabel,
       onPointerMove: (e) => at(e.clientX, e.clientY, data),
       onPointerLeave: () => setTip(null),
@@ -136,7 +140,8 @@ export function ChartFrame({
       style={{ ...(sx.style as object), height }}
     >
       <svg
-        role="img"
+        role="group"
+        aria-roledescription="chart"
         aria-label={label}
         width={width}
         height={height}

@@ -24,7 +24,9 @@ describe('InputGroup', () => {
         isInvalid
         errorMessage="Required"
         isDisabled
-        ref={(n) => { el = n; }}
+        ref={(n) => {
+          el = n;
+        }}
       />,
     );
     expect(screen.getByLabelText('Amount')).toBeDisabled();

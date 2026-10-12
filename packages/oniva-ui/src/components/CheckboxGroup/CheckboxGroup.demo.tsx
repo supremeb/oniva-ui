@@ -4,7 +4,7 @@ import { CheckboxGroup } from './CheckboxGroup';
 
 const demo: DemoModule = {
   meta: {
-    title: 'CheckboxGroup',
+    title: 'Checkbox group',
     slug: 'checkbox-group',
     category: 'Forms',
     description: 'Labelled group of checkboxes with shared value, validation and orientation.',
@@ -18,7 +18,11 @@ const demo: DemoModule = {
   <Checkbox value="sms">SMS</Checkbox>
 </CheckboxGroup>`,
       Component: () => (
-        <CheckboxGroup label="Notify me via" description="You can change this anytime." defaultValue={['email']}>
+        <CheckboxGroup
+          label="Notify me via"
+          description="You can change this anytime."
+          defaultValue={['email']}
+        >
           <Checkbox value="email">Email</Checkbox>
           <Checkbox value="slack">Slack</Checkbox>
           <Checkbox value="sms">SMS</Checkbox>

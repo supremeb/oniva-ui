@@ -1,4 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
+import { media } from '../../tokens/media.stylex';
 import {
   Popover as AriaPopover,
   PreviewTrigger,
@@ -24,32 +25,32 @@ const popOut = stylex.keyframes({
 
 const styles = stylex.create({
   card: {
-    backgroundColor: colors.surface,
-    borderColor: colors.border,
-    borderRadius: radius.xl,
+    backgroundColor: colors['--oniva-color-surface'],
+    borderColor: colors['--oniva-color-border'],
+    borderRadius: radius['--oniva-radius-xl'],
     borderStyle: 'solid',
     borderWidth: 1,
-    boxShadow: shadow.dropdown,
+    boxShadow: shadow['--oniva-shadow-dropdown'],
     boxSizing: 'border-box',
-    color: colors.text,
-    fontFamily: font.sans,
-    fontSize: font.size14,
-    lineHeight: font.lh14,
+    color: colors['--oniva-color-text'],
+    fontFamily: font['--oniva-font-sans'],
+    fontSize: font['--oniva-font-size-14'],
+    lineHeight: font['--oniva-font-lh-14'],
     outline: 'none',
     padding: 16,
     width: 280,
   },
   entering: {
-    animationDuration: motion.durBase,
+    animationDuration: motion['--oniva-motion-dur-base'],
     animationFillMode: 'both',
-    animationName: { default: popIn, '@media (prefers-reduced-motion: reduce)': 'none' },
-    animationTimingFunction: motion.easeOut,
+    animationName: { default: popIn, [media.reducedMotion]: 'none' },
+    animationTimingFunction: motion['--oniva-motion-ease-out'],
   },
   exiting: {
-    animationDuration: motion.durFast,
+    animationDuration: motion['--oniva-motion-dur-fast'],
     animationFillMode: 'both',
-    animationName: { default: popOut, '@media (prefers-reduced-motion: reduce)': 'none' },
-    animationTimingFunction: motion.easeIn,
+    animationName: { default: popOut, [media.reducedMotion]: 'none' },
+    animationTimingFunction: motion['--oniva-motion-ease-in'],
   },
 });
 

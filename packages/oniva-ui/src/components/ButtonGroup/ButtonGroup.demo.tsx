@@ -6,7 +6,7 @@ import { ButtonGroup } from './ButtonGroup';
 
 const demo: DemoModule = {
   meta: {
-    title: 'ButtonGroup',
+    title: 'Button group',
     slug: 'button-group',
     category: 'Actions',
     description: 'Attach related buttons into a single cluster with shared borders.',
@@ -37,7 +37,9 @@ const demo: DemoModule = {
         <div style={{ display: 'grid', gap: 16, justifyItems: 'start' }}>
           <ButtonGroup aria-label="Publish">
             <Button>Publish report</Button>
-            <IconButton aria-label="More options" variant="primary"><ChevronDown size={16} /></IconButton>
+            <IconButton aria-label="More options" variant="primary">
+              <ChevronDown size={16} />
+            </IconButton>
           </ButtonGroup>
           <ButtonGroup aria-label="Stacked" orientation="vertical">
             <Button variant="secondary">Day</Button>

@@ -7,17 +7,21 @@ import { CodeBlock } from '../components/CodeBlock';
 import { getDemo } from '../demos';
 
 const styles = stylex.create({
-  crumb: { color: colors.textMuted, fontSize: font.size13, textDecoration: 'none' },
+  crumb: {
+    color: colors['--oniva-color-text-muted'],
+    fontSize: font['--oniva-font-size-13'],
+    textDecoration: 'none',
+  },
   h1: {
-    fontSize: font.size32,
-    fontWeight: font.weightMedium,
-    letterSpacing: font.trackHero,
+    fontSize: font['--oniva-font-size-32'],
+    fontWeight: font['--oniva-font-weight-medium'],
+    letterSpacing: font['--oniva-font-track-hero'],
     margin: '8px 0',
   },
   lead: {
-    color: colors.textMuted,
-    fontSize: font.size16,
-    lineHeight: font.lh16,
+    color: colors['--oniva-color-text-muted'],
+    fontSize: font['--oniva-font-size-16'],
+    lineHeight: font['--oniva-font-lh-16'],
     margin: '0 0 24px',
     maxWidth: 640,
   },

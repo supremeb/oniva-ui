@@ -12,6 +12,8 @@ import type { ReactNode, Ref } from 'react';
 import { cx, ff } from '../../internal/forms-field';
 
 const styles = stylex.create({
+  footer: { display: 'flex', gap: 8, justifyContent: 'space-between' },
+  footerText: { display: 'flex', flexDirection: 'column', gap: 6 },
   area: {
     alignItems: 'stretch',
     height: 'auto',
@@ -23,7 +25,10 @@ const styles = stylex.create({
   counter: { alignSelf: 'flex-end' },
 });
 
-export interface TextareaProps extends Omit<AriaTextFieldProps, 'className' | 'style' | 'children'> {
+export interface TextareaProps extends Omit<
+  AriaTextFieldProps,
+  'className' | 'style' | 'children'
+> {
   label?: ReactNode;
   description?: ReactNode;
   errorMessage?: string | ((v: ValidationResult) => string);
@@ -75,8 +80,8 @@ export function Textarea({
               )}
             />
           </div>
-          <div style={{ display: 'flex', gap: 8, justifyContent: 'space-between' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+          <div {...stylex.props(styles.footer)}>
+            <div {...stylex.props(styles.footerText)}>
               {description != null && (
                 <Text slot="description" {...stylex.props(ff.description)}>
                   {description}

@@ -16,7 +16,10 @@ import { Button } from '../components/Button';
 const SOURCES = [
   { title: 'SaaS growth benchmarks, Q3 2026', url: 'https://www.bvp.com/atlas/q3-2026-benchmarks' },
   { title: 'Net revenue retention by segment', url: 'https://www.saastr.com/nrr-by-segment' },
-  { title: 'Q3 earnings roundup: software', url: 'https://www.reuters.com/markets/software-q3-2026' },
+  {
+    title: 'Q3 earnings roundup: software',
+    url: 'https://www.reuters.com/markets/software-q3-2026',
+  },
 ];
 
 const ANSWER = `## Q3 2026 revenue: $4.82M (+14.2% QoQ)
@@ -62,7 +65,20 @@ function statuses(phase: number): TaskItem[] {
     'Compare against plan and Q2',
     'Write the summary',
   ];
-  const doneCount = phase <= 1 ? 0 : phase === 2 ? 0 : phase === 3 ? 2 : phase === 4 ? 2 : phase === 5 ? 3 : phase === 6 ? 4 : 5;
+  const doneCount =
+    phase <= 1
+      ? 0
+      : phase === 2
+        ? 0
+        : phase === 3
+          ? 2
+          : phase === 4
+            ? 2
+            : phase === 5
+              ? 3
+              : phase === 6
+                ? 4
+                : 5;
   return labels.map((label, i) => ({
     id: String(i),
     label,
@@ -87,8 +103,24 @@ function Playback({ height, onReplay }: { height: number; onReplay: () => void }
   const working = !(phase >= 7 && streamDone);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 12, height, width: '100%', maxWidth: 760 }}>
-      <div style={{ flex: 1, minHeight: 0, border: '1px solid var(--oniva-border, #ebebeb)', borderRadius: 16 }}>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 12,
+        height,
+        width: '100%',
+        maxWidth: 760,
+      }}
+    >
+      <div
+        style={{
+          flex: 1,
+          minHeight: 0,
+          border: '1px solid var(--oniva-border, #ebebeb)',
+          borderRadius: 16,
+        }}
+      >
         <ChatContainer>
           <Message role="user" name="Bala" timestamp="10:42 AM">
             Analyze Q3 revenue by segment and compare it to industry benchmarks.
@@ -121,7 +153,14 @@ function Playback({ height, onReplay }: { height: number; onReplay: () => void }
                         resultCount: phase >= 5 ? 8 : undefined,
                       },
                       ...(phase >= 5
-                        ? [{ id: '2', query: 'net revenue retention median enterprise SaaS', status: phase >= 6 ? ('done' as const) : ('searching' as const), resultCount: phase >= 6 ? 6 : undefined }]
+                        ? [
+                            {
+                              id: '2',
+                              query: 'net revenue retention median enterprise SaaS',
+                              status: phase >= 6 ? ('done' as const) : ('searching' as const),
+                              resultCount: phase >= 6 ? 6 : undefined,
+                            },
+                          ]
                         : []),
                     ]}
                     sources={phase >= 6 ? SOURCES : []}

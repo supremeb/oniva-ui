@@ -11,29 +11,44 @@ import { mergeSx } from '../../internal/sx';
 const styles = stylex.create({
   base: {
     alignItems: 'center',
-    borderRadius: radius.lg,
+    borderRadius: radius['--oniva-radius-lg'],
     boxSizing: 'border-box',
     display: 'flex',
-    fontFamily: font.sans,
-    fontSize: font.size13,
-    fontWeight: font.weightMedium,
+    fontFamily: font['--oniva-font-sans'],
+    fontSize: font['--oniva-font-size-13'],
+    fontWeight: font['--oniva-font-weight-medium'],
     gap: 10,
-    lineHeight: font.lh13,
+    lineHeight: font['--oniva-font-lh-13'],
     paddingBlock: 8,
     paddingInline: 12,
   },
-  info: { backgroundColor: colors.infoBg, color: colors.infoFg },
-  success: { backgroundColor: colors.successBg, color: colors.successFg },
-  warning: { backgroundColor: colors.warningBg, color: colors.warningFg },
-  danger: { backgroundColor: colors.dangerBg, color: colors.dangerFg },
-  neutral: { backgroundColor: colors.surfaceTertiary, color: colors.textOnTertiary },
+  info: {
+    backgroundColor: colors['--oniva-color-info-bg'],
+    color: colors['--oniva-color-info-fg'],
+  },
+  success: {
+    backgroundColor: colors['--oniva-color-success-bg'],
+    color: colors['--oniva-color-success-fg'],
+  },
+  warning: {
+    backgroundColor: colors['--oniva-color-warning-bg'],
+    color: colors['--oniva-color-warning-fg'],
+  },
+  danger: {
+    backgroundColor: colors['--oniva-color-danger-bg'],
+    color: colors['--oniva-color-danger-fg'],
+  },
+  neutral: {
+    backgroundColor: colors['--oniva-color-surface-tertiary'],
+    color: colors['--oniva-color-text-on-tertiary'],
+  },
   msg: { flexGrow: 1, minWidth: 0 },
   action: { flexShrink: 0 },
   close: {
     alignItems: 'center',
     appearance: 'none',
     backgroundColor: 'transparent',
-    borderRadius: radius.sm,
+    borderRadius: radius['--oniva-radius-sm'],
     borderWidth: 0,
     color: 'inherit',
     cursor: 'pointer',
@@ -46,7 +61,7 @@ const styles = stylex.create({
     outlineOffset: 1,
     outlineStyle: { default: 'none', ':focus-visible': 'solid' },
     outlineWidth: 2,
-    transitionDuration: motion.durBase,
+    transitionDuration: motion['--oniva-motion-dur-base'],
     transitionProperty: 'opacity',
     width: 22,
   },
@@ -54,14 +69,14 @@ const styles = stylex.create({
     appearance: 'none',
     backgroundColor: 'transparent',
     borderColor: 'currentColor',
-    borderRadius: radius.md,
+    borderRadius: radius['--oniva-radius-md'],
     borderStyle: 'solid',
     borderWidth: 1,
     color: 'inherit',
     cursor: 'pointer',
-    fontFamily: font.sans,
-    fontSize: font.size12,
-    fontWeight: font.weightSemibold,
+    fontFamily: font['--oniva-font-sans'],
+    fontSize: font['--oniva-font-size-12'],
+    fontWeight: font['--oniva-font-weight-semibold'],
     height: 24,
     outlineColor: 'currentColor',
     outlineOffset: 1,
@@ -72,7 +87,13 @@ const styles = stylex.create({
 });
 
 export type SystemBannerTone = 'info' | 'success' | 'warning' | 'danger' | 'neutral';
-const icons = { info: Info, success: CheckCircle2, warning: AlertTriangle, danger: OctagonAlert, neutral: Info } as const;
+const icons = {
+  info: Info,
+  success: CheckCircle2,
+  warning: AlertTriangle,
+  danger: OctagonAlert,
+  neutral: Info,
+} as const;
 
 export interface SystemBannerProps extends Omit<HTMLAttributes<HTMLDivElement>, 'style'> {
   tone?: SystemBannerTone;
@@ -100,16 +121,28 @@ export function SystemBanner({
   const Icon = icons[tone];
   const sx = stylex.props(styles.base, styles[tone], xstyle);
   return (
-    <div role={tone === 'danger' || tone === 'warning' ? 'alert' : 'status'} {...rest} ref={ref} {...mergeSx(sx, className)}>
+    <div
+      role={tone === 'danger' || tone === 'warning' ? 'alert' : 'status'}
+      {...rest}
+      ref={ref}
+      {...mergeSx(sx, className)}
+    >
       <Icon size={16} aria-hidden="true" style={{ flexShrink: 0 }} />
       <span {...stylex.props(styles.msg)}>{children}</span>
       {actionLabel && (
-        <AriaButton onPress={onAction} className={() => stylex.props(styles.actionBtn, styles.action).className ?? ''}>
+        <AriaButton
+          onPress={onAction}
+          className={() => stylex.props(styles.actionBtn, styles.action).className ?? ''}
+        >
           {actionLabel}
         </AriaButton>
       )}
       {onDismiss && (
-        <AriaButton aria-label="Dismiss" onPress={onDismiss} className={() => stylex.props(styles.close).className ?? ''}>
+        <AriaButton
+          aria-label="Dismiss"
+          onPress={onDismiss}
+          className={() => stylex.props(styles.close).className ?? ''}
+        >
           <X size={14} aria-hidden="true" />
         </AriaButton>
       )}

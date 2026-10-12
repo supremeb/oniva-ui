@@ -1,14 +1,21 @@
 import type { DemoModule } from '../../internal/demo';
 import { SearchField } from './SearchField';
 
-const col = { display: 'flex', flexDirection: 'column', gap: 16, width: '100%', maxWidth: 340 } as const;
+const col = {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 16,
+  width: '100%',
+  maxWidth: 340,
+} as const;
 
 const demo: DemoModule = {
   meta: {
-    title: 'SearchField',
+    title: 'Search field',
     slug: 'search-field',
     category: 'Forms',
-    description: 'Search input with leading icon, clear button and an optional keyboard shortcut hint.',
+    description:
+      'Search input with leading icon, clear button and an optional keyboard shortcut hint.',
   },
   demos: [
     {
@@ -27,7 +34,12 @@ const demo: DemoModule = {
       Component: () => (
         <div style={col}>
           <SearchField size="sm" aria-label="Small" defaultValue="Acme Corp" shortcut={null} />
-          <SearchField size="lg" aria-label="Large" shortcut="/" placeholder="Filter transactions" />
+          <SearchField
+            size="lg"
+            aria-label="Large"
+            shortcut="/"
+            placeholder="Filter transactions"
+          />
         </div>
       ),
     },

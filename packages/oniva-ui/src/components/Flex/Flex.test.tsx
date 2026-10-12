@@ -25,7 +25,15 @@ describe('Flex', () => {
   });
   it('forwards ref', () => {
     let el: HTMLElement | null = null;
-    render(<Flex ref={(n) => { el = n; }}>x</Flex>);
+    render(
+      <Flex
+        ref={(n) => {
+          el = n;
+        }}
+      >
+        x
+      </Flex>,
+    );
     expect(el).toBeInstanceOf(HTMLElement);
   });
 });

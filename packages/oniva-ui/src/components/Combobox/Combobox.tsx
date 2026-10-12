@@ -27,8 +27,10 @@ export type ComboboxItemProps = FormsItemProps;
 export const ComboboxItem = FormsItem;
 export const ComboboxSection = FormsSection;
 
-export interface ComboboxProps<T extends object>
-  extends Omit<AriaComboBoxProps<T>, 'className' | 'style' | 'children'> {
+export interface ComboboxProps<T extends object> extends Omit<
+  AriaComboBoxProps<T>,
+  'className' | 'style' | 'children'
+> {
   label?: ReactNode;
   description?: ReactNode;
   errorMessage?: string | ((v: ValidationResult) => string);

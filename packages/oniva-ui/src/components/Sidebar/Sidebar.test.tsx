@@ -20,8 +20,12 @@ function Example(props: { onCollapsedChange?: (c: boolean) => void; defaultColla
       <SidebarSearch />
       <SidebarContent>
         <SidebarSection title="Workspace" collapsible>
-          <SidebarItem href="#home" icon={<Home size={16} />} isActive badge="152">Home</SidebarItem>
-          <SidebarItem href="#set" icon={<Settings size={16} />}>Settings</SidebarItem>
+          <SidebarItem href="#home" icon={<Home size={16} />} isActive badge="152">
+            Home
+          </SidebarItem>
+          <SidebarItem href="#set" icon={<Settings size={16} />}>
+            Settings
+          </SidebarItem>
         </SidebarSection>
       </SidebarContent>
       <SidebarFooter>

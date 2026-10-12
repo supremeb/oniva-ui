@@ -5,7 +5,7 @@ import { ScatterChart } from './ScatterChart';
 
 const demo: DemoModule = {
   meta: {
-    title: 'ScatterChart',
+    title: 'Scatter chart',
     slug: 'scatter-chart',
     category: 'Charts',
     description: 'Scatter and bubble charts with named points, optional size and group colouring.',

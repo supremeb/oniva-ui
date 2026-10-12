@@ -7,7 +7,9 @@ describe('InputOTP', () => {
   it('accepts digits only, fills slots and fires onComplete', async () => {
     const onComplete = vi.fn();
     const onChange = vi.fn();
-    render(<InputOTP label="Verification code" length={4} onChange={onChange} onComplete={onComplete} />);
+    render(
+      <InputOTP label="Verification code" length={4} onChange={onChange} onComplete={onComplete} />,
+    );
     const input = screen.getByLabelText('Verification code');
     expect(input).toHaveAttribute('autocomplete', 'one-time-code');
     await userEvent.type(input, '12ab34');
@@ -18,7 +20,14 @@ describe('InputOTP', () => {
 
   it('shows error, separator and respects disabled', () => {
     const { container } = render(
-      <InputOTP label="Code" defaultValue="123" separatorAt={3} isInvalid errorMessage="Invalid code" isDisabled />,
+      <InputOTP
+        label="Code"
+        defaultValue="123"
+        separatorAt={3}
+        isInvalid
+        errorMessage="Invalid code"
+        isDisabled
+      />,
     );
     expect(screen.getByText('Invalid code')).toBeInTheDocument();
     expect(screen.getByLabelText('Code')).toBeDisabled();

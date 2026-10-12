@@ -11,7 +11,7 @@ const data = revenueByMonth.map((d) => ({
 
 const demo: DemoModule = {
   meta: {
-    title: 'ComboChart',
+    title: 'Combo chart',
     slug: 'combo-chart',
     category: 'Charts',
     description: 'Bars plus lines with an optional second value axis on the right.',

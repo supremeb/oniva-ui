@@ -11,6 +11,7 @@ Same rules as Loop 2 (docs/plans/WORKER-BRIEF.md). Folders: `src/charts/<Name>/`
 After Loop 2 is merged, workers SHOULD compose Loop-2 components (Select, Tabs, Tooltip, DropdownMenu, Pagination, ProgressBar…).
 
 ## Group F — Charts (`src/charts/`) — hand-built SVG with d3-scale/d3-shape/d3-array/d3-sankey
+
 Shared: `ChartCard` (title, big value, delta chip, period switcher slot, legend), `ChartTooltip` (pointer-follow,
 keyboard focusable data points), `ChartLegend`, `useChartDimensions` (ResizeObserver), axis/grid helpers in
 `src/internal/charts-*.ts`. Palette = chart1..chart10 tokens (teal, lime, pink, sky, purple, blue, emerald, yellow, indigo).
@@ -23,6 +24,7 @@ A11y: each chart role="img" + aria-label summary, optional visually-hidden data 
 Animations: draw-in on mount (respect reduced motion).
 
 ## Group G — AI & Agent (`src/ai/`)
+
 Composer (auto-grow textarea, attach button, model selector, effort/permission controls, send/stop), ComposerAttachments
 (file tiles with circular upload progress ring), ComposerLoader (orbiting light border), ModelSelector, Message
 (user/assistant bubble, avatar, actions: copy/retry/thumbs), ChatContainer (auto-scroll + ScrollToBottomButton),
@@ -34,6 +36,7 @@ ToolCallCard (name, args, status, collapsible result), WebSearchTrail (queries +
 Questionnaire (plan-mode questions with options), FeedbackBar, SystemBanner, ImageGenerationLoader.
 
 ## Group H — Dashboard widgets (`src/widgets/`)
+
 StatCard (KPI + delta chip + sparkline), DeltaBadge, ActivityWidget (Move/Exercise/Running tiles + ActivityRings),
 StepsWidget (week bar chart + date range switcher "29 Jun – 5 Jul"), SleepScoreWidget (score ring + breakdown rows),
 MostActiveDays (year of day buttons by month, scrollable), AlertsFeed ("Important alerts · 12 this week", icon + date chip cards),
@@ -43,6 +46,7 @@ social buttons), EventCalendar (month view w/ event pills), MeetingSchedule (day
 NotificationCenter (inbox w/ tabs), SettingsModal (multi-page dialog w/ sidebar nav), FileUploadCard.
 
 ## Group I — Landing + templates (apps/docs) — runs LAST, after F/G/H
+
 Rebuild `/` as a BoardUI-grade landing (original copy for oniva/ui): hero w/ rotating domain word ("for Dashboards / Agent
 Interfaces / Healthcare / Finance"), tech strip (React · StyleX · React Aria · TanStack Table), masonry widget showcase using
 real widgets, "Install components" grid of live mini-previews, AI composer loader section, charts section, templates section,

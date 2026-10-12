@@ -3,7 +3,7 @@ import { AuthCard } from './AuthCard';
 
 const demo: DemoModule = {
   meta: {
-    title: 'AuthCard',
+    title: 'Auth card',
     slug: 'auth-card',
     category: 'Widgets',
     description: 'Sign-in card with email/password, forgot-password link and social providers.',

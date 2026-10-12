@@ -20,7 +20,7 @@ const meta = {
 
 const demo: DemoModule = {
   meta: {
-    title: 'Hover Card',
+    title: 'Hover card',
     slug: 'hover-card',
     category: 'Overlays',
     description:

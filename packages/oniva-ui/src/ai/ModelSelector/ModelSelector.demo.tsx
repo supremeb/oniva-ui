@@ -10,7 +10,7 @@ const models = [
 
 const demo: DemoModule = {
   meta: {
-    title: 'Model Selector',
+    title: 'Model selector',
     slug: 'model-selector',
     category: 'AI & Agent',
     description: 'Compact model picker with descriptions, built on DropdownMenu.',

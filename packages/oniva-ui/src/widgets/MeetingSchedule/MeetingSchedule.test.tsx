@@ -4,7 +4,14 @@ import { describe, expect, it, vi } from 'vitest';
 import { MeetingSchedule, type Meeting } from './MeetingSchedule';
 
 const meetings: Meeting[] = [
-  { id: 'm1', title: 'Design sync', date: '2026-10-12', start: '10:00', end: '11:00', attendees: ['Ana Lind', 'Kofi Mensah'] },
+  {
+    id: 'm1',
+    title: 'Design sync',
+    date: '2026-10-12',
+    start: '10:00',
+    end: '11:00',
+    attendees: ['Ana Lind', 'Kofi Mensah'],
+  },
   { id: 'm2', title: 'Vendor call', date: '2026-10-14', start: '14:00', end: '15:00' },
 ];
 

@@ -8,7 +8,8 @@ const demo: DemoModule = {
     title: 'Flex',
     slug: 'flex',
     category: 'Layout',
-    description: 'Flexbox primitive. gap, padding, align and justify map to the space tokens; no inline styles needed.',
+    description:
+      'Flexbox primitive. gap, padding, align and justify map to the space tokens; no inline styles needed.',
   },
   demos: [
     {
@@ -18,7 +19,13 @@ const demo: DemoModule = {
   <strong>$128,430</strong>
 </Flex>`,
       Component: () => (
-        <Flex align="center" justify="between" gap={12} xstyle={demoStyles.tile} style={{ maxWidth: 360 }}>
+        <Flex
+          align="center"
+          justify="between"
+          gap={12}
+          xstyle={demoStyles.tile}
+          style={{ maxWidth: 360 }}
+        >
           <span>Q3 revenue</span>
           <strong style={{ fontVariantNumeric: 'tabular-nums' }}>$128,430</strong>
         </Flex>

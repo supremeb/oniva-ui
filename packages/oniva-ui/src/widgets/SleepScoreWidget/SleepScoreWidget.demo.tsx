@@ -24,10 +24,11 @@ const nights: SleepNight[] = [
 
 const demo: DemoModule = {
   meta: {
-    title: 'SleepScoreWidget',
+    title: 'Sleep score widget',
     slug: 'sleep-score-widget',
     category: 'Widgets',
-    description: 'Sleep score ring with verdict and a colored-dot breakdown (duration, bedtime, interruptions).',
+    description:
+      'Sleep score ring with verdict and a colored-dot breakdown (duration, bedtime, interruptions).',
   },
   demos: [
     {

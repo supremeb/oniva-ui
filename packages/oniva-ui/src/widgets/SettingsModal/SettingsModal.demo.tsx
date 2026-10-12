@@ -61,7 +61,7 @@ function Controlled() {
 
 const demo: DemoModule = {
   meta: {
-    title: 'SettingsModal',
+    title: 'Settings modal',
     slug: 'settings-modal',
     category: 'Widgets',
     description: 'Multi-page settings dialog with a vertical sidebar nav and per-page content.',
@@ -84,7 +84,12 @@ const demo: DemoModule = {
             <Button variant="secondary" onPress={() => setOpen(true)}>
               Security settings
             </Button>
-            <SettingsModal pages={pages} defaultPage="security" isOpen={open} onOpenChange={setOpen} />
+            <SettingsModal
+              pages={pages}
+              defaultPage="security"
+              isOpen={open}
+              onOpenChange={setOpen}
+            />
           </>
         );
       },

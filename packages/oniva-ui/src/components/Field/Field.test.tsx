@@ -23,7 +23,12 @@ describe('Field', () => {
   it('forwards ref and className', () => {
     let el: HTMLDivElement | null = null;
     render(
-      <Field className="x" ref={(n) => { el = n; }}>
+      <Field
+        className="x"
+        ref={(n) => {
+          el = n;
+        }}
+      >
         hi
       </Field>,
     );

@@ -1,9 +1,12 @@
+import type * as stylex from '@stylexjs/stylex';
 import type { Ref } from 'react';
 import { Flex, type FlexProps } from '../Flex';
 
 export interface StackProps extends Omit<FlexProps, 'direction' | 'wrap' | 'inline'> {
   /** Lay children out horizontally instead. */
   horizontal?: boolean;
+  /** StyleX overrides, applied last. */
+  xstyle?: stylex.StyleXStyles;
   ref?: Ref<HTMLElement>;
 }
 

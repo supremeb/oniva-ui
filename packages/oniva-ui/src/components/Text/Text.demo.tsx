@@ -8,7 +8,8 @@ const demo: DemoModule = {
     title: 'Text',
     slug: 'text',
     category: 'Typography',
-    description: 'Body copy and captions on the token type scale: caption, body, headline, title, display.',
+    description:
+      'Body copy and captions on the token type scale: caption, body, headline, title, display.',
   },
   demos: [
     {
@@ -20,11 +21,15 @@ const demo: DemoModule = {
 <Text variant="caption" tone="muted">Updated Oct 12, 2026</Text>`,
       Component: () => (
         <div style={col}>
-          <Text variant="display" tabular>$48,290</Text>
+          <Text variant="display" tabular>
+            $48,290
+          </Text>
           <Text variant="title">Revenue overview</Text>
           <Text variant="headline">Q3 payouts</Text>
           <Text>Payouts settle within 2 business days.</Text>
-          <Text variant="caption" tone="muted">Updated Oct 12, 2026</Text>
+          <Text variant="caption" tone="muted">
+            Updated Oct 12, 2026
+          </Text>
         </div>
       ),
     },

@@ -1,4 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
+import type { ControlSize } from '../../internal/types';
 import { Button as AriaButton, type ButtonProps as AriaButtonProps } from 'react-aria-components';
 import { X } from 'lucide-react';
 import type { CSSProperties, Ref } from 'react';
@@ -13,30 +14,33 @@ const styles = stylex.create({
     appearance: 'none',
     backgroundColor: {
       default: 'transparent',
-      ':hover': colors.surfaceInsetHover,
-      ':active': colors.surfaceTertiaryHover,
+      ':hover': colors['--oniva-color-surface-inset-hover'],
+      ':active': colors['--oniva-color-surface-tertiary-hover'],
     },
     borderWidth: 0,
-    color: { default: colors.iconMuted, ':hover': colors.text },
+    color: { default: colors['--oniva-color-icon-muted'], ':hover': colors['--oniva-color-text'] },
     cursor: 'pointer',
     display: 'inline-flex',
     flexShrink: 0,
     justifyContent: 'center',
-    outlineColor: colors.focusRing,
+    outlineColor: colors['--oniva-color-focus-ring'],
     outlineOffset: 1,
     outlineStyle: { default: 'none', ':focus-visible': 'solid' },
     outlineWidth: 2,
     padding: 0,
-    transitionDuration: motion.durBase,
+    transitionDuration: motion['--oniva-motion-dur-base'],
     transitionProperty: 'background-color, color',
-    transitionTimingFunction: motion.easeStandard,
+    transitionTimingFunction: motion['--oniva-motion-ease-standard'],
   },
-  sm: { borderRadius: radius.sm, height: 24, width: 24 },
-  md: { borderRadius: radius.md, height: 32, width: 32 },
+  sm: { borderRadius: radius['--oniva-radius-sm'], height: 24, width: 24 },
+  md: { borderRadius: radius['--oniva-radius-md'], height: 32, width: 32 },
 });
 
-export interface CloseButtonProps extends Omit<AriaButtonProps, 'className' | 'style' | 'children'> {
-  size?: 'sm' | 'md';
+export interface CloseButtonProps extends Omit<
+  AriaButtonProps,
+  'className' | 'style' | 'children'
+> {
+  size?: Extract<ControlSize, 'sm' | 'md'>;
   className?: string;
   style?: CSSProperties;
   xstyle?: stylex.StyleXStyles;

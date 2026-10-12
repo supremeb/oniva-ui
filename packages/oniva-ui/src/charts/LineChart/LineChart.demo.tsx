@@ -23,7 +23,7 @@ const fmt = (n: number) => `${n.toFixed(1)}M`;
 
 const demo: DemoModule = {
   meta: {
-    title: 'LineChart',
+    title: 'Line chart',
     slug: 'line-chart',
     category: 'Charts',
     description:

@@ -20,7 +20,9 @@ describe('Toolbar', () => {
     render(
       <Toolbar aria-label="t">
         <ToolbarToggleButton aria-label="Bold">B</ToolbarToggleButton>
-        <ToolbarButton aria-label="Undo" onPress={onPress}>U</ToolbarButton>
+        <ToolbarButton aria-label="Undo" onPress={onPress}>
+          U
+        </ToolbarButton>
       </Toolbar>,
     );
     const bold = screen.getByRole('button', { name: 'Bold' });

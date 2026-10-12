@@ -9,12 +9,12 @@ import { radius } from '@oniva-tokens/radius.stylex';
 const styles = stylex.create({
   wrap: { position: 'relative' },
   pre: {
-    backgroundColor: colors.surfaceInner,
-    borderRadius: radius.lg,
-    color: colors.text,
-    fontFamily: font.mono,
-    fontSize: font.size13,
-    lineHeight: font.lh18,
+    backgroundColor: colors['--oniva-color-surface-inner'],
+    borderRadius: radius['--oniva-radius-lg'],
+    color: colors['--oniva-color-text'],
+    fontFamily: font['--oniva-font-mono'],
+    fontSize: font['--oniva-font-size-13'],
+    lineHeight: font['--oniva-font-lh-18'],
     margin: 0,
     overflowX: 'auto',
     paddingBlock: 14,

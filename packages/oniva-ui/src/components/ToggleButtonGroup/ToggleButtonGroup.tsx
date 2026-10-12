@@ -4,7 +4,7 @@ import {
   type ToggleButtonGroupProps as AriaToggleButtonGroupProps,
 } from 'react-aria-components';
 import type { CSSProperties, ReactNode, Ref } from 'react';
-import { ToggleGroupStyleContext, type ControlSize } from '../../internal/feedback-control';
+import { ToggleGroupStyleContext, type ButtonSize } from '../../internal/feedback-control';
 import { mergeSx } from '../../internal/sx';
 import { colors } from '../../tokens/colors.stylex';
 import { radius } from '../../tokens/radius.stylex';
@@ -12,19 +12,21 @@ import { radius } from '../../tokens/radius.stylex';
 const styles = stylex.create({
   base: { alignItems: 'center', display: 'inline-flex', gap: 8 },
   segmented: {
-    backgroundColor: colors.surfaceInset,
-    borderRadius: radius.xl,
+    backgroundColor: colors['--oniva-color-surface-inset'],
+    borderRadius: radius['--oniva-radius-xl'],
     gap: 2,
     padding: 2,
   },
   vertical: { alignItems: 'stretch', flexDirection: 'column' },
 });
 
-export interface ToggleButtonGroupProps
-  extends Omit<AriaToggleButtonGroupProps, 'className' | 'style' | 'children'> {
+export interface ToggleButtonGroupProps extends Omit<
+  AriaToggleButtonGroupProps,
+  'className' | 'style' | 'children'
+> {
   /** `segmented` = inset track with a raised selected tile. */
   variant?: 'secondary' | 'ghost' | 'soft' | 'segmented';
-  size?: ControlSize;
+  size?: ButtonSize;
   children?: ReactNode;
   className?: string;
   style?: CSSProperties;

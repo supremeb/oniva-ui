@@ -16,7 +16,9 @@ describe('ComposerAttachments', () => {
     );
     expect(screen.getAllByRole('listitem')).toHaveLength(2);
     expect(screen.getByText('47 KB')).toBeInTheDocument();
-    expect(screen.getByRole('progressbar', { name: 'Uploading board-deck.pdf' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('progressbar', { name: 'Uploading board-deck.pdf' }),
+    ).toBeInTheDocument();
     expect(screen.getByText('42%')).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Remove q3_revenue.csv' }));
     expect(onRemove).toHaveBeenCalledWith('a');

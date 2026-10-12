@@ -19,19 +19,22 @@ import { fp } from '../../internal/forms-popover';
 
 const styles = stylex.create({
   kbd: {
-    backgroundColor: colors.kbdBg,
-    borderRadius: radius.full,
-    color: colors.textOnTertiary,
-    fontFamily: font.sans,
-    fontSize: font.size12,
-    fontWeight: font.weightSemibold,
-    lineHeight: font.lh12,
+    backgroundColor: colors['--oniva-color-kbd-bg'],
+    borderRadius: radius['--oniva-radius-full'],
+    color: colors['--oniva-color-text-on-tertiary'],
+    fontFamily: font['--oniva-font-sans'],
+    fontSize: font['--oniva-font-size-12'],
+    fontWeight: font['--oniva-font-weight-semibold'],
+    lineHeight: font['--oniva-font-lh-12'],
     paddingBlock: 2,
     paddingInline: 8,
   },
 });
 
-export interface SearchFieldProps extends Omit<AriaSearchFieldProps, 'className' | 'style' | 'children'> {
+export interface SearchFieldProps extends Omit<
+  AriaSearchFieldProps,
+  'className' | 'style' | 'children'
+> {
   label?: ReactNode;
   description?: ReactNode;
   errorMessage?: string | ((v: ValidationResult) => string);
@@ -63,7 +66,12 @@ export function SearchField({
         <>
           {label != null && <Label {...stylex.props(ff.label)}>{label}</Label>}
           <div
-            {...stylex.props(ff.control, ff[size], isInvalid && ff.invalid, isDisabled && ff.disabled)}
+            {...stylex.props(
+              ff.control,
+              ff[size],
+              isInvalid && ff.invalid,
+              isDisabled && ff.disabled,
+            )}
           >
             <Search size={16} aria-hidden="true" {...stylex.props(ff.adornment)} />
             <Input

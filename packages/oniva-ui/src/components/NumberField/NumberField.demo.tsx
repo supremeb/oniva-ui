@@ -1,14 +1,21 @@
 import type { DemoModule } from '../../internal/demo';
 import { NumberField } from './NumberField';
 
-const col = { display: 'flex', flexDirection: 'column', gap: 16, width: '100%', maxWidth: 240 } as const;
+const col = {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 16,
+  width: '100%',
+  maxWidth: 240,
+} as const;
 
 const demo: DemoModule = {
   meta: {
-    title: 'NumberField',
+    title: 'Number field',
     slug: 'number-field',
     category: 'Forms',
-    description: 'Numeric input with stepper buttons, locale-aware formatting and min/max clamping.',
+    description:
+      'Numeric input with stepper buttons, locale-aware formatting and min/max clamping.',
   },
   demos: [
     {

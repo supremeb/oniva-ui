@@ -18,7 +18,7 @@ const legend = (s: { label: string; tone: number }[]) => <ChartLegend items={s} 
 
 const demo: DemoModule = {
   meta: {
-    title: 'AreaChart',
+    title: 'Area chart',
     slug: 'area-chart',
     category: 'Charts',
     description:

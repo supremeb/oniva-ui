@@ -17,7 +17,7 @@ const tok = [
 
 const demo: DemoModule = {
   meta: {
-    title: 'BarChart',
+    title: 'Bar chart',
     slug: 'bar-chart',
     category: 'Charts',
     description:

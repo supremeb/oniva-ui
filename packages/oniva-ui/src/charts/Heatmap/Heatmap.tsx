@@ -189,16 +189,18 @@ export function ContributionHeatmap({
         const left = weekly ? 0 : range === 'yearly' ? 30 : 34;
         const cell = clamp((width - left - gap * (weeks - 1)) / weeks, 4, weekly ? 56 : 28);
         const top = weekly ? 8 : 22;
-        const monthMarks: { col: number; text: string }[] = [];
-        let lastMonth = -1;
+        // One label per month start (plus the first column). When two labels would collide, drop the
+        // EARLIER (partial) one so every later month, e.g. Nov between Oct and Dec, stays visible.
+        const minCols = Math.max(2, Math.ceil(28 / (cell + gap)));
+        const starts: { col: number; text: string }[] = [];
         slice.forEach((d, i) => {
           const dt = parse(d.date);
-          const col = Math.floor((i + startDow) / 7);
-          if (dt.getUTCMonth() !== lastMonth && (dt.getUTCDate() <= 7 || i === 0)) {
-            if (!monthMarks.length || col - monthMarks[monthMarks.length - 1]!.col >= 3)
-              monthMarks.push({ col, text: MONTHS[dt.getUTCMonth()]! });
-            lastMonth = dt.getUTCMonth();
-          }
+          if (i === 0 || dt.getUTCDate() === 1)
+            starts.push({ col: Math.floor((i + startDow) / 7), text: MONTHS[dt.getUTCMonth()]! });
+        });
+        const monthMarks = starts.filter((m, i) => {
+          const next = starts[i + 1];
+          return !next || next.col - m.col >= minCols;
         });
         const gridW = weeks * (cell + gap) - gap;
         return (

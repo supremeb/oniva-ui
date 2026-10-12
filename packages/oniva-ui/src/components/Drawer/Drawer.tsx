@@ -1,4 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
+import { media } from '../../tokens/media.stylex';
 import {
   Dialog as AriaDialog,
   DialogTrigger,
@@ -43,11 +44,9 @@ const outBottom = stylex.keyframes({
   to: { transform: 'translateY(100%)' },
 });
 
-const NO_MOTION = '@media (prefers-reduced-motion: reduce)';
-
 const styles = stylex.create({
   overlay: {
-    backgroundColor: colors.overlay,
+    backgroundColor: colors['--oniva-color-overlay'],
     height: '100vh',
     left: 0,
     position: 'fixed',
@@ -56,38 +55,38 @@ const styles = stylex.create({
     zIndex: 100,
   },
   overlayEntering: {
-    animationDuration: motion.durBase,
+    animationDuration: motion['--oniva-motion-dur-base'],
     animationFillMode: 'both',
-    animationName: { default: fadeIn, [NO_MOTION]: 'none' },
+    animationName: { default: fadeIn, [media.reducedMotion]: 'none' },
   },
   overlayExiting: {
-    animationDuration: motion.durBase,
+    animationDuration: motion['--oniva-motion-dur-base'],
     animationFillMode: 'both',
-    animationName: { default: fadeOut, [NO_MOTION]: 'none' },
+    animationName: { default: fadeOut, [media.reducedMotion]: 'none' },
   },
   panel: {
-    backgroundColor: colors.surface,
-    borderColor: colors.border,
+    backgroundColor: colors['--oniva-color-surface'],
+    borderColor: colors['--oniva-color-border'],
     borderStyle: 'solid',
     borderWidth: 0,
-    boxShadow: shadow.xl,
+    boxShadow: shadow['--oniva-shadow-xl'],
     boxSizing: 'border-box',
-    color: colors.text,
+    color: colors['--oniva-color-text'],
     display: 'flex',
-    fontFamily: font.sans,
+    fontFamily: font['--oniva-font-sans'],
     outline: 'none',
     position: 'fixed',
   },
   right: {
     borderLeftWidth: 1,
-    borderRadius: `${radius.card} 0 0 ${radius.card}`,
+    borderRadius: `${radius['--oniva-radius-card']} 0 0 ${radius['--oniva-radius-card']}`,
     bottom: 0,
     height: '100%',
     right: 0,
     top: 0,
   },
   left: {
-    borderRadius: `0 ${radius.card} ${radius.card} 0`,
+    borderRadius: `0 ${radius['--oniva-radius-card']} ${radius['--oniva-radius-card']} 0`,
     borderRightWidth: 1,
     bottom: 0,
     height: '100%',
@@ -95,7 +94,7 @@ const styles = stylex.create({
     top: 0,
   },
   bottom: {
-    borderRadius: `${radius.card} ${radius.card} 0 0`,
+    borderRadius: `${radius['--oniva-radius-card']} ${radius['--oniva-radius-card']} 0 0`,
     borderTopWidth: 1,
     bottom: 0,
     left: 0,
@@ -107,40 +106,40 @@ const styles = stylex.create({
   sizeMd: { maxWidth: '100%', width: 420 },
   sizeLg: { maxWidth: '100%', width: 560 },
   enterRight: {
-    animationDuration: motion.durSlow,
+    animationDuration: motion['--oniva-motion-dur-slow'],
     animationFillMode: 'both',
-    animationName: { default: inRight, [NO_MOTION]: 'none' },
-    animationTimingFunction: motion.easeOut,
+    animationName: { default: inRight, [media.reducedMotion]: 'none' },
+    animationTimingFunction: motion['--oniva-motion-ease-out'],
   },
   exitRight: {
-    animationDuration: motion.durBase,
+    animationDuration: motion['--oniva-motion-dur-base'],
     animationFillMode: 'both',
-    animationName: { default: outRight, [NO_MOTION]: 'none' },
-    animationTimingFunction: motion.easeIn,
+    animationName: { default: outRight, [media.reducedMotion]: 'none' },
+    animationTimingFunction: motion['--oniva-motion-ease-in'],
   },
   enterLeft: {
-    animationDuration: motion.durSlow,
+    animationDuration: motion['--oniva-motion-dur-slow'],
     animationFillMode: 'both',
-    animationName: { default: inLeft, [NO_MOTION]: 'none' },
-    animationTimingFunction: motion.easeOut,
+    animationName: { default: inLeft, [media.reducedMotion]: 'none' },
+    animationTimingFunction: motion['--oniva-motion-ease-out'],
   },
   exitLeft: {
-    animationDuration: motion.durBase,
+    animationDuration: motion['--oniva-motion-dur-base'],
     animationFillMode: 'both',
-    animationName: { default: outLeft, [NO_MOTION]: 'none' },
-    animationTimingFunction: motion.easeIn,
+    animationName: { default: outLeft, [media.reducedMotion]: 'none' },
+    animationTimingFunction: motion['--oniva-motion-ease-in'],
   },
   enterBottom: {
-    animationDuration: motion.durSlow,
+    animationDuration: motion['--oniva-motion-dur-slow'],
     animationFillMode: 'both',
-    animationName: { default: inBottom, [NO_MOTION]: 'none' },
-    animationTimingFunction: motion.easeOut,
+    animationName: { default: inBottom, [media.reducedMotion]: 'none' },
+    animationTimingFunction: motion['--oniva-motion-ease-out'],
   },
   exitBottom: {
-    animationDuration: motion.durBase,
+    animationDuration: motion['--oniva-motion-dur-base'],
     animationFillMode: 'both',
-    animationName: { default: outBottom, [NO_MOTION]: 'none' },
-    animationTimingFunction: motion.easeIn,
+    animationName: { default: outBottom, [media.reducedMotion]: 'none' },
+    animationTimingFunction: motion['--oniva-motion-ease-in'],
   },
   dialog: {
     boxSizing: 'border-box',

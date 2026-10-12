@@ -1,4 +1,9 @@
-export { NavigationMenu, NavigationMenuLink, NavigationMenuTrigger, NavigationMenuItemLink } from './NavigationMenu';
+export {
+  NavigationMenu,
+  NavigationMenuLink,
+  NavigationMenuTrigger,
+  NavigationMenuItemLink,
+} from './NavigationMenu';
 export type {
   NavigationMenuProps,
   NavigationMenuLinkProps,

@@ -1,12 +1,17 @@
 import * as stylex from '@stylexjs/stylex';
-import { Label as AriaLabel, Meter as AriaMeter, type MeterProps as AriaMeterProps } from 'react-aria-components';
+import type { ControlSize } from '../../internal/types';
+import {
+  Label as AriaLabel,
+  Meter as AriaMeter,
+  type MeterProps as AriaMeterProps,
+} from 'react-aria-components';
 import type { ReactNode, Ref } from 'react';
 import { progressStyles } from '../ProgressBar/ProgressBar';
 
 export interface MeterProps extends Omit<AriaMeterProps, 'className' | 'style' | 'children'> {
   label?: ReactNode;
   showValue?: boolean;
-  size?: 'sm' | 'md' | 'lg';
+  size?: ControlSize;
   /** Percentage at/above which the meter turns warning. Default 70. */
   warnAt?: number;
   /** Percentage at/above which the meter turns danger. Default 90. */
@@ -40,7 +45,9 @@ export function Meter({
       style={sx.style as never}
     >
       {({ percentage, valueText }) => {
-        const t = tone ?? (percentage >= dangerAt ? 'danger' : percentage >= warnAt ? 'warning' : 'success');
+        const t =
+          tone ??
+          (percentage >= dangerAt ? 'danger' : percentage >= warnAt ? 'warning' : 'success');
         return (
           <>
             {(label || showValue) && (

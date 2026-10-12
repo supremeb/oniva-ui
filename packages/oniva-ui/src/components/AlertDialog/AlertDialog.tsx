@@ -28,11 +28,17 @@ const styles = stylex.create({
     justifyContent: 'center',
     width: 40,
   },
-  badgeDefault: { backgroundColor: colors.infoBg, color: colors.infoFg },
-  badgeDanger: { backgroundColor: colors.dangerBg, color: colors.dangerFg },
+  badgeDefault: {
+    backgroundColor: colors['--oniva-color-info-bg'],
+    color: colors['--oniva-color-info-fg'],
+  },
+  badgeDanger: {
+    backgroundColor: colors['--oniva-color-danger-bg'],
+    color: colors['--oniva-color-danger-fg'],
+  },
   text: { display: 'flex', flexDirection: 'column', gap: 6, minWidth: 0, paddingTop: 2 },
   footer: { display: 'flex', gap: 8, justifyContent: 'flex-end' },
-  fontBase: { fontFamily: font.sans },
+  fontBase: { fontFamily: font['--oniva-font-sans'] },
 });
 
 export interface AlertDialogProps {

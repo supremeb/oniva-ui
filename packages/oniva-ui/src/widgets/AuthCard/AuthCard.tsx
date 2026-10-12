@@ -11,26 +11,39 @@ import { font } from '../../tokens/font.stylex';
 const styles = stylex.create({
   head: { display: 'flex', flexDirection: 'column', gap: 4, paddingInline: 8, paddingTop: 8 },
   title: {
-    color: colors.text,
-    fontSize: font.size20,
-    fontWeight: font.weightMedium,
-    lineHeight: font.lh20,
+    color: colors['--oniva-color-text'],
+    fontSize: font['--oniva-font-size-20'],
+    fontWeight: font['--oniva-font-weight-medium'],
+    lineHeight: font['--oniva-font-lh-20'],
     margin: 0,
   },
-  sub: { color: colors.textMuted, fontSize: font.size14, lineHeight: font.lh14, margin: 0 },
+  sub: {
+    color: colors['--oniva-color-text-muted'],
+    fontSize: font['--oniva-font-size-14'],
+    lineHeight: font['--oniva-font-lh-14'],
+    margin: 0,
+  },
   form: { display: 'flex', flexDirection: 'column', gap: 14 },
-  forgot: { alignSelf: 'flex-end', fontSize: font.size13 },
+  forgot: { alignSelf: 'flex-end', fontSize: font['--oniva-font-size-13'] },
   or: {
     alignItems: 'center',
-    color: colors.textMuted,
+    color: colors['--oniva-color-text-muted'],
     display: 'flex',
-    fontSize: font.size12,
+    fontSize: font['--oniva-font-size-12'],
     gap: 10,
   },
-  rule: { backgroundColor: colors.separator, flexGrow: 1, height: 1 },
+  rule: { backgroundColor: colors['--oniva-color-separator'], flexGrow: 1, height: 1 },
   socials: { display: 'grid', gap: 8, gridTemplateColumns: '1fr 1fr' },
-  foot: { color: colors.textMuted, fontSize: font.size13, textAlign: 'center' },
-  error: { color: colors.textError, fontSize: font.size13, margin: 0 },
+  foot: {
+    color: colors['--oniva-color-text-muted'],
+    fontSize: font['--oniva-font-size-13'],
+    textAlign: 'center',
+  },
+  error: {
+    color: colors['--oniva-color-text-error'],
+    fontSize: font['--oniva-font-size-13'],
+    margin: 0,
+  },
 });
 
 export interface AuthCardProps {
@@ -104,12 +117,7 @@ export function AuthCard({
             value={password}
             onChange={setPassword}
           />
-          <Link
-            href="#forgot"
-            xstyle={styles.forgot}
-            onPress={onForgotPassword}
-            tone="accent"
-          >
+          <Link href="#forgot" xstyle={styles.forgot} onPress={onForgotPassword} tone="accent">
             Forgot password?
           </Link>
           {error && (

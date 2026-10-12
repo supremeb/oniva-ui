@@ -15,7 +15,8 @@ const demo: DemoModule = {
     title: 'Stepper',
     slug: 'stepper',
     category: 'Navigation',
-    description: 'Multi-step progress, horizontal or vertical. Completed steps get the accent gradient; steps can be pressable.',
+    description:
+      'Multi-step progress, horizontal or vertical. Completed steps get the accent gradient; steps can be pressable.',
   },
   demos: [
     {

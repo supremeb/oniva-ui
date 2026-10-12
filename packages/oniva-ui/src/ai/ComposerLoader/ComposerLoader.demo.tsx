@@ -5,10 +5,11 @@ import { ComposerLoader } from './ComposerLoader';
 
 const demo: DemoModule = {
   meta: {
-    title: 'Composer Loader',
+    title: 'Composer loader',
     slug: 'composer-loader',
     category: 'AI & Agent',
-    description: 'A light that orbits the composer border while the agent is working. Static with reduced motion.',
+    description:
+      'A light that orbits the composer border while the agent is working. Static with reduced motion.',
   },
   demos: [
     {

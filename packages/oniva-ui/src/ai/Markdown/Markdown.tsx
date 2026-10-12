@@ -9,67 +9,94 @@ import { CodeBlock } from '../CodeBlock';
 
 const styles = stylex.create({
   root: {
-    color: colors.text,
-    fontFamily: font.sans,
-    fontSize: font.size14,
-    lineHeight: font.lh16,
+    color: colors['--oniva-color-text'],
+    fontFamily: font['--oniva-font-sans'],
+    fontSize: font['--oniva-font-size-14'],
+    lineHeight: font['--oniva-font-lh-16'],
     overflowWrap: 'anywhere',
   },
   p: { marginBlock: 0, marginBlockEnd: 12 },
-  h1: { fontSize: font.size20, fontWeight: font.weightSemibold, lineHeight: font.lh20, margin: 0, marginBlockEnd: 8, marginBlockStart: 16 },
-  h2: { fontSize: font.size16, fontWeight: font.weightSemibold, lineHeight: font.lh16, margin: 0, marginBlockEnd: 8, marginBlockStart: 16 },
-  h3: { fontSize: font.size14, fontWeight: font.weightSemibold, lineHeight: font.lh14, margin: 0, marginBlockEnd: 6, marginBlockStart: 12 },
+  h1: {
+    fontSize: font['--oniva-font-size-20'],
+    fontWeight: font['--oniva-font-weight-semibold'],
+    lineHeight: font['--oniva-font-lh-20'],
+    margin: 0,
+    marginBlockEnd: 8,
+    marginBlockStart: 16,
+  },
+  h2: {
+    fontSize: font['--oniva-font-size-16'],
+    fontWeight: font['--oniva-font-weight-semibold'],
+    lineHeight: font['--oniva-font-lh-16'],
+    margin: 0,
+    marginBlockEnd: 8,
+    marginBlockStart: 16,
+  },
+  h3: {
+    fontSize: font['--oniva-font-size-14'],
+    fontWeight: font['--oniva-font-weight-semibold'],
+    lineHeight: font['--oniva-font-lh-14'],
+    margin: 0,
+    marginBlockEnd: 6,
+    marginBlockStart: 12,
+  },
   list: { marginBlock: 0, marginBlockEnd: 12, paddingInlineStart: 22 },
   li: { marginBlockEnd: 4 },
   task: { listStyle: 'none', marginInlineStart: -22 },
   quote: {
-    borderInlineStartColor: colors.borderHover,
+    borderInlineStartColor: colors['--oniva-color-border-hover'],
     borderInlineStartStyle: 'solid',
     borderInlineStartWidth: 3,
-    color: colors.textMuted,
+    color: colors['--oniva-color-text-muted'],
     marginBlock: 0,
     marginBlockEnd: 12,
     paddingInlineStart: 12,
   },
-  hr: { borderColor: colors.border, borderStyle: 'solid', borderWidth: 0, borderBlockStartWidth: 1, marginBlock: 16 },
+  hr: {
+    borderColor: colors['--oniva-color-border'],
+    borderStyle: 'solid',
+    borderWidth: 0,
+    borderBlockStartWidth: 1,
+    marginBlock: 16,
+  },
   a: {
-    color: colors.accentSoftFg,
+    color: colors['--oniva-color-accent-soft-fg'],
     textDecoration: 'underline',
     textDecorationThickness: 1,
     textUnderlineOffset: 2,
   },
   code: {
-    backgroundColor: colors.surfaceTertiary,
-    borderRadius: radius.xs,
-    color: colors.text,
-    fontFamily: font.mono,
+    backgroundColor: colors['--oniva-color-surface-tertiary'],
+    borderRadius: radius['--oniva-radius-xs'],
+    color: colors['--oniva-color-text'],
+    fontFamily: font['--oniva-font-mono'],
     fontSize: '0.9em',
     paddingBlock: 1,
     paddingInline: 5,
   },
   block: { marginBlockEnd: 12 },
   tableWrap: {
-    borderColor: colors.border,
-    borderRadius: radius.lg,
+    borderColor: colors['--oniva-color-border'],
+    borderRadius: radius['--oniva-radius-lg'],
     borderStyle: 'solid',
     borderWidth: 1,
     marginBlockEnd: 12,
     overflowX: 'auto',
   },
-  table: { borderCollapse: 'collapse', fontSize: font.size13, width: '100%' },
+  table: { borderCollapse: 'collapse', fontSize: font['--oniva-font-size-13'], width: '100%' },
   th: {
-    backgroundColor: colors.surfaceInset,
-    borderBottomColor: colors.border,
+    backgroundColor: colors['--oniva-color-surface-inset'],
+    borderBottomColor: colors['--oniva-color-border'],
     borderBottomStyle: 'solid',
     borderBottomWidth: 1,
-    color: colors.textMuted,
-    fontWeight: font.weightMedium,
+    color: colors['--oniva-color-text-muted'],
+    fontWeight: font['--oniva-font-weight-medium'],
     paddingBlock: 8,
     paddingInline: 12,
     whiteSpace: 'nowrap',
   },
   td: {
-    borderBottomColor: colors.border,
+    borderBottomColor: colors['--oniva-color-border'],
     borderBottomStyle: 'solid',
     borderBottomWidth: 1,
     fontVariantNumeric: 'tabular-nums',
@@ -79,14 +106,19 @@ const styles = stylex.create({
   left: { textAlign: 'left' },
   right: { textAlign: 'right' },
   center: { textAlign: 'center' },
-  img: { maxWidth: '100%', borderRadius: radius.lg },
+  img: { maxWidth: '100%', borderRadius: radius['--oniva-radius-lg'] },
 });
 
 export interface MarkdownProps {
   /** Markdown source. Raw HTML in the source is rendered as inert text, never as markup. */
   children: string;
   /** Replace how a link is rendered (e.g. to turn `[1]` links into `Citation`s). */
-  renderLink?: (props: { href: string | undefined; title?: string; children: ReactNode; text: string }) => ReactNode;
+  renderLink?: (props: {
+    href: string | undefined;
+    title?: string;
+    children: ReactNode;
+    text: string;
+  }) => ReactNode;
   className?: string;
   xstyle?: stylex.StyleXStyles;
   ref?: Ref<HTMLDivElement>;
@@ -121,7 +153,8 @@ function inlineToken(t: Token, ctx: Ctx): ReactNode {
       const l = t as Tokens.Link;
       const href = safeUrl(l.href);
       const kids = inline(l.tokens, ctx);
-      if (ctx.renderLink) return ctx.renderLink({ href, title: l.title ?? undefined, children: kids, text: l.text });
+      if (ctx.renderLink)
+        return ctx.renderLink({ href, title: l.title ?? undefined, children: kids, text: l.text });
       return href ? (
         <a
           href={href}
@@ -140,7 +173,13 @@ function inlineToken(t: Token, ctx: Ctx): ReactNode {
       const im = t as Tokens.Image;
       const src = safeUrl(im.href);
       return src && !src.startsWith('mailto:') ? (
-        <img src={src} alt={im.text} title={im.title ?? undefined} loading="lazy" {...stylex.props(styles.img)} />
+        <img
+          src={src}
+          alt={im.text}
+          title={im.title ?? undefined}
+          loading="lazy"
+          {...stylex.props(styles.img)}
+        />
       ) : (
         im.text
       );
@@ -168,7 +207,7 @@ function block(tokens: Token[], ctx: Ctx): ReactNode[] {
         return;
       case 'heading': {
         const h = t as Tokens.Heading;
-        const Tag = (`h${Math.min(h.depth, 6)}`) as 'h1';
+        const Tag = `h${Math.min(h.depth, 6)}` as 'h1';
         const s = h.depth === 1 ? styles.h1 : h.depth === 2 ? styles.h2 : styles.h3;
         out.push(
           <Tag key={i} {...stylex.props(s)}>
@@ -179,7 +218,9 @@ function block(tokens: Token[], ctx: Ctx): ReactNode[] {
       }
       case 'code': {
         const c = t as Tokens.Code;
-        out.push(<CodeBlock key={i} code={c.text} language={c.lang || undefined} xstyle={styles.block} />);
+        out.push(
+          <CodeBlock key={i} code={c.text} language={c.lang || undefined} xstyle={styles.block} />,
+        );
         return;
       }
       case 'blockquote':
@@ -196,10 +237,22 @@ function block(tokens: Token[], ctx: Ctx): ReactNode[] {
         const l = t as Tokens.List;
         const Tag = l.ordered ? 'ol' : 'ul';
         out.push(
-          <Tag key={i} start={l.ordered && l.start !== '' ? Number(l.start) : undefined} {...stylex.props(styles.list)}>
+          <Tag
+            key={i}
+            start={l.ordered && l.start !== '' ? Number(l.start) : undefined}
+            {...stylex.props(styles.list)}
+          >
             {l.items.map((it, j) => (
               <li key={j} {...stylex.props(styles.li, it.task && styles.task)}>
-                {it.task && <input type="checkbox" checked={Boolean(it.checked)} readOnly aria-label={it.checked ? 'Done' : 'Not done'} style={{ marginInlineEnd: 6 }} />}
+                {it.task && (
+                  <input
+                    type="checkbox"
+                    checked={Boolean(it.checked)}
+                    readOnly
+                    aria-label={it.checked ? 'Done' : 'Not done'}
+                    style={{ marginInlineEnd: 6 }}
+                  />
+                )}
                 {block(it.tokens, { ...ctx }).map((n, k) => (
                   <Fragment key={k}>{n}</Fragment>
                 ))}
@@ -211,7 +264,8 @@ function block(tokens: Token[], ctx: Ctx): ReactNode[] {
       }
       case 'table': {
         const tb = t as Tokens.Table;
-        const al = (a: string | null) => (a === 'right' ? styles.right : a === 'center' ? styles.center : styles.left);
+        const al = (a: string | null) =>
+          a === 'right' ? styles.right : a === 'center' ? styles.center : styles.left;
         out.push(
           <div key={i} {...stylex.props(styles.tableWrap)}>
             <table {...stylex.props(styles.table)}>

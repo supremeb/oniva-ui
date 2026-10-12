@@ -1,15 +1,30 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
-import { NavigationMenu, NavigationMenuItemLink, NavigationMenuLink, NavigationMenuTrigger } from './NavigationMenu';
+import {
+  NavigationMenu,
+  NavigationMenuItemLink,
+  NavigationMenuLink,
+  NavigationMenuTrigger,
+} from './NavigationMenu';
 
 function Example() {
   return (
     <NavigationMenu aria-label="Site" className="x">
-      <NavigationMenuLink href="#home" isActive>Home</NavigationMenuLink>
+      <NavigationMenuLink href="#home" isActive>
+        Home
+      </NavigationMenuLink>
       <NavigationMenuTrigger label="Products">
-        <NavigationMenuItemLink href="#pay" title="Payments" description="Accept cards and bank transfers" />
-        <NavigationMenuItemLink href="#inv" title="Invoicing" description="Send and track invoices" />
+        <NavigationMenuItemLink
+          href="#pay"
+          title="Payments"
+          description="Accept cards and bank transfers"
+        />
+        <NavigationMenuItemLink
+          href="#inv"
+          title="Invoicing"
+          description="Send and track invoices"
+        />
       </NavigationMenuTrigger>
     </NavigationMenu>
   );

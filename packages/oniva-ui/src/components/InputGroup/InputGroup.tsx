@@ -18,22 +18,22 @@ const styles = stylex.create({
   addon: {
     alignItems: 'center',
     alignSelf: 'stretch',
-    backgroundColor: colors.surfaceHover,
-    color: colors.textMuted,
+    backgroundColor: colors['--oniva-color-surface-hover'],
+    color: colors['--oniva-color-text-muted'],
     display: 'flex',
     flexShrink: 0,
-    fontSize: font.size14,
-    fontWeight: font.weightMedium,
+    fontSize: font['--oniva-font-size-14'],
+    fontWeight: font['--oniva-font-weight-medium'],
     gap: 6,
     paddingInline: 10,
   },
   start: {
-    borderInlineEndColor: colors.border,
+    borderInlineEndColor: colors['--oniva-color-border'],
     borderInlineEndStyle: 'solid',
     borderInlineEndWidth: 1,
   },
   end: {
-    borderInlineStartColor: colors.border,
+    borderInlineStartColor: colors['--oniva-color-border'],
     borderInlineStartStyle: 'solid',
     borderInlineStartWidth: 1,
   },
@@ -83,7 +83,9 @@ export function InputGroup({
               isDisabled && ff.disabled,
             )}
           >
-            {startAddon != null && <div {...stylex.props(styles.addon, styles.start)}>{startAddon}</div>}
+            {startAddon != null && (
+              <div {...stylex.props(styles.addon, styles.start)}>{startAddon}</div>
+            )}
             <Input ref={ref} placeholder={placeholder} {...stylex.props(ff.bare, styles.input)} />
             {endAddon != null && <div {...stylex.props(styles.addon, styles.end)}>{endAddon}</div>}
           </div>

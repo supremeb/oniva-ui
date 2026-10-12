@@ -6,7 +6,9 @@ describe('WebSearchTrail', () => {
   it('lists queries and sources', () => {
     render(
       <WebSearchTrail
-        queries={[{ id: '1', query: 'SaaS Q3 2026 NRR benchmarks', status: 'done', resultCount: 8 }]}
+        queries={[
+          { id: '1', query: 'SaaS Q3 2026 NRR benchmarks', status: 'done', resultCount: 8 },
+        ]}
         sources={[{ title: 'SaaS benchmarks', url: 'https://www.bvp.com/atlas' }]}
       />,
     );

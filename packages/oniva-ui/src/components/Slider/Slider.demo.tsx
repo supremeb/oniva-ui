@@ -2,7 +2,13 @@ import { useState } from 'react';
 import type { DemoModule } from '../../internal/demo';
 import { Slider } from './Slider';
 
-const col = { display: 'flex', flexDirection: 'column', gap: 24, width: '100%', maxWidth: 380 } as const;
+const col = {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 24,
+  width: '100%',
+  maxWidth: 380,
+} as const;
 
 function Range() {
   const [v, setV] = useState([250, 1800]);

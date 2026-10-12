@@ -2,7 +2,13 @@ import { useState } from 'react';
 import type { DemoModule } from '../../internal/demo';
 import { Checkbox } from './Checkbox';
 
-const col = { display: 'flex', flexDirection: 'column', gap: 16, width: '100%', maxWidth: 380 } as const;
+const col = {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 16,
+  width: '100%',
+  maxWidth: 380,
+} as const;
 
 function SelectAll() {
   const [items, setItems] = useState({ inv: true, pay: false, rec: false });
@@ -36,7 +42,8 @@ const demo: DemoModule = {
     title: 'Checkbox',
     slug: 'checkbox',
     category: 'Forms',
-    description: 'Checkbox with accent gradient checked state, indeterminate and description support.',
+    description:
+      'Checkbox with accent gradient checked state, indeterminate and description support.',
   },
   demos: [
     {

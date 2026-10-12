@@ -26,11 +26,20 @@ describe('FileUpload', () => {
         files={[
           { id: '1', name: 'q3-report.pdf', size: 2_400_000, progress: 42 },
           { id: '2', name: 'ledger.csv', size: 12_000, progress: 100 },
-          { id: '3', name: 'huge.zip', size: 900_000_000, progress: 10, error: 'File exceeds 50 MB' },
+          {
+            id: '3',
+            name: 'huge.zip',
+            size: 900_000_000,
+            progress: 10,
+            error: 'File exceeds 50 MB',
+          },
         ]}
       />,
     );
-    expect(screen.getByRole('progressbar', { name: 'Uploading q3-report.pdf' })).toHaveAttribute('aria-valuenow', '42');
+    expect(screen.getByRole('progressbar', { name: 'Uploading q3-report.pdf' })).toHaveAttribute(
+      'aria-valuenow',
+      '42',
+    );
     expect(screen.getByLabelText('Upload complete')).toBeInTheDocument();
     expect(screen.getByText('File exceeds 50 MB')).toBeInTheDocument();
     expect(formatBytes(2048)).toBe('2.0 KB');

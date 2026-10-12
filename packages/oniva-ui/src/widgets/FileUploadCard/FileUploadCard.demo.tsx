@@ -41,7 +41,7 @@ function Live() {
 
 const demo: DemoModule = {
   meta: {
-    title: 'FileUploadCard',
+    title: 'File upload card',
     slug: 'file-upload-card',
     category: 'Widgets',
     description: 'Upload card with drop zone, live progress list and a storage quota meter.',
@@ -65,7 +65,13 @@ const demo: DemoModule = {
         <div style={{ maxWidth: 440 }}>
           <FileUploadCard
             files={[
-              { id: 'x', name: 'archive.zip', size: 48_000_000, progress: 20, error: 'Larger than 25 MB' },
+              {
+                id: 'x',
+                name: 'archive.zip',
+                size: 48_000_000,
+                progress: 20,
+                error: 'Larger than 25 MB',
+              },
             ]}
           />
         </div>

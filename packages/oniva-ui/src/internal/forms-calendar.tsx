@@ -20,72 +20,98 @@ import { ff } from './forms-field';
 import { fp } from './forms-popover';
 
 export const fc = stylex.create({
-  root: { boxSizing: 'border-box', color: colors.text, fontFamily: font.sans, padding: 12, width: 'fit-content' },
+  root: {
+    boxSizing: 'border-box',
+    color: colors['--oniva-color-text'],
+    fontFamily: font['--oniva-font-sans'],
+    padding: 12,
+    width: 'fit-content',
+  },
   card: {
-    backgroundColor: colors.surface,
-    borderColor: colors.border,
-    borderRadius: radius.xl,
+    backgroundColor: colors['--oniva-color-surface'],
+    borderColor: colors['--oniva-color-border'],
+    borderRadius: radius['--oniva-radius-xl'],
     borderStyle: 'solid',
     borderWidth: 1,
-    boxShadow: shadow.xs,
+    boxShadow: shadow['--oniva-shadow-xs'],
   },
-  header: { alignItems: 'center', display: 'flex', justifyContent: 'space-between', marginBottom: 8 },
+  header: {
+    alignItems: 'center',
+    display: 'flex',
+    justifyContent: 'space-between',
+    marginBottom: 8,
+  },
   heading: {
-    fontSize: font.size14,
-    fontWeight: font.weightSemibold,
-    lineHeight: font.lh14,
+    fontSize: font['--oniva-font-size-14'],
+    fontWeight: font['--oniva-font-weight-semibold'],
+    lineHeight: font['--oniva-font-lh-14'],
     margin: 0,
   },
   grid: { borderCollapse: 'collapse', borderSpacing: 0 },
   dow: {
-    color: colors.textMuted,
-    fontSize: font.size12,
-    fontWeight: font.weightMedium,
+    color: colors['--oniva-color-text-muted'],
+    fontSize: font['--oniva-font-size-12'],
+    fontWeight: font['--oniva-font-weight-medium'],
     height: 28,
-    lineHeight: font.lh12,
+    lineHeight: font['--oniva-font-lh-12'],
     textAlign: 'center',
   },
   td: { padding: 0 },
   cell: {
     alignItems: 'center',
-    borderRadius: radius.md,
+    borderRadius: radius['--oniva-radius-md'],
     boxSizing: 'border-box',
-    color: colors.text,
+    color: colors['--oniva-color-text'],
     cursor: 'pointer',
     display: 'flex',
-    fontSize: font.size14,
+    fontSize: font['--oniva-font-size-14'],
     fontVariantNumeric: 'tabular-nums',
-    fontWeight: font.weightMedium,
+    fontWeight: font['--oniva-font-weight-medium'],
     height: 36,
     justifyContent: 'center',
-    lineHeight: font.lh14,
+    lineHeight: font['--oniva-font-lh-14'],
     outline: 'none',
-    transitionDuration: motion.durFast,
+    transitionDuration: motion['--oniva-motion-dur-fast'],
     transitionProperty: 'background-color, color',
     width: 36,
   },
-  hover: { backgroundColor: colors.surfaceHover },
-  today: { color: colors.accentSoftFg, fontWeight: font.weightSemibold },
-  outside: { color: colors.textSubtle },
-  disabled: { color: colors.textDisabled, cursor: 'not-allowed' },
-  unavailable: { color: colors.textError, textDecoration: 'line-through' },
+  hover: { backgroundColor: colors['--oniva-color-surface-hover'] },
+  today: {
+    color: colors['--oniva-color-accent-soft-fg'],
+    fontWeight: font['--oniva-font-weight-semibold'],
+  },
+  outside: { color: colors['--oniva-color-text-subtle'] },
+  disabled: { color: colors['--oniva-color-text-disabled'], cursor: 'not-allowed' },
+  unavailable: { color: colors['--oniva-color-text-error'], textDecoration: 'line-through' },
   selected: {
-    backgroundImage: `linear-gradient(180deg, ${accent.accent500}, ${accent.accent600})`,
-    boxShadow: shadow.accentInset,
-    color: colors.accentFg,
+    backgroundImage: `linear-gradient(180deg, ${accent['--oniva-accent-500']}, ${accent['--oniva-accent-600']})`,
+    boxShadow: shadow['--oniva-shadow-accent-inset'],
+    color: colors['--oniva-color-accent-fg'],
   },
   rangeMid: {
-    backgroundColor: colors.accentTint,
+    backgroundColor: colors['--oniva-color-accent-tint'],
     borderRadius: 0,
-    color: colors.text,
+    color: colors['--oniva-color-text'],
   },
-  rangeStart: { borderEndStartRadius: radius.md, borderStartStartRadius: radius.md },
-  rangeEnd: { borderEndEndRadius: radius.md, borderStartEndRadius: radius.md },
+  rangeStart: {
+    borderEndStartRadius: radius['--oniva-radius-md'],
+    borderStartStartRadius: radius['--oniva-radius-md'],
+  },
+  rangeEnd: {
+    borderEndEndRadius: radius['--oniva-radius-md'],
+    borderStartEndRadius: radius['--oniva-radius-md'],
+  },
   gridWrap: { display: 'flex', gap: 16 },
 });
 
 /** Previous / heading / next + one grid. Used by Calendar and RangeCalendar. */
-export function CalendarBody({ range, visibleDuration }: { range?: boolean; visibleDuration?: number }) {
+export function CalendarBody({
+  range,
+  visibleDuration,
+}: {
+  range?: boolean;
+  visibleDuration?: number;
+}) {
   const grids = Array.from({ length: visibleDuration ?? 1 }, (_, i) => i);
   return (
     <>

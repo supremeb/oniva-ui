@@ -10,7 +10,11 @@ describe('Heading', () => {
   it('visual variant is independent of level', () => {
     const { rerender } = render(<Heading level={2}>A</Heading>);
     const a = screen.getByRole('heading').className;
-    rerender(<Heading level={2} variant="display">A</Heading>);
+    rerender(
+      <Heading level={2} variant="display">
+        A
+      </Heading>,
+    );
     expect(screen.getByRole('heading').className).not.toBe(a);
     expect(screen.getByRole('heading').tagName).toBe('H2');
   });

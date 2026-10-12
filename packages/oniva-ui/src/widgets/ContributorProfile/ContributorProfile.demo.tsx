@@ -10,7 +10,10 @@ function makeActivity() {
     const r = s / 4294967296;
     const d = new Date(end - i * 86400000);
     const weekend = d.getUTCDay() === 0 || d.getUTCDay() === 6;
-    out.push({ date: d.toISOString().slice(0, 10), value: r < (weekend ? 0.7 : 0.3) ? 0 : Math.round(r * 10) });
+    out.push({
+      date: d.toISOString().slice(0, 10),
+      value: r < (weekend ? 0.7 : 0.3) ? 0 : Math.round(r * 10),
+    });
   }
   return out;
 }
@@ -24,10 +27,11 @@ const stats = [
 
 const demo: DemoModule = {
   meta: {
-    title: 'ContributorProfile',
+    title: 'Contributor profile',
     slug: 'contributor-profile',
     category: 'Widgets',
-    description: 'Contributor card with PRO chip, yearly $ total + delta, stat tiles and a contribution heatmap.',
+    description:
+      'Contributor card with PRO chip, yearly $ total + delta, stat tiles and a contribution heatmap.',
   },
   demos: [
     {

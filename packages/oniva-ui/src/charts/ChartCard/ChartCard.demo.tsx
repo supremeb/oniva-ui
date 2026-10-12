@@ -88,7 +88,7 @@ function Revenue() {
 
 const demo: DemoModule = {
   meta: {
-    title: 'ChartCard',
+    title: 'Chart card',
     slug: 'chart-card',
     category: 'Charts',
     description:

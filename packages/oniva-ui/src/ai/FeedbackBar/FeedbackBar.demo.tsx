@@ -3,7 +3,7 @@ import { FeedbackBar } from './FeedbackBar';
 
 const demo: DemoModule = {
   meta: {
-    title: 'Feedback Bar',
+    title: 'Feedback bar',
     slug: 'feedback-bar',
     category: 'AI & Agent',
     description: 'Inline response rating. A thumbs-down follows up with a reason.',

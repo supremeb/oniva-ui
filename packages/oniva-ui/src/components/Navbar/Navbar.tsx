@@ -1,8 +1,7 @@
 import * as stylex from '@stylexjs/stylex';
 import { Link as AriaLink, type LinkProps as AriaLinkProps } from 'react-aria-components';
 import type { CSSProperties, HTMLAttributes, ReactNode, Ref } from 'react';
-import { cx } from '../../internal/nav-cx';
-import { mergeSx } from '../../internal/sx';
+import { mergeSx, sxClass } from '../../internal/sx';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 import { motion } from '../../tokens/motion.stylex';
@@ -10,60 +9,82 @@ import { radius } from '../../tokens/radius.stylex';
 import { shadow } from '../../tokens/shadow.stylex';
 
 const styles = stylex.create({
+  nav: { flexGrow: 1 },
   root: {
     alignItems: 'center',
-    backgroundColor: colors.surface,
-    borderBottomColor: colors.border,
+    backgroundColor: colors['--oniva-color-surface'],
+    borderBottomColor: colors['--oniva-color-border'],
     borderBottomStyle: 'solid',
     borderBottomWidth: 1,
     boxSizing: 'border-box',
-    color: colors.text,
+    color: colors['--oniva-color-text'],
     display: 'flex',
-    fontFamily: font.sans,
+    fontFamily: font['--oniva-font-sans'],
     gap: 24,
     height: 56,
     paddingInline: 16,
     width: '100%',
   },
   floating: {
-    borderColor: colors.border,
-    borderRadius: radius.xxl,
+    borderColor: colors['--oniva-color-border'],
+    borderRadius: radius['--oniva-radius-xxl'],
     borderStyle: 'solid',
     borderWidth: 1,
-    boxShadow: shadow.float,
+    boxShadow: shadow['--oniva-shadow-float'],
   },
   sticky: { position: 'sticky', top: 0, zIndex: 10 },
-  brand: { alignItems: 'center', display: 'flex', flexShrink: 0, fontSize: font.size16, fontWeight: font.weightSemibold, gap: 8 },
-  links: { alignItems: 'center', display: 'flex', flexGrow: 1, gap: 4, listStyle: 'none', margin: 0, padding: 0 },
+  brand: {
+    alignItems: 'center',
+    display: 'flex',
+    flexShrink: 0,
+    fontSize: font['--oniva-font-size-16'],
+    fontWeight: font['--oniva-font-weight-semibold'],
+    gap: 8,
+  },
+  links: {
+    alignItems: 'center',
+    display: 'flex',
+    flexGrow: 1,
+    gap: 4,
+    listStyle: 'none',
+    margin: 0,
+    padding: 0,
+  },
   end: { alignItems: 'center', display: 'flex', flexShrink: 0, gap: 8, marginInlineStart: 'auto' },
   link: {
     alignItems: 'center',
-    borderRadius: radius.lg,
+    borderRadius: radius['--oniva-radius-lg'],
     boxSizing: 'border-box',
     cursor: 'pointer',
     display: 'inline-flex',
-    fontSize: font.size14,
-    fontWeight: font.weightMedium,
+    fontSize: font['--oniva-font-size-14'],
+    fontWeight: font['--oniva-font-weight-medium'],
     height: 36,
-    outlineColor: colors.focusRing,
+    outlineColor: colors['--oniva-color-focus-ring'],
     outlineOffset: 2,
     outlineWidth: 2,
     paddingInline: 12,
     textDecoration: 'none',
-    transitionDuration: motion.durBase,
+    transitionDuration: motion['--oniva-motion-dur-base'],
     transitionProperty: 'background-color, color',
-    transitionTimingFunction: motion.easeStandard,
+    transitionTimingFunction: motion['--oniva-motion-ease-standard'],
   },
   linkFocus: { outlineStyle: 'solid' },
   linkNoFocus: { outlineStyle: 'none' },
   linkIdle: {
-    backgroundColor: { default: 'transparent', ':hover': colors.surfaceInset },
-    color: { default: colors.textMuted, ':hover': colors.text },
+    backgroundColor: { default: 'transparent', ':hover': colors['--oniva-color-surface-inset'] },
+    color: { default: colors['--oniva-color-text-muted'], ':hover': colors['--oniva-color-text'] },
   },
-  linkActive: { backgroundColor: colors.surfaceInsetHover, color: colors.text },
+  linkActive: {
+    backgroundColor: colors['--oniva-color-surface-inset-hover'],
+    color: colors['--oniva-color-text'],
+  },
 });
 
-export interface NavbarProps extends Omit<HTMLAttributes<HTMLElement>, 'style' | 'className' | 'children'> {
+export interface NavbarProps extends Omit<
+  HTMLAttributes<HTMLElement>,
+  'style' | 'className' | 'children'
+> {
   /** Logo / product name block at the start. */
   brand?: ReactNode;
   /** Actions at the end (buttons, avatar). */
@@ -93,11 +114,16 @@ export function Navbar({
   ref,
   ...rest
 }: NavbarProps) {
-  const sx = stylex.props(styles.root, floating && styles.floating, sticky && styles.sticky, xstyle);
+  const sx = stylex.props(
+    styles.root,
+    floating && styles.floating,
+    sticky && styles.sticky,
+    xstyle,
+  );
   return (
     <header {...rest} ref={ref} {...mergeSx(sx, className, style)}>
       {brand && <div {...stylex.props(styles.brand)}>{brand}</div>}
-      <nav aria-label={ariaLabel} style={{ flexGrow: 1 }}>
+      <nav aria-label={ariaLabel} {...stylex.props(styles.nav)}>
         <ul {...stylex.props(styles.links)}>{children}</ul>
       </nav>
       {end && <div {...stylex.props(styles.end)}>{end}</div>}
@@ -113,7 +139,14 @@ export interface NavbarLinkProps extends Omit<AriaLinkProps, 'className' | 'styl
   ref?: Ref<HTMLAnchorElement>;
 }
 
-export function NavbarLink({ isActive = false, children, className, xstyle, ref, ...rest }: NavbarLinkProps) {
+export function NavbarLink({
+  isActive = false,
+  children,
+  className,
+  xstyle,
+  ref,
+  ...rest
+}: NavbarLinkProps) {
   return (
     <li>
       <AriaLink
@@ -121,7 +154,7 @@ export function NavbarLink({ isActive = false, children, className, xstyle, ref,
         ref={ref}
         aria-current={isActive ? 'page' : undefined}
         className={(s) =>
-          cx(
+          sxClass(
             stylex.props(
               styles.link,
               s.isFocusVisible ? styles.linkFocus : styles.linkNoFocus,

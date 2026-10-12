@@ -2,17 +2,17 @@ import * as stylex from '@stylexjs/stylex';
 import { ChevronDown, Sparkles } from 'lucide-react';
 import type { Ref } from 'react';
 import { Button } from '../../components/Button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-} from '../../components/DropdownMenu';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem } from '../../components/DropdownMenu';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 
 const styles = stylex.create({
-  desc: { color: colors.textMuted, fontSize: font.size12, fontWeight: font.weightRegular },
-  chevron: { color: colors.iconMuted },
+  desc: {
+    color: colors['--oniva-color-text-muted'],
+    fontSize: font['--oniva-font-size-12'],
+    fontWeight: font['--oniva-font-weight-regular'],
+  },
+  chevron: { color: colors['--oniva-color-icon-muted'] },
 });
 
 export interface ModelOption {
@@ -32,7 +32,15 @@ export interface ModelSelectorProps {
 }
 
 /** Model picker: a compact ghost button that opens a single-select menu. */
-export function ModelSelector({ models, value, defaultValue, onChange, isDisabled, xstyle, ref }: ModelSelectorProps) {
+export function ModelSelector({
+  models,
+  value,
+  defaultValue,
+  onChange,
+  isDisabled,
+  xstyle,
+  ref,
+}: ModelSelectorProps) {
   const selected = value ?? undefined;
   const current = models.find((m) => m.id === (selected ?? defaultValue)) ?? models[0];
   return (

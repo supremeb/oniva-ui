@@ -2,7 +2,10 @@ import { act, fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { ChatContainer } from './ChatContainer';
 
-function setMetrics(el: HTMLElement, m: { scrollHeight: number; clientHeight: number; scrollTop: number }) {
+function setMetrics(
+  el: HTMLElement,
+  m: { scrollHeight: number; clientHeight: number; scrollTop: number },
+) {
   Object.defineProperty(el, 'scrollHeight', { value: m.scrollHeight, configurable: true });
   Object.defineProperty(el, 'clientHeight', { value: m.clientHeight, configurable: true });
   el.scrollTop = m.scrollTop;

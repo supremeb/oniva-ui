@@ -2,7 +2,13 @@ import { useState } from 'react';
 import type { DemoModule } from '../../internal/demo';
 import { Textarea } from './Textarea';
 
-const col = { display: 'flex', flexDirection: 'column', gap: 16, width: '100%', maxWidth: 400 } as const;
+const col = {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 16,
+  width: '100%',
+  maxWidth: 400,
+} as const;
 
 function Counter() {
   const [v, setV] = useState('Quarterly vendor review: renegotiate AWS commit before Dec 15.');
@@ -14,7 +20,8 @@ const demo: DemoModule = {
     title: 'Textarea',
     slug: 'textarea',
     category: 'Forms',
-    description: 'Multi-line text field with label, description, error and optional character counter.',
+    description:
+      'Multi-line text field with label, description, error and optional character counter.',
   },
   demos: [
     {
@@ -46,7 +53,11 @@ const demo: DemoModule = {
 <Textarea label="Archived note" isDisabled defaultValue="Closed on Sep 30." />`,
       Component: () => (
         <div style={col}>
-          <Textarea label="Reason" isInvalid errorMessage="A reason is required to void an invoice." />
+          <Textarea
+            label="Reason"
+            isInvalid
+            errorMessage="A reason is required to void an invoice."
+          />
           <Textarea label="Archived note" isDisabled defaultValue="Closed on Sep 30." />
         </div>
       ),

@@ -3,7 +3,7 @@ import { ChartTooltip } from './ChartTooltip';
 
 const demo: DemoModule = {
   meta: {
-    title: 'ChartTooltip',
+    title: 'Chart tooltip',
     slug: 'chart-tooltip',
     category: 'Charts',
     description:

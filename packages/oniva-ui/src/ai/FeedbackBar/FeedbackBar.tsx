@@ -7,7 +7,15 @@ import { Button } from '../../components/Button';
 import { mergeSx } from '../../internal/sx';
 
 const styles = stylex.create({
-  root: { alignItems: 'center', color: colors.textMuted, display: 'flex', flexWrap: 'wrap', fontFamily: font.sans, fontSize: font.size13, gap: 8 },
+  root: {
+    alignItems: 'center',
+    color: colors['--oniva-color-text-muted'],
+    display: 'flex',
+    flexWrap: 'wrap',
+    fontFamily: font['--oniva-font-sans'],
+    fontSize: font['--oniva-font-size-13'],
+    gap: 8,
+  },
   reasons: { display: 'flex', flexWrap: 'wrap', gap: 6 },
 });
 
@@ -16,7 +24,10 @@ export interface FeedbackValue {
   reason?: string;
 }
 
-export interface FeedbackBarProps extends Omit<HTMLAttributes<HTMLDivElement>, 'style' | 'onSubmit'> {
+export interface FeedbackBarProps extends Omit<
+  HTMLAttributes<HTMLDivElement>,
+  'style' | 'onSubmit'
+> {
   question?: string;
   reasons?: string[];
   onSubmit?: (value: FeedbackValue) => void;
@@ -52,7 +63,12 @@ export function FeedbackBar({
           <span>What went wrong?</span>
           <div role="group" aria-label="Reasons" {...stylex.props(styles.reasons)}>
             {reasons.map((r) => (
-              <Button key={r} size="xs" variant="secondary" onPress={() => finish({ rating: 'down', reason: r })}>
+              <Button
+                key={r}
+                size="xs"
+                variant="secondary"
+                onPress={() => finish({ rating: 'down', reason: r })}
+              >
                 {r}
               </Button>
             ))}
@@ -72,7 +88,12 @@ export function FeedbackBar({
           >
             Yes
           </Button>
-          <Button size="xs" variant="secondary" startIcon={<ThumbsDown size={12} aria-hidden="true" />} onPress={() => setRating('down')}>
+          <Button
+            size="xs"
+            variant="secondary"
+            startIcon={<ThumbsDown size={12} aria-hidden="true" />}
+            onPress={() => setRating('down')}
+          >
             No
           </Button>
         </>

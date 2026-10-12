@@ -6,7 +6,7 @@ const row = { display: 'flex', flexWrap: 'wrap', gap: 12, alignItems: 'center' }
 
 const demo: DemoModule = {
   meta: {
-    title: 'LinkButton',
+    title: 'Link button',
     slug: 'link-button',
     category: 'Actions',
     description: 'A link that looks like a Button, for navigation CTAs.',
@@ -20,10 +20,16 @@ const demo: DemoModule = {
 <LinkButton href="#" variant="ghost">Docs</LinkButton>`,
       Component: () => (
         <div style={row}>
-          <LinkButton href="#/components/link-button" variant="primary">View statement</LinkButton>
+          <LinkButton href="#/components/link-button" variant="primary">
+            View statement
+          </LinkButton>
           <LinkButton href="#/components/link-button">Download PDF</LinkButton>
-          <LinkButton href="#/components/link-button" variant="soft">Contact sales</LinkButton>
-          <LinkButton href="#/components/link-button" variant="ghost">Docs</LinkButton>
+          <LinkButton href="#/components/link-button" variant="soft">
+            Contact sales
+          </LinkButton>
+          <LinkButton href="#/components/link-button" variant="ghost">
+            Docs
+          </LinkButton>
         </div>
       ),
     },
@@ -33,10 +39,16 @@ const demo: DemoModule = {
 <LinkButton href="#" size="lg">Get started</LinkButton>`,
       Component: () => (
         <div style={row}>
-          <LinkButton href="#/components/link-button" size="sm" endIcon={<ArrowUpRight size={14} />}>
+          <LinkButton
+            href="#/components/link-button"
+            size="sm"
+            endIcon={<ArrowUpRight size={14} />}
+          >
             Open dashboard
           </LinkButton>
-          <LinkButton href="#/components/link-button" size="lg" variant="primary">Get started</LinkButton>
+          <LinkButton href="#/components/link-button" size="lg" variant="primary">
+            Get started
+          </LinkButton>
         </div>
       ),
     },

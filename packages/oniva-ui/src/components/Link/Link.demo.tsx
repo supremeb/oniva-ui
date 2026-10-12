@@ -27,7 +27,9 @@ const demo: DemoModule = {
       Component: () => (
         <div style={{ display: 'flex', gap: 20 }}>
           <Link href="#/components/link">Accent</Link>
-          <Link href="#/components/link" tone="muted" underline>Muted underlined</Link>
+          <Link href="#/components/link" tone="muted" underline>
+            Muted underlined
+          </Link>
           <Link isDisabled>Disabled</Link>
         </div>
       ),

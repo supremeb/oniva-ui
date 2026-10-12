@@ -1,10 +1,15 @@
+import type * as stylex from '@stylexjs/stylex';
 import type { Ref } from 'react';
 import { Button, type ButtonProps } from '../Button';
 
-export interface IconButtonProps
-  extends Omit<ButtonProps, 'isIconOnly' | 'startIcon' | 'endIcon' | 'ref'> {
+export interface IconButtonProps extends Omit<
+  ButtonProps,
+  'isIconOnly' | 'startIcon' | 'endIcon' | 'ref'
+> {
   /** Required: icon-only buttons have no visible text. */
   'aria-label': string;
+  /** StyleX overrides, applied last. */
+  xstyle?: stylex.StyleXStyles;
   ref?: Ref<HTMLButtonElement>;
 }
 

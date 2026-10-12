@@ -10,60 +10,93 @@ import { CloseButton } from '../CloseButton';
 const styles = stylex.create({
   base: {
     alignItems: 'flex-start',
-    borderColor: colors.border,
-    borderRadius: radius.lg,
+    borderColor: colors['--oniva-color-border'],
+    borderRadius: radius['--oniva-radius-lg'],
     borderStyle: 'solid',
     borderWidth: 1,
-    boxShadow: shadow.card,
+    boxShadow: shadow['--oniva-shadow-card'],
     boxSizing: 'border-box',
     display: 'flex',
-    fontFamily: font.sans,
+    fontFamily: font['--oniva-font-sans'],
     gap: 12,
     padding: 12,
     width: '100%',
   },
-  info: { backgroundColor: colors.surfaceInset },
-  success: { backgroundColor: colors.surfaceInset },
-  warning: { backgroundColor: colors.surfaceInset },
-  danger: { backgroundColor: colors.surfaceInset },
+  info: { backgroundColor: colors['--oniva-color-surface-inset'] },
+  success: { backgroundColor: colors['--oniva-color-surface-inset'] },
+  warning: { backgroundColor: colors['--oniva-color-surface-inset'] },
+  danger: { backgroundColor: colors['--oniva-color-surface-inset'] },
   // solid banner: fills with status colours
-  bannerInfo: { backgroundColor: colors.infoBg, borderColor: 'transparent', color: colors.infoFg },
-  bannerSuccess: { backgroundColor: colors.successBg, borderColor: 'transparent', color: colors.successFg },
-  bannerWarning: { backgroundColor: colors.warningBg, borderColor: 'transparent', color: colors.warningFg },
-  bannerDanger: { backgroundColor: colors.dangerBg, borderColor: 'transparent', color: colors.dangerFg },
-  banner: { borderRadius: radius.lg, boxShadow: 'none' },
+  bannerInfo: {
+    backgroundColor: colors['--oniva-color-info-bg'],
+    borderColor: 'transparent',
+    color: colors['--oniva-color-info-fg'],
+  },
+  bannerSuccess: {
+    backgroundColor: colors['--oniva-color-success-bg'],
+    borderColor: 'transparent',
+    color: colors['--oniva-color-success-fg'],
+  },
+  bannerWarning: {
+    backgroundColor: colors['--oniva-color-warning-bg'],
+    borderColor: 'transparent',
+    color: colors['--oniva-color-warning-fg'],
+  },
+  bannerDanger: {
+    backgroundColor: colors['--oniva-color-danger-bg'],
+    borderColor: 'transparent',
+    color: colors['--oniva-color-danger-fg'],
+  },
+  banner: { borderRadius: radius['--oniva-radius-lg'], boxShadow: 'none' },
   iconWrap: {
     alignItems: 'center',
-    borderRadius: radius.full,
+    borderRadius: radius['--oniva-radius-full'],
     display: 'inline-flex',
     flexShrink: 0,
     height: 24,
     justifyContent: 'center',
     width: 24,
   },
-  iconInfo: { backgroundColor: colors.infoHalo, color: colors.infoSolid },
-  iconSuccess: { backgroundColor: colors.successHalo, color: colors.successSolid },
-  iconWarning: { backgroundColor: colors.warningHalo, color: colors.warningSolid },
-  iconDanger: { backgroundColor: colors.dangerHalo, color: colors.dangerSolid },
+  iconInfo: {
+    backgroundColor: colors['--oniva-color-info-halo'],
+    color: colors['--oniva-color-info-solid'],
+  },
+  iconSuccess: {
+    backgroundColor: colors['--oniva-color-success-halo'],
+    color: colors['--oniva-color-success-solid'],
+  },
+  iconWarning: {
+    backgroundColor: colors['--oniva-color-warning-halo'],
+    color: colors['--oniva-color-warning-solid'],
+  },
+  iconDanger: {
+    backgroundColor: colors['--oniva-color-danger-halo'],
+    color: colors['--oniva-color-danger-solid'],
+  },
   iconBanner: { backgroundColor: 'transparent', color: 'inherit' },
   body: { display: 'grid', flex: '1 1 0%', gap: 2, minWidth: 0 },
   title: {
-    color: colors.text,
-    fontSize: font.size14,
-    fontWeight: font.weightSemibold,
-    lineHeight: font.lh14,
+    color: colors['--oniva-color-text'],
+    fontSize: font['--oniva-font-size-14'],
+    fontWeight: font['--oniva-font-weight-semibold'],
+    lineHeight: font['--oniva-font-lh-14'],
   },
   description: {
-    color: colors.textMuted,
-    fontSize: font.size13,
-    lineHeight: font.lh13,
+    color: colors['--oniva-color-text-muted'],
+    fontSize: font['--oniva-font-size-13'],
+    lineHeight: font['--oniva-font-lh-13'],
   },
   inherit: { color: 'inherit' },
   actions: { alignItems: 'center', display: 'flex', gap: 8, marginBlockStart: 8 },
   dismiss: { color: 'inherit', flexShrink: 0, marginBlock: -2, marginInlineEnd: -4 },
 });
 
-const icons = { info: Info, success: CircleCheck, warning: TriangleAlert, danger: CircleAlert } as const;
+const icons = {
+  info: Info,
+  success: CircleCheck,
+  warning: TriangleAlert,
+  danger: CircleAlert,
+} as const;
 const bannerStyle = {
   info: 'bannerInfo',
   success: 'bannerSuccess',
@@ -129,7 +162,10 @@ export function Alert({
       {icon !== null && (
         <span
           aria-hidden="true"
-          {...stylex.props(styles.iconWrap, isBanner ? styles.iconBanner : styles[iconStyle[variant]])}
+          {...stylex.props(
+            styles.iconWrap,
+            isBanner ? styles.iconBanner : styles[iconStyle[variant]],
+          )}
         >
           {icon ?? <Glyph size={isBanner ? 18 : 14} />}
         </span>
@@ -137,7 +173,9 @@ export function Alert({
       <div {...stylex.props(styles.body)}>
         {title && <div {...stylex.props(styles.title, isBanner && styles.inherit)}>{title}</div>}
         {(description || children) && (
-          <div {...stylex.props(styles.description, isBanner && styles.inherit)}>{description ?? children}</div>
+          <div {...stylex.props(styles.description, isBanner && styles.inherit)}>
+            {description ?? children}
+          </div>
         )}
         {actions && <div {...stylex.props(styles.actions)}>{actions}</div>}
       </div>

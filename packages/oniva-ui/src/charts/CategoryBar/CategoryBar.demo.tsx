@@ -11,7 +11,7 @@ const stack = {
 
 const demo: DemoModule = {
   meta: {
-    title: 'CategoryBar',
+    title: 'Category bar',
     slug: 'category-bar',
     category: 'Charts',
     description:

@@ -21,11 +21,14 @@ const styles = stylex.create({
   input: { fontVariantNumeric: 'tabular-nums', paddingInline: 4, textAlign: 'center' },
   step: {
     opacity: { default: 1, ':disabled': 0.4 },
-    color: colors.iconMuted,
+    color: colors['--oniva-color-icon-muted'],
   },
 });
 
-export interface NumberFieldProps extends Omit<AriaNumberFieldProps, 'className' | 'style' | 'children'> {
+export interface NumberFieldProps extends Omit<
+  AriaNumberFieldProps,
+  'className' | 'style' | 'children'
+> {
   label?: ReactNode;
   description?: ReactNode;
   errorMessage?: string | ((v: ValidationResult) => string);

@@ -6,10 +6,10 @@ import { mergeSx } from '../../internal/sx';
 
 const styles = stylex.create({
   root: {
-    color: colors.text,
-    fontFamily: font.sans,
-    fontSize: font.size14,
-    lineHeight: font.lh16,
+    color: colors['--oniva-color-text'],
+    fontFamily: font['--oniva-font-sans'],
+    fontSize: font['--oniva-font-size-14'],
+    lineHeight: font['--oniva-font-lh-16'],
     whiteSpace: 'pre-wrap',
   },
 });
@@ -77,16 +77,15 @@ export function ResponseStream({
   ref,
   ...rest
 }: ResponseStreamProps) {
-  const { visible, isComplete } = useResponseStream(text, { speed, intervalMs, instant, onComplete });
+  const { visible, isComplete } = useResponseStream(text, {
+    speed,
+    intervalMs,
+    instant,
+    onComplete,
+  });
   const sx = stylex.props(styles.root, xstyle);
   return (
-    <div
-      {...rest}
-      ref={ref}
-      aria-busy={!isComplete}
-      aria-live="polite"
-      {...mergeSx(sx, className)}
-    >
+    <div {...rest} ref={ref} aria-busy={!isComplete} aria-live="polite" {...mergeSx(sx, className)}>
       {render ? render(visible, isComplete) : visible}
     </div>
   );

@@ -9,37 +9,37 @@ import { radius } from '../../tokens/radius.stylex';
 
 const styles = stylex.create({
   verdict: {
-    color: colors.text,
-    fontSize: font.size24,
-    fontWeight: font.weightMedium,
-    letterSpacing: font.trackHero,
-    lineHeight: font.lh24,
+    color: colors['--oniva-color-text'],
+    fontSize: font['--oniva-font-size-24'],
+    fontWeight: font['--oniva-font-weight-medium'],
+    letterSpacing: font['--oniva-font-track-hero'],
+    lineHeight: font['--oniva-font-lh-24'],
     margin: 0,
   },
   ring: { display: 'flex', justifyContent: 'center', paddingBlock: 8 },
   rows: { display: 'flex', flexDirection: 'column' },
   row: {
     alignItems: 'center',
-    borderBottomColor: colors.separator,
+    borderBottomColor: colors['--oniva-color-separator'],
     borderBottomStyle: 'solid',
     borderBottomWidth: { default: 1, ':last-child': 0 },
-    color: colors.text,
+    color: colors['--oniva-color-text'],
     display: 'flex',
-    fontSize: font.size14,
+    fontSize: font['--oniva-font-size-14'],
     gap: 10,
-    lineHeight: font.lh14,
+    lineHeight: font['--oniva-font-lh-14'],
     paddingBlock: 10,
   },
   label: { flexGrow: 1, minWidth: 0 },
-  detail: { color: colors.textMuted },
-  score: { fontFeatureSettings: "'tnum'", fontWeight: font.weightMedium },
-  dot: { borderRadius: radius.xs, flexShrink: 0, height: 10, width: 10 },
-  t5: { backgroundColor: colors.chart5 },
-  t3: { backgroundColor: colors.chart3 },
-  t6: { backgroundColor: colors.chart6 },
-  t1: { backgroundColor: colors.chart1 },
-  t2: { backgroundColor: colors.chart2 },
-  t4: { backgroundColor: colors.chart4 },
+  detail: { color: colors['--oniva-color-text-muted'] },
+  score: { fontFeatureSettings: "'tnum'", fontWeight: font['--oniva-font-weight-medium'] },
+  dot: { borderRadius: radius['--oniva-radius-xs'], flexShrink: 0, height: 10, width: 10 },
+  t5: { backgroundColor: colors['--oniva-color-chart-5'] },
+  t3: { backgroundColor: colors['--oniva-color-chart-3'] },
+  t6: { backgroundColor: colors['--oniva-color-chart-6'] },
+  t1: { backgroundColor: colors['--oniva-color-chart-1'] },
+  t2: { backgroundColor: colors['--oniva-color-chart-2'] },
+  t4: { backgroundColor: colors['--oniva-color-chart-4'] },
 });
 
 const DOTS = [styles.t5, styles.t3, styles.t6, styles.t1, styles.t2, styles.t4];
@@ -67,7 +67,8 @@ export interface SleepScoreWidgetProps {
   ref?: Ref<HTMLDivElement>;
 }
 
-const verdict = (s: number) => (s >= 90 ? 'Excellent' : s >= 75 ? 'Good' : s >= 60 ? 'Fair' : 'Poor');
+const verdict = (s: number) =>
+  s >= 90 ? 'Excellent' : s >= 75 ? 'Good' : s >= 60 ? 'Fair' : 'Poor';
 
 /** Sleep score ring with verdict and a per-factor breakdown (colored dot, detail, n/max). */
 export function SleepScoreWidget({
@@ -101,7 +102,11 @@ export function SleepScoreWidget({
       <div {...stylex.props(styles.ring)}>
         <SegmentRing
           label={`Sleep score ${night.score} out of 100`}
-          segments={night.factors.map((f, k) => ({ label: f.label, value: f.score, tone: [5, 3, 6, 1, 2, 4][k % 6] ?? 5 }))}
+          segments={night.factors.map((f, k) => ({
+            label: f.label,
+            value: f.score,
+            tone: [5, 3, 6, 1, 2, 4][k % 6] ?? 5,
+          }))}
         >
           {night.score}
         </SegmentRing>

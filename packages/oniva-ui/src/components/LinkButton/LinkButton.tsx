@@ -1,17 +1,18 @@
 import * as stylex from '@stylexjs/stylex';
+import { focus } from '../../internal/focus';
 import { Link as AriaLink, type LinkProps as AriaLinkProps } from 'react-aria-components';
 import type { CSSProperties, ReactNode, Ref } from 'react';
 import {
   controlIconSize,
   controlStyles,
-  type ControlSize,
+  type ButtonSize,
   type ControlVariant,
 } from '../../internal/feedback-control';
 import { mergeSx } from '../../internal/sx';
 
 export interface LinkButtonProps extends Omit<AriaLinkProps, 'className' | 'style' | 'children'> {
   variant?: ControlVariant;
-  size?: ControlSize;
+  size?: ButtonSize;
   isIconOnly?: boolean;
   startIcon?: ReactNode;
   endIcon?: ReactNode;
@@ -38,6 +39,7 @@ export function LinkButton({
 }: LinkButtonProps) {
   const sx = stylex.props(
     controlStyles.base,
+    focus.ring,
     controlStyles[variant],
     controlStyles[size],
     isIconOnly && controlStyles[controlIconSize[size]],

@@ -3,7 +3,7 @@ import { TaskList } from './TaskList';
 
 const demo: DemoModule = {
   meta: {
-    title: 'Task List',
+    title: 'Task list',
     slug: 'task-list',
     category: 'AI & Agent',
     description: 'Step checklist for agent plans: done, running and pending states.',

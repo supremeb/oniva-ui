@@ -16,7 +16,7 @@ describe('ActivityWidget', () => {
     expect(screen.getAllByText('Running').length).toBeGreaterThan(0);
     expect(screen.getAllByText(/486/).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/5\.2/).length).toBeGreaterThan(0);
-    expect(screen.getByRole('img', { name: /Activity rings/ })).toBeInTheDocument();
+    expect(screen.getByRole('group', { name: /Activity rings/ })).toBeInTheDocument();
   });
 
   it('forwards ref and className', () => {

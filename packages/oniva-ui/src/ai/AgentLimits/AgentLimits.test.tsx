@@ -14,7 +14,9 @@ describe('AgentLimits', () => {
             { id: 'b', label: 'Tools', value: 300_000 },
           ],
         }}
-        limits={[{ id: '5h', label: '5-hour limit', resetsIn: 'Resets in 2 hr 46 min', percent: 38 }]}
+        limits={[
+          { id: '5h', label: '5-hour limit', resetsIn: 'Resets in 2 hr 46 min', percent: 38 },
+        ]}
       />,
     );
     expect(screen.getByText('820k / 1M (82%)')).toBeInTheDocument();

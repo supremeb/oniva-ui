@@ -17,52 +17,61 @@ import { shadow } from '../../tokens/shadow.stylex';
 import { cx, ff } from '../../internal/forms-field';
 
 const styles = stylex.create({
-  root: { display: 'flex', flexDirection: 'column', fontFamily: font.sans, gap: 8, width: '100%' },
+  root: {
+    display: 'flex',
+    flexDirection: 'column',
+    fontFamily: font['--oniva-font-sans'],
+    gap: 8,
+    width: '100%',
+  },
   head: { alignItems: 'center', display: 'flex', justifyContent: 'space-between' },
   output: {
-    color: colors.textMuted,
-    fontSize: font.size14,
+    color: colors['--oniva-color-text-muted'],
+    fontSize: font['--oniva-font-size-14'],
     fontVariantNumeric: 'tabular-nums',
-    fontWeight: font.weightMedium,
-    lineHeight: font.lh14,
+    fontWeight: font['--oniva-font-weight-medium'],
+    lineHeight: font['--oniva-font-lh-14'],
   },
   track: { alignItems: 'center', display: 'flex', height: 20, position: 'relative', width: '100%' },
   rail: {
-    backgroundColor: colors.surfaceTertiary,
-    borderRadius: radius.full,
+    backgroundColor: colors['--oniva-color-surface-tertiary'],
+    borderRadius: radius['--oniva-radius-full'],
     height: 6,
     left: 0,
     position: 'absolute',
     right: 0,
   },
   fill: {
-    backgroundImage: `linear-gradient(90deg, ${accent.accent500}, ${accent.accent600})`,
-    borderRadius: radius.full,
+    backgroundImage: `linear-gradient(90deg, ${accent['--oniva-accent-500']}, ${accent['--oniva-accent-600']})`,
+    borderRadius: radius['--oniva-radius-full'],
     height: 6,
     position: 'absolute',
   },
   thumb: {
-    backgroundColor: colors.surface,
-    borderColor: colors.borderControl,
-    borderRadius: radius.full,
+    backgroundColor: colors['--oniva-color-surface'],
+    borderColor: colors['--oniva-color-border-control'],
+    borderRadius: radius['--oniva-radius-full'],
     borderStyle: 'solid',
     borderWidth: 1,
-    boxShadow: shadow.sm,
+    boxShadow: shadow['--oniva-shadow-sm'],
     boxSizing: 'border-box',
     cursor: 'grab',
     height: 20,
     top: 10,
-    transitionDuration: motion.durFast,
+    transitionDuration: motion['--oniva-motion-dur-fast'],
     transitionProperty: 'box-shadow, border-color',
     width: 20,
   },
-  thumbHover: { borderColor: colors.borderActive },
-  thumbDrag: { cursor: 'grabbing', boxShadow: shadow.md },
+  thumbHover: { borderColor: colors['--oniva-color-border-active'] },
+  thumbDrag: { cursor: 'grabbing', boxShadow: shadow['--oniva-shadow-md'] },
   thumbDisabled: { cursor: 'not-allowed', opacity: 0.5 },
   rootDisabled: { opacity: 0.6 },
 });
 
-export interface SliderProps<T extends number | number[]> extends Omit<AriaSliderProps<T>, 'className' | 'style' | 'children'> {
+export interface SliderProps<T extends number | number[]> extends Omit<
+  AriaSliderProps<T>,
+  'className' | 'style' | 'children'
+> {
   label?: ReactNode;
   /** Hide the numeric output. */
   hideOutput?: boolean;
@@ -86,7 +95,10 @@ export function Slider<T extends number | number[]>({
       {...rest}
       ref={ref}
       className={({ isDisabled }) =>
-        cx(stylex.props(styles.root, isDisabled && styles.rootDisabled, xstyle).className, className)
+        cx(
+          stylex.props(styles.root, isDisabled && styles.rootDisabled, xstyle).className,
+          className,
+        )
       }
     >
       {({ isDisabled }) => (

@@ -11,7 +11,7 @@ const items = [
 
 const demo: DemoModule = {
   meta: {
-    title: 'RadialChart',
+    title: 'Radial chart',
     slug: 'radial-chart',
     category: 'Charts',
     description: 'Concentric radial bars with background tracks, each against its own maximum.',

@@ -2,11 +2,17 @@ import { CalendarDate } from '@internationalized/date';
 import type { DemoModule } from '../../internal/demo';
 import { DatePicker } from './DatePicker';
 
-const col = { display: 'flex', flexDirection: 'column', gap: 16, width: '100%', maxWidth: 300 } as const;
+const col = {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 16,
+  width: '100%',
+  maxWidth: 300,
+} as const;
 
 const demo: DemoModule = {
   meta: {
-    title: 'DatePicker',
+    title: 'Date picker',
     slug: 'date-picker',
     category: 'Forms',
     description: 'Date field with a calendar popover. Type segments or pick from the grid.',

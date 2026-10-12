@@ -18,7 +18,7 @@ const area = {
 
 const demo: DemoModule = {
   meta: {
-    title: 'Context Menu',
+    title: 'Context menu',
     slug: 'context-menu',
     category: 'Overlays',
     description:

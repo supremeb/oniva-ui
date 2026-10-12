@@ -6,7 +6,11 @@ import { LayoutShell } from './LayoutShell';
 describe('LayoutShell', () => {
   it('renders sidebar, banner header and main content', () => {
     render(
-      <LayoutShell sidebar={<aside aria-label="App">Side</aside>} header={<h1>Dashboard</h1>} className="x">
+      <LayoutShell
+        sidebar={<aside aria-label="App">Side</aside>}
+        header={<h1>Dashboard</h1>}
+        className="x"
+      >
         <p>Revenue</p>
       </LayoutShell>,
     );

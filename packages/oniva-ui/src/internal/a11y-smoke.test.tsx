@@ -4,14 +4,27 @@ import type { ColumnDef } from '@tanstack/react-table';
 import { describe, it } from 'vitest';
 import { Button } from '../components/Button';
 import { DataTable } from '../components/DataTable';
-import { Dialog, DialogBody, DialogHeader, DialogTitle, DialogTrigger, Modal } from '../components/Dialog';
+import {
+  Dialog,
+  DialogBody,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  Modal,
+} from '../components/Dialog';
 import { Select, SelectItem } from '../components/Select';
 import { Tab, TabList, TabPanel, Tabs } from '../components/Tabs';
 import { expectNoA11yViolations } from './test-a11y';
 
-interface Row { id: string; name: string }
+interface Row {
+  id: string;
+  name: string;
+}
 const columns: ColumnDef<Row>[] = [{ accessorKey: 'name', header: 'Name' }];
-const data: Row[] = [{ id: 'a', name: 'Priya Nair' }, { id: 'b', name: 'Marcus Lee' }];
+const data: Row[] = [
+  { id: 'a', name: 'Priya Nair' },
+  { id: 'b', name: 'Marcus Lee' },
+];
 
 describe('a11y smoke (axe)', () => {
   it('Button', async () => {
@@ -33,7 +46,9 @@ describe('a11y smoke (axe)', () => {
         <Button>Open</Button>
         <Modal>
           <Dialog>
-            <DialogHeader><DialogTitle>Invite</DialogTitle></DialogHeader>
+            <DialogHeader>
+              <DialogTitle>Invite</DialogTitle>
+            </DialogHeader>
             <DialogBody>Send an invite.</DialogBody>
           </Dialog>
         </Modal>
@@ -58,7 +73,13 @@ describe('a11y smoke (axe)', () => {
   });
   it('DataTable', async () => {
     const { container } = render(
-      <DataTable aria-label="People" data={data} columns={columns} itemLabel="people" getRowId={(r) => r.id} />,
+      <DataTable
+        aria-label="People"
+        data={data}
+        columns={columns}
+        itemLabel="people"
+        getRowId={(r) => r.id}
+      />,
     );
     await expectNoA11yViolations(container);
   });

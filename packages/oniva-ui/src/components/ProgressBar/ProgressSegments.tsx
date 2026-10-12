@@ -1,4 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
+import type { ControlSize } from '../../internal/types';
 import type { HTMLAttributes, ReactNode, Ref } from 'react';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
@@ -8,8 +9,8 @@ import { progressStyles } from './ProgressBar';
 
 const styles = stylex.create({
   bar: {
-    backgroundColor: colors.chartTrack,
-    borderRadius: radius.full,
+    backgroundColor: colors['--oniva-color-chart-track'],
+    borderRadius: radius['--oniva-radius-full'],
     display: 'flex',
     gap: 2,
     overflow: 'hidden',
@@ -17,43 +18,59 @@ const styles = stylex.create({
   },
   seg: {
     height: '100%',
-    transitionDuration: motion.durSlow,
+    transitionDuration: motion['--oniva-motion-dur-slow'],
     transitionProperty: 'width',
-    transitionTimingFunction: motion.easeStandard,
+    transitionTimingFunction: motion['--oniva-motion-ease-standard'],
   },
   legend: {
-    color: colors.textMuted,
+    color: colors['--oniva-color-text-muted'],
     display: 'flex',
     flexWrap: 'wrap',
-    fontSize: font.size12,
+    fontSize: font['--oniva-font-size-12'],
     gap: '4px 16px',
-    lineHeight: font.lh12,
+    lineHeight: font['--oniva-font-lh-12'],
     listStyle: 'none',
     margin: 0,
     padding: 0,
   },
   legendItem: { alignItems: 'center', display: 'inline-flex', gap: 6 },
-  dot: { borderRadius: radius.full, flexShrink: 0, height: 8, width: 8 },
-  num: { color: colors.text, fontVariantNumeric: 'tabular-nums', fontWeight: font.weightMedium },
-  c1: { backgroundColor: colors.chart1 },
-  c2: { backgroundColor: colors.chart2 },
-  c3: { backgroundColor: colors.chart3 },
-  c4: { backgroundColor: colors.chart4 },
-  c5: { backgroundColor: colors.chart5 },
-  c6: { backgroundColor: colors.chart6 },
-  c7: { backgroundColor: colors.chart7 },
-  c8: { backgroundColor: colors.chart8 },
-  c9: { backgroundColor: colors.chart9 },
-  c10: { backgroundColor: colors.chart10 },
-  success: { backgroundColor: colors.successSolid },
-  warning: { backgroundColor: colors.warningSolid },
-  danger: { backgroundColor: colors.dangerSolid },
-  info: { backgroundColor: colors.infoSolid },
+  dot: { borderRadius: radius['--oniva-radius-full'], flexShrink: 0, height: 8, width: 8 },
+  num: {
+    color: colors['--oniva-color-text'],
+    fontVariantNumeric: 'tabular-nums',
+    fontWeight: font['--oniva-font-weight-medium'],
+  },
+  c1: { backgroundColor: colors['--oniva-color-chart-1'] },
+  c2: { backgroundColor: colors['--oniva-color-chart-2'] },
+  c3: { backgroundColor: colors['--oniva-color-chart-3'] },
+  c4: { backgroundColor: colors['--oniva-color-chart-4'] },
+  c5: { backgroundColor: colors['--oniva-color-chart-5'] },
+  c6: { backgroundColor: colors['--oniva-color-chart-6'] },
+  c7: { backgroundColor: colors['--oniva-color-chart-7'] },
+  c8: { backgroundColor: colors['--oniva-color-chart-8'] },
+  c9: { backgroundColor: colors['--oniva-color-chart-9'] },
+  c10: { backgroundColor: colors['--oniva-color-chart-10'] },
+  success: { backgroundColor: colors['--oniva-color-success-solid'] },
+  warning: { backgroundColor: colors['--oniva-color-warning-solid'] },
+  danger: { backgroundColor: colors['--oniva-color-danger-solid'] },
+  info: { backgroundColor: colors['--oniva-color-info-solid'] },
 });
 
 export type SegmentColor =
-  | 'c1' | 'c2' | 'c3' | 'c4' | 'c5' | 'c6' | 'c7' | 'c8' | 'c9' | 'c10'
-  | 'success' | 'warning' | 'danger' | 'info';
+  | 'c1'
+  | 'c2'
+  | 'c3'
+  | 'c4'
+  | 'c5'
+  | 'c6'
+  | 'c7'
+  | 'c8'
+  | 'c9'
+  | 'c10'
+  | 'success'
+  | 'warning'
+  | 'danger'
+  | 'info';
 
 export interface ProgressSegment {
   id: string;
@@ -65,8 +82,10 @@ export interface ProgressSegment {
   display?: string;
 }
 
-export interface ProgressSegmentsProps
-  extends Omit<HTMLAttributes<HTMLDivElement>, 'style' | 'children' | 'title'> {
+export interface ProgressSegmentsProps extends Omit<
+  HTMLAttributes<HTMLDivElement>,
+  'style' | 'children' | 'title'
+> {
   segments: ProgressSegment[];
   /** Total capacity (e.g. 1,000,000 tokens). Unfilled space stays as track. Defaults to sum. */
   max?: number;
@@ -74,7 +93,7 @@ export interface ProgressSegmentsProps
   title?: ReactNode;
   /** Summary shown right of the title, e.g. "820k / 1M (82%)". Auto-generated when omitted and `max` is set. */
   summary?: ReactNode;
-  size?: 'sm' | 'md' | 'lg';
+  size?: ControlSize;
   showLegend?: boolean;
   xstyle?: stylex.StyleXStyles;
   ref?: Ref<HTMLDivElement>;
@@ -99,7 +118,9 @@ export function ProgressSegments({
   const sum = segments.reduce((a, s) => a + s.value, 0);
   const total = max ?? sum;
   const pct = total > 0 ? Math.round((sum / total) * 100) : 0;
-  const auto = max ? `${sum.toLocaleString('en-US')} / ${max.toLocaleString('en-US')} (${pct}%)` : undefined;
+  const auto = max
+    ? `${sum.toLocaleString('en-US')} / ${max.toLocaleString('en-US')} (${pct}%)`
+    : undefined;
   const sx = stylex.props(progressStyles.root, xstyle);
   return (
     <div
@@ -140,7 +161,9 @@ export function ProgressSegments({
                 {...stylex.props(styles.dot, styles[s.color ?? cycle[i % cycle.length]!])}
               />
               {s.label}
-              <span {...stylex.props(styles.num)}>{s.display ?? s.value.toLocaleString('en-US')}</span>
+              <span {...stylex.props(styles.num)}>
+                {s.display ?? s.value.toLocaleString('en-US')}
+              </span>
             </li>
           ))}
         </ul>

@@ -26,8 +26,10 @@ const styles = stylex.create({
   inputs: { alignItems: 'center', display: 'flex', flexGrow: 1, minWidth: 0 },
 });
 
-export interface DateRangePickerProps<T extends DateValue>
-  extends Omit<AriaDateRangePickerProps<T>, 'className' | 'style' | 'children'> {
+export interface DateRangePickerProps<T extends DateValue> extends Omit<
+  AriaDateRangePickerProps<T>,
+  'className' | 'style' | 'children'
+> {
   label?: ReactNode;
   description?: ReactNode;
   errorMessage?: string | ((v: ValidationResult) => string);

@@ -39,7 +39,13 @@ const demo: DemoModule = {
         const [busy, setBusy] = useState(false);
         const [files, setFiles] = useState<AttachmentFile[]>([
           { id: 'seed', name: 'q3_revenue.csv', size: 48_200, type: 'text/csv' },
-          { id: 'seed2', name: 'board-deck.pdf', size: 2_400_000, status: 'uploading', progress: 58 },
+          {
+            id: 'seed2',
+            name: 'board-deck.pdf',
+            size: 2_400_000,
+            status: 'uploading',
+            progress: 58,
+          },
         ]);
         useEffect(() => {
           if (!files.some((f) => f.status === 'uploading')) return;
@@ -93,7 +99,12 @@ const demo: DemoModule = {
       code: `<Composer isStreaming defaultValue="Summarize churn drivers" onStop={…} />`,
       Component: () => (
         <div style={{ maxWidth: 640 }}>
-          <Composer isStreaming defaultValue="Summarize churn drivers for self-serve" hideEffort models={models} />
+          <Composer
+            isStreaming
+            defaultValue="Summarize churn drivers for self-serve"
+            hideEffort
+            models={models}
+          />
         </div>
       ),
     },

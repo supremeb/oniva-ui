@@ -6,7 +6,12 @@ import { Alert } from './Alert';
 describe('Alert', () => {
   it('renders title, description and actions', () => {
     render(
-      <Alert title="Payment failed" description="Visa ending 4242 was declined." actions={<button>Retry</button>} variant="danger" />,
+      <Alert
+        title="Payment failed"
+        description="Visa ending 4242 was declined."
+        actions={<button>Retry</button>}
+        variant="danger"
+      />,
     );
     expect(screen.getByRole('alert')).toHaveTextContent('Payment failed');
     expect(screen.getByText('Visa ending 4242 was declined.')).toBeInTheDocument();

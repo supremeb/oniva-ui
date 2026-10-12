@@ -28,7 +28,15 @@ describe('Checkbox', () => {
 
   it('forwards ref', () => {
     let el: HTMLLabelElement | null = null;
-    render(<Checkbox ref={(n) => { el = n; }}>x</Checkbox>);
+    render(
+      <Checkbox
+        ref={(n) => {
+          el = n;
+        }}
+      >
+        x
+      </Checkbox>,
+    );
     expect(el).toBeInstanceOf(HTMLLabelElement);
   });
 });

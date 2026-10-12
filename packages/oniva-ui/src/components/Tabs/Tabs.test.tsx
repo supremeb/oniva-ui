@@ -3,13 +3,21 @@ import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import { Tab, TabList, TabPanel, Tabs } from './Tabs';
 
-function Example(props: { variant?: 'line' | 'pill'; onChange?: (k: unknown) => void; className?: string }) {
+function Example(props: {
+  variant?: 'line' | 'pill';
+  onChange?: (k: unknown) => void;
+  className?: string;
+}) {
   return (
     <Tabs variant={props.variant} onSelectionChange={props.onChange} className={props.className}>
       <TabList aria-label="Account">
         <Tab id="overview">Overview</Tab>
-        <Tab id="billing" count={3}>Billing</Tab>
-        <Tab id="team" isDisabled>Team</Tab>
+        <Tab id="billing" count={3}>
+          Billing
+        </Tab>
+        <Tab id="team" isDisabled>
+          Team
+        </Tab>
       </TabList>
       <TabPanel id="overview">Overview panel</TabPanel>
       <TabPanel id="billing">Billing panel</TabPanel>

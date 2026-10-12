@@ -17,17 +17,17 @@ import { ModelSelector, type ModelOption } from '../ModelSelector';
 import { mergeSx } from '../../internal/sx';
 
 const styles = stylex.create({
-  root: { fontFamily: font.sans, width: '100%' },
+  root: { fontFamily: font['--oniva-font-sans'], width: '100%' },
   body: { boxSizing: 'border-box', display: 'flex', flexDirection: 'column', gap: 8, padding: 12 },
   area: {
     appearance: 'none',
     backgroundColor: 'transparent',
     borderWidth: 0,
     boxSizing: 'border-box',
-    color: colors.text,
-    fontFamily: font.sans,
-    fontSize: font.size14,
-    lineHeight: font.lh16,
+    color: colors['--oniva-color-text'],
+    fontFamily: font['--oniva-font-sans'],
+    fontSize: font['--oniva-font-size-14'],
+    lineHeight: font['--oniva-font-lh-16'],
     maxHeight: 220,
     minHeight: 44,
     outlineStyle: 'none',
@@ -35,19 +35,39 @@ const styles = stylex.create({
     padding: 4,
     resize: 'none',
     width: '100%',
-    '::placeholder': { color: colors.textPlaceholder },
+    '::placeholder': { color: colors['--oniva-color-text-placeholder'] },
   },
   bar: { alignItems: 'center', display: 'flex', gap: 2 },
   spacer: { flexGrow: 1 },
-  hint: { alignItems: 'center', color: colors.textMuted, display: 'inline-flex', fontSize: font.size12, gap: 4, marginInlineEnd: 6 },
+  hint: {
+    alignItems: 'center',
+    color: colors['--oniva-color-text-muted'],
+    display: 'inline-flex',
+    fontSize: font['--oniva-font-size-12'],
+    gap: 4,
+    marginInlineEnd: 6,
+  },
   effort: { display: 'flex', flexDirection: 'column', gap: 8, width: 220 },
-  effortLabels: { color: colors.textMuted, display: 'flex', fontSize: font.size12, justifyContent: 'space-between' },
-  effortTitle: { color: colors.text, fontSize: font.size13, fontWeight: font.weightMedium },
+  effortLabels: {
+    color: colors['--oniva-color-text-muted'],
+    display: 'flex',
+    fontSize: font['--oniva-font-size-12'],
+    justifyContent: 'space-between',
+  },
+  effortTitle: {
+    color: colors['--oniva-color-text'],
+    fontSize: font['--oniva-font-size-13'],
+    fontWeight: font['--oniva-font-weight-medium'],
+  },
 });
 
 export type ComposerEffort = 'faster' | 'balanced' | 'smarter';
 const efforts: ComposerEffort[] = ['faster', 'balanced', 'smarter'];
-const effortLabel: Record<ComposerEffort, string> = { faster: 'Faster', balanced: 'Balanced', smarter: 'Smarter' };
+const effortLabel: Record<ComposerEffort, string> = {
+  faster: 'Faster',
+  balanced: 'Balanced',
+  smarter: 'Smarter',
+};
 
 export interface PermissionMode {
   id: string;
@@ -158,7 +178,9 @@ export function Composer({
     <div ref={ref} {...mergeSx(sx, className)}>
       <ComposerLoader active={isStreaming}>
         <div {...stylex.props(styles.body)}>
-          {attachments.length > 0 && <ComposerAttachments files={attachments} onRemove={onRemoveAttachment} />}
+          {attachments.length > 0 && (
+            <ComposerAttachments files={attachments} onRemove={onRemoveAttachment} />
+          )}
           <AriaTextArea
             ref={area}
             aria-label="Message"
@@ -206,7 +228,12 @@ export function Composer({
               </>
             )}
             {models && models.length > 0 && (
-              <ModelSelector models={models} value={model ?? models[0]!.id} onChange={onModelChange} isDisabled={isDisabled} />
+              <ModelSelector
+                models={models}
+                value={model ?? models[0]!.id}
+                onChange={onModelChange}
+                isDisabled={isDisabled}
+              />
             )}
             {!hidePermissions && currentMode && (
               <DropdownMenu>
@@ -283,11 +310,22 @@ export function Composer({
               </span>
             )}
             {isStreaming ? (
-              <IconButton size="sm" variant="secondary" aria-label="Stop generating" onPress={onStop}>
+              <IconButton
+                size="sm"
+                variant="secondary"
+                aria-label="Stop generating"
+                onPress={onStop}
+              >
                 <Square size={14} fill="currentColor" aria-hidden="true" />
               </IconButton>
             ) : (
-              <IconButton size="sm" variant="primary" aria-label="Send message" isDisabled={!canSend} onPress={submit}>
+              <IconButton
+                size="sm"
+                variant="primary"
+                aria-label="Send message"
+                isDisabled={!canSend}
+                onPress={submit}
+              >
                 <ArrowUp size={16} aria-hidden="true" />
               </IconButton>
             )}

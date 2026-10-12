@@ -4,7 +4,13 @@ import { describe, expect, it } from 'vitest';
 import { NotificationCenter, type NotificationItem } from './NotificationCenter';
 
 const items: NotificationItem[] = [
-  { id: '1', title: 'Priya commented on Q4 plan', time: '5m ago', actor: 'Priya Nair', mention: true },
+  {
+    id: '1',
+    title: 'Priya commented on Q4 plan',
+    time: '5m ago',
+    actor: 'Priya Nair',
+    mention: true,
+  },
   { id: '2', title: 'Invoice paid', body: '$4,820 from Northwind', time: '2h ago' },
   { id: '3', title: 'Backup finished', time: 'Yesterday', read: true },
 ];

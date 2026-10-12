@@ -18,7 +18,7 @@ const events = [
 
 const demo: DemoModule = {
   meta: {
-    title: 'Scroll Area',
+    title: 'Scroll area',
     slug: 'scroll-area',
     category: 'Layout',
     description: 'Scroll container with slim themed scrollbars; keyboard focusable.',
@@ -31,7 +31,11 @@ const demo: DemoModule = {
         <ScrollArea aria-label="Recent activity" maxHeight={200} xstyle={undefined}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8, paddingInlineEnd: 8 }}>
             {events.map(([t, a]) => (
-              <div key={t} {...stylex.props(demoStyles.tile)} style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <div
+                key={t}
+                {...stylex.props(demoStyles.tile)}
+                style={{ display: 'flex', justifyContent: 'space-between' }}
+              >
                 <span>{t}</span>
                 <span>{a}</span>
               </div>

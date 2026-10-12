@@ -3,10 +3,15 @@ import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import { ResizablePanel, ResizablePanels } from './ResizablePanels';
 
-function Example(props: { onResize?: (s: number[]) => void; direction?: 'horizontal' | 'vertical' }) {
+function Example(props: {
+  onResize?: (s: number[]) => void;
+  direction?: 'horizontal' | 'vertical';
+}) {
   return (
     <ResizablePanels {...props} aria-label="Editor" className="x">
-      <ResizablePanel defaultSize={30} aria-label="Files">Files</ResizablePanel>
+      <ResizablePanel defaultSize={30} aria-label="Files">
+        Files
+      </ResizablePanel>
       <ResizablePanel aria-label="Editor pane">Editor</ResizablePanel>
     </ResizablePanels>
   );

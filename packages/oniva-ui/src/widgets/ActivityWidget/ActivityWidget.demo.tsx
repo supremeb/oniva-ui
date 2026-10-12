@@ -3,10 +3,11 @@ import { ActivityWidget } from './ActivityWidget';
 
 const demo: DemoModule = {
   meta: {
-    title: 'ActivityWidget',
+    title: 'Activity widget',
     slug: 'activity-widget',
     category: 'Widgets',
-    description: 'Move / Exercise / Running summary with concentric progress rings and a tile per metric.',
+    description:
+      'Move / Exercise / Running summary with concentric progress rings and a tile per metric.',
   },
   demos: [
     {

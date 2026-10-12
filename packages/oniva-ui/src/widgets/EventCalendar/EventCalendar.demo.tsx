@@ -14,7 +14,7 @@ const events: CalendarEvent[] = [
 
 const demo: DemoModule = {
   meta: {
-    title: 'EventCalendar',
+    title: 'Event calendar',
     slug: 'event-calendar',
     category: 'Widgets',
     description: 'Month grid with colour-coded event pills, overflow count and a month switcher.',

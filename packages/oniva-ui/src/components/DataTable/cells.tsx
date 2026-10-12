@@ -43,7 +43,7 @@ export function StatusSelectCell({
 }
 
 const chip = stylex.create({
-  square: { borderRadius: radius.sm, paddingInline: 8 },
+  square: { borderRadius: radius['--oniva-radius-sm'], paddingInline: 8 },
 });
 
 export function StatusBadgeCell({

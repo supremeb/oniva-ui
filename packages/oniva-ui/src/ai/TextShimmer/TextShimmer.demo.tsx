@@ -3,10 +3,11 @@ import { TextShimmer } from './TextShimmer';
 
 const demo: DemoModule = {
   meta: {
-    title: 'Text Shimmer',
+    title: 'Text shimmer',
     slug: 'text-shimmer',
     category: 'AI & Agent',
-    description: 'Loading label with a moving highlight. Falls back to static muted text when reduced motion is on.',
+    description:
+      'Loading label with a moving highlight. Falls back to static muted text when reduced motion is on.',
   },
   demos: [
     {

@@ -18,10 +18,11 @@ const limits = [
 
 const demo: DemoModule = {
   meta: {
-    title: 'Agent Limits',
+    title: 'Agent limits',
     slug: 'agent-limits',
     category: 'AI & Agent',
-    description: 'Context window usage as a segmented bar, plus plan usage limits with reset times.',
+    description:
+      'Context window usage as a segmented bar, plus plan usage limits with reset times.',
   },
   demos: [
     {

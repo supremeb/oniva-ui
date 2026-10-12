@@ -12,8 +12,10 @@ import type { ReactNode, Ref } from 'react';
 import { cx, ff, type FieldSize } from '../../internal/forms-field';
 import { Segments } from '../../internal/forms-date';
 
-export interface DateFieldProps<T extends DateValue>
-  extends Omit<AriaDateFieldProps<T>, 'className' | 'style' | 'children'> {
+export interface DateFieldProps<T extends DateValue> extends Omit<
+  AriaDateFieldProps<T>,
+  'className' | 'style' | 'children'
+> {
   label?: ReactNode;
   description?: ReactNode;
   errorMessage?: string | ((v: ValidationResult) => string);
@@ -43,7 +45,12 @@ export function DateField<T extends DateValue>({
         <>
           {label != null && <Label {...stylex.props(ff.label)}>{label}</Label>}
           <div
-            {...stylex.props(ff.control, ff[size], isInvalid && ff.invalid, isDisabled && ff.disabled)}
+            {...stylex.props(
+              ff.control,
+              ff[size],
+              isInvalid && ff.invalid,
+              isDisabled && ff.disabled,
+            )}
           >
             <Segments />
             {suffix != null && <span {...stylex.props(ff.adornment)}>{suffix}</span>}

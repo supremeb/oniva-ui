@@ -6,7 +6,8 @@ const demo: DemoModule = {
     title: 'Questionnaire',
     slug: 'questionnaire',
     category: 'AI & Agent',
-    description: 'Clarifying questions an agent asks in plan mode, with single and multi-select option cards.',
+    description:
+      'Clarifying questions an agent asks in plan mode, with single and multi-select option cards.',
   },
   demos: [
     {

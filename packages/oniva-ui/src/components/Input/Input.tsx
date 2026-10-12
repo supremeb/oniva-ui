@@ -1,4 +1,6 @@
 import * as stylex from '@stylexjs/stylex';
+import { media } from '../../tokens/media.stylex';
+import type { ControlSize } from '../../internal/types';
 import {
   FieldError,
   Input as AriaInput,
@@ -19,52 +21,55 @@ const styles = stylex.create({
   root: {
     display: 'flex',
     flexDirection: 'column',
-    fontFamily: font.sans,
+    fontFamily: font['--oniva-font-sans'],
     gap: 6,
   },
   label: {
-    color: colors.text,
-    fontSize: font.size14,
-    fontWeight: font.weightMedium,
-    lineHeight: font.lh14,
+    color: colors['--oniva-color-text'],
+    fontSize: font['--oniva-font-size-14'],
+    fontWeight: font['--oniva-font-weight-medium'],
+    lineHeight: font['--oniva-font-lh-14'],
   },
   field: {
     alignItems: 'center',
-    backgroundColor: colors.surface,
+    backgroundColor: colors['--oniva-color-surface'],
     borderColor: {
-      default: colors.border,
-      ':hover': colors.borderHover,
-      ':focus-within': colors.focusRing,
+      default: colors['--oniva-color-border'],
+      ':hover': colors['--oniva-color-border-hover'],
+      ':focus-within': colors['--oniva-color-focus-ring'],
     },
-    borderRadius: radius.lg,
+    borderRadius: radius['--oniva-radius-lg'],
     borderStyle: 'solid',
     borderWidth: 1,
-    boxShadow: shadow.xs,
+    boxShadow: shadow['--oniva-shadow-xs'],
     boxSizing: 'border-box',
     display: 'flex',
-    outlineColor: colors.focusRing,
+    outlineColor: colors['--oniva-color-focus-ring'],
     outlineOffset: 1,
     outlineStyle: { default: 'none', ':focus-within': 'solid' },
     outlineWidth: 2,
     gap: 6,
-    transitionDuration: { default: motion.durBase, '@media (prefers-reduced-motion: reduce)': '0.01ms' },
+    transitionDuration: {
+      default: motion['--oniva-motion-dur-base'],
+      [media.reducedMotion]: '0.01ms',
+    },
     transitionProperty: 'border-color, box-shadow, background-color',
-    transitionTimingFunction: motion.easeStandard,
+    transitionTimingFunction: motion['--oniva-motion-ease-standard'],
   },
   invalid: {
-    backgroundColor: colors.errorBg,
+    backgroundColor: colors['--oniva-color-error-bg'],
     borderColor: {
-      default: colors.errorBorder,
-      ':hover': colors.errorBorder,
-      ':focus-within': colors.errorBorder,
+      default: colors['--oniva-color-error-border'],
+      ':hover': colors['--oniva-color-error-border'],
+      ':focus-within': colors['--oniva-color-error-border'],
     },
-    outlineColor: colors.errorBorder,
+    outlineColor: colors['--oniva-color-error-border'],
   },
   disabled: {
-    backgroundColor: colors.surfaceHover,
-    borderColor: colors.border,
+    backgroundColor: colors['--oniva-color-surface-hover'],
+    borderColor: colors['--oniva-color-border'],
     boxShadow: 'none',
-    color: colors.textDisabled,
+    color: colors['--oniva-color-text-disabled'],
   },
   sm: { height: 32, paddingInline: 8 },
   md: { height: 38, paddingInline: 10 },
@@ -73,27 +78,38 @@ const styles = stylex.create({
     appearance: 'none',
     backgroundColor: 'transparent',
     borderWidth: 0,
-    color: { default: colors.text, ':disabled': colors.textDisabled },
+    color: {
+      default: colors['--oniva-color-text'],
+      ':disabled': colors['--oniva-color-text-disabled'],
+    },
     cursor: { default: 'text', ':disabled': 'not-allowed' },
     flexGrow: 1,
     fontFamily: 'inherit',
-    fontSize: font.size14,
-    fontWeight: font.weightRegular,
+    fontSize: font['--oniva-font-size-14'],
+    fontWeight: font['--oniva-font-weight-regular'],
     height: '100%',
-    lineHeight: font.lh14,
+    lineHeight: font['--oniva-font-lh-14'],
     minWidth: 0,
     outline: 'none',
     padding: 0,
-    '::placeholder': { color: colors.textPlaceholder },
+    '::placeholder': { color: colors['--oniva-color-text-placeholder'] },
   },
   adornment: {
     alignItems: 'center',
-    color: colors.textMuted,
+    color: colors['--oniva-color-text-muted'],
     display: 'inline-flex',
     flexShrink: 0,
   },
-  description: { color: colors.textMuted, fontSize: font.size13, lineHeight: font.lh13 },
-  error: { color: colors.textError, fontSize: font.size13, lineHeight: font.lh13 },
+  description: {
+    color: colors['--oniva-color-text-muted'],
+    fontSize: font['--oniva-font-size-13'],
+    lineHeight: font['--oniva-font-lh-13'],
+  },
+  error: {
+    color: colors['--oniva-color-text-error'],
+    fontSize: font['--oniva-font-size-13'],
+    lineHeight: font['--oniva-font-lh-13'],
+  },
 });
 
 export interface InputProps extends Omit<AriaTextFieldProps, 'className' | 'style' | 'children'> {
@@ -102,7 +118,7 @@ export interface InputProps extends Omit<AriaTextFieldProps, 'className' | 'styl
   /** Custom error content, or a function receiving validation state (RAC). */
   errorMessage?: string | ((v: ValidationResult) => string);
   placeholder?: string;
-  size?: 'sm' | 'md' | 'lg';
+  size?: ControlSize;
   /** Leading adornment (icon or text). Decorative. */
   prefix?: ReactNode;
   /** Trailing adornment (icon, unit, or button). */

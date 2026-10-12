@@ -36,7 +36,12 @@ const demo: DemoModule = {
         <div style={row}>
           <Spinner size="sm" label="Syncing" />
           <Text tone="muted">Syncing 1,204 transactions...</Text>
-          <Button variant="secondary" size="sm" isDisabled startIcon={<Spinner size="xs" tone="current" />}>
+          <Button
+            variant="secondary"
+            size="sm"
+            isDisabled
+            startIcon={<Spinner size="xs" tone="current" />}
+          >
             Exporting
           </Button>
         </div>

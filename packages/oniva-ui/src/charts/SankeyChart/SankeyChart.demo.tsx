@@ -8,7 +8,7 @@ const nodes = sankeyFlows.nodes.map((n, i) => ({ ...n, tone: tones[i] }));
 
 const demo: DemoModule = {
   meta: {
-    title: 'SankeyChart',
+    title: 'Sankey chart',
     slug: 'sankey-chart',
     category: 'Charts',
     description:

@@ -1,4 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
+import type { ControlSize } from './types';
 import { colors } from '../tokens/colors.stylex';
 import { font } from '../tokens/font.stylex';
 import { motion } from '../tokens/motion.stylex';
@@ -10,57 +11,65 @@ export const ff = stylex.create({
   root: {
     display: 'flex',
     flexDirection: 'column',
-    fontFamily: font.sans,
+    fontFamily: font['--oniva-font-sans'],
     gap: 6,
   },
   label: {
-    color: colors.text,
-    fontSize: font.size14,
-    fontWeight: font.weightMedium,
-    lineHeight: font.lh14,
+    color: colors['--oniva-color-text'],
+    fontSize: font['--oniva-font-size-14'],
+    fontWeight: font['--oniva-font-weight-medium'],
+    lineHeight: font['--oniva-font-lh-14'],
   },
-  description: { color: colors.textMuted, fontSize: font.size13, lineHeight: font.lh13 },
-  error: { color: colors.textError, fontSize: font.size13, lineHeight: font.lh13 },
+  description: {
+    color: colors['--oniva-color-text-muted'],
+    fontSize: font['--oniva-font-size-13'],
+    lineHeight: font['--oniva-font-lh-13'],
+  },
+  error: {
+    color: colors['--oniva-color-text-error'],
+    fontSize: font['--oniva-font-size-13'],
+    lineHeight: font['--oniva-font-lh-13'],
+  },
   control: {
     alignItems: 'center',
-    backgroundColor: colors.surface,
+    backgroundColor: colors['--oniva-color-surface'],
     borderColor: {
-      default: colors.border,
-      ':hover': colors.borderHover,
-      ':focus-within': colors.focusRing,
+      default: colors['--oniva-color-border'],
+      ':hover': colors['--oniva-color-border-hover'],
+      ':focus-within': colors['--oniva-color-focus-ring'],
     },
-    borderRadius: radius.lg,
+    borderRadius: radius['--oniva-radius-lg'],
     borderStyle: 'solid',
     borderWidth: 1,
     boxShadow: {
-      default: shadow.xs,
-      ':focus-within': `0 0 0 3px color-mix(in srgb, ${colors.focusRing} 25%, transparent)`,
+      default: shadow['--oniva-shadow-xs'],
+      ':focus-within': `0 0 0 3px color-mix(in srgb, ${colors['--oniva-color-focus-ring']} 25%, transparent)`,
     },
     boxSizing: 'border-box',
-    color: colors.text,
+    color: colors['--oniva-color-text'],
     display: 'flex',
-    fontFamily: font.sans,
+    fontFamily: font['--oniva-font-sans'],
     gap: 6,
-    transitionDuration: motion.durBase,
+    transitionDuration: motion['--oniva-motion-dur-base'],
     transitionProperty: 'border-color, box-shadow, background-color',
-    transitionTimingFunction: motion.easeStandard,
+    transitionTimingFunction: motion['--oniva-motion-ease-standard'],
   },
   invalid: {
-    backgroundColor: colors.errorBg,
+    backgroundColor: colors['--oniva-color-error-bg'],
     borderColor: {
-      default: colors.errorBorder,
-      ':hover': colors.errorBorder,
-      ':focus-within': colors.errorBorder,
+      default: colors['--oniva-color-error-border'],
+      ':hover': colors['--oniva-color-error-border'],
+      ':focus-within': colors['--oniva-color-error-border'],
     },
     boxShadow: {
-      default: shadow.xs,
-      ':focus-within': `0 0 0 3px color-mix(in srgb, ${colors.errorBorder} 25%, transparent)`,
+      default: shadow['--oniva-shadow-xs'],
+      ':focus-within': `0 0 0 3px color-mix(in srgb, ${colors['--oniva-color-error-border']} 25%, transparent)`,
     },
   },
   disabled: {
-    backgroundColor: colors.surfaceHover,
+    backgroundColor: colors['--oniva-color-surface-hover'],
     boxShadow: 'none',
-    color: colors.textDisabled,
+    color: colors['--oniva-color-text-disabled'],
     cursor: 'not-allowed',
   },
   sm: { height: 32, paddingInline: 8 },
@@ -70,26 +79,29 @@ export const ff = stylex.create({
     appearance: 'none',
     backgroundColor: 'transparent',
     borderWidth: 0,
-    color: { default: colors.text, ':disabled': colors.textDisabled },
+    color: {
+      default: colors['--oniva-color-text'],
+      ':disabled': colors['--oniva-color-text-disabled'],
+    },
     cursor: { default: 'text', ':disabled': 'not-allowed' },
     flexGrow: 1,
     fontFamily: 'inherit',
-    fontSize: font.size14,
-    fontWeight: font.weightRegular,
-    lineHeight: font.lh14,
+    fontSize: font['--oniva-font-size-14'],
+    fontWeight: font['--oniva-font-weight-regular'],
+    lineHeight: font['--oniva-font-lh-14'],
     minWidth: 0,
     outline: 'none',
     padding: 0,
-    '::placeholder': { color: colors.textPlaceholder },
+    '::placeholder': { color: colors['--oniva-color-text-placeholder'] },
   },
   adornment: {
     alignItems: 'center',
-    color: colors.textMuted,
+    color: colors['--oniva-color-text-muted'],
     display: 'inline-flex',
     flexShrink: 0,
   },
   focusRing: {
-    outlineColor: colors.focusRing,
+    outlineColor: colors['--oniva-color-focus-ring'],
     outlineOffset: 2,
     outlineStyle: 'solid',
     outlineWidth: 2,
@@ -97,7 +109,7 @@ export const ff = stylex.create({
   tabular: { fontVariantNumeric: 'tabular-nums' },
 });
 
-export type FieldSize = 'sm' | 'md' | 'lg';
+export type FieldSize = ControlSize;
 
 /** className merge helper for RAC className callbacks. */
 export function cx(...parts: Array<string | undefined | false>): string {

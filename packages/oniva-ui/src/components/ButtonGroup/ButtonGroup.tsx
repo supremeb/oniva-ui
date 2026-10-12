@@ -1,5 +1,12 @@
 import * as stylex from '@stylexjs/stylex';
-import { Children, cloneElement, isValidElement, type HTMLAttributes, type ReactElement, type Ref } from 'react';
+import {
+  Children,
+  cloneElement,
+  isValidElement,
+  type HTMLAttributes,
+  type ReactElement,
+  type Ref,
+} from 'react';
 
 const styles = stylex.create({
   base: { alignItems: 'center', display: 'inline-flex' },
@@ -43,10 +50,15 @@ export function ButtonGroup({
       className={[sx.className, className].filter(Boolean).join(' ')}
     >
       {items.map((child, i) => {
-        const pos = items.length === 1 ? null : i === 0 ? 'First' : i === items.length - 1 ? 'Last' : 'Mid';
+        const pos =
+          items.length === 1 ? null : i === 0 ? 'First' : i === items.length - 1 ? 'Last' : 'Mid';
         const key = pos ? (`${v ? 'v' : 'h'}${pos}` as keyof typeof styles) : null;
         return cloneElement(child, {
-          xstyle: [styles.raise, key && styles[key], child.props.xstyle] as unknown as stylex.StyleXStyles,
+          xstyle: [
+            styles.raise,
+            key && styles[key],
+            child.props.xstyle,
+          ] as unknown as stylex.StyleXStyles,
         });
       })}
     </div>

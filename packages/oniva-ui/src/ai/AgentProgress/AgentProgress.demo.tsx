@@ -13,10 +13,11 @@ const base: TaskItem[] = [
 
 const demo: DemoModule = {
   meta: {
-    title: 'Agent Progress',
+    title: 'Agent progress',
     slug: 'agent-progress',
     category: 'AI & Agent',
-    description: 'Collapsible plan card with a progress ring, "steps left" count and the live task list.',
+    description:
+      'Collapsible plan card with a progress ring, "steps left" count and the live task list.',
   },
   demos: [
     {
@@ -41,7 +42,8 @@ const demo: DemoModule = {
         }, [step]);
         const items = base.map((it, i) => ({
           ...it,
-          status: i < step ? ('done' as const) : i === step ? ('running' as const) : ('pending' as const),
+          status:
+            i < step ? ('done' as const) : i === step ? ('running' as const) : ('pending' as const),
         }));
         return (
           <div style={{ maxWidth: 420 }}>

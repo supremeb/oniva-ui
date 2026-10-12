@@ -6,7 +6,13 @@ describe('Text', () => {
   it('renders as the chosen element and forwards className/ref', () => {
     let el: HTMLElement | null = null;
     render(
-      <Text as="p" className="c" ref={(n) => { el = n; }}>
+      <Text
+        as="p"
+        className="c"
+        ref={(n) => {
+          el = n;
+        }}
+      >
         Net revenue
       </Text>,
     );
@@ -17,7 +23,11 @@ describe('Text', () => {
   it('variants and tabular change classes', () => {
     const { rerender } = render(<Text data-testid="t">1</Text>);
     const a = screen.getByTestId('t').className;
-    rerender(<Text data-testid="t" variant="display" tabular tone="muted">1</Text>);
+    rerender(
+      <Text data-testid="t" variant="display" tabular tone="muted">
+        1
+      </Text>,
+    );
     expect(screen.getByTestId('t').className).not.toBe(a);
   });
 });

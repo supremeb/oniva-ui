@@ -15,8 +15,10 @@ const styles = stylex.create({
   itemsRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 20 },
 });
 
-export interface CheckboxGroupProps
-  extends Omit<AriaCheckboxGroupProps, 'className' | 'style' | 'children'> {
+export interface CheckboxGroupProps extends Omit<
+  AriaCheckboxGroupProps,
+  'className' | 'style' | 'children'
+> {
   label?: ReactNode;
   description?: ReactNode;
   errorMessage?: string | ((v: ValidationResult) => string);

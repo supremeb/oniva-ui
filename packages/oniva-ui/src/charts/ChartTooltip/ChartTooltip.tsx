@@ -8,20 +8,20 @@ import { shadow } from '../../tokens/shadow.stylex';
 
 const styles = stylex.create({
   base: {
-    backgroundColor: colors.surface,
-    borderColor: colors.border,
-    borderRadius: radius.lg,
+    backgroundColor: colors['--oniva-color-surface'],
+    borderColor: colors['--oniva-color-border'],
+    borderRadius: radius['--oniva-radius-lg'],
     borderStyle: 'solid',
     borderWidth: 1,
-    boxShadow: shadow.dropdown,
+    boxShadow: shadow['--oniva-shadow-dropdown'],
     boxSizing: 'border-box',
-    color: colors.text,
+    color: colors['--oniva-color-text'],
     display: 'flex',
     flexDirection: 'column',
-    fontFamily: font.sans,
-    fontSize: font.size12,
+    fontFamily: font['--oniva-font-sans'],
+    fontSize: font['--oniva-font-size-12'],
     gap: 4,
-    lineHeight: font.lh12,
+    lineHeight: font['--oniva-font-lh-12'],
     minWidth: 120,
     padding: 8,
     pointerEvents: 'none',
@@ -32,11 +32,19 @@ const styles = stylex.create({
   center: { transform: 'translate(-50%, calc(-100% - 12px))' },
   left: { transform: 'translate(-12px, calc(-100% - 12px))' },
   right: { transform: 'translate(calc(-100% + 12px), calc(-100% - 12px))' },
-  title: { color: colors.textMuted, fontWeight: font.weightMedium },
+  title: {
+    color: colors['--oniva-color-text-muted'],
+    fontWeight: font['--oniva-font-weight-medium'],
+  },
   row: { alignItems: 'center', display: 'flex', gap: 12, justifyContent: 'space-between' },
-  label: { alignItems: 'center', color: colors.textMuted, display: 'inline-flex', gap: 6 },
+  label: {
+    alignItems: 'center',
+    color: colors['--oniva-color-text-muted'],
+    display: 'inline-flex',
+    gap: 6,
+  },
   swatch: { backgroundColor: 'currentColor', borderRadius: 3, height: 8, width: 8 },
-  value: { fontVariantNumeric: 'tabular-nums', fontWeight: font.weightSemibold },
+  value: { fontVariantNumeric: 'tabular-nums', fontWeight: font['--oniva-font-weight-semibold'] },
 });
 
 export interface ChartTooltipRow {

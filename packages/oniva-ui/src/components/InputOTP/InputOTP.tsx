@@ -17,42 +17,55 @@ import { shadow } from '../../tokens/shadow.stylex';
 import { cx, ff } from '../../internal/forms-field';
 
 const styles = stylex.create({
-  row: { alignItems: 'center', display: 'flex', gap: 8, position: 'relative', width: 'fit-content' },
+  contents: { display: 'contents' },
+  row: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: 8,
+    position: 'relative',
+    width: 'fit-content',
+  },
   slot: {
     alignItems: 'center',
-    backgroundColor: colors.surface,
-    borderColor: colors.border,
-    borderRadius: radius.lg,
+    backgroundColor: colors['--oniva-color-surface'],
+    borderColor: colors['--oniva-color-border'],
+    borderRadius: radius['--oniva-radius-lg'],
     borderStyle: 'solid',
     borderWidth: 1,
-    boxShadow: shadow.xs,
+    boxShadow: shadow['--oniva-shadow-xs'],
     boxSizing: 'border-box',
-    color: colors.text,
+    color: colors['--oniva-color-text'],
     display: 'flex',
-    fontSize: font.size20,
+    fontSize: font['--oniva-font-size-20'],
     fontVariantNumeric: 'tabular-nums',
-    fontWeight: font.weightSemibold,
+    fontWeight: font['--oniva-font-weight-semibold'],
     height: 48,
     justifyContent: 'center',
-    transitionDuration: motion.durBase,
+    transitionDuration: motion['--oniva-motion-dur-base'],
     transitionProperty: 'border-color, box-shadow',
     width: 40,
   },
   active: {
-    borderColor: colors.focusRing,
-    boxShadow: `0 0 0 3px color-mix(in srgb, ${colors.focusRing} 25%, transparent)`,
+    borderColor: colors['--oniva-color-focus-ring'],
+    boxShadow: `0 0 0 3px color-mix(in srgb, ${colors['--oniva-color-focus-ring']} 25%, transparent)`,
   },
-  invalid: { backgroundColor: colors.errorBg, borderColor: colors.errorBorder },
-  disabled: { backgroundColor: colors.surfaceHover, color: colors.textDisabled },
+  invalid: {
+    backgroundColor: colors['--oniva-color-error-bg'],
+    borderColor: colors['--oniva-color-error-border'],
+  },
+  disabled: {
+    backgroundColor: colors['--oniva-color-surface-hover'],
+    color: colors['--oniva-color-text-disabled'],
+  },
   caret: {
     animationDuration: '1s',
     animationIterationCount: 'infinite',
     animationName: stylex.keyframes({ '0%, 49%': { opacity: 1 }, '50%, 100%': { opacity: 0 } }),
-    backgroundColor: colors.text,
+    backgroundColor: colors['--oniva-color-text'],
     height: 20,
     width: 1,
   },
-  sep: { backgroundColor: colors.borderControl, height: 2, width: 8 },
+  sep: { backgroundColor: colors['--oniva-color-border-control'], height: 2, width: 8 },
   input: {
     appearance: 'none',
     backgroundColor: 'transparent',
@@ -69,8 +82,10 @@ const styles = stylex.create({
   },
 });
 
-export interface InputOTPProps
-  extends Omit<TextFieldProps, 'pattern' | 'className' | 'style' | 'children' | 'value' | 'defaultValue' | 'onChange'> {
+export interface InputOTPProps extends Omit<
+  TextFieldProps,
+  'pattern' | 'className' | 'style' | 'children' | 'value' | 'defaultValue' | 'onChange'
+> {
   label?: ReactNode;
   description?: ReactNode;
   errorMessage?: string | ((v: ValidationResult) => string);
@@ -135,7 +150,7 @@ export function InputOTP({
             {Array.from({ length }, (_, i) => {
               const isActive = focused && i === Math.min(current.length, length - 1);
               return (
-                <span key={i} style={{ display: 'contents' }}>
+                <span key={i} {...stylex.props(styles.contents)}>
                   <span
                     aria-hidden="true"
                     data-slot={i}
@@ -147,7 +162,9 @@ export function InputOTP({
                     )}
                   >
                     {current[i] ??
-                      (isActive && current.length < length ? <span {...stylex.props(styles.caret)} /> : null)}
+                      (isActive && current.length < length ? (
+                        <span {...stylex.props(styles.caret)} />
+                      ) : null)}
                   </span>
                   {separatorAt != null && i + 1 === separatorAt && i + 1 < length && (
                     <span aria-hidden="true" {...stylex.props(styles.sep)} />

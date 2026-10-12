@@ -9,7 +9,9 @@ describe('ButtonGroup', () => {
     const onPress = vi.fn();
     render(
       <ButtonGroup aria-label="Invoice actions">
-        <Button variant="secondary" onPress={onPress}>Send</Button>
+        <Button variant="secondary" onPress={onPress}>
+          Send
+        </Button>
         <Button variant="secondary">Print</Button>
         <Button variant="secondary">Archive</Button>
       </ButtonGroup>,

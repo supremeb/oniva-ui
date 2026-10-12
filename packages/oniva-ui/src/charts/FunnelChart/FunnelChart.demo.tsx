@@ -5,7 +5,7 @@ import { FunnelChart } from './FunnelChart';
 
 const demo: DemoModule = {
   meta: {
-    title: 'FunnelChart',
+    title: 'Funnel chart',
     slug: 'funnel-chart',
     category: 'Charts',
     description:

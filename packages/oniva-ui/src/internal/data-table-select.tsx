@@ -11,11 +11,11 @@ import { colors } from '../tokens/colors.stylex';
 import { tableStyles as s } from './data-table-styles';
 
 const dots = stylex.create({
-  success: { backgroundColor: colors.successSolid },
-  warning: { backgroundColor: colors.warningSolid },
-  danger: { backgroundColor: colors.dangerSolid },
-  info: { backgroundColor: colors.infoSolid },
-  neutral: { backgroundColor: colors.textSubtle },
+  success: { backgroundColor: colors['--oniva-color-success-solid'] },
+  warning: { backgroundColor: colors['--oniva-color-warning-solid'] },
+  danger: { backgroundColor: colors['--oniva-color-danger-solid'] },
+  info: { backgroundColor: colors['--oniva-color-info-solid'] },
+  neutral: { backgroundColor: colors['--oniva-color-text-subtle'] },
 });
 
 export type StatusTone = keyof typeof dots;

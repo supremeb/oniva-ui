@@ -91,7 +91,7 @@ const filters: DataTableFilter[] = [
 
 const demo: DemoModule = {
   meta: {
-    title: 'Data Table',
+    title: 'Data table',
     slug: 'data-table',
     category: 'Data display',
     description:

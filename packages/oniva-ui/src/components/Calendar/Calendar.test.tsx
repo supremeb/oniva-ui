@@ -7,7 +7,13 @@ import { Calendar } from './Calendar';
 describe('Calendar', () => {
   it('renders a labelled grid and selects a date', async () => {
     const onChange = vi.fn();
-    render(<Calendar aria-label="Due date" defaultFocusedValue={new CalendarDate(2026, 10, 12)} onChange={onChange} />);
+    render(
+      <Calendar
+        aria-label="Due date"
+        defaultFocusedValue={new CalendarDate(2026, 10, 12)}
+        onChange={onChange}
+      />,
+    );
     expect(screen.getByRole('grid')).toBeInTheDocument();
     await userEvent.click(screen.getAllByText('15')[0]!);
     expect(onChange).toHaveBeenCalled();

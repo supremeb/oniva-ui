@@ -8,7 +8,7 @@ const TEXT =
 
 const demo: DemoModule = {
   meta: {
-    title: 'Response Stream',
+    title: 'Response stream',
     slug: 'response-stream',
     category: 'AI & Agent',
     description: 'Streams text in progressively. Pass a render function to stream into Markdown.',
@@ -20,7 +20,15 @@ const demo: DemoModule = {
       Component: function Plain() {
         const [run, setRun] = useState(0);
         return (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 12, alignItems: 'flex-start', maxWidth: 520 }}>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 12,
+              alignItems: 'flex-start',
+              maxWidth: 520,
+            }}
+          >
             <ResponseStream key={run} text={TEXT} />
             <Button size="sm" variant="secondary" onPress={() => setRun((r) => r + 1)}>
               Replay

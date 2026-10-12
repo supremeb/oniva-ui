@@ -5,15 +5,15 @@ import * as stylex from '@stylexjs/stylex';
  * (two themes touching the same group would conflict). Default = blue.
  */
 export const accent = stylex.defineVars({
-  accent50: '#eff6ff',
-  accent100: '#dbeafe',
-  accent200: '#bedbff',
-  accent300: '#8ec5ff',
-  accent400: '#3392ff',
-  accent500: '#2b7fff',
-  accent600: '#155dfc',
-  accent700: '#1447e6',
-  accent800: '#193cb8',
-  accent900: '#1c398e',
-  accent950: '#162556',
+  '--oniva-accent-50': '#eff6ff',
+  '--oniva-accent-100': '#dbeafe',
+  '--oniva-accent-200': '#bedbff',
+  '--oniva-accent-300': '#8ec5ff',
+  '--oniva-accent-400': '#3392ff',
+  '--oniva-accent-500': '#2b7fff',
+  '--oniva-accent-600': '#155dfc',
+  '--oniva-accent-700': '#1447e6',
+  '--oniva-accent-800': '#193cb8',
+  '--oniva-accent-900': '#1c398e',
+  '--oniva-accent-950': '#162556',
 });

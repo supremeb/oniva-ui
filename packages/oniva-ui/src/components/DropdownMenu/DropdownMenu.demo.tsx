@@ -24,7 +24,7 @@ import {
 
 const demo: DemoModule = {
   meta: {
-    title: 'Dropdown Menu',
+    title: 'Dropdown menu',
     slug: 'dropdown-menu',
     category: 'Overlays',
     description:

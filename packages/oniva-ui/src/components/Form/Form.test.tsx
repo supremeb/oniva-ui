@@ -22,7 +22,14 @@ describe('Form', () => {
 
   it('exposes form role and forwards ref', () => {
     let el: HTMLFormElement | null = null;
-    render(<Form aria-label="Profile" ref={(n) => { el = n; }} />);
+    render(
+      <Form
+        aria-label="Profile"
+        ref={(n) => {
+          el = n;
+        }}
+      />,
+    );
     expect(screen.getByRole('form', { name: 'Profile' })).toBeInTheDocument();
     expect(el).toBeInstanceOf(HTMLFormElement);
   });

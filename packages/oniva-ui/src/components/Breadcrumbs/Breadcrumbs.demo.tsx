@@ -7,7 +7,8 @@ const demo: DemoModule = {
     title: 'Breadcrumbs',
     slug: 'breadcrumbs',
     category: 'Navigation',
-    description: 'Shows the path to the current page. The last item is marked aria-current and not linked.',
+    description:
+      'Shows the path to the current page. The last item is marked aria-current and not linked.',
   },
   demos: [
     {
@@ -30,9 +31,15 @@ const demo: DemoModule = {
       code: `<Breadcrumb href="#" icon={<Home size={14} />} separator="/">Home</Breadcrumb>`,
       Component: () => (
         <Breadcrumbs aria-label="Path">
-          <Breadcrumb href="#" icon={<Home size={14} />} separator="/">Home</Breadcrumb>
-          <Breadcrumb href="#" separator="/">Finance</Breadcrumb>
-          <Breadcrumb href="#" separator="/">Invoices</Breadcrumb>
+          <Breadcrumb href="#" icon={<Home size={14} />} separator="/">
+            Home
+          </Breadcrumb>
+          <Breadcrumb href="#" separator="/">
+            Finance
+          </Breadcrumb>
+          <Breadcrumb href="#" separator="/">
+            Invoices
+          </Breadcrumb>
           <Breadcrumb>INV-2041</Breadcrumb>
         </Breadcrumbs>
       ),

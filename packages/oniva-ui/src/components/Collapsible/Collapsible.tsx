@@ -1,4 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
+import { focus } from '../../internal/focus';
 import {
   Button as AriaButton,
   Disclosure,
@@ -14,43 +15,45 @@ import { motion } from '../../tokens/motion.stylex';
 import { radius } from '../../tokens/radius.stylex';
 
 const styles = stylex.create({
-  root: { boxSizing: 'border-box', fontFamily: font.sans },
+  root: { boxSizing: 'border-box', fontFamily: font['--oniva-font-sans'] },
   heading: { margin: 0 },
   trigger: {
     alignItems: 'center',
     appearance: 'none',
-    backgroundColor: { default: 'transparent', ':hover': colors.surfaceInsetHover },
-    borderRadius: radius.md,
+    backgroundColor: {
+      default: 'transparent',
+      ':hover': colors['--oniva-color-surface-inset-hover'],
+    },
+    borderRadius: radius['--oniva-radius-md'],
     borderWidth: 0,
-    color: { default: colors.text, ':disabled': colors.textDisabled },
+    color: {
+      default: colors['--oniva-color-text'],
+      ':disabled': colors['--oniva-color-text-disabled'],
+    },
     cursor: { default: 'pointer', ':disabled': 'not-allowed' },
     display: 'inline-flex',
-    fontFamily: font.sans,
-    fontSize: font.size14,
-    fontWeight: font.weightMedium,
+    fontFamily: font['--oniva-font-sans'],
+    fontSize: font['--oniva-font-size-14'],
+    fontWeight: font['--oniva-font-weight-medium'],
     gap: 6,
     height: 32,
-    lineHeight: font.lh14,
-    outlineColor: colors.focusRing,
-    outlineOffset: 2,
-    outlineStyle: { default: 'none', ':focus-visible': 'solid' },
-    outlineWidth: 2,
+    lineHeight: font['--oniva-font-lh-14'],
     paddingInline: 8,
-    transitionDuration: motion.durBase,
+    transitionDuration: motion['--oniva-motion-dur-base'],
     transitionProperty: 'background-color',
-    transitionTimingFunction: motion.easeStandard,
+    transitionTimingFunction: motion['--oniva-motion-ease-standard'],
   },
   chevron: {
-    color: colors.iconMuted,
-    transitionDuration: motion.durBase,
+    color: colors['--oniva-color-icon-muted'],
+    transitionDuration: motion['--oniva-motion-dur-base'],
     transitionProperty: 'transform',
-    transitionTimingFunction: motion.easeStandard,
+    transitionTimingFunction: motion['--oniva-motion-ease-standard'],
   },
   chevronOpen: { transform: 'rotate(90deg)' },
   panel: {
-    color: colors.textMuted,
-    fontSize: font.size14,
-    lineHeight: font.lh16,
+    color: colors['--oniva-color-text-muted'],
+    fontSize: font['--oniva-font-size-14'],
+    lineHeight: font['--oniva-font-lh-16'],
     paddingBlockStart: 4,
     paddingInlineStart: 8,
   },
@@ -85,7 +88,7 @@ export function Collapsible({
           <Heading level={3} {...stylex.props(styles.heading)}>
             <AriaButton
               slot="trigger"
-              className={() => stylex.props(styles.trigger).className ?? ''}
+              className={() => stylex.props(styles.trigger, focus.ring).className ?? ''}
             >
               <ChevronRight
                 size={16}

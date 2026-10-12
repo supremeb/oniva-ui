@@ -25,7 +25,7 @@ const styles = stylex.create({
   hit: {
     appearance: 'none',
     backgroundColor: 'transparent',
-    borderRadius: radius.lg,
+    borderRadius: radius['--oniva-radius-lg'],
     borderWidth: 0,
     cursor: 'pointer',
     insetBlock: 0,
@@ -46,14 +46,14 @@ const styles = stylex.create({
   },
   chip: {
     alignItems: 'center',
-    backgroundColor: colors.surfaceTertiary,
-    borderRadius: radius.full,
-    color: colors.textOnTertiary,
+    backgroundColor: colors['--oniva-color-surface-tertiary'],
+    borderRadius: radius['--oniva-radius-full'],
+    color: colors['--oniva-color-text-on-tertiary'],
     display: 'inline-flex',
-    fontSize: font.size12,
-    fontWeight: font.weightSemibold,
+    fontSize: font['--oniva-font-size-12'],
+    fontWeight: font['--oniva-font-weight-semibold'],
     gap: 2,
-    lineHeight: font.lh12,
+    lineHeight: font['--oniva-font-lh-12'],
     paddingBlock: 2,
     paddingInlineEnd: 4,
     paddingInlineStart: 8,
@@ -61,8 +61,11 @@ const styles = stylex.create({
   chipX: {
     alignItems: 'center',
     appearance: 'none',
-    backgroundColor: { default: 'transparent', ':hover': colors.surfaceTertiaryHover },
-    borderRadius: radius.full,
+    backgroundColor: {
+      default: 'transparent',
+      ':hover': colors['--oniva-color-surface-tertiary-hover'],
+    },
+    borderRadius: radius['--oniva-radius-full'],
     borderWidth: 0,
     color: 'inherit',
     cursor: 'pointer',
@@ -76,7 +79,11 @@ const styles = stylex.create({
     zIndex: 1,
   },
   chevron: { insetInlineEnd: 10, pointerEvents: 'none', position: 'absolute' },
-  placeholder: { color: colors.textPlaceholder, fontSize: font.size14, fontWeight: font.weightRegular },
+  placeholder: {
+    color: colors['--oniva-color-text-placeholder'],
+    fontSize: font['--oniva-font-size-14'],
+    fontWeight: font['--oniva-font-weight-regular'],
+  },
 });
 
 export interface MultiSelectOption {
@@ -84,11 +91,17 @@ export interface MultiSelectOption {
   label: string;
 }
 
-export interface MultiSelectProps
-  extends Omit<
-    AriaSelectProps<MultiSelectOption, 'multiple'>,
-    'className' | 'style' | 'children' | 'selectionMode' | 'items' | 'value' | 'defaultValue' | 'onChange'
-  > {
+export interface MultiSelectProps extends Omit<
+  AriaSelectProps<MultiSelectOption, 'multiple'>,
+  | 'className'
+  | 'style'
+  | 'children'
+  | 'selectionMode'
+  | 'items'
+  | 'value'
+  | 'defaultValue'
+  | 'onChange'
+> {
   label?: ReactNode;
   description?: ReactNode;
   errorMessage?: string | ((v: ValidationResult) => string);
@@ -142,13 +155,19 @@ export function MultiSelect({
             )}
           >
             <Button ref={ref} className={stylex.props(styles.hit).className}>
-              <span style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', clip: 'rect(0 0 0 0)' }}>
+              <span
+                style={{
+                  position: 'absolute',
+                  width: 1,
+                  height: 1,
+                  overflow: 'hidden',
+                  clip: 'rect(0 0 0 0)',
+                }}
+              >
                 {placeholder}
               </span>
             </Button>
-            <SelectValue<MultiSelectOption>
-              className={stylex.props(styles.chips).className ?? ''}
-            >
+            <SelectValue<MultiSelectOption> className={stylex.props(styles.chips).className ?? ''}>
               {({ selectedItems, state }) =>
                 selectedItems.length === 0 || selectedItems.every((i) => i == null) ? (
                   <span {...stylex.props(styles.placeholder)}>{placeholder}</span>
@@ -177,7 +196,11 @@ export function MultiSelect({
                 )
               }
             </SelectValue>
-            <ChevronDown size={16} aria-hidden="true" {...stylex.props(fp.chevron, styles.chevron)} />
+            <ChevronDown
+              size={16}
+              aria-hidden="true"
+              {...stylex.props(fp.chevron, styles.chevron)}
+            />
           </div>
           {description != null && (
             <Text slot="description" {...stylex.props(ff.description)}>

@@ -3,7 +3,7 @@ import { Radio, RadioGroup } from './RadioGroup';
 
 const demo: DemoModule = {
   meta: {
-    title: 'RadioGroup',
+    title: 'Radio group',
     slug: 'radio-group',
     category: 'Forms',
     description: 'Single-choice group with plain and card-style radios.',
@@ -40,10 +40,20 @@ const demo: DemoModule = {
             <Radio variant="card" value="starter" description="Up to 3 seats" trailing="$0">
               Starter
             </Radio>
-            <Radio variant="card" value="growth" description="Up to 25 seats, API access" trailing="$49/mo">
+            <Radio
+              variant="card"
+              value="growth"
+              description="Up to 25 seats, API access"
+              trailing="$49/mo"
+            >
               Growth
             </Radio>
-            <Radio variant="card" value="scale" description="Unlimited seats, SSO, audit logs" trailing="$199/mo">
+            <Radio
+              variant="card"
+              value="scale"
+              description="Unlimited seats, SSO, audit logs"
+              trailing="$199/mo"
+            >
               Scale
             </Radio>
           </RadioGroup>

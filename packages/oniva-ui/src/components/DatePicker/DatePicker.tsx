@@ -25,8 +25,10 @@ const styles = stylex.create({
   dialog: { outline: 'none' },
 });
 
-export interface DatePickerProps<T extends DateValue>
-  extends Omit<AriaDatePickerProps<T>, 'className' | 'style' | 'children'> {
+export interface DatePickerProps<T extends DateValue> extends Omit<
+  AriaDatePickerProps<T>,
+  'className' | 'style' | 'children'
+> {
   label?: ReactNode;
   description?: ReactNode;
   errorMessage?: string | ((v: ValidationResult) => string);

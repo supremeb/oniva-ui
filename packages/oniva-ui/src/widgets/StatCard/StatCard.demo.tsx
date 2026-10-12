@@ -11,7 +11,7 @@ const grid = {
 
 const demo: DemoModule = {
   meta: {
-    title: 'StatCard',
+    title: 'Stat card',
     slug: 'stat-card',
     category: 'Widgets',
     description: 'KPI card with headline value, delta chip and inline sparkline.',

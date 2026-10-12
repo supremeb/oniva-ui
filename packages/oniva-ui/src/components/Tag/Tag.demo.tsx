@@ -42,11 +42,21 @@ const demo: DemoModule = {
       Component: () => (
         <TagGroup aria-label="Statuses">
           <Tag id="1">Draft</Tag>
-          <Tag id="2" color="accent">Pro plan</Tag>
-          <Tag id="3" color="success">Paid</Tag>
-          <Tag id="4" color="warning">Pending</Tag>
-          <Tag id="5" color="danger">Overdue</Tag>
-          <Tag id="6" color="outline">Archived</Tag>
+          <Tag id="2" color="accent">
+            Pro plan
+          </Tag>
+          <Tag id="3" color="success">
+            Paid
+          </Tag>
+          <Tag id="4" color="warning">
+            Pending
+          </Tag>
+          <Tag id="5" color="danger">
+            Overdue
+          </Tag>
+          <Tag id="6" color="outline">
+            Archived
+          </Tag>
         </TagGroup>
       ),
     },
@@ -66,9 +76,15 @@ const demo: DemoModule = {
 </TagGroup>`,
       Component: () => (
         <TagGroup label="Notify me about" selectionMode="multiple" defaultSelectedKeys={['pay']}>
-          <Tag id="pay" color="outline">Payouts</Tag>
-          <Tag id="dis" color="outline">Disputes</Tag>
-          <Tag id="inv" color="outline">Invoices</Tag>
+          <Tag id="pay" color="outline">
+            Payouts
+          </Tag>
+          <Tag id="dis" color="outline">
+            Disputes
+          </Tag>
+          <Tag id="inv" color="outline">
+            Invoices
+          </Tag>
         </TagGroup>
       ),
     },

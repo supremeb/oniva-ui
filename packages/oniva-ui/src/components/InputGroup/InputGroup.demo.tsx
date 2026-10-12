@@ -2,14 +2,21 @@ import { Mail } from 'lucide-react';
 import type { DemoModule } from '../../internal/demo';
 import { InputGroup } from './InputGroup';
 
-const col = { display: 'flex', flexDirection: 'column', gap: 16, width: '100%', maxWidth: 380 } as const;
+const col = {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 16,
+  width: '100%',
+  maxWidth: 380,
+} as const;
 
 const demo: DemoModule = {
   meta: {
-    title: 'InputGroup',
+    title: 'Input group',
     slug: 'input-group',
     category: 'Forms',
-    description: 'Input with attached addons (protocol, currency, units, domains) that share the field border.',
+    description:
+      'Input with attached addons (protocol, currency, units, domains) that share the field border.',
   },
   demos: [
     {

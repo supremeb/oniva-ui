@@ -9,7 +9,15 @@ describe('getPaginationRange', () => {
   });
   it('adds ellipses', () => {
     expect(getPaginationRange(1, 20)).toEqual([1, 2, 3, 4, 5, 'ellipsis-end', 20]);
-    expect(getPaginationRange(10, 20)).toEqual([1, 'ellipsis-start', 9, 10, 11, 'ellipsis-end', 20]);
+    expect(getPaginationRange(10, 20)).toEqual([
+      1,
+      'ellipsis-start',
+      9,
+      10,
+      11,
+      'ellipsis-end',
+      20,
+    ]);
     expect(getPaginationRange(20, 20)).toEqual([1, 'ellipsis-start', 16, 17, 18, 19, 20]);
   });
 });
@@ -34,7 +42,14 @@ describe('Pagination', () => {
   });
   it('simple variant shows summary and Next', async () => {
     const onPageChange = vi.fn();
-    render(<Pagination variant="simple" pageCount={5} summary="Showing 1-10 of 48" onPageChange={onPageChange} />);
+    render(
+      <Pagination
+        variant="simple"
+        pageCount={5}
+        summary="Showing 1-10 of 48"
+        onPageChange={onPageChange}
+      />,
+    );
     expect(screen.getByText('Showing 1-10 of 48')).toBeInTheDocument();
     await userEvent.click(screen.getByRole('button', { name: /Next/ }));
     expect(onPageChange).toHaveBeenCalledWith(2);

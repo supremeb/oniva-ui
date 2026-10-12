@@ -4,9 +4,12 @@ import stylex from '@stylexjs/unplugin';
 
 export default defineConfig({
   plugins: [
-    stylex.vite({ runtimeInjection: false,
+    stylex.vite({
+      runtimeInjection: false,
       // wrap atomic CSS in cascade layers so app CSS can override predictably
-      useCSSLayers: true, lightningcssOptions: { minify: true } }),
+      useCSSLayers: true,
+      lightningcssOptions: { minify: true },
+    }),
     react(),
   ],
   build: {

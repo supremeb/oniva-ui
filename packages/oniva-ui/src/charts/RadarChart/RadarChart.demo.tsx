@@ -6,7 +6,7 @@ import { RadarChart } from './RadarChart';
 
 const demo: DemoModule = {
   meta: {
-    title: 'RadarChart',
+    title: 'Radar chart',
     slug: 'radar-chart',
     category: 'Charts',
     description:

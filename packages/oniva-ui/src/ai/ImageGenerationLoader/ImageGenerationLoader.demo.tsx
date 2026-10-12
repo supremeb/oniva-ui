@@ -3,7 +3,7 @@ import { ImageGenerationLoader } from './ImageGenerationLoader';
 
 const demo: DemoModule = {
   meta: {
-    title: 'Image Generation Loader',
+    title: 'Image generation loader',
     slug: 'image-generation-loader',
     category: 'AI & Agent',
     description: 'Placeholder for images being generated.',

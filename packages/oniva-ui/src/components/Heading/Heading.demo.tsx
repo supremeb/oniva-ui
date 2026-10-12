@@ -31,7 +31,9 @@ const demo: DemoModule = {
 <Text tone="muted">128 customers on the Pro plan.</Text>`,
       Component: () => (
         <div>
-          <Heading level={2} variant="headline">Active subscriptions</Heading>
+          <Heading level={2} variant="headline">
+            Active subscriptions
+          </Heading>
           <Text tone="muted">128 customers on the Pro plan.</Text>
         </div>
       ),

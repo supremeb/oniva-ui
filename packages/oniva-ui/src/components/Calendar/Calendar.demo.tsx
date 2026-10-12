@@ -18,7 +18,8 @@ const demo: DemoModule = {
     title: 'Calendar',
     slug: 'calendar',
     category: 'Forms',
-    description: 'Month grid with keyboard navigation, min/max, unavailable dates and accent-gradient selection.',
+    description:
+      'Month grid with keyboard navigation, min/max, unavailable dates and accent-gradient selection.',
   },
   demos: [
     {

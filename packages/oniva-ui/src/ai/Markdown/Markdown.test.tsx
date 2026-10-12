@@ -12,7 +12,11 @@ describe('Markdown', () => {
   });
 
   it('renders tables and fenced code', () => {
-    render(<Markdown>{'| Region | Rev |\n|---|--:|\n| EMEA | $1.2M |\n\n```py\nprint(1)\n```'}</Markdown>);
+    render(
+      <Markdown>
+        {'| Region | Rev |\n|---|--:|\n| EMEA | $1.2M |\n\n```py\nprint(1)\n```'}
+      </Markdown>,
+    );
     expect(screen.getByRole('table')).toBeInTheDocument();
     expect(screen.getByRole('columnheader', { name: 'Rev' })).toBeInTheDocument();
     expect(screen.getByText('print(1)')).toBeInTheDocument();
@@ -20,7 +24,11 @@ describe('Markdown', () => {
 
   it('never renders raw HTML as markup and drops unsafe links', () => {
     const { container } = render(
-      <Markdown>{'<script>alert(1)</script>\n\n<img src=x onerror=alert(1)>\n\n[bad](javascript:alert(1)) [ok](https://example.com)'}</Markdown>,
+      <Markdown>
+        {
+          '<script>alert(1)</script>\n\n<img src=x onerror=alert(1)>\n\n[bad](javascript:alert(1)) [ok](https://example.com)'
+        }
+      </Markdown>,
     );
     expect(container.querySelector('script')).toBeNull();
     expect(container.querySelector('img')).toBeNull();

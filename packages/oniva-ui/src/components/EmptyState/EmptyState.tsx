@@ -11,27 +11,27 @@ const styles = stylex.create({
     boxSizing: 'border-box',
     display: 'flex',
     flexDirection: 'column',
-    fontFamily: font.sans,
+    fontFamily: font['--oniva-font-sans'],
     gap: 4,
     padding: 32,
     textAlign: 'center',
     width: '100%',
   },
   bordered: {
-    borderColor: colors.borderControl,
-    borderRadius: radius.card,
+    borderColor: colors['--oniva-color-border-control'],
+    borderRadius: radius['--oniva-radius-card'],
     borderStyle: 'dashed',
     borderWidth: 1,
   },
   media: {
     alignItems: 'center',
-    backgroundColor: colors.surface,
-    borderColor: colors.border,
-    borderRadius: radius.xl,
+    backgroundColor: colors['--oniva-color-surface'],
+    borderColor: colors['--oniva-color-border'],
+    borderRadius: radius['--oniva-radius-xl'],
     borderStyle: 'solid',
     borderWidth: 1,
-    boxShadow: shadow.sm,
-    color: colors.iconMuted,
+    boxShadow: shadow['--oniva-shadow-sm'],
+    color: colors['--oniva-color-icon-muted'],
     display: 'inline-flex',
     height: 48,
     justifyContent: 'center',
@@ -39,16 +39,16 @@ const styles = stylex.create({
     width: 48,
   },
   title: {
-    color: colors.text,
-    fontSize: font.size16,
-    fontWeight: font.weightSemibold,
-    lineHeight: font.lh16,
+    color: colors['--oniva-color-text'],
+    fontSize: font['--oniva-font-size-16'],
+    fontWeight: font['--oniva-font-weight-semibold'],
+    lineHeight: font['--oniva-font-lh-16'],
     margin: 0,
   },
   description: {
-    color: colors.textMuted,
-    fontSize: font.size14,
-    lineHeight: font.lh14,
+    color: colors['--oniva-color-text-muted'],
+    fontSize: font['--oniva-font-size-14'],
+    lineHeight: font['--oniva-font-lh-14'],
     margin: 0,
     maxWidth: 360,
   },
@@ -82,7 +82,12 @@ export function EmptyState({
 }: EmptyStateProps) {
   const sx = stylex.props(styles.base, bordered && styles.bordered, xstyle);
   return (
-    <div {...rest} ref={ref} {...sx} className={[sx.className, className].filter(Boolean).join(' ')}>
+    <div
+      {...rest}
+      ref={ref}
+      {...sx}
+      className={[sx.className, className].filter(Boolean).join(' ')}
+    >
       {icon && (
         <span aria-hidden="true" {...stylex.props(styles.media)}>
           {icon}

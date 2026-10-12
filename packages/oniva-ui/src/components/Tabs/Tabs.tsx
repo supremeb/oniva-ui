@@ -10,7 +10,7 @@ import {
   type TabsProps as AriaTabsProps,
 } from 'react-aria-components';
 import { createContext, use, type CSSProperties, type ReactNode, type Ref } from 'react';
-import { cx } from '../../internal/nav-cx';
+import { sxClass } from '../../internal/sx';
 import { accent } from '../../tokens/accent.stylex';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
@@ -21,20 +21,37 @@ import { shadow } from '../../tokens/shadow.stylex';
 export type TabsVariant = 'line' | 'pill';
 export type TabsSize = 'sm' | 'md';
 
-const Ctx = createContext<{ variant: TabsVariant; size: TabsSize; vertical: boolean }>({ variant: 'line', size: 'md', vertical: false });
+const Ctx = createContext<{ variant: TabsVariant; size: TabsSize; vertical: boolean }>({
+  variant: 'line',
+  size: 'md',
+  vertical: false,
+});
 
 const styles = stylex.create({
-  root: { display: 'flex', flexDirection: 'column', fontFamily: font.sans },
+  root: { display: 'flex', flexDirection: 'column', fontFamily: font['--oniva-font-sans'] },
   rootV: { flexDirection: 'row', gap: 16 },
   list: { alignItems: 'center', display: 'flex', gap: 4 },
   listV: { alignItems: 'stretch', flexDirection: 'column' },
-  listLine: { alignSelf: 'stretch', borderBottomColor: colors.border, borderBottomStyle: 'solid', borderBottomWidth: 1, gap: 20 },
-  listLineV: { borderBottomWidth: 0, borderRightColor: colors.border, borderRightStyle: 'solid', borderRightWidth: 1, gap: 4, paddingInlineEnd: 4 },
+  listLine: {
+    alignSelf: 'stretch',
+    borderBottomColor: colors['--oniva-color-border'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: 1,
+    gap: 20,
+  },
+  listLineV: {
+    borderBottomWidth: 0,
+    borderRightColor: colors['--oniva-color-border'],
+    borderRightStyle: 'solid',
+    borderRightWidth: 1,
+    gap: 4,
+    paddingInlineEnd: 4,
+  },
   listPill: {
     alignSelf: 'flex-start',
-    backgroundColor: colors.surfaceInset,
-    borderColor: colors.border,
-    borderRadius: radius.xl,
+    backgroundColor: colors['--oniva-color-surface-inset'],
+    borderColor: colors['--oniva-color-border'],
+    borderRadius: radius['--oniva-radius-xl'],
     borderStyle: 'solid',
     borderWidth: 1,
     boxSizing: 'border-box',
@@ -49,19 +66,19 @@ const styles = stylex.create({
     boxSizing: 'border-box',
     cursor: { default: 'pointer', ':is([data-disabled])': 'not-allowed' },
     display: 'inline-flex',
-    fontFamily: font.sans,
-    fontSize: font.size14,
-    fontWeight: font.weightMedium,
+    fontFamily: font['--oniva-font-sans'],
+    fontSize: font['--oniva-font-size-14'],
+    fontWeight: font['--oniva-font-weight-medium'],
     gap: 6,
     justifyContent: 'center',
-    lineHeight: font.lh14,
-    outlineColor: colors.focusRing,
+    lineHeight: font['--oniva-font-lh-14'],
+    outlineColor: colors['--oniva-color-focus-ring'],
     outlineOffset: 2,
     outlineStyle: 'none',
     outlineWidth: 2,
-    transitionDuration: motion.durBase,
+    transitionDuration: motion['--oniva-motion-dur-base'],
     transitionProperty: 'background-color, color, box-shadow, border-color',
-    transitionTimingFunction: motion.easeStandard,
+    transitionTimingFunction: motion['--oniva-motion-ease-standard'],
     userSelect: 'none',
     whiteSpace: 'nowrap',
   },
@@ -74,25 +91,45 @@ const styles = stylex.create({
     marginBottom: -1,
     paddingInline: 2,
   },
-  lineV: { borderBottomWidth: 0, borderRightColor: 'transparent', borderRightWidth: 2, justifyContent: 'flex-start', marginBottom: 0, marginRight: -1, paddingInline: 12 },
-  lineSelected: { borderBottomColor: accent.accent500, borderRightColor: accent.accent500, color: colors.text },
-  lineIdle: { color: { default: colors.textMuted, ':hover': colors.text } },
-  pill: { borderRadius: radius.lg, paddingInline: 12 },
-  pillSm: { borderRadius: radius.md, paddingInline: 10 },
-  pillSelected: { backgroundColor: colors.surface, boxShadow: shadow.sm, color: colors.text },
-  pillIdle: { color: { default: colors.textMuted, ':hover': colors.text } },
-  disabled: { color: colors.textDisabled },
+  lineV: {
+    borderBottomWidth: 0,
+    borderRightColor: 'transparent',
+    borderRightWidth: 2,
+    justifyContent: 'flex-start',
+    marginBottom: 0,
+    marginRight: -1,
+    paddingInline: 12,
+  },
+  lineSelected: {
+    borderBottomColor: accent['--oniva-accent-500'],
+    borderRightColor: accent['--oniva-accent-500'],
+    color: colors['--oniva-color-text'],
+  },
+  lineIdle: {
+    color: { default: colors['--oniva-color-text-muted'], ':hover': colors['--oniva-color-text'] },
+  },
+  pill: { borderRadius: radius['--oniva-radius-lg'], paddingInline: 12 },
+  pillSm: { borderRadius: radius['--oniva-radius-md'], paddingInline: 10 },
+  pillSelected: {
+    backgroundColor: colors['--oniva-color-surface'],
+    boxShadow: shadow['--oniva-shadow-sm'],
+    color: colors['--oniva-color-text'],
+  },
+  pillIdle: {
+    color: { default: colors['--oniva-color-text-muted'], ':hover': colors['--oniva-color-text'] },
+  },
+  disabled: { color: colors['--oniva-color-text-disabled'] },
   badge: {
-    backgroundColor: colors.surfaceTertiary,
-    borderRadius: radius.full,
-    color: colors.textOnTertiary,
-    fontSize: font.size11,
+    backgroundColor: colors['--oniva-color-surface-tertiary'],
+    borderRadius: radius['--oniva-radius-full'],
+    color: colors['--oniva-color-text-on-tertiary'],
+    fontSize: font['--oniva-font-size-11'],
     fontVariantNumeric: 'tabular-nums',
-    lineHeight: font.lh11,
+    lineHeight: font['--oniva-font-lh-11'],
     paddingInline: 6,
   },
   panel: {
-    outlineColor: colors.focusRing,
+    outlineColor: colors['--oniva-color-focus-ring'],
     outlineOffset: 2,
     outlineStyle: 'none',
     outlineWidth: 2,
@@ -111,7 +148,15 @@ export interface TabsProps extends Omit<AriaTabsProps, 'className' | 'style'> {
   ref?: Ref<HTMLDivElement>;
 }
 
-export function Tabs({ variant = 'line', size = 'md', className, style, xstyle, ref, ...rest }: TabsProps) {
+export function Tabs({
+  variant = 'line',
+  size = 'md',
+  className,
+  style,
+  xstyle,
+  ref,
+  ...rest
+}: TabsProps) {
   const vertical = rest.orientation === 'vertical';
   return (
     <Ctx value={{ variant, size, vertical }}>
@@ -119,20 +164,29 @@ export function Tabs({ variant = 'line', size = 'md', className, style, xstyle, 
         {...rest}
         ref={ref}
         style={style}
-        className={cx(stylex.props(styles.root, vertical && styles.rootV, xstyle), className)}
+        className={sxClass(stylex.props(styles.root, vertical && styles.rootV, xstyle), className)}
       />
     </Ctx>
   );
 }
 
-export interface TabListProps<T extends object> extends Omit<AriaTabListProps<T>, 'className' | 'style'> {
+export interface TabListProps<T extends object> extends Omit<
+  AriaTabListProps<T>,
+  'className' | 'style'
+> {
   className?: string;
   style?: CSSProperties;
   xstyle?: stylex.StyleXStyles;
   ref?: Ref<HTMLDivElement>;
 }
 
-export function TabList<T extends object>({ className, style, xstyle, ref, ...rest }: TabListProps<T>) {
+export function TabList<T extends object>({
+  className,
+  style,
+  xstyle,
+  ref,
+  ...rest
+}: TabListProps<T>) {
   const { variant, vertical: v } = use(Ctx);
   return (
     <AriaTabList
@@ -140,7 +194,7 @@ export function TabList<T extends object>({ className, style, xstyle, ref, ...re
       ref={ref}
       style={style}
       className={() => {
-        return cx(
+        return sxClass(
           stylex.props(
             styles.list,
             v && styles.listV,
@@ -174,7 +228,7 @@ export function Tab({ children, count, icon, className, style, xstyle, ref, ...r
       ref={ref}
       style={style}
       className={(s) => {
-        return cx(
+        return sxClass(
           stylex.props(
             styles.tab,
             size === 'sm' ? styles.tabSm : styles.tabMd,
@@ -211,7 +265,17 @@ export function TabPanel({ className, style, xstyle, ref, ...rest }: TabPanelPro
       {...rest}
       ref={ref}
       style={style}
-      className={(s) => cx(stylex.props(styles.panel, styles.panelGrow, s.isFocusVisible && styles.panelFocus, xstyle), className)}
+      className={(s) =>
+        sxClass(
+          stylex.props(
+            styles.panel,
+            styles.panelGrow,
+            s.isFocusVisible && styles.panelFocus,
+            xstyle,
+          ),
+          className,
+        )
+      }
     />
   );
 }

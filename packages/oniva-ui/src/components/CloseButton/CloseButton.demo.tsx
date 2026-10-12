@@ -3,7 +3,7 @@ import { CloseButton } from './CloseButton';
 
 const demo: DemoModule = {
   meta: {
-    title: 'CloseButton',
+    title: 'Close button',
     slug: 'close-button',
     category: 'Actions',
     description: 'Compact dismiss control used by alerts, tags, dialogs and toasts.',

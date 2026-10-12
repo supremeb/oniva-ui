@@ -1,4 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
+import { mergeSx } from '../../internal/sx';
 import {
   flexRender,
   getCoreRowModel,
@@ -30,35 +31,39 @@ import { Cell, Column, Row, Table, TableBody, TableHeader, type TableDensity } f
 
 const styles = stylex.create({
   root: {
-    backgroundColor: colors.surfaceInset,
-    borderColor: colors.border,
-    borderRadius: radius.card,
+    backgroundColor: colors['--oniva-color-surface-inset'],
+    borderColor: colors['--oniva-color-border'],
+    borderRadius: radius['--oniva-radius-card'],
     borderStyle: 'solid',
     borderWidth: 1,
     boxSizing: 'border-box',
     display: 'flex',
     flexDirection: 'column',
-    fontFamily: font.sans,
+    fontFamily: font['--oniva-font-sans'],
     gap: 12,
     padding: 12,
     width: '100%',
   },
   toolbar: { alignItems: 'center', display: 'flex', flexWrap: 'wrap', gap: 12, paddingInline: 4 },
   total: { display: 'flex', flexDirection: 'column', marginInlineEnd: 'auto' },
-  totalLabel: { color: colors.textMuted, fontSize: font.size14, lineHeight: font.lh14 },
+  totalLabel: {
+    color: colors['--oniva-color-text-muted'],
+    fontSize: font['--oniva-font-size-14'],
+    lineHeight: font['--oniva-font-lh-14'],
+  },
   totalValue: {
-    color: colors.text,
-    fontSize: font.size14,
+    color: colors['--oniva-color-text'],
+    fontSize: font['--oniva-font-size-14'],
     fontVariantNumeric: 'tabular-nums',
-    fontWeight: font.weightMedium,
-    lineHeight: font.lh14,
+    fontWeight: font['--oniva-font-weight-medium'],
+    lineHeight: font['--oniva-font-lh-14'],
   },
   search: {
     alignItems: 'center',
-    backgroundColor: colors.surfaceInsetHover,
-    borderRadius: radius.full,
+    backgroundColor: colors['--oniva-color-surface-inset-hover'],
+    borderRadius: radius['--oniva-radius-full'],
     boxSizing: 'border-box',
-    color: colors.iconMuted,
+    color: colors['--oniva-color-icon-muted'],
     display: 'flex',
     gap: 8,
     height: 36,
@@ -69,13 +74,13 @@ const styles = stylex.create({
     appearance: 'none',
     backgroundColor: 'transparent',
     borderWidth: 0,
-    color: colors.text,
+    color: colors['--oniva-color-text'],
     flexGrow: 1,
-    fontFamily: font.sans,
-    fontSize: font.size14,
+    fontFamily: font['--oniva-font-sans'],
+    fontSize: font['--oniva-font-size-14'],
     minWidth: 0,
     outline: 'none',
-    '::placeholder': { color: colors.textPlaceholder },
+    '::placeholder': { color: colors['--oniva-color-text-placeholder'] },
   },
   footer: {
     alignItems: 'center',
@@ -86,8 +91,8 @@ const styles = stylex.create({
     paddingInline: 4,
   },
   range: {
-    color: colors.textMuted,
-    fontSize: font.size14,
+    color: colors['--oniva-color-text-muted'],
+    fontSize: font['--oniva-font-size-14'],
     fontVariantNumeric: 'tabular-nums',
   },
   pages: { alignItems: 'center', display: 'flex', gap: 4 },
@@ -95,11 +100,11 @@ const styles = stylex.create({
     fontVariantNumeric: 'tabular-nums',
     minWidth: 32,
     paddingInline: 0,
-    transitionDuration: motion.durBase,
+    transitionDuration: motion['--oniva-motion-dur-base'],
   },
-  ellipsis: { color: colors.textMuted, paddingInline: 6 },
+  ellipsis: { color: colors['--oniva-color-text-muted'], paddingInline: 6 },
   empty: {
-    color: colors.textMuted,
+    color: colors['--oniva-color-text-muted'],
     paddingBlock: 32,
     textAlign: 'center',
   },
@@ -133,6 +138,7 @@ export interface DataTableProps<TData extends object> {
   onDataChange?: (data: TData[]) => void;
   onSelectionChange?: (ids: string[]) => void;
   xstyle?: stylex.StyleXStyles;
+  className?: string;
   ref?: Ref<HTMLDivElement>;
 }
 
@@ -162,6 +168,7 @@ export function DataTable<TData extends object>({
   onDataChange,
   onSelectionChange,
   xstyle,
+  className,
   ref,
   ...rest
 }: DataTableProps<TData>) {
@@ -234,7 +241,7 @@ export function DataTable<TData extends object>({
   );
 
   return (
-    <div ref={ref} {...stylex.props(styles.root, xstyle)}>
+    <div ref={ref} {...mergeSx(stylex.props(styles.root, xstyle), className)}>
       <div {...stylex.props(styles.toolbar)}>
         <div {...stylex.props(styles.total)}>
           <span {...stylex.props(styles.totalLabel)}>{title}</span>

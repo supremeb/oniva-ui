@@ -17,10 +17,29 @@ describe('ScrollArea', () => {
   });
   it('orientation changes classes; ref forwarded', () => {
     let el: HTMLDivElement | null = null;
-    const { rerender } = render(<ScrollArea aria-label="a" ref={(n) => { el = n; }}>x</ScrollArea>);
+    const { rerender } = render(
+      <ScrollArea
+        aria-label="a"
+        ref={(n) => {
+          el = n;
+        }}
+      >
+        x
+      </ScrollArea>,
+    );
     const a = screen.getByRole('region').className;
     expect(el).toBeInstanceOf(HTMLDivElement);
-    rerender(<ScrollArea aria-label="a" orientation="horizontal" ref={(n) => { el = n; }}>x</ScrollArea>);
+    rerender(
+      <ScrollArea
+        aria-label="a"
+        orientation="horizontal"
+        ref={(n) => {
+          el = n;
+        }}
+      >
+        x
+      </ScrollArea>,
+    );
     expect(screen.getByRole('region').className).not.toBe(a);
   });
 });

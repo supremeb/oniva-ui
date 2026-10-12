@@ -9,7 +9,8 @@ const demo: DemoModule = {
     title: 'Navbar',
     slug: 'navbar',
     category: 'Navigation',
-    description: 'Top application bar with brand, links and actions. Flat with a hairline, or floating.',
+    description:
+      'Top application bar with brand, links and actions. Flat with a hairline, or floating.',
   },
   demos: [
     {
@@ -21,7 +22,9 @@ const demo: DemoModule = {
 </Navbar>`,
       Component: () => (
         <Navbar brand="Oniva" end={<Button size="sm">Upgrade</Button>}>
-          <NavbarLink href="#" isActive>Dashboard</NavbarLink>
+          <NavbarLink href="#" isActive>
+            Dashboard
+          </NavbarLink>
           <NavbarLink href="#">Reports</NavbarLink>
           <NavbarLink href="#">Customers</NavbarLink>
         </Navbar>
@@ -44,7 +47,9 @@ const demo: DemoModule = {
           }
         >
           <NavbarLink href="#">Invoices</NavbarLink>
-          <NavbarLink href="#" isActive>Payments</NavbarLink>
+          <NavbarLink href="#" isActive>
+            Payments
+          </NavbarLink>
           <NavbarLink href="#">Payouts</NavbarLink>
         </Navbar>
       ),

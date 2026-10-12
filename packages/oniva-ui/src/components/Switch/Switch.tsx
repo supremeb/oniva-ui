@@ -1,4 +1,6 @@
 import * as stylex from '@stylexjs/stylex';
+import { media } from '../../tokens/media.stylex';
+import type { ControlSize } from '../../internal/types';
 import { Switch as AriaSwitch, type SwitchProps as AriaSwitchProps } from 'react-aria-components';
 import type { CSSProperties, ReactNode, Ref } from 'react';
 import { mergeSx } from '../../internal/sx';
@@ -12,54 +14,63 @@ import { shadow } from '../../tokens/shadow.stylex';
 const styles = stylex.create({
   root: {
     alignItems: 'center',
-    color: colors.text,
+    color: colors['--oniva-color-text'],
     cursor: 'pointer',
     display: 'inline-flex',
-    fontFamily: font.sans,
-    fontSize: font.size14,
-    fontWeight: font.weightMedium,
+    fontFamily: font['--oniva-font-sans'],
+    fontSize: font['--oniva-font-size-14'],
+    fontWeight: font['--oniva-font-weight-medium'],
     gap: 10,
-    lineHeight: font.lh14,
+    lineHeight: font['--oniva-font-lh-14'],
   },
   rootDisabled: { cursor: 'not-allowed', opacity: 0.5 },
   track: {
-    backgroundImage: `linear-gradient(180deg, ${colors.surface}, ${colors.surfaceHover})`,
-    borderColor: { default: colors.border, '@media (forced-colors: active)': 'ButtonText' },
-    borderRadius: radius.full,
+    backgroundImage: `linear-gradient(180deg, ${colors['--oniva-color-surface']}, ${colors['--oniva-color-surface-hover']})`,
+    borderColor: {
+      default: colors['--oniva-color-border'],
+      '@media (forced-colors: active)': 'ButtonText',
+    },
+    borderRadius: radius['--oniva-radius-full'],
     borderStyle: 'solid',
     borderWidth: 1,
-    boxShadow: shadow.xs,
+    boxShadow: shadow['--oniva-shadow-xs'],
     boxSizing: 'border-box',
     flexShrink: 0,
     position: 'relative',
-    transitionDuration: { default: motion.durBase, '@media (prefers-reduced-motion: reduce)': '0.01ms' },
+    transitionDuration: {
+      default: motion['--oniva-motion-dur-base'],
+      [media.reducedMotion]: '0.01ms',
+    },
     transitionProperty: 'background-image, border-color, box-shadow',
-    transitionTimingFunction: motion.easeStandard,
+    transitionTimingFunction: motion['--oniva-motion-ease-standard'],
   },
   trackOn: {
-    backgroundImage: `linear-gradient(180deg, ${accent.accent500}, ${accent.accent600})`,
+    backgroundImage: `linear-gradient(180deg, ${accent['--oniva-accent-500']}, ${accent['--oniva-accent-600']})`,
     borderColor: { default: 'transparent', '@media (forced-colors: active)': 'Highlight' },
-    boxShadow: shadow.accentInset,
+    boxShadow: shadow['--oniva-shadow-accent-inset'],
   },
-  knobOn: { backgroundImage: 'none', backgroundColor: colors.accentFg },
+  knobOn: { backgroundImage: 'none', backgroundColor: colors['--oniva-color-accent-fg'] },
   focus: {
-    outlineColor: colors.focusRing,
+    outlineColor: colors['--oniva-color-focus-ring'],
     outlineOffset: 2,
     outlineStyle: 'solid',
     outlineWidth: 2,
   },
   knob: {
-    backgroundImage: `linear-gradient(180deg, ${colors.surface}, ${colors.surfaceHover})`,
+    backgroundImage: `linear-gradient(180deg, ${colors['--oniva-color-surface']}, ${colors['--oniva-color-surface-hover']})`,
     borderColor: { default: 'transparent', '@media (forced-colors: active)': 'ButtonText' },
-    borderRadius: radius.full,
+    borderRadius: radius['--oniva-radius-full'],
     borderStyle: 'solid',
     borderWidth: 1,
     boxSizing: 'border-box',
-    boxShadow: shadow.sm,
+    boxShadow: shadow['--oniva-shadow-sm'],
     position: 'absolute',
-    transitionDuration: { default: motion.durBase, '@media (prefers-reduced-motion: reduce)': '0.01ms' },
+    transitionDuration: {
+      default: motion['--oniva-motion-dur-base'],
+      [media.reducedMotion]: '0.01ms',
+    },
     transitionProperty: 'inset-inline-start',
-    transitionTimingFunction: motion.easeStandard,
+    transitionTimingFunction: motion['--oniva-motion-ease-standard'],
   },
   // sizes (track w x h, knob d, inset 2px / border 1px)
   trackSm: { height: 20, width: 36 },
@@ -75,7 +86,7 @@ const styles = stylex.create({
 
 export interface SwitchProps extends Omit<AriaSwitchProps, 'className' | 'style' | 'children'> {
   style?: CSSProperties;
-  size?: 'sm' | 'md' | 'lg';
+  size?: ControlSize;
   children?: ReactNode;
   className?: string;
   xstyle?: stylex.StyleXStyles;
@@ -88,17 +99,30 @@ const sizeMap = {
   lg: ['trackLg', 'knobLg', 'knobLgOn'],
 } as const;
 
-export function Switch({ size = 'md', children, className, style, xstyle, ref, ...rest }: SwitchProps) {
+export function Switch({
+  size = 'md',
+  children,
+  className,
+  style,
+  xstyle,
+  ref,
+  ...rest
+}: SwitchProps) {
   const [trackKey, knobKey, knobOnKey] = sizeMap[size];
   return (
     <AriaSwitch
       {...rest}
       ref={ref}
       className={({ isDisabled }) =>
-        mergeSx(stylex.props(styles.root, isDisabled && styles.rootDisabled, xstyle), className).className
+        mergeSx(stylex.props(styles.root, isDisabled && styles.rootDisabled, xstyle), className)
+          .className
       }
       style={({ isDisabled }) =>
-        mergeSx(stylex.props(styles.root, isDisabled && styles.rootDisabled, xstyle), className, style).style
+        mergeSx(
+          stylex.props(styles.root, isDisabled && styles.rootDisabled, xstyle),
+          className,
+          style,
+        ).style
       }
     >
       {({ isSelected, isFocusVisible }) => (
@@ -113,7 +137,12 @@ export function Switch({ size = 'md', children, className, style, xstyle, ref, .
             )}
           >
             <span
-              {...stylex.props(styles.knob, styles[knobKey], isSelected && styles[knobOnKey], isSelected && styles.knobOn)}
+              {...stylex.props(
+                styles.knob,
+                styles[knobKey],
+                isSelected && styles[knobOnKey],
+                isSelected && styles.knobOn,
+              )}
             />
           </span>
           {children}

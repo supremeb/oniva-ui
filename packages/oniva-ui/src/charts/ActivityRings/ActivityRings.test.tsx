@@ -10,7 +10,7 @@ const rings = [
 describe('ActivityRings', () => {
   it('lists progress in the label and tooltip', () => {
     render(<ActivityRings rings={rings} />);
-    expect(screen.getByRole('img')).toHaveAttribute(
+    expect(screen.getByRole('group')).toHaveAttribute(
       'aria-label',
       expect.stringContaining('Move 300 kcal of 600'),
     );

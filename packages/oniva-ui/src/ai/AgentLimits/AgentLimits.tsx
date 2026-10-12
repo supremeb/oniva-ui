@@ -12,12 +12,24 @@ const styles = stylex.create({
   root: { display: 'flex', flexDirection: 'column', gap: 8, padding: 8 },
   tile: { display: 'flex', flexDirection: 'column', gap: 14, padding: 14 },
   head: { alignItems: 'center', display: 'flex', gap: 8, justifyContent: 'space-between' },
-  headTitle: { color: colors.text, fontSize: font.size14, fontWeight: font.weightMedium },
+  headTitle: {
+    color: colors['--oniva-color-text'],
+    fontSize: font['--oniva-font-size-14'],
+    fontWeight: font['--oniva-font-weight-medium'],
+  },
   row: { display: 'flex', flexDirection: 'column', gap: 6 },
   rowTop: { alignItems: 'baseline', display: 'flex', gap: 8, justifyContent: 'space-between' },
-  label: { color: colors.text, fontSize: font.size13, fontWeight: font.weightMedium },
-  reset: { color: colors.textMuted, fontSize: font.size12 },
-  pct: { color: colors.text, fontSize: font.size13, fontWeight: font.weightMedium },
+  label: {
+    color: colors['--oniva-color-text'],
+    fontSize: font['--oniva-font-size-13'],
+    fontWeight: font['--oniva-font-weight-medium'],
+  },
+  reset: { color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-12'] },
+  pct: {
+    color: colors['--oniva-color-text'],
+    fontSize: font['--oniva-font-size-13'],
+    fontWeight: font['--oniva-font-weight-medium'],
+  },
 });
 
 export interface AgentLimit {
@@ -43,7 +55,15 @@ export interface AgentLimitsProps extends Omit<HTMLAttributes<HTMLDivElement>, '
 const toneFor = (p: number) => (p >= 90 ? 'danger' : p >= 70 ? 'warning' : 'accent');
 
 /** Context-window segmented bar plus plan usage-limit rows with reset times. */
-export function AgentLimits({ context, plan, limits = [], className, xstyle, ref, ...rest }: AgentLimitsProps) {
+export function AgentLimits({
+  context,
+  plan,
+  limits = [],
+  className,
+  xstyle,
+  ref,
+  ...rest
+}: AgentLimitsProps) {
   const used = context?.segments.reduce((a, s) => a + s.value, 0) ?? 0;
   const sx = stylex.props(aiStyles.panel, styles.root, xstyle);
   return (
@@ -73,7 +93,12 @@ export function AgentLimits({ context, plan, limits = [], className, xstyle, ref
                 </span>
                 <span {...stylex.props(styles.pct, aiStyles.num)}>{Math.round(l.percent)}%</span>
               </div>
-              <ProgressBar aria-label={l.label} value={l.percent} size="sm" tone={toneFor(l.percent)} />
+              <ProgressBar
+                aria-label={l.label}
+                value={l.percent}
+                size="sm"
+                tone={toneFor(l.percent)}
+              />
             </div>
           ))}
         </div>

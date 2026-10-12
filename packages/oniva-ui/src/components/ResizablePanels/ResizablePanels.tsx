@@ -1,4 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
+import { focus } from '../../internal/focus';
 import { useMove } from 'react-aria';
 import {
   Children,
@@ -17,9 +18,23 @@ import { motion } from '../../tokens/motion.stylex';
 import { radius } from '../../tokens/radius.stylex';
 
 const styles = stylex.create({
-  root: { boxSizing: 'border-box', display: 'flex', height: '100%', minHeight: 0, minWidth: 0, width: '100%' },
+  root: {
+    boxSizing: 'border-box',
+    display: 'flex',
+    height: '100%',
+    minHeight: 0,
+    minWidth: 0,
+    width: '100%',
+  },
   col: { flexDirection: 'column' },
-  panel: { boxSizing: 'border-box', flexGrow: 0, flexShrink: 0, minHeight: 0, minWidth: 0, overflow: 'auto' },
+  panel: {
+    boxSizing: 'border-box',
+    flexGrow: 0,
+    flexShrink: 0,
+    minHeight: 0,
+    minWidth: 0,
+    overflow: 'auto',
+  },
   size: (p: number) => ({ flexBasis: `${p}%` }),
   handle: {
     alignItems: 'center',
@@ -27,27 +42,23 @@ const styles = stylex.create({
     display: 'flex',
     flexShrink: 0,
     justifyContent: 'center',
-    outlineColor: colors.focusRing,
-    outlineOffset: -2,
-    outlineStyle: { default: 'none', ':focus-visible': 'solid' },
-    outlineWidth: 2,
     position: 'relative',
     touchAction: 'none',
   },
   handleH: { cursor: 'col-resize', width: 12 },
   handleV: { cursor: 'row-resize', height: 12 },
   grip: {
-    backgroundColor: colors.border,
-    borderRadius: radius.full,
-    transitionDuration: motion.durBase,
+    backgroundColor: colors['--oniva-color-border'],
+    borderRadius: radius['--oniva-radius-full'],
+    transitionDuration: motion['--oniva-motion-dur-base'],
     transitionProperty: 'background-color',
   },
   gripH: { height: '100%', width: 2 },
   gripV: { height: 2, width: '100%' },
-  gripActive: { backgroundColor: colors.focusRing },
+  gripActive: { backgroundColor: colors['--oniva-color-focus-ring'] },
   pill: {
-    backgroundColor: colors.borderHover,
-    borderRadius: radius.full,
+    backgroundColor: colors['--oniva-color-border-hover'],
+    borderRadius: radius['--oniva-radius-full'],
     position: 'absolute',
   },
   pillH: { height: 32, width: 4 },
@@ -113,15 +124,28 @@ function Handle({
       aria-valuenow={Math.round(value)}
       aria-valuemin={min}
       aria-valuemax={max}
-      {...stylex.props(styles.handle, horizontal ? styles.handleH : styles.handleV)}
+      {...stylex.props(styles.handle, focus.inset, horizontal ? styles.handleH : styles.handleV)}
     >
-      <span aria-hidden="true" {...stylex.props(styles.grip, horizontal ? styles.gripH : styles.gripV, active && styles.gripActive)} />
-      <span aria-hidden="true" {...stylex.props(styles.pill, horizontal ? styles.pillH : styles.pillV)} />
+      <span
+        aria-hidden="true"
+        {...stylex.props(
+          styles.grip,
+          horizontal ? styles.gripH : styles.gripV,
+          active && styles.gripActive,
+        )}
+      />
+      <span
+        aria-hidden="true"
+        {...stylex.props(styles.pill, horizontal ? styles.pillH : styles.pillV)}
+      />
     </div>
   );
 }
 
-export interface ResizablePanelsProps extends Omit<HTMLAttributes<HTMLDivElement>, 'style' | 'className' | 'children'> {
+export interface ResizablePanelsProps extends Omit<
+  HTMLAttributes<HTMLDivElement>,
+  'style' | 'className' | 'children'
+> {
   /** `horizontal` = panels side by side (drag left/right). `vertical` = stacked. */
   direction?: 'horizontal' | 'vertical';
   /** `ResizablePanel` children (2 or more). */
@@ -144,7 +168,9 @@ export function ResizablePanels({
   ref,
   ...rest
 }: ResizablePanelsProps) {
-  const panels = Children.toArray(children).filter(isValidElement) as ReactElement<ResizablePanelProps>[];
+  const panels = Children.toArray(children).filter(
+    isValidElement,
+  ) as ReactElement<ResizablePanelProps>[];
   const [sizes, setSizes] = useState<number[]>(() => {
     const fixed = panels.reduce((a, p) => a + (p.props.defaultSize ?? 0), 0);
     const free = panels.filter((p) => p.props.defaultSize === undefined).length;
@@ -186,7 +212,13 @@ export function ResizablePanels({
       {...merged}
     >
       {panels.map((p, i) => {
-        const { children: content, xstyle: pStyle, className: pClass, minSize = 10, 'aria-label': pLabel } = p.props;
+        const {
+          children: content,
+          xstyle: pStyle,
+          className: pClass,
+          minSize = 10,
+          'aria-label': pLabel,
+        } = p.props;
         const panelSx = stylex.props(styles.panel, styles.size(sizes[i] ?? 0), pStyle);
         return [
           <div key={`p${i}`} role="group" aria-label={pLabel} {...mergeSx(panelSx, pClass)}>
@@ -198,7 +230,9 @@ export function ResizablePanels({
               orientation={direction}
               value={sizes[i] ?? 0}
               min={minSize}
-              max={Math.round((sizes[i] ?? 0) + (sizes[i + 1] ?? 0) - (panels[i + 1]?.props.minSize ?? 10))}
+              max={Math.round(
+                (sizes[i] ?? 0) + (sizes[i + 1] ?? 0) - (panels[i + 1]?.props.minSize ?? 10),
+              )}
               label={pLabel ? `Resize ${pLabel}` : `Resize panel ${i + 1}`}
               onMove={(d) => resize(i, d)}
             />

@@ -6,9 +6,15 @@ import { Select, SelectItem } from './Select';
 function setup(props: Partial<React.ComponentProps<typeof Select>> = {}) {
   return render(
     <Select label="Status" {...(props as object)}>
-      <SelectItem id="paid" dot="success">Paid</SelectItem>
-      <SelectItem id="pending" dot="warning">Pending</SelectItem>
-      <SelectItem id="failed" dot="danger">Failed</SelectItem>
+      <SelectItem id="paid" dot="success">
+        Paid
+      </SelectItem>
+      <SelectItem id="pending" dot="warning">
+        Pending
+      </SelectItem>
+      <SelectItem id="failed" dot="danger">
+        Failed
+      </SelectItem>
     </Select>,
   );
 }

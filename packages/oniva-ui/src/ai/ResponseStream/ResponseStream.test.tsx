@@ -8,7 +8,15 @@ describe('ResponseStream', () => {
   it('reveals text progressively and calls onComplete', () => {
     vi.useFakeTimers();
     const done = vi.fn();
-    render(<ResponseStream data-testid="r" text="Revenue grew 12%" speed={4} intervalMs={10} onComplete={done} />);
+    render(
+      <ResponseStream
+        data-testid="r"
+        text="Revenue grew 12%"
+        speed={4}
+        intervalMs={10}
+        onComplete={done}
+      />,
+    );
     expect(screen.getByTestId('r')).toHaveTextContent('');
     act(() => {
       vi.advanceTimersByTime(10);

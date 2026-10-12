@@ -9,7 +9,7 @@ print(by_segment.head())`;
 
 const demo: DemoModule = {
   meta: {
-    title: 'Code Block',
+    title: 'Code block',
     slug: 'code-block',
     category: 'AI & Agent',
     description: 'Code panel with filename, language label and copy-to-clipboard.',

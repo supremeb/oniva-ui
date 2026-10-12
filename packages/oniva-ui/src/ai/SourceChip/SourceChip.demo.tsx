@@ -3,7 +3,7 @@ import { SourceChip } from './SourceChip';
 
 const demo: DemoModule = {
   meta: {
-    title: 'Source Chip',
+    title: 'Source chip',
     slug: 'source-chip',
     category: 'AI & Agent',
     description: 'Pill link for a cited web source.',

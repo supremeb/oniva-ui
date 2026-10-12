@@ -3,10 +3,11 @@ import { DeltaBadge } from './DeltaBadge';
 
 const demo: DemoModule = {
   meta: {
-    title: 'DeltaBadge',
+    title: 'Delta badge',
     slug: 'delta-badge',
     category: 'Widgets',
-    description: 'Signed change chip with trend arrow. Green for good, red for bad, neutral when flat.',
+    description:
+      'Signed change chip with trend arrow. Green for good, red for bad, neutral when flat.',
   },
   demos: [
     {

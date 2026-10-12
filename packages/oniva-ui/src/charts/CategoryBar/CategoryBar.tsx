@@ -5,14 +5,20 @@ import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 
 const styles = stylex.create({
-  root: { display: 'flex', flexDirection: 'column', fontFamily: font.sans, gap: 8, width: '100%' },
+  root: {
+    display: 'flex',
+    flexDirection: 'column',
+    fontFamily: font['--oniva-font-sans'],
+    gap: 8,
+    width: '100%',
+  },
   track: { display: 'flex', gap: 2, height: 10, position: 'relative' },
   seg: { backgroundColor: 'currentColor', minWidth: 3 },
   first: { borderBottomLeftRadius: 9999, borderTopLeftRadius: 9999 },
   last: { borderBottomRightRadius: 9999, borderTopRightRadius: 9999 },
   marker: {
-    backgroundColor: colors.text,
-    borderColor: colors.surface,
+    backgroundColor: colors['--oniva-color-text'],
+    borderColor: colors['--oniva-color-surface'],
     borderRadius: 9999,
     borderStyle: 'solid',
     borderWidth: 2,
@@ -24,11 +30,11 @@ const styles = stylex.create({
     width: 16,
   },
   labels: {
-    color: colors.textMuted,
+    color: colors['--oniva-color-text-muted'],
     display: 'flex',
-    fontSize: font.size12,
+    fontSize: font['--oniva-font-size-12'],
     fontVariantNumeric: 'tabular-nums',
-    fontWeight: font.weightMedium,
+    fontWeight: font['--oniva-font-weight-medium'],
     justifyContent: 'space-between',
   },
 });

@@ -8,7 +8,12 @@ describe('ToggleButtonGroup', () => {
   it('single selection: selecting one deselects the other', async () => {
     const onSelectionChange = vi.fn();
     render(
-      <ToggleButtonGroup aria-label="Range" selectionMode="single" defaultSelectedKeys={['7d']} onSelectionChange={onSelectionChange}>
+      <ToggleButtonGroup
+        aria-label="Range"
+        selectionMode="single"
+        defaultSelectedKeys={['7d']}
+        onSelectionChange={onSelectionChange}
+      >
         <ToggleButton id="7d">7 days</ToggleButton>
         <ToggleButton id="30d">30 days</ToggleButton>
       </ToggleButtonGroup>,

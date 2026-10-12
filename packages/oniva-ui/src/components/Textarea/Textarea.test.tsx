@@ -25,7 +25,9 @@ describe('Textarea', () => {
         showCount
         value="abc"
         isDisabled
-        ref={(n) => { el = n; }}
+        ref={(n) => {
+          el = n;
+        }}
       />,
     );
     expect(screen.getByLabelText('Bio')).toHaveAttribute('aria-invalid', 'true');

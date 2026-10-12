@@ -6,7 +6,10 @@ import { FunnelChart } from './FunnelChart';
 describe('FunnelChart', () => {
   it('labels each step with value and share of first step', () => {
     render(<FunnelChart steps={funnelSteps} />);
-    expect(screen.getByRole('img')).toHaveAttribute('aria-label', expect.stringContaining('Paid'));
+    expect(screen.getByRole('group')).toHaveAttribute(
+      'aria-label',
+      expect.stringContaining('Paid'),
+    );
     fireEvent.focus(screen.getByLabelText(/^Paid:/));
     expect(screen.getByRole('tooltip')).toHaveTextContent('3.1%');
   });

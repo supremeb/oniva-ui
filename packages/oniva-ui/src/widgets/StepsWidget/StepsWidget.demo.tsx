@@ -14,7 +14,7 @@ const weeks = [
 
 const demo: DemoModule = {
   meta: {
-    title: 'StepsWidget',
+    title: 'Steps widget',
     slug: 'steps-widget',
     category: 'Widgets',
     description: 'Weekly steps as rounded teal bars on a gray track with a date-range switcher.',

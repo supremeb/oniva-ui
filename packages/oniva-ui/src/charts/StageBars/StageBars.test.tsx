@@ -14,7 +14,7 @@ const segments = [
 describe('StageBars', () => {
   it('summarises durations per stage', () => {
     render(<StageBars stages={stages} segments={segments} />);
-    expect(screen.getByRole('img')).toHaveAttribute(
+    expect(screen.getByRole('group')).toHaveAttribute(
       'aria-label',
       expect.stringContaining('Deep 1h 0m'),
     );

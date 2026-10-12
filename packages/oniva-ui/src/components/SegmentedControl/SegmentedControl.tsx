@@ -1,4 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
+import type { ControlSize } from '../../internal/types';
 import {
   Radio as AriaRadio,
   RadioGroup as AriaRadioGroup,
@@ -16,53 +17,58 @@ import { cx, ff } from '../../internal/forms-field';
 const styles = stylex.create({
   track: {
     alignItems: 'center',
-    backgroundColor: colors.surfaceInset,
-    borderRadius: radius.lg,
+    backgroundColor: colors['--oniva-color-surface-inset'],
+    borderRadius: radius['--oniva-radius-lg'],
     boxSizing: 'border-box',
     display: 'inline-flex',
-    fontFamily: font.sans,
+    fontFamily: font['--oniva-font-sans'],
     gap: 2,
     padding: 4,
   },
   full: { display: 'flex', width: '100%' },
   item: {
     alignItems: 'center',
-    borderRadius: radius.md,
+    borderRadius: radius['--oniva-radius-md'],
     boxSizing: 'border-box',
     cursor: 'pointer',
     display: 'inline-flex',
     flexGrow: 0,
-    fontSize: font.size14,
+    fontSize: font['--oniva-font-size-14'],
     gap: 6,
     justifyContent: 'center',
-    lineHeight: font.lh14,
+    lineHeight: font['--oniva-font-lh-14'],
     paddingBlock: 4,
     paddingInline: 10,
-    transitionDuration: motion.durBase,
+    transitionDuration: motion['--oniva-motion-dur-base'],
     transitionProperty: 'background-color, color, box-shadow',
-    transitionTimingFunction: motion.easeStandard,
+    transitionTimingFunction: motion['--oniva-motion-ease-standard'],
     userSelect: 'none',
     whiteSpace: 'nowrap',
   },
-  itemSm: { fontSize: font.size13, height: 24, paddingInline: 8 },
+  itemSm: { fontSize: font['--oniva-font-size-13'], height: 24, paddingInline: 8 },
   itemMd: { height: 28 },
   fullItem: { flexGrow: 1 },
-  off: { color: colors.textMuted, fontWeight: font.weightRegular },
-  offHover: { color: colors.text },
+  off: {
+    color: colors['--oniva-color-text-muted'],
+    fontWeight: font['--oniva-font-weight-regular'],
+  },
+  offHover: { color: colors['--oniva-color-text'] },
   on: {
-    backgroundColor: colors.surface,
-    boxShadow: shadow.xs,
-    color: colors.text,
-    fontWeight: font.weightMedium,
+    backgroundColor: colors['--oniva-color-surface'],
+    boxShadow: shadow['--oniva-shadow-xs'],
+    color: colors['--oniva-color-text'],
+    fontWeight: font['--oniva-font-weight-medium'],
   },
   disabled: { cursor: 'not-allowed', opacity: 0.5 },
 });
 
 const SizeCtx = createContext<{ size: 'sm' | 'md'; full: boolean }>({ size: 'md', full: false });
 
-export interface SegmentedControlProps
-  extends Omit<AriaRadioGroupProps, 'className' | 'style' | 'children' | 'orientation'> {
-  size?: 'sm' | 'md';
+export interface SegmentedControlProps extends Omit<
+  AriaRadioGroupProps,
+  'className' | 'style' | 'children' | 'orientation'
+> {
+  size?: Extract<ControlSize, 'sm' | 'md'>;
   /** Stretch to container width with equal segments. */
   fullWidth?: boolean;
   children?: ReactNode;
@@ -82,14 +88,21 @@ export function SegmentedControl({
 }: SegmentedControlProps) {
   const sx = stylex.props(styles.track, fullWidth && styles.full, xstyle);
   return (
-    <AriaRadioGroup {...rest} ref={ref} orientation="horizontal" className={cx(sx.className, className)}>
+    <AriaRadioGroup
+      {...rest}
+      ref={ref}
+      orientation="horizontal"
+      className={cx(sx.className, className)}
+    >
       <SizeCtx value={{ size, full: fullWidth }}>{children}</SizeCtx>
     </AriaRadioGroup>
   );
 }
 
-export interface SegmentedControlItemProps
-  extends Omit<AriaRadioProps, 'className' | 'style' | 'children'> {
+export interface SegmentedControlItemProps extends Omit<
+  AriaRadioProps,
+  'className' | 'style' | 'children'
+> {
   children?: ReactNode;
   className?: string;
   xstyle?: stylex.StyleXStyles;

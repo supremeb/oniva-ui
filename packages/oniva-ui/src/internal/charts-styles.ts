@@ -1,4 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
+import { media } from '../tokens/media.stylex';
 import { colors } from '../tokens/colors.stylex';
 import { font } from '../tokens/font.stylex';
 
@@ -19,7 +20,7 @@ const ease = 'cubic-bezier(0.22, 1, 0.36, 1)';
 /** Draw-in animations (disabled for reduced motion). Stagger with inline `animationDelay`. */
 export const chartMotion = stylex.create({
   grow: {
-    animationDuration: { default: '600ms', '@media (prefers-reduced-motion: reduce)': '0ms' },
+    animationDuration: { default: '600ms', [media.reducedMotion]: '0ms' },
     animationFillMode: 'backwards',
     animationName: grow,
     animationTimingFunction: ease,
@@ -27,7 +28,7 @@ export const chartMotion = stylex.create({
     transformOrigin: '50% 100%',
   },
   growX: {
-    animationDuration: { default: '600ms', '@media (prefers-reduced-motion: reduce)': '0ms' },
+    animationDuration: { default: '600ms', [media.reducedMotion]: '0ms' },
     animationFillMode: 'backwards',
     animationName: growX,
     animationTimingFunction: ease,
@@ -35,20 +36,20 @@ export const chartMotion = stylex.create({
     transformOrigin: '0% 50%',
   },
   fade: {
-    animationDuration: { default: '600ms', '@media (prefers-reduced-motion: reduce)': '0ms' },
+    animationDuration: { default: '600ms', [media.reducedMotion]: '0ms' },
     animationFillMode: 'backwards',
     animationName: fade,
     animationTimingFunction: ease,
   },
   draw: {
-    animationDuration: { default: '900ms', '@media (prefers-reduced-motion: reduce)': '0ms' },
+    animationDuration: { default: '900ms', [media.reducedMotion]: '0ms' },
     animationFillMode: 'backwards',
     animationName: draw,
     animationTimingFunction: ease,
     strokeDasharray: 1,
   },
   pop: {
-    animationDuration: { default: '600ms', '@media (prefers-reduced-motion: reduce)': '0ms' },
+    animationDuration: { default: '600ms', [media.reducedMotion]: '0ms' },
     animationFillMode: 'backwards',
     animationName: pop,
     animationTimingFunction: ease,
@@ -59,44 +60,44 @@ export const chartMotion = stylex.create({
 
 /** Series colour via `color`; SVG shapes then use `fill/stroke="currentColor"`. */
 export const tones = stylex.create({
-  c1: { color: colors.chart1 },
-  c2: { color: colors.chart2 },
-  c3: { color: colors.chart3 },
-  c4: { color: colors.chart4 },
-  c5: { color: colors.chart5 },
-  c6: { color: colors.chart6 },
-  c7: { color: colors.chart7 },
-  c8: { color: colors.chart8 },
-  c9: { color: colors.chart9 },
-  c10: { color: colors.chart10 },
-  track: { color: colors.chartTrack },
-  cursor: { color: colors.chartCursor },
-  text: { color: colors.text },
-  muted: { color: colors.textMuted },
+  c1: { color: colors['--oniva-color-chart-1'] },
+  c2: { color: colors['--oniva-color-chart-2'] },
+  c3: { color: colors['--oniva-color-chart-3'] },
+  c4: { color: colors['--oniva-color-chart-4'] },
+  c5: { color: colors['--oniva-color-chart-5'] },
+  c6: { color: colors['--oniva-color-chart-6'] },
+  c7: { color: colors['--oniva-color-chart-7'] },
+  c8: { color: colors['--oniva-color-chart-8'] },
+  c9: { color: colors['--oniva-color-chart-9'] },
+  c10: { color: colors['--oniva-color-chart-10'] },
+  track: { color: colors['--oniva-color-chart-track'] },
+  cursor: { color: colors['--oniva-color-chart-cursor'] },
+  text: { color: colors['--oniva-color-text'] },
+  muted: { color: colors['--oniva-color-text-muted'] },
 });
 
 export const svgText = stylex.create({
   axis: {
-    fill: colors.textMuted,
-    fontFamily: font.sans,
+    fill: colors['--oniva-color-text-muted'],
+    fontFamily: font['--oniva-font-sans'],
     fontSize: 11,
     fontVariantNumeric: 'tabular-nums',
-    fontWeight: font.weightMedium,
+    fontWeight: font['--oniva-font-weight-medium'],
   },
   strong: {
-    fill: colors.text,
-    fontFamily: font.sans,
+    fill: colors['--oniva-color-text'],
+    fontFamily: font['--oniva-font-sans'],
     fontVariantNumeric: 'tabular-nums',
-    fontWeight: font.weightSemibold,
+    fontWeight: font['--oniva-font-weight-semibold'],
   },
   inverse: {
-    fill: colors.accentFg,
-    fontFamily: font.sans,
+    fill: colors['--oniva-color-accent-fg'],
+    fontFamily: font['--oniva-font-sans'],
     fontSize: 12,
     fontVariantNumeric: 'tabular-nums',
-    fontWeight: font.weightSemibold,
+    fontWeight: font['--oniva-font-weight-semibold'],
   },
-  grid: { stroke: colors.chartTrack },
+  grid: { stroke: colors['--oniva-color-chart-track'] },
   /** Invisible hover/focus column; shows a soft band. Pair with `tones.cursor`. */
   band: {
     cursor: 'default',
@@ -107,11 +108,14 @@ export const svgText = stylex.create({
     transitionProperty: 'fill-opacity',
   },
   noEvents: { pointerEvents: 'none' },
-  dotRing: { stroke: colors.surfaceInner },
-  cursorLine: { stroke: colors.chartCursor },
+  dotRing: { stroke: colors['--oniva-color-surface-inner'] },
+  cursorLine: { stroke: colors['--oniva-color-chart-cursor'] },
   hit: {
     cursor: 'default',
-    outline: { default: 'none', ':focus-visible': `2px solid ${colors.focusRing}` },
+    outline: {
+      default: 'none',
+      ':focus-visible': `2px solid ${colors['--oniva-color-focus-ring']}`,
+    },
     outlineOffset: 2,
   },
 });

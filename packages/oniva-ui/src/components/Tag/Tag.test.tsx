@@ -8,7 +8,9 @@ describe('TagGroup', () => {
     render(
       <TagGroup label="Categories">
         <Tag id="a">Payments</Tag>
-        <Tag id="b" color="success">Active</Tag>
+        <Tag id="b" color="success">
+          Active
+        </Tag>
       </TagGroup>,
     );
     expect(screen.getByRole('grid', { name: 'Categories' })).toBeInTheDocument();
@@ -31,7 +33,9 @@ describe('TagGroup', () => {
     render(
       <TagGroup aria-label="Pick" selectionMode="multiple" onSelectionChange={onSelectionChange}>
         <Tag id="a">One</Tag>
-        <Tag id="b" color="danger">Two</Tag>
+        <Tag id="b" color="danger">
+          Two
+        </Tag>
       </TagGroup>,
     );
     const [one, two] = screen.getAllByRole('row');

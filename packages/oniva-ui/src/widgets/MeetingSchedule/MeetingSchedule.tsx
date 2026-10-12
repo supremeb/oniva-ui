@@ -5,77 +5,88 @@ import { Avatar, AvatarGroup } from '../../components/Avatar';
 import { Button } from '../../components/Button';
 import { Card, CardHeader, CardHeaderText, CardTitle, Tile } from '../../components/Card';
 import { SegmentedControl, SegmentedControlItem } from '../../components/SegmentedControl';
-import {
-  isoDate,
-  MONTHS_SHORT,
-  RangeSwitcher,
-  WEEKDAYS_SHORT,
-} from '../../internal/widgets-parts';
+import { isoDate, MONTHS_SHORT, RangeSwitcher, WEEKDAYS_SHORT } from '../../internal/widgets-parts';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 import { radius } from '../../tokens/radius.stylex';
 
 const styles = stylex.create({
   controls: { alignItems: 'center', display: 'flex', flexWrap: 'wrap', gap: 8 },
-  slots: { display: 'flex', flexDirection: 'column', gap: 6, listStyle: 'none', margin: 0, padding: 0 },
+  slots: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 6,
+    listStyle: 'none',
+    margin: 0,
+    padding: 0,
+  },
   slot: { alignItems: 'stretch', display: 'grid', gap: 10, gridTemplateColumns: '72px 1fr' },
   time: {
-    color: colors.textMuted,
+    color: colors['--oniva-color-text-muted'],
     fontFeatureSettings: "'tnum'",
-    fontSize: font.size12,
-    lineHeight: font.lh12,
+    fontSize: font['--oniva-font-size-12'],
+    lineHeight: font['--oniva-font-lh-12'],
     paddingBlockStart: 10,
     whiteSpace: 'nowrap',
   },
   meeting: {
     alignItems: 'center',
-    backgroundColor: colors.accentSoft,
-    borderRadius: radius.md,
-    color: colors.accentSoftFg,
+    backgroundColor: colors['--oniva-color-accent-soft'],
+    borderRadius: radius['--oniva-radius-md'],
+    color: colors['--oniva-color-accent-soft-fg'],
     display: 'flex',
     gap: 10,
     justifyContent: 'space-between',
     paddingBlock: 8,
     paddingInline: 10,
   },
-  mTitle: { fontSize: font.size14, fontWeight: font.weightMedium, lineHeight: font.lh14, margin: 0 },
+  mTitle: {
+    fontSize: font['--oniva-font-size-14'],
+    fontWeight: font['--oniva-font-weight-medium'],
+    lineHeight: font['--oniva-font-lh-14'],
+    margin: 0,
+  },
   mMeta: {
     alignItems: 'center',
     display: 'flex',
-    fontSize: font.size12,
+    fontSize: font['--oniva-font-size-12'],
     gap: 4,
-    lineHeight: font.lh12,
+    lineHeight: font['--oniva-font-lh-12'],
     opacity: 0.85,
   },
   open: {
     alignItems: 'center',
-    borderColor: colors.border,
-    borderRadius: radius.md,
+    borderColor: colors['--oniva-color-border'],
+    borderRadius: radius['--oniva-radius-md'],
     borderStyle: 'dashed',
     borderWidth: 1,
-    color: colors.textMuted,
+    color: colors['--oniva-color-text-muted'],
     display: 'flex',
-    fontSize: font.size13,
+    fontSize: font['--oniva-font-size-13'],
     justifyContent: 'space-between',
     paddingBlock: 4,
     paddingInline: 10,
   },
   week: { display: 'grid', gap: 6, gridTemplateColumns: 'repeat(5, minmax(0, 1fr))' },
   col: { display: 'flex', flexDirection: 'column', gap: 6, minWidth: 0 },
-  colHead: { color: colors.textMuted, fontSize: font.size12, fontWeight: font.weightMedium },
+  colHead: {
+    color: colors['--oniva-color-text-muted'],
+    fontSize: font['--oniva-font-size-12'],
+    fontWeight: font['--oniva-font-weight-medium'],
+  },
   chip: {
-    backgroundColor: colors.accentSoft,
-    borderRadius: radius.sm,
-    color: colors.accentSoftFg,
-    fontSize: font.size11,
-    lineHeight: font.lh11,
+    backgroundColor: colors['--oniva-color-accent-soft'],
+    borderRadius: radius['--oniva-radius-sm'],
+    color: colors['--oniva-color-accent-soft-fg'],
+    fontSize: font['--oniva-font-size-11'],
+    lineHeight: font['--oniva-font-lh-11'],
     overflow: 'hidden',
     paddingBlock: 4,
     paddingInline: 6,
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
   },
-  none: { color: colors.textSubtle, fontSize: font.size12 },
+  none: { color: colors['--oniva-color-text-subtle'], fontSize: font['--oniva-font-size-12'] },
 });
 
 export interface Meeting {
@@ -222,7 +233,9 @@ export function MeetingSchedule({
             {Array.from({ length: 5 }, (_, i) => {
               const day = new Date(monday.getTime() + i * 86400000);
               const iso = toIso(day);
-              const list = all.filter((x) => x.date === iso).sort((a, b) => a.start.localeCompare(b.start));
+              const list = all
+                .filter((x) => x.date === iso)
+                .sort((a, b) => a.start.localeCompare(b.start));
               return (
                 <section key={iso} aria-label={iso} {...stylex.props(styles.col)}>
                   <span {...stylex.props(styles.colHead)}>

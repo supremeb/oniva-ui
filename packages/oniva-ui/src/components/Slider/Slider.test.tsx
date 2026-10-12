@@ -6,7 +6,15 @@ import { Slider } from './Slider';
 describe('Slider', () => {
   it('exposes a labelled slider and changes with the keyboard', async () => {
     const onChange = vi.fn();
-    render(<Slider label="Credit limit" defaultValue={50} minValue={0} maxValue={100} onChange={onChange} />);
+    render(
+      <Slider
+        label="Credit limit"
+        defaultValue={50}
+        minValue={0}
+        maxValue={100}
+        onChange={onChange}
+      />,
+    );
     const thumb = screen.getByRole('slider');
     expect(thumb).toHaveValue('50');
     thumb.focus();

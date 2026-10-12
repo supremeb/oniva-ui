@@ -29,8 +29,8 @@ const demo: DemoModule = {
               onFeedback={setFb}
               feedback={fb}
             >
-              Q3 revenue closed at <strong>$4.82M</strong>, up 14.2% quarter over quarter. Enterprise drove most of
-              the growth.
+              Q3 revenue closed at <strong>$4.82M</strong>, up 14.2% quarter over quarter.
+              Enterprise drove most of the growth.
             </Message>
           </div>
         );

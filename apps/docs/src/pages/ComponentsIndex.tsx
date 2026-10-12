@@ -5,12 +5,16 @@ import { demoModules, groupByCategory } from '../demos';
 
 const styles = stylex.create({
   h1: {
-    fontSize: font.size32,
-    fontWeight: font.weightMedium,
-    letterSpacing: font.trackHero,
+    fontSize: font['--oniva-font-size-32'],
+    fontWeight: font['--oniva-font-weight-medium'],
+    letterSpacing: font['--oniva-font-track-hero'],
     margin: '0 0 8px',
   },
-  h2: { fontSize: font.size18, fontWeight: font.weightSemibold, margin: '32px 0 12px' },
+  h2: {
+    fontSize: font['--oniva-font-size-18'],
+    fontWeight: font['--oniva-font-weight-semibold'],
+    margin: '32px 0 12px',
+  },
   grid: { display: 'grid', gap: 16, gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))' },
 });
 

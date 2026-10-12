@@ -20,7 +20,7 @@ function Verify() {
 
 const demo: DemoModule = {
   meta: {
-    title: 'InputOTP',
+    title: 'Input OTP',
     slug: 'input-otp',
     category: 'Forms',
     description: 'One-time-code input with slot display, paste and SMS-autofill support.',
@@ -38,7 +38,13 @@ const demo: DemoModule = {
       Component: () => (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
           <InputOTP label="Card PIN" length={4} />
-          <InputOTP label="Code" length={4} defaultValue="1234" isInvalid errorMessage="That code has expired." />
+          <InputOTP
+            label="Code"
+            length={4}
+            defaultValue="1234"
+            isInvalid
+            errorMessage="That code has expired."
+          />
         </div>
       ),
     },

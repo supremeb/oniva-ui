@@ -1,7 +1,13 @@
 import type { DemoModule } from '../../internal/demo';
 import { Combobox, ComboboxItem } from './Combobox';
 
-const col = { display: 'flex', flexDirection: 'column', gap: 16, width: '100%', maxWidth: 340 } as const;
+const col = {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 16,
+  width: '100%',
+  maxWidth: 340,
+} as const;
 
 const demo: DemoModule = {
   meta: {
@@ -20,7 +26,11 @@ const demo: DemoModule = {
 </Combobox>`,
       Component: () => (
         <div style={col}>
-          <Combobox label="Vendor" placeholder="Search vendors…" description="Used for expense categorisation.">
+          <Combobox
+            label="Vendor"
+            placeholder="Search vendors…"
+            description="Used for expense categorisation."
+          >
             <ComboboxItem id="aws">Amazon Web Services</ComboboxItem>
             <ComboboxItem id="stripe">Stripe</ComboboxItem>
             <ComboboxItem id="figma">Figma</ComboboxItem>
@@ -36,9 +46,15 @@ const demo: DemoModule = {
       Component: () => (
         <div style={col}>
           <Combobox label="Account" isInvalid errorMessage="Select an account to continue.">
-            <ComboboxItem id="op" dot="success">Operating ····4821</ComboboxItem>
-            <ComboboxItem id="pay" dot="warning">Payroll ····9034</ComboboxItem>
-            <ComboboxItem id="tax" dot="neutral">Tax reserve ····1177</ComboboxItem>
+            <ComboboxItem id="op" dot="success">
+              Operating ····4821
+            </ComboboxItem>
+            <ComboboxItem id="pay" dot="warning">
+              Payroll ····9034
+            </ComboboxItem>
+            <ComboboxItem id="tax" dot="neutral">
+              Tax reserve ····1177
+            </ComboboxItem>
           </Combobox>
         </div>
       ),

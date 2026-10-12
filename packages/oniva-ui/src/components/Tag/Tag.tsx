@@ -20,72 +20,100 @@ import { motion } from '../../tokens/motion.stylex';
 import { radius } from '../../tokens/radius.stylex';
 
 const styles = stylex.create({
-  group: { display: 'flex', flexDirection: 'column', fontFamily: font.sans, gap: 6 },
+  group: {
+    display: 'flex',
+    flexDirection: 'column',
+    fontFamily: font['--oniva-font-sans'],
+    gap: 6,
+  },
   label: {
-    color: colors.text,
-    fontSize: font.size13,
-    fontWeight: font.weightMedium,
-    lineHeight: font.lh13,
+    color: colors['--oniva-color-text'],
+    fontSize: font['--oniva-font-size-13'],
+    fontWeight: font['--oniva-font-weight-medium'],
+    lineHeight: font['--oniva-font-lh-13'],
   },
   list: { display: 'flex', flexWrap: 'wrap', gap: 6 },
   tag: {
     alignItems: 'center',
     borderColor: 'transparent',
-    borderRadius: radius.md,
+    borderRadius: radius['--oniva-radius-md'],
     borderStyle: 'solid',
     borderWidth: 1,
     boxSizing: 'border-box',
     cursor: 'default',
     display: 'inline-flex',
-    fontFamily: font.sans,
-    fontSize: font.size12,
-    fontWeight: font.weightMedium,
+    fontFamily: font['--oniva-font-sans'],
+    fontSize: font['--oniva-font-size-12'],
+    fontWeight: font['--oniva-font-weight-medium'],
     gap: 4,
     height: 24,
-    lineHeight: font.lh12,
-    outlineColor: colors.focusRing,
+    lineHeight: font['--oniva-font-lh-12'],
+    outlineColor: colors['--oniva-color-focus-ring'],
     outlineOffset: 1,
     outlineStyle: { default: 'none', ':focus-visible': 'solid' },
     outlineWidth: 2,
     paddingInline: 8,
-    transitionDuration: motion.durBase,
+    transitionDuration: motion['--oniva-motion-dur-base'],
     transitionProperty: 'background-color, border-color, color',
   },
   selectable: { cursor: 'pointer' },
   removable: { paddingInlineEnd: 2 },
-  neutral: { backgroundColor: colors.surfaceTertiary, color: colors.textOnTertiary },
-  accent: { backgroundColor: colors.accentSoft, color: colors.accentSoftFg },
-  info: { backgroundColor: colors.infoBg, color: colors.infoFg },
-  success: { backgroundColor: colors.successBg, color: colors.successFg },
-  warning: { backgroundColor: colors.warningBg, color: colors.warningFg },
-  danger: { backgroundColor: colors.dangerBg, color: colors.dangerFg },
-  outline: { backgroundColor: colors.surface, borderColor: colors.border, color: colors.text },
-  selected: { borderColor: colors.accentSoftFg },
+  neutral: {
+    backgroundColor: colors['--oniva-color-surface-tertiary'],
+    color: colors['--oniva-color-text-on-tertiary'],
+  },
+  accent: {
+    backgroundColor: colors['--oniva-color-accent-soft'],
+    color: colors['--oniva-color-accent-soft-fg'],
+  },
+  info: {
+    backgroundColor: colors['--oniva-color-info-bg'],
+    color: colors['--oniva-color-info-fg'],
+  },
+  success: {
+    backgroundColor: colors['--oniva-color-success-bg'],
+    color: colors['--oniva-color-success-fg'],
+  },
+  warning: {
+    backgroundColor: colors['--oniva-color-warning-bg'],
+    color: colors['--oniva-color-warning-fg'],
+  },
+  danger: {
+    backgroundColor: colors['--oniva-color-danger-bg'],
+    color: colors['--oniva-color-danger-fg'],
+  },
+  outline: {
+    backgroundColor: colors['--oniva-color-surface'],
+    borderColor: colors['--oniva-color-border'],
+    color: colors['--oniva-color-text'],
+  },
+  selected: { borderColor: colors['--oniva-color-accent-soft-fg'] },
   disabled: { opacity: 0.5 },
   remove: {
     alignItems: 'center',
     appearance: 'none',
-    backgroundColor: { default: 'transparent', ':hover': '#00000014' },
-    borderRadius: radius.sm,
+    backgroundColor: { default: 'transparent', ':hover': colors['--oniva-color-overlay-hover'] },
+    borderRadius: radius['--oniva-radius-sm'],
     borderWidth: 0,
     color: 'inherit',
     cursor: 'pointer',
     display: 'inline-flex',
     height: 18,
     justifyContent: 'center',
-    outlineColor: colors.focusRing,
+    outlineColor: colors['--oniva-color-focus-ring'],
     outlineStyle: { default: 'none', ':focus-visible': 'solid' },
     outlineWidth: 2,
     padding: 0,
     width: 18,
   },
-  desc: { color: colors.textMuted, fontSize: font.size12 },
+  desc: { color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-12'] },
 });
 
 export type TagColor = StatusTone | 'accent' | 'outline';
 
 export interface TagGroupProps<T extends object>
-  extends Omit<AriaTagGroupProps, 'children' | 'className' | 'style'>,
+  extends
+    Omit<AriaTagGroupProps, 'children' | 'className' | 'style'>,
     Pick<TagListProps<T>, 'items' | 'renderEmptyState'> {
   label?: ReactNode;
   description?: ReactNode;
@@ -114,7 +142,11 @@ export function TagGroup<T extends object>({
       <AriaTagList items={items} renderEmptyState={renderEmptyState} {...stylex.props(styles.list)}>
         {children}
       </AriaTagList>
-      {description && <AriaText slot="description" {...stylex.props(styles.desc)}>{description}</AriaText>}
+      {description && (
+        <AriaText slot="description" {...stylex.props(styles.desc)}>
+          {description}
+        </AriaText>
+      )}
     </AriaTagGroup>
   );
 }
@@ -130,7 +162,15 @@ export interface TagProps extends Omit<AriaTagProps, 'className' | 'style' | 'ch
 }
 
 /** A chip. Must be inside a `TagGroup`; removable when the group has `onRemove`. */
-export function Tag({ color = 'neutral', icon, children, className, xstyle, ref, ...rest }: TagProps) {
+export function Tag({
+  color = 'neutral',
+  icon,
+  children,
+  className,
+  xstyle,
+  ref,
+  ...rest
+}: TagProps) {
   const textValue = rest.textValue ?? (typeof children === 'string' ? children : undefined);
   return (
     <AriaTag
@@ -142,7 +182,7 @@ export function Tag({ color = 'neutral', icon, children, className, xstyle, ref,
           styles.tag,
           styles[color],
           s.allowsRemoving && styles.removable,
-          (s.selectionMode !== 'none') && styles.selectable,
+          s.selectionMode !== 'none' && styles.selectable,
           s.isSelected && styles.selected,
           s.isDisabled && styles.disabled,
           xstyle,

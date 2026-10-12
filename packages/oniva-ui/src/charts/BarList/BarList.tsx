@@ -10,7 +10,7 @@ const styles = stylex.create({
   list: {
     display: 'flex',
     flexDirection: 'column',
-    fontFamily: font.sans,
+    fontFamily: font['--oniva-font-sans'],
     gap: 6,
     listStyle: 'none',
     margin: 0,
@@ -18,7 +18,7 @@ const styles = stylex.create({
   },
   row: {
     alignItems: 'center',
-    borderRadius: radius.md,
+    borderRadius: radius['--oniva-radius-md'],
     boxSizing: 'border-box',
     display: 'flex',
     gap: 12,
@@ -29,7 +29,7 @@ const styles = stylex.create({
   },
   fill: {
     backgroundColor: 'currentColor',
-    borderRadius: radius.md,
+    borderRadius: radius['--oniva-radius-md'],
     bottom: 0,
     left: 0,
     opacity: 0.2,
@@ -37,9 +37,9 @@ const styles = stylex.create({
     top: 0,
   },
   name: {
-    color: colors.text,
-    fontSize: font.size14,
-    fontWeight: font.weightMedium,
+    color: colors['--oniva-color-text'],
+    fontSize: font['--oniva-font-size-14'],
+    fontWeight: font['--oniva-font-weight-medium'],
     minWidth: 0,
     overflow: 'hidden',
     position: 'relative',
@@ -50,17 +50,24 @@ const styles = stylex.create({
     color: 'inherit',
     textDecoration: { default: 'none', ':hover': 'underline' },
     outline: 'none',
-    boxShadow: { default: 'none', ':focus-visible': `0 0 0 2px ${colors.focusRing}` },
-    borderRadius: radius.xs,
+    boxShadow: {
+      default: 'none',
+      ':focus-visible': `0 0 0 2px ${colors['--oniva-color-focus-ring']}`,
+    },
+    borderRadius: radius['--oniva-radius-xs'],
   },
   value: {
-    color: colors.text,
-    fontSize: font.size14,
+    color: colors['--oniva-color-text'],
+    fontSize: font['--oniva-font-size-14'],
     fontVariantNumeric: 'tabular-nums',
-    fontWeight: font.weightSemibold,
+    fontWeight: font['--oniva-font-weight-semibold'],
     position: 'relative',
   },
-  rank: { color: colors.textMuted, fontVariantNumeric: 'tabular-nums', marginInlineEnd: 8 },
+  rank: {
+    color: colors['--oniva-color-text-muted'],
+    fontVariantNumeric: 'tabular-nums',
+    marginInlineEnd: 8,
+  },
 });
 
 export interface BarListItem {

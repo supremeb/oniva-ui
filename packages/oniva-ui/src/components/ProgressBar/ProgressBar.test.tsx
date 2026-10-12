@@ -16,7 +16,16 @@ describe('ProgressBar', () => {
   });
   it('tone changes classes and ref forwards', () => {
     let el: HTMLDivElement | null = null;
-    render(<ProgressBar aria-label="x" value={5} tone="danger" ref={(n) => { el = n; }} />);
+    render(
+      <ProgressBar
+        aria-label="x"
+        value={5}
+        tone="danger"
+        ref={(n) => {
+          el = n;
+        }}
+      />,
+    );
     expect(el).toBeInstanceOf(HTMLDivElement);
   });
 });
@@ -34,7 +43,9 @@ describe('ProgressSegments', () => {
     expect(screen.getByText('820,000 / 1,000,000 (82%)')).toBeInTheDocument();
     expect(screen.getByRole('group', { name: 'Context window' })).toBeInTheDocument();
     expect(screen.getAllByRole('listitem')).toHaveLength(3);
-    const widths = Array.from(container.querySelectorAll<HTMLElement>('[role=img] > div')).map((d) => d.style.width);
+    const widths = Array.from(container.querySelectorAll<HTMLElement>('[role=img] > div')).map(
+      (d) => d.style.width,
+    );
     expect(widths).toEqual(['12%', '50%', '20%']);
   });
   it('hides legend on request', () => {

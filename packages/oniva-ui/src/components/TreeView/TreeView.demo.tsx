@@ -4,7 +4,7 @@ import { TreeView, TreeViewItem } from './TreeView';
 
 const demo: DemoModule = {
   meta: {
-    title: 'Tree View',
+    title: 'Tree view',
     slug: 'tree-view',
     category: 'Data display',
     description:

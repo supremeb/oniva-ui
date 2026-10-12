@@ -20,12 +20,12 @@ export type ResolvedTheme = 'light' | 'dark';
 
 const styles = stylex.create({
   root: {
-    backgroundColor: colors.bg,
+    backgroundColor: colors['--oniva-color-bg'],
     boxSizing: 'border-box',
-    color: colors.text,
-    fontFamily: font.sans,
-    fontSize: font.size14,
-    lineHeight: font.lh14,
+    color: colors['--oniva-color-text'],
+    fontFamily: font['--oniva-font-sans'],
+    fontSize: font['--oniva-font-size-14'],
+    lineHeight: font['--oniva-font-lh-14'],
     WebkitFontSmoothing: 'antialiased',
     MozOsxFontSmoothing: 'grayscale',
     textRendering: 'optimizeLegibility',

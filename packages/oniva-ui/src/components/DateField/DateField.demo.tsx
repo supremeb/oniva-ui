@@ -2,11 +2,17 @@ import { CalendarDate } from '@internationalized/date';
 import type { DemoModule } from '../../internal/demo';
 import { DateField } from './DateField';
 
-const col = { display: 'flex', flexDirection: 'column', gap: 16, width: '100%', maxWidth: 280 } as const;
+const col = {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 16,
+  width: '100%',
+  maxWidth: 280,
+} as const;
 
 const demo: DemoModule = {
   meta: {
-    title: 'DateField',
+    title: 'Date field',
     slug: 'date-field',
     category: 'Forms',
     description: 'Segmented, keyboard-first date entry with locale-aware formatting.',

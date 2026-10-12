@@ -7,7 +7,8 @@ const demo: DemoModule = {
     title: 'Skeleton',
     slug: 'skeleton',
     category: 'Feedback',
-    description: 'Shimmering placeholder for loading content. Static when reduced motion is requested.',
+    description:
+      'Shimmering placeholder for loading content. Static when reduced motion is requested.',
   },
   demos: [
     {

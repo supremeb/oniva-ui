@@ -7,99 +7,102 @@ import { accent } from './accent.stylex';
  */
 export const colors = stylex.defineVars({
   // surfaces
-  bg: '#ffffff', // page canvas
-  surface: '#ffffff', // primary: tiles, buttons, inputs
-  surfaceHover: '#f7f7f7',
-  surfaceActive: '#ebebeb',
-  surfaceInner: '#ffffff', // tile inside an inset card
-  surfaceInset: '#f7f7f7', // OUTER card, segmented track
-  surfaceInsetHover: '#ebebeb',
-  surfaceTertiary: '#ebebeb', // badges, pills, avatars
-  surfaceTertiaryHover: '#d4d4d4',
-  overlay: 'rgba(10, 10, 10, 0.4)',
+  '--oniva-color-bg': '#ffffff', // page canvas
+  '--oniva-color-surface': '#ffffff', // primary: tiles, buttons, inputs
+  '--oniva-color-surface-hover': '#f7f7f7',
+  '--oniva-color-surface-active': '#ebebeb',
+  '--oniva-color-surface-inner': '#ffffff', // tile inside an inset card
+  '--oniva-color-surface-inset': '#f7f7f7', // OUTER card, segmented track
+  '--oniva-color-surface-inset-hover': '#ebebeb',
+  '--oniva-color-surface-tertiary': '#ebebeb', // badges, pills, avatars
+  '--oniva-color-surface-tertiary-hover': '#d4d4d4',
+  '--oniva-color-overlay': 'rgba(10, 10, 10, 0.4)',
 
   // borders
-  border: '#ebebeb',
-  borderHover: '#d4d4d4',
-  borderActive: '#a1a1a1',
-  borderControl: '#d4d4d4', // checkbox / radio
-  separator: '#ebebeb',
-  focusRing: accent.accent500,
+  '--oniva-color-border': '#ebebeb',
+  '--oniva-color-border-hover': '#d4d4d4',
+  '--oniva-color-border-active': '#a1a1a1',
+  '--oniva-color-border-control': '#d4d4d4', // checkbox / radio
+  '--oniva-color-separator': '#ebebeb',
+  '--oniva-color-focus-ring': accent['--oniva-accent-500'],
 
   // text + icon
-  text: '#0a0a0a',
-  textMuted: '#6b6b6b', // n500 nudged darker for AA on #f7f7f7
-  textOnTertiary: '#525252', // text on tertiary fills (badges, avatars)
-  textSubtle: '#a1a1a1',
-  textDisabled: '#d4d4d4',
-  textPlaceholder: '#a1a1a1',
-  textError: '#e7000b', // red-600: AA on white (red-500 is 3.8:1)
-  iconMuted: '#737373',
-  iconSubtle: '#a1a1a1',
+  '--oniva-color-text': '#0a0a0a',
+  '--oniva-color-text-muted': '#6b6b6b', // n500 nudged darker for AA on #f7f7f7
+  '--oniva-color-text-on-tertiary': '#525252', // text on tertiary fills (badges, avatars)
+  '--oniva-color-text-subtle': '#a1a1a1',
+  '--oniva-color-text-disabled': '#d4d4d4',
+  '--oniva-color-text-placeholder': '#a1a1a1',
+  '--oniva-color-text-error': '#e7000b', // red-600: AA on white (red-500 is 3.8:1)
+  '--oniva-color-icon-muted': '#737373',
+  '--oniva-color-icon-subtle': '#a1a1a1',
 
-  kbdBg: '#d4d4d4',
-  kbdFg: '#737373',
+  '--oniva-color-kbd-bg': '#d4d4d4',
+  '--oniva-color-kbd-fg': '#737373',
 
   // accent-derived
-  accentFg: '#ffffff',
-  accentSoft: accent.accent100,
-  accentSoftHover: accent.accent200,
-  accentSoftActive: accent.accent300,
-  accentSoftFg: accent.accent700,
-  accentSoftDisabled: accent.accent50,
-  accentSoftDisabledFg: accent.accent300,
-  accentTint: `color-mix(in srgb, ${accent.accent500} 12%, transparent)`,
+  '--oniva-color-accent-fg': '#ffffff',
+  '--oniva-color-on-solid': '#ffffff', // text on solid danger/status fills (same in both themes)
+  '--oniva-color-on-chart': '#0a0a0a', // text on bright chart fills (same in both themes)
+  '--oniva-color-overlay-hover': 'rgba(0, 0, 0, 0.08)', // translucent hover wash on any surface
+  '--oniva-color-accent-soft': accent['--oniva-accent-100'],
+  '--oniva-color-accent-soft-hover': accent['--oniva-accent-200'],
+  '--oniva-color-accent-soft-active': accent['--oniva-accent-300'],
+  '--oniva-color-accent-soft-fg': accent['--oniva-accent-700'],
+  '--oniva-color-accent-soft-disabled': accent['--oniva-accent-50'],
+  '--oniva-color-accent-soft-disabled-fg': accent['--oniva-accent-300'],
+  '--oniva-color-accent-tint': `color-mix(in srgb, ${accent['--oniva-accent-500']} 12%, transparent)`,
 
   // disabled solid (gradient stops)
-  disabledFrom: '#ebebeb',
-  disabledTo: '#d4d4d4',
-  disabledFg: '#a1a1a1',
+  '--oniva-color-disabled-from': '#ebebeb',
+  '--oniva-color-disabled-to': '#d4d4d4',
+  '--oniva-color-disabled-fg': '#a1a1a1',
 
   // danger solid
-  dangerFrom: '#fb2c36',
-  dangerTo: '#e7000b',
-  dangerHoverFrom: '#ff6467',
-  dangerHoverTo: '#fb2c36',
-  dangerActiveFrom: '#e7000b',
-  dangerActiveTo: '#c10007',
-  errorBg: '#ffe2e2',
-  errorBorder: '#fb2c36',
+  '--oniva-color-danger-from': '#fb2c36',
+  '--oniva-color-danger-to': '#e7000b',
+  '--oniva-color-danger-hover-from': '#ff6467',
+  '--oniva-color-danger-hover-to': '#fb2c36',
+  '--oniva-color-danger-active-from': '#e7000b',
+  '--oniva-color-danger-active-to': '#c10007',
+  '--oniva-color-error-bg': '#ffe2e2',
+  '--oniva-color-error-border': '#fb2c36',
 
   // status chips (bg / fg) + solid dot + halo
-  successBg: '#d8f999',
-  successFg: '#3c6300',
-  successSolid: '#00c950',
-  successHalo: '#dbfce7',
-  warningBg: '#fff085',
-  warningFg: '#894b00',
-  warningSolid: '#f0b100',
-  warningHalo: '#fff085',
-  dangerBg: '#ffccd3',
-  dangerFg: '#a50036',
-  dangerSolid: '#fb2c36',
-  dangerHalo: '#ffe2e2',
-  infoBg: '#bedbff',
-  infoFg: '#193cb8',
-  infoSolid: '#615fff',
-  infoHalo: '#e0e7ff',
-  cyanBg: '#a2f4fd',
-  cyanFg: '#005f78',
-  orangeBg: '#ffd6a7',
-  orangeFg: '#9f2d00',
-  purpleBg: '#f3e8ff',
-  purpleFg: '#9810fa',
+  '--oniva-color-success-bg': '#d8f999',
+  '--oniva-color-success-fg': '#3c6300',
+  '--oniva-color-success-solid': '#00c950',
+  '--oniva-color-success-halo': '#dbfce7',
+  '--oniva-color-warning-bg': '#fff085',
+  '--oniva-color-warning-fg': '#894b00',
+  '--oniva-color-warning-solid': '#f0b100',
+  '--oniva-color-warning-halo': '#fff085',
+  '--oniva-color-danger-bg': '#ffccd3',
+  '--oniva-color-danger-fg': '#a50036',
+  '--oniva-color-danger-solid': '#fb2c36',
+  '--oniva-color-danger-halo': '#ffe2e2',
+  '--oniva-color-info-bg': '#bedbff',
+  '--oniva-color-info-fg': '#193cb8',
+  '--oniva-color-info-solid': '#615fff',
+  '--oniva-color-info-halo': '#e0e7ff',
+  '--oniva-color-cyan-bg': '#a2f4fd',
+  '--oniva-color-cyan-fg': '#005f78',
+  '--oniva-color-orange-bg': '#ffd6a7',
+  '--oniva-color-orange-fg': '#9f2d00',
+  '--oniva-color-purple-bg': '#f3e8ff',
+  '--oniva-color-purple-fg': '#9810fa',
 
   // charts (not accent-driven)
-  chart1: '#00d5be',
-  chart2: '#9ae600',
-  chart3: '#fb64b6',
-  chart4: '#00bcff',
-  chart5: '#c27aff',
-  chart6: '#3392ff',
-  chart7: '#00d492',
-  chart8: '#fdc700',
-  chart9: '#7c86ff',
-  chart10: '#a1a1a1',
-  chartTrack: '#ebebeb',
-  chartCursor: '#d4d4d4',
+  '--oniva-color-chart-1': '#00d5be',
+  '--oniva-color-chart-2': '#9ae600',
+  '--oniva-color-chart-3': '#fb64b6',
+  '--oniva-color-chart-4': '#00bcff',
+  '--oniva-color-chart-5': '#c27aff',
+  '--oniva-color-chart-6': '#3392ff',
+  '--oniva-color-chart-7': '#00d492',
+  '--oniva-color-chart-8': '#fdc700',
+  '--oniva-color-chart-9': '#7c86ff',
+  '--oniva-color-chart-10': '#a1a1a1',
+  '--oniva-color-chart-track': '#ebebeb',
+  '--oniva-color-chart-cursor': '#d4d4d4',
 });

@@ -1,5 +1,12 @@
 import * as stylex from '@stylexjs/stylex';
-import { createElement, type CSSProperties, type ElementType, type HTMLAttributes, type ReactNode, type Ref } from 'react';
+import {
+  createElement,
+  type CSSProperties,
+  type ElementType,
+  type HTMLAttributes,
+  type ReactNode,
+  type Ref,
+} from 'react';
 import { mergeSx } from '../../internal/sx';
 import { gapStyle, paddingStyle, type PaddingStep, type SpaceStep } from '../../internal/nav-space';
 

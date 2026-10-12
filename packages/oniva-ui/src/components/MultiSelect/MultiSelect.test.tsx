@@ -25,7 +25,12 @@ describe('MultiSelect', () => {
   it('removes a chip via its remove button', async () => {
     const onChange = vi.fn();
     render(
-      <MultiSelect label="Teams" options={options} defaultValue={['design', 'eng']} onChange={onChange} />,
+      <MultiSelect
+        label="Teams"
+        options={options}
+        defaultValue={['design', 'eng']}
+        onChange={onChange}
+      />,
     );
     await userEvent.click(screen.getByRole('button', { name: 'Remove Design' }));
     expect(onChange).toHaveBeenLastCalledWith(['eng']);

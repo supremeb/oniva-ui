@@ -17,7 +17,13 @@ describe('Separator', () => {
   });
   it('forwards ref', () => {
     let el: HTMLElement | null = null;
-    render(<Separator ref={(n) => { el = n; }} />);
+    render(
+      <Separator
+        ref={(n) => {
+          el = n;
+        }}
+      />,
+    );
     expect(el).not.toBeNull();
   });
 });

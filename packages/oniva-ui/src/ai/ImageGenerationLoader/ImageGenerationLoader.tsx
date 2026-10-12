@@ -1,4 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
+import { media } from '../../tokens/media.stylex';
 import { ImageIcon } from 'lucide-react';
 import type { HTMLAttributes, Ref } from 'react';
 import { colors } from '../../tokens/colors.stylex';
@@ -15,9 +16,9 @@ const drift = stylex.keyframes({
 
 const styles = stylex.create({
   root: {
-    borderRadius: radius.xl,
+    borderRadius: radius['--oniva-radius-xl'],
     boxSizing: 'border-box',
-    fontFamily: font.sans,
+    fontFamily: font['--oniva-font-sans'],
     overflow: 'hidden',
     position: 'relative',
     width: '100%',
@@ -25,29 +26,35 @@ const styles = stylex.create({
   canvas: {
     animationDuration: '6s',
     animationIterationCount: 'infinite',
-    animationName: { default: drift, '@media (prefers-reduced-motion: reduce)': 'none' },
+    animationName: { default: drift, [media.reducedMotion]: 'none' },
     animationTimingFunction: 'ease-in-out',
-    backgroundImage: `radial-gradient(circle at 20% 20%, ${colors.chart4}, transparent 55%), radial-gradient(circle at 80% 30%, ${colors.chart5}, transparent 55%), radial-gradient(circle at 50% 90%, ${colors.chart3}, transparent 60%)`,
+    backgroundImage: `radial-gradient(circle at 20% 20%, ${colors['--oniva-color-chart-4']}, transparent 55%), radial-gradient(circle at 80% 30%, ${colors['--oniva-color-chart-5']}, transparent 55%), radial-gradient(circle at 50% 90%, ${colors['--oniva-color-chart-3']}, transparent 60%)`,
     backgroundSize: '200% 200%',
     filter: 'blur(24px) saturate(1.1)',
     inset: -24,
     opacity: 0.55,
     position: 'absolute',
   },
-  frame: { backgroundColor: colors.surfaceInset, inset: 0, position: 'absolute' },
+  frame: { backgroundColor: colors['--oniva-color-surface-inset'], inset: 0, position: 'absolute' },
   label: {
     alignItems: 'center',
-    color: colors.textMuted,
+    color: colors['--oniva-color-text-muted'],
     display: 'flex',
     flexDirection: 'column',
-    fontSize: font.size13,
-    fontWeight: font.weightMedium,
+    fontSize: font['--oniva-font-size-13'],
+    fontWeight: font['--oniva-font-weight-medium'],
     gap: 6,
     inset: 0,
     justifyContent: 'center',
     position: 'absolute',
   },
-  prompt: { color: colors.textMuted, fontSize: font.size12, fontWeight: font.weightRegular, maxWidth: '80%', textAlign: 'center' },
+  prompt: {
+    color: colors['--oniva-color-text-muted'],
+    fontSize: font['--oniva-font-size-12'],
+    fontWeight: font['--oniva-font-weight-regular'],
+    maxWidth: '80%',
+    textAlign: 'center',
+  },
 });
 
 export interface ImageGenerationLoaderProps extends Omit<HTMLAttributes<HTMLDivElement>, 'style'> {

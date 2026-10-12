@@ -10,31 +10,40 @@ import { Tooltip } from '../../components/Tooltip';
 import { mergeSx } from '../../internal/sx';
 
 const styles = stylex.create({
-  root: { display: 'flex', fontFamily: font.sans, gap: 12, width: '100%' },
+  root: { display: 'flex', fontFamily: font['--oniva-font-sans'], gap: 12, width: '100%' },
   user: { flexDirection: 'row-reverse' },
   col: { display: 'flex', flexDirection: 'column', gap: 6, minWidth: 0 },
   colUser: { alignItems: 'flex-end', maxWidth: '80%' },
   colAssistant: { flexGrow: 1 },
   bubble: {
-    backgroundColor: colors.surfaceInset,
-    borderColor: colors.border,
-    borderRadius: radius.xl,
-    borderStartEndRadius: radius.xs,
+    backgroundColor: colors['--oniva-color-surface-inset'],
+    borderColor: colors['--oniva-color-border'],
+    borderRadius: radius['--oniva-radius-xl'],
+    borderStartEndRadius: radius['--oniva-radius-xs'],
     borderStyle: 'solid',
     borderWidth: 1,
     boxSizing: 'border-box',
-    color: colors.text,
-    fontSize: font.size14,
-    lineHeight: font.lh16,
+    color: colors['--oniva-color-text'],
+    fontSize: font['--oniva-font-size-14'],
+    lineHeight: font['--oniva-font-lh-16'],
     paddingBlock: 8,
     paddingInline: 14,
     whiteSpace: 'pre-wrap',
   },
-  content: { color: colors.text, fontSize: font.size14, lineHeight: font.lh16, minWidth: 0 },
-  meta: { color: colors.textMuted, fontSize: font.size12, fontVariantNumeric: 'tabular-nums' },
+  content: {
+    color: colors['--oniva-color-text'],
+    fontSize: font['--oniva-font-size-14'],
+    lineHeight: font['--oniva-font-lh-16'],
+    minWidth: 0,
+  },
+  meta: {
+    color: colors['--oniva-color-text-muted'],
+    fontSize: font['--oniva-font-size-12'],
+    fontVariantNumeric: 'tabular-nums',
+  },
   actions: { alignItems: 'center', display: 'flex', gap: 2, marginInlineStart: -6 },
-  ok: { color: colors.successSolid },
-  pressed: { color: colors.accentSoftFg },
+  ok: { color: colors['--oniva-color-success-solid'] },
+  pressed: { color: colors['--oniva-color-accent-soft-fg'] },
 });
 
 export interface MessageProps extends Omit<HTMLAttributes<HTMLDivElement>, 'style' | 'content'> {
@@ -114,7 +123,11 @@ export function Message({
                     t.current = setTimeout(() => setCopied(false), 1600);
                   }}
                 >
-                  {copied ? <Check size={14} aria-hidden="true" {...stylex.props(styles.ok)} /> : <Copy size={14} aria-hidden="true" />}
+                  {copied ? (
+                    <Check size={14} aria-hidden="true" {...stylex.props(styles.ok)} />
+                  ) : (
+                    <Copy size={14} aria-hidden="true" />
+                  )}
                 </IconButton>
               </Tooltip>
             )}
@@ -134,7 +147,11 @@ export function Message({
                   aria-pressed={feedback === 'up'}
                   onPress={() => onFeedback('up')}
                 >
-                  <ThumbsUp size={14} aria-hidden="true" {...stylex.props(feedback === 'up' && styles.pressed)} />
+                  <ThumbsUp
+                    size={14}
+                    aria-hidden="true"
+                    {...stylex.props(feedback === 'up' && styles.pressed)}
+                  />
                 </IconButton>
                 <IconButton
                   variant="ghost"
@@ -143,7 +160,11 @@ export function Message({
                   aria-pressed={feedback === 'down'}
                   onPress={() => onFeedback('down')}
                 >
-                  <ThumbsDown size={14} aria-hidden="true" {...stylex.props(feedback === 'down' && styles.pressed)} />
+                  <ThumbsDown
+                    size={14}
+                    aria-hidden="true"
+                    {...stylex.props(feedback === 'down' && styles.pressed)}
+                  />
                 </IconButton>
               </>
             )}

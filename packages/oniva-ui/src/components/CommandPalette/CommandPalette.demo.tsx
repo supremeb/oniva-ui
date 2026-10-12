@@ -51,7 +51,7 @@ const groups: CommandGroup[] = [
 
 const demo: DemoModule = {
   meta: {
-    title: 'Command Palette',
+    title: 'Command palette',
     slug: 'command-palette',
     category: 'Overlays',
     description:

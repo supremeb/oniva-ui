@@ -6,10 +6,11 @@ const col = { display: 'grid', gap: 20, maxWidth: 440, width: '100%' } as const;
 
 const demo: DemoModule = {
   meta: {
-    title: 'ProgressBar',
+    title: 'Progress bar',
     slug: 'progress-bar',
     category: 'Feedback',
-    description: 'Determinate, indeterminate and multi-segment progress built on React Aria ProgressBar.',
+    description:
+      'Determinate, indeterminate and multi-segment progress built on React Aria ProgressBar.',
   },
   demos: [
     {

@@ -11,7 +11,7 @@ const rings = [
 
 const demo: DemoModule = {
   meta: {
-    title: 'ActivityRings',
+    title: 'Activity rings',
     slug: 'activity-rings',
     category: 'Charts',
     description:

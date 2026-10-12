@@ -8,7 +8,7 @@ import {
   type Key,
 } from 'react-aria-components';
 import { Search } from 'lucide-react';
-import { useCallback, useEffect, useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useState, type ReactNode, type Ref } from 'react';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 import { menuStyles as m } from '../../internal/overlays-menu';
@@ -20,10 +20,10 @@ const styles = stylex.create({
   panel: { maxWidth: 'calc(100vw - 32px)', width: 560 },
   searchRow: {
     alignItems: 'center',
-    borderBottomColor: colors.border,
+    borderBottomColor: colors['--oniva-color-border'],
     borderBottomStyle: 'solid',
     borderBottomWidth: 1,
-    color: colors.iconMuted,
+    color: colors['--oniva-color-icon-muted'],
     display: 'flex',
     gap: 10,
     paddingBlock: 0,
@@ -34,47 +34,47 @@ const styles = stylex.create({
     appearance: 'none',
     backgroundColor: 'transparent',
     borderWidth: 0,
-    color: colors.text,
+    color: colors['--oniva-color-text'],
     flexGrow: 1,
-    fontFamily: font.sans,
-    fontSize: font.size16,
+    fontFamily: font['--oniva-font-sans'],
+    fontSize: font['--oniva-font-size-16'],
     height: 52,
-    lineHeight: font.lh16,
+    lineHeight: font['--oniva-font-lh-16'],
     outline: 'none',
-    '::placeholder': { color: colors.textPlaceholder },
+    '::placeholder': { color: colors['--oniva-color-text-placeholder'] },
     '::-webkit-search-cancel-button': { appearance: 'none', display: 'none' },
   },
   list: { maxHeight: 340, padding: 8 },
   empty: {
-    color: colors.textMuted,
-    fontFamily: font.sans,
-    fontSize: font.size14,
+    color: colors['--oniva-color-text-muted'],
+    fontFamily: font['--oniva-font-sans'],
+    fontSize: font['--oniva-font-size-14'],
     paddingBlock: 32,
     paddingInline: 16,
     textAlign: 'center',
   },
   footer: {
     alignItems: 'center',
-    backgroundColor: colors.surfaceInset,
-    borderTopColor: colors.border,
+    backgroundColor: colors['--oniva-color-surface-inset'],
+    borderTopColor: colors['--oniva-color-border'],
     borderTopStyle: 'solid',
     borderTopWidth: 1,
-    color: colors.textMuted,
+    color: colors['--oniva-color-text-muted'],
     display: 'flex',
-    fontFamily: font.sans,
-    fontSize: font.size12,
+    fontFamily: font['--oniva-font-sans'],
+    fontSize: font['--oniva-font-size-12'],
     gap: 16,
     paddingBlock: 8,
     paddingInline: 16,
   },
   hint: { alignItems: 'center', display: 'inline-flex', gap: 6 },
   kbd: {
-    backgroundColor: colors.kbdBg,
+    backgroundColor: colors['--oniva-color-kbd-bg'],
     borderRadius: 4,
-    color: colors.textOnTertiary,
-    fontFamily: font.sans,
-    fontSize: font.size11,
-    fontWeight: font.weightMedium,
+    color: colors['--oniva-color-text-on-tertiary'],
+    fontFamily: font['--oniva-font-sans'],
+    fontSize: font['--oniva-font-size-11'],
+    fontWeight: font['--oniva-font-weight-medium'],
     paddingBlock: 1,
     paddingInline: 5,
   },
@@ -129,6 +129,8 @@ export interface CommandPaletteProps {
   emptyMessage?: ReactNode;
   'aria-label'?: string;
   xstyle?: stylex.StyleXStyles;
+  className?: string;
+  ref?: Ref<HTMLElement>;
 }
 
 export function CommandPalette({
@@ -142,6 +144,8 @@ export function CommandPalette({
   emptyMessage = 'No results found.',
   'aria-label': ariaLabel = 'Command palette',
   xstyle,
+  className,
+  ref,
 }: CommandPaletteProps) {
   const [inner, setInner] = useState(defaultOpen);
   const open = isOpenProp ?? inner;
@@ -177,7 +181,7 @@ export function CommandPalette({
       overlayXstyle={styles.overlay}
       xstyle={[styles.panel, xstyle]}
     >
-      <Dialog aria-label={ariaLabel} showCloseButton={false}>
+      <Dialog ref={ref} className={className} aria-label={ariaLabel} showCloseButton={false}>
         <Autocomplete filter={(text, input) => fuzzyMatch(text, input)}>
           <div {...stylex.props(styles.searchRow)}>
             <Search size={18} aria-hidden="true" />

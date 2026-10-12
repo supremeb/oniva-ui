@@ -6,10 +6,11 @@ const row = { display: 'flex', gap: 16, alignItems: 'center' } as const;
 
 const demo: DemoModule = {
   meta: {
-    title: 'RingProgress',
+    title: 'Ring progress',
     slug: 'ring-progress',
     category: 'Feedback',
-    description: 'Circular determinate loader with centre label, like a "4 steps left" setup indicator.',
+    description:
+      'Circular determinate loader with centre label, like a "4 steps left" setup indicator.',
   },
   demos: [
     {
@@ -22,23 +23,33 @@ const demo: DemoModule = {
             4
           </RingProgress>
           <div>
-            <Text as="div" variant="headline">Finish setting up</Text>
-            <Text tone="muted" variant="caption">4 steps left</Text>
+            <Text as="div" variant="headline">
+              Finish setting up
+            </Text>
+            <Text tone="muted" variant="caption">
+              4 steps left
+            </Text>
           </div>
         </div>
       ),
     },
     {
       name: 'Tones and sizes',
-      code: `<RingProgress aria-label="Storage" value={42} size={48} />
-<RingProgress aria-label="Budget" value={88} tone="warning" size={48} />
-<RingProgress aria-label="Quota" value={100} tone="success" size={48} />`,
+      code: `<RingProgress aria-label="Storage" value={42} diameter={48} />
+<RingProgress aria-label="Budget" value={88} tone="warning" diameter={48} />
+<RingProgress aria-label="Quota" value={100} tone="success" diameter={48} />`,
       Component: () => (
         <div style={row}>
-          <RingProgress aria-label="Storage" value={42} size={48} />
-          <RingProgress aria-label="Budget" value={88} tone="warning" size={48} />
-          <RingProgress aria-label="Quota" value={100} tone="success" size={48} />
-          <RingProgress aria-label="Errors" value={25} tone="danger" size={28} strokeWidth={3} />
+          <RingProgress aria-label="Storage" value={42} diameter={48} />
+          <RingProgress aria-label="Budget" value={88} tone="warning" diameter={48} />
+          <RingProgress aria-label="Quota" value={100} tone="success" diameter={48} />
+          <RingProgress
+            aria-label="Errors"
+            value={25}
+            tone="danger"
+            diameter={28}
+            strokeWidth={3}
+          />
         </div>
       ),
     },

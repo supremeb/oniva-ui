@@ -21,7 +21,11 @@ describe('ToggleButton', () => {
   });
   it('disabled does not toggle', async () => {
     const onChange = vi.fn();
-    render(<ToggleButton isDisabled onChange={onChange}>A</ToggleButton>);
+    render(
+      <ToggleButton isDisabled onChange={onChange}>
+        A
+      </ToggleButton>,
+    );
     await userEvent.click(screen.getByRole('button'));
     expect(onChange).not.toHaveBeenCalled();
   });

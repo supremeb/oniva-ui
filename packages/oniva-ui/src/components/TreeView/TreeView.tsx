@@ -28,9 +28,9 @@ const styles = stylex.create({
     width: 16,
   },
   chevronIcon: {
-    transitionDuration: motion.durBase,
+    transitionDuration: motion['--oniva-motion-dur-base'],
     transitionProperty: 'transform',
-    transitionTimingFunction: motion.easeStandard,
+    transitionTimingFunction: motion['--oniva-motion-ease-standard'],
   },
   chevronOpen: { transform: 'rotate(90deg)' },
   spacer: { display: 'inline-block', flexShrink: 0, width: 16 },

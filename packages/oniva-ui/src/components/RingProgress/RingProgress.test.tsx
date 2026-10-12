@@ -10,7 +10,7 @@ describe('RingProgress', () => {
   });
   it('renders custom centre content and offsets the arc', () => {
     const { container } = render(
-      <RingProgress aria-label="Setup" value={3} maxValue={7} size={40}>
+      <RingProgress aria-label="Setup" value={3} maxValue={7} diameter={40}>
         4
       </RingProgress>,
     );

@@ -15,7 +15,7 @@ const row = {
 
 const demo: DemoModule = {
   meta: {
-    title: 'DonutChart',
+    title: 'Donut chart',
     slug: 'donut-chart',
     category: 'Charts',
     description:

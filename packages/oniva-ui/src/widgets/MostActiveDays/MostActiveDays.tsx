@@ -19,47 +19,59 @@ const styles = stylex.create({
   scroller: { maxHeight: 300, overflowY: 'auto', paddingInline: 4, position: 'relative' },
   month: { display: 'flex', flexDirection: 'column', gap: 8, paddingBlock: 8 },
   monthTitle: {
-    color: colors.text,
-    fontSize: font.size16,
-    fontWeight: font.weightMedium,
+    color: colors['--oniva-color-text'],
+    fontSize: font['--oniva-font-size-16'],
+    fontWeight: font['--oniva-font-weight-medium'],
     margin: 0,
     paddingBlock: 4,
   },
   grid: { display: 'grid', gap: 4, gridTemplateColumns: 'repeat(7, minmax(0, 1fr))' },
   dow: {
-    color: colors.textMuted,
-    fontSize: font.size11,
-    lineHeight: font.lh11,
+    color: colors['--oniva-color-text-muted'],
+    fontSize: font['--oniva-font-size-11'],
+    lineHeight: font['--oniva-font-lh-11'],
     textAlign: 'center',
   },
   day: {
     alignItems: 'center',
-    borderRadius: radius.md,
+    borderRadius: radius['--oniva-radius-md'],
     borderWidth: 0,
-    color: colors.text,
+    color: colors['--oniva-color-text'],
     cursor: 'pointer',
     display: 'flex',
     flexDirection: 'column',
-    fontFamily: font.sans,
+    fontFamily: font['--oniva-font-sans'],
     fontFeatureSettings: "'tnum'",
-    fontSize: font.size12,
-    fontWeight: font.weightMedium,
+    fontSize: font['--oniva-font-size-12'],
+    fontWeight: font['--oniva-font-weight-medium'],
     gap: 2,
     justifyContent: 'center',
     minHeight: 40,
-    outline: { default: 'none', ':focus-visible': `2px solid ${colors.focusRing}` },
+    outline: {
+      default: 'none',
+      ':focus-visible': `2px solid ${colors['--oniva-color-focus-ring']}`,
+    },
     outlineOffset: 1,
     paddingBlock: 4,
-    transitionDuration: motion.durBase,
+    transitionDuration: motion['--oniva-motion-dur-base'],
     transitionProperty: 'transform, box-shadow',
     transform: { default: 'none', ':hover': 'scale(1.06)' },
   },
-  selected: { boxShadow: `0 0 0 2px ${colors.text}` },
-  h0: { backgroundColor: colors.surfaceInset, color: colors.textMuted },
-  h1: { backgroundColor: `color-mix(in srgb, ${colors.chart1} 22%, ${colors.surfaceInner})` },
-  h2: { backgroundColor: `color-mix(in srgb, ${colors.chart1} 45%, ${colors.surfaceInner})` },
-  h3: { backgroundColor: `color-mix(in srgb, ${colors.chart1} 70%, ${colors.surfaceInner})` },
-  h4: { backgroundColor: colors.chart1, color: '#0a0a0a' },
+  selected: { boxShadow: `0 0 0 2px ${colors['--oniva-color-text']}` },
+  h0: {
+    backgroundColor: colors['--oniva-color-surface-inset'],
+    color: colors['--oniva-color-text-muted'],
+  },
+  h1: {
+    backgroundColor: `color-mix(in srgb, ${colors['--oniva-color-chart-1']} 22%, ${colors['--oniva-color-surface-inner']})`,
+  },
+  h2: {
+    backgroundColor: `color-mix(in srgb, ${colors['--oniva-color-chart-1']} 45%, ${colors['--oniva-color-surface-inner']})`,
+  },
+  h3: {
+    backgroundColor: `color-mix(in srgb, ${colors['--oniva-color-chart-1']} 70%, ${colors['--oniva-color-surface-inner']})`,
+  },
+  h4: { backgroundColor: colors['--oniva-color-chart-1'], color: colors['--oniva-color-on-chart'] },
 });
 
 const HEAT = [styles.h0, styles.h1, styles.h2, styles.h3, styles.h4];
@@ -103,7 +115,8 @@ export function MostActiveDays({
     const sec = refs.current[m];
     if (!box || !sec) return;
     const top = sec.offsetTop;
-    if (typeof box.scrollTo === 'function') box.scrollTo({ top, behavior: smooth ? 'smooth' : 'auto' });
+    if (typeof box.scrollTo === 'function')
+      box.scrollTo({ top, behavior: smooth ? 'smooth' : 'auto' });
   };
   useEffect(() => {
     scrollTo(defaultMonth, false);

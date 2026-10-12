@@ -1,5 +1,12 @@
 import * as stylex from '@stylexjs/stylex';
-import { createElement, type CSSProperties, type ElementType, type HTMLAttributes, type ReactNode, type Ref } from 'react';
+import {
+  createElement,
+  type CSSProperties,
+  type ElementType,
+  type HTMLAttributes,
+  type ReactNode,
+  type Ref,
+} from 'react';
 import { mergeSx } from '../../internal/sx';
 import { gapStyle, paddingStyle, type PaddingStep, type SpaceStep } from '../../internal/nav-space';
 
@@ -24,8 +31,19 @@ const styles = stylex.create({
   jEvenly: { justifyContent: 'space-evenly' },
 });
 
-const dir = { row: 'row', column: 'column', 'row-reverse': 'rowReverse', 'column-reverse': 'columnReverse' } as const;
-const al = { start: 'aStart', center: 'aCenter', end: 'aEnd', stretch: 'aStretch', baseline: 'aBaseline' } as const;
+const dir = {
+  row: 'row',
+  column: 'column',
+  'row-reverse': 'rowReverse',
+  'column-reverse': 'columnReverse',
+} as const;
+const al = {
+  start: 'aStart',
+  center: 'aCenter',
+  end: 'aEnd',
+  stretch: 'aStretch',
+  baseline: 'aBaseline',
+} as const;
 const jt = {
   start: 'jStart',
   center: 'jCenter',

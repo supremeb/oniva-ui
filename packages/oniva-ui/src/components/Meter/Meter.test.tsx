@@ -11,7 +11,8 @@ describe('Meter', () => {
   });
   it('colour class changes across thresholds', () => {
     const { container, rerender } = render(<Meter aria-label="d" value={30} />);
-    const cls = () => (container.querySelector('[role=meter] > div:last-child > div') as HTMLElement).className;
+    const cls = () =>
+      (container.querySelector('[role=meter] > div:last-child > div') as HTMLElement).className;
     const low = cls();
     rerender(<Meter aria-label="d" value={95} />);
     expect(cls()).not.toBe(low);

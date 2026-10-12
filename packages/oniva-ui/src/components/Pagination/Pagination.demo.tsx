@@ -7,7 +7,8 @@ const demo: DemoModule = {
     title: 'Pagination',
     slug: 'pagination',
     category: 'Navigation',
-    description: 'Page navigation with numbers and ellipsis, or a compact table-footer variant with Previous / Next.',
+    description:
+      'Page navigation with numbers and ellipsis, or a compact table-footer variant with Previous / Next.',
   },
   demos: [
     {

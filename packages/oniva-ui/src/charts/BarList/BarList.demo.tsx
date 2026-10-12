@@ -5,7 +5,7 @@ import { BarList } from './BarList';
 
 const demo: DemoModule = {
   meta: {
-    title: 'BarList',
+    title: 'Bar list',
     slug: 'bar-list',
     category: 'Charts',
     description:

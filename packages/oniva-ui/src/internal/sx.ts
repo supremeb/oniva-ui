@@ -20,3 +20,11 @@ export function mergeSx(
   if (s) merged.style = s;
   return merged;
 }
+
+/**
+ * Class-only variant for RAC `className` render-prop callbacks, which can't carry a `style` object.
+ * Use `mergeSx` everywhere else so dynamic StyleX values are preserved.
+ */
+export function sxClass(sx: StyleXProps, className?: string): string {
+  return [sx.className, className].filter(Boolean).join(' ');
+}

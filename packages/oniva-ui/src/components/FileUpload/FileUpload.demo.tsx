@@ -8,12 +8,20 @@ function Simulated() {
   const [files, setFiles] = useState<UploadFile[]>([
     { id: 'a', name: 'Q3-board-report.pdf', size: 2_480_000, progress: 62 },
     { id: 'b', name: 'vendor-ledger.csv', size: 184_000, progress: 100 },
-    { id: 'c', name: 'bank-export-oct.zip', size: 74_000_000, progress: 18, error: 'File exceeds the 50 MB limit.' },
+    {
+      id: 'c',
+      name: 'bank-export-oct.zip',
+      size: 74_000_000,
+      progress: 18,
+      error: 'File exceeds the 50 MB limit.',
+    },
   ]);
   useEffect(() => {
     const t = setInterval(() => {
       setFiles((cur) =>
-        cur.map((f) => (f.progress < 100 && !f.error ? { ...f, progress: Math.min(100, f.progress + 6) } : f)),
+        cur.map((f) =>
+          f.progress < 100 && !f.error ? { ...f, progress: Math.min(100, f.progress + 6) } : f,
+        ),
       );
     }, 700);
     return () => {
@@ -30,7 +38,12 @@ function Simulated() {
         onFilesAdded={(picked) =>
           setFiles((cur) => [
             ...cur,
-            ...picked.map((f, i) => ({ id: `${Date.now()}-${i}`, name: f.name, size: f.size, progress: 5 })),
+            ...picked.map((f, i) => ({
+              id: `${Date.now()}-${i}`,
+              name: f.name,
+              size: f.size,
+              progress: 5,
+            })),
           ])
         }
       />
@@ -40,10 +53,11 @@ function Simulated() {
 
 const demo: DemoModule = {
   meta: {
-    title: 'FileUpload',
+    title: 'File upload',
     slug: 'file-upload',
     category: 'Forms',
-    description: 'Dropzone with file picker, accepted types and a file list showing progress rings, success and errors.',
+    description:
+      'Dropzone with file picker, accepted types and a file list showing progress rings, success and errors.',
   },
   demos: [
     {

@@ -8,7 +8,11 @@ const row = { display: 'flex', flexWrap: 'wrap', gap: 12, alignItems: 'center' }
 function Mute() {
   const [on, setOn] = useState(false);
   return (
-    <ToggleButton isSelected={on} onChange={setOn} startIcon={on ? <BellOff size={16} /> : <Bell size={16} />}>
+    <ToggleButton
+      isSelected={on}
+      onChange={setOn}
+      startIcon={on ? <BellOff size={16} /> : <Bell size={16} />}
+    >
       {on ? 'Muted' : 'Mute alerts'}
     </ToggleButton>
   );
@@ -16,7 +20,7 @@ function Mute() {
 
 const demo: DemoModule = {
   meta: {
-    title: 'ToggleButton',
+    title: 'Toggle button',
     slug: 'toggle-button',
     category: 'Actions',
     description: 'A two-state button (aria-pressed) sharing Button sizes.',
@@ -30,8 +34,12 @@ const demo: DemoModule = {
       Component: () => (
         <div style={row}>
           <ToggleButton defaultSelected>Secondary</ToggleButton>
-          <ToggleButton variant="ghost" defaultSelected>Ghost</ToggleButton>
-          <ToggleButton variant="soft" defaultSelected>Soft</ToggleButton>
+          <ToggleButton variant="ghost" defaultSelected>
+            Ghost
+          </ToggleButton>
+          <ToggleButton variant="soft" defaultSelected>
+            Soft
+          </ToggleButton>
           <ToggleButton>Off</ToggleButton>
         </div>
       ),
@@ -50,8 +58,12 @@ const demo: DemoModule = {
       code: `<ToggleButton isIconOnly aria-label="Favorite" defaultSelected><Star size={16} /></ToggleButton>`,
       Component: () => (
         <div style={row}>
-          <ToggleButton isIconOnly aria-label="Favorite" defaultSelected><Star size={16} /></ToggleButton>
-          <ToggleButton isIconOnly aria-label="Favorite 2" size="sm"><Star size={14} /></ToggleButton>
+          <ToggleButton isIconOnly aria-label="Favorite" defaultSelected>
+            <Star size={16} />
+          </ToggleButton>
+          <ToggleButton isIconOnly aria-label="Favorite 2" size="sm">
+            <Star size={14} />
+          </ToggleButton>
         </div>
       ),
     },

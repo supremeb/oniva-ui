@@ -5,7 +5,7 @@ import { EmptyState } from './EmptyState';
 
 const demo: DemoModule = {
   meta: {
-    title: 'EmptyState',
+    title: 'Empty state',
     slug: 'empty-state',
     category: 'Feedback',
     description: 'Placeholder for lists, tables and search results with no content.',

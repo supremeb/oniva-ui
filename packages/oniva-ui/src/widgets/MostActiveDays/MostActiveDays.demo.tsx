@@ -21,10 +21,11 @@ const data = makeData();
 
 const demo: DemoModule = {
   meta: {
-    title: 'MostActiveDays',
+    title: 'Most active days',
     slug: 'most-active-days',
     category: 'Widgets',
-    description: 'Year of day buttons grouped by month, heat-coloured by steps, with a month switcher.',
+    description:
+      'Year of day buttons grouped by month, heat-coloured by steps, with a month switcher.',
   },
   demos: [
     {

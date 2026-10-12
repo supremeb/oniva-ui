@@ -27,21 +27,21 @@ const styles = stylex.create({
   root: { width: '100%' },
   trigger: {
     borderColor: {
-      default: colors.border,
-      ':hover': colors.borderHover,
-      ':focus-visible': colors.focusRing,
+      default: colors['--oniva-color-border'],
+      ':hover': colors['--oniva-color-border-hover'],
+      ':focus-visible': colors['--oniva-color-focus-ring'],
     },
     boxShadow: {
-      default: shadow.xs,
-      ':focus-visible': `0 0 0 3px color-mix(in srgb, ${colors.focusRing} 25%, transparent)`,
+      default: shadow['--oniva-shadow-xs'],
+      ':focus-visible': `0 0 0 3px color-mix(in srgb, ${colors['--oniva-color-focus-ring']} 25%, transparent)`,
     },
   },
-  open: { borderColor: colors.focusRing },
+  open: { borderColor: colors['--oniva-color-focus-ring'] },
   triggerInvalid: {
     borderColor: {
-      default: colors.errorBorder,
-      ':hover': colors.errorBorder,
-      ':focus-visible': colors.errorBorder,
+      default: colors['--oniva-color-error-border'],
+      ':hover': colors['--oniva-color-error-border'],
+      ':focus-visible': colors['--oniva-color-error-border'],
     },
   },
   disabledTrigger: { cursor: 'not-allowed' },
@@ -52,8 +52,10 @@ export type SelectItemProps = FormsItemProps;
 export const SelectItem = FormsItem;
 export const SelectSection = FormsSection;
 
-export interface SelectProps<T extends object>
-  extends Omit<AriaSelectProps<T, 'single'>, 'className' | 'style' | 'children' | 'selectionMode'> {
+export interface SelectProps<T extends object> extends Omit<
+  AriaSelectProps<T, 'single'>,
+  'className' | 'style' | 'children' | 'selectionMode'
+> {
   label?: ReactNode;
   description?: ReactNode;
   errorMessage?: string | ((v: ValidationResult) => string);

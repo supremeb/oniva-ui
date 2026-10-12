@@ -13,7 +13,7 @@ describe('AreaChart', () => {
     render(
       <AreaChart data={revenueByMonth} index="month" series={series} label="Revenue by month" />,
     );
-    expect(screen.getByRole('img', { name: 'Revenue by month' })).toBeInTheDocument();
+    expect(screen.getByRole('group', { name: 'Revenue by month' })).toBeInTheDocument();
     expect(screen.getByRole('table', { hidden: true })).toBeInTheDocument();
   });
   it('shows a tooltip on focus and hides it on Escape', () => {

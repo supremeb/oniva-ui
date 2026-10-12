@@ -10,7 +10,13 @@ const teams = [
   { id: 'cs', label: 'Customer Success' },
 ];
 
-const col = { display: 'flex', flexDirection: 'column', gap: 16, width: '100%', maxWidth: 380 } as const;
+const col = {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 16,
+  width: '100%',
+  maxWidth: 380,
+} as const;
 
 function Controlled() {
   const [v, setV] = useState<string[]>(['eng', 'fin']);
@@ -24,7 +30,7 @@ function Controlled() {
 
 const demo: DemoModule = {
   meta: {
-    title: 'MultiSelect',
+    title: 'Multi select',
     slug: 'multi-select',
     category: 'Forms',
     description: 'Select with multiple choices rendered as removable tag chips.',
@@ -35,7 +41,12 @@ const demo: DemoModule = {
       code: `<MultiSelect label="Teams" options={teams} defaultValue={['design']} placeholder="Add teams" />`,
       Component: () => (
         <div style={col}>
-          <MultiSelect label="Teams" options={teams} defaultValue={['design']} placeholder="Add teams" />
+          <MultiSelect
+            label="Teams"
+            options={teams}
+            defaultValue={['design']}
+            placeholder="Add teams"
+          />
         </div>
       ),
     },
@@ -50,7 +61,12 @@ const demo: DemoModule = {
       code: `<MultiSelect label="Teams" options={teams} isInvalid errorMessage="Choose at least one team." />`,
       Component: () => (
         <div style={col}>
-          <MultiSelect label="Teams" options={teams} isInvalid errorMessage="Choose at least one team." />
+          <MultiSelect
+            label="Teams"
+            options={teams}
+            isInvalid
+            errorMessage="Choose at least one team."
+          />
         </div>
       ),
     },

@@ -1,13 +1,7 @@
 import * as stylex from '@stylexjs/stylex';
 import { AlertCircle, Check, FileText, UploadCloud, X } from 'lucide-react';
 import { useId, useState, type ReactNode, type Ref } from 'react';
-import {
-  Button,
-  DropZone,
-  FileTrigger,
-  Text,
-  type DropZoneProps,
-} from 'react-aria-components';
+import { Button, DropZone, FileTrigger, Text, type DropZoneProps } from 'react-aria-components';
 import { accent } from '../../tokens/accent.stylex';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
@@ -18,12 +12,18 @@ import { cx, ff } from '../../internal/forms-field';
 import { fp } from '../../internal/forms-popover';
 
 const styles = stylex.create({
-  root: { display: 'flex', flexDirection: 'column', fontFamily: font.sans, gap: 12, width: '100%' },
+  root: {
+    display: 'flex',
+    flexDirection: 'column',
+    fontFamily: font['--oniva-font-sans'],
+    gap: 12,
+    width: '100%',
+  },
   zone: {
     alignItems: 'center',
-    backgroundColor: colors.surfaceInset,
-    borderColor: colors.borderControl,
-    borderRadius: radius.card,
+    backgroundColor: colors['--oniva-color-surface-inset'],
+    borderColor: colors['--oniva-color-border-control'],
+    borderRadius: radius['--oniva-radius-card'],
     borderStyle: 'dashed',
     borderWidth: 1,
     boxSizing: 'border-box',
@@ -34,56 +34,71 @@ const styles = stylex.create({
     paddingBlock: 28,
     paddingInline: 20,
     textAlign: 'center',
-    transitionDuration: motion.durBase,
+    transitionDuration: motion['--oniva-motion-dur-base'],
     transitionProperty: 'background-color, border-color',
   },
-  zoneActive: { backgroundColor: colors.accentTint, borderColor: colors.focusRing },
+  zoneActive: {
+    backgroundColor: colors['--oniva-color-accent-tint'],
+    borderColor: colors['--oniva-color-focus-ring'],
+  },
   zoneDisabled: { opacity: 0.5 },
   iconWrap: {
     alignItems: 'center',
-    backgroundColor: colors.surface,
-    borderColor: colors.border,
-    borderRadius: radius.lg,
+    backgroundColor: colors['--oniva-color-surface'],
+    borderColor: colors['--oniva-color-border'],
+    borderRadius: radius['--oniva-radius-lg'],
     borderStyle: 'solid',
     borderWidth: 1,
-    boxShadow: shadow.xs,
-    color: colors.iconMuted,
+    boxShadow: shadow['--oniva-shadow-xs'],
+    color: colors['--oniva-color-icon-muted'],
     display: 'flex',
     height: 40,
     justifyContent: 'center',
     width: 40,
   },
-  title: { color: colors.text, fontSize: font.size14, fontWeight: font.weightMedium, lineHeight: font.lh14 },
+  title: {
+    color: colors['--oniva-color-text'],
+    fontSize: font['--oniva-font-size-14'],
+    fontWeight: font['--oniva-font-weight-medium'],
+    lineHeight: font['--oniva-font-lh-14'],
+  },
   browse: {
     appearance: 'none',
     backgroundColor: 'transparent',
     borderWidth: 0,
-    color: colors.accentSoftFg,
+    color: colors['--oniva-color-accent-soft-fg'],
     cursor: 'pointer',
     font: 'inherit',
     padding: 0,
     textDecoration: { default: 'none', ':hover': 'underline' },
   },
-  list: { display: 'flex', flexDirection: 'column', gap: 8, listStyle: 'none', margin: 0, padding: 0 },
+  list: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 8,
+    listStyle: 'none',
+    margin: 0,
+    padding: 0,
+  },
   row: {
     alignItems: 'center',
-    backgroundColor: colors.surface,
-    borderColor: colors.border,
-    borderRadius: radius.lg,
+    backgroundColor: colors['--oniva-color-surface'],
+    borderColor: colors['--oniva-color-border'],
+    borderRadius: radius['--oniva-radius-lg'],
     borderStyle: 'solid',
     borderWidth: 1,
-    boxShadow: shadow.xs,
+    boxShadow: shadow['--oniva-shadow-xs'],
     boxSizing: 'border-box',
     display: 'flex',
     gap: 12,
     padding: 10,
   },
-  rowError: { borderColor: colors.errorBorder },
+  rowError: { borderColor: colors['--oniva-color-error-border'] },
   fileIcon: {
     alignItems: 'center',
-    backgroundColor: colors.surfaceTertiary,
-    borderRadius: radius.md,
-    color: colors.textOnTertiary,
+    backgroundColor: colors['--oniva-color-surface-tertiary'],
+    borderRadius: radius['--oniva-radius-md'],
+    color: colors['--oniva-color-text-on-tertiary'],
     display: 'flex',
     flexShrink: 0,
     height: 36,
@@ -92,17 +107,25 @@ const styles = stylex.create({
   },
   meta: { display: 'flex', flexDirection: 'column', flexGrow: 1, gap: 2, minWidth: 0 },
   name: {
-    color: colors.text,
-    fontSize: font.size14,
-    fontWeight: font.weightMedium,
-    lineHeight: font.lh14,
+    color: colors['--oniva-color-text'],
+    fontSize: font['--oniva-font-size-14'],
+    fontWeight: font['--oniva-font-weight-medium'],
+    lineHeight: font['--oniva-font-lh-14'],
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
   },
-  ringWrap: { alignItems: 'center', display: 'flex', flexShrink: 0, height: 28, justifyContent: 'center', position: 'relative', width: 28 },
-  ok: { color: colors.successSolid },
-  bad: { color: colors.textError },
+  ringWrap: {
+    alignItems: 'center',
+    display: 'flex',
+    flexShrink: 0,
+    height: 28,
+    justifyContent: 'center',
+    position: 'relative',
+    width: 28,
+  },
+  ok: { color: colors['--oniva-color-success-solid'] },
+  bad: { color: colors['--oniva-color-text-error'] },
 });
 
 export interface UploadFile {
@@ -123,8 +146,12 @@ export function formatBytes(n: number): string {
 }
 
 const ringTrack = stylex.create({
-  track: { stroke: colors.chartTrack },
-  bar: { stroke: accent.accent500, transitionDuration: motion.durBase, transitionProperty: 'stroke-dashoffset' },
+  track: { stroke: colors['--oniva-color-chart-track'] },
+  bar: {
+    stroke: accent['--oniva-accent-500'],
+    transitionDuration: motion['--oniva-motion-dur-base'],
+    transitionProperty: 'stroke-dashoffset',
+  },
 });
 
 /** Circular progress indicator (SVG ring). */
@@ -142,7 +169,14 @@ export function ProgressRing({ value, label }: { value: number; label: string })
       {...stylex.props(styles.ringWrap)}
     >
       <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true">
-        <circle cx="14" cy="14" r={r} fill="none" strokeWidth="3" {...stylex.props(ringTrack.track)} />
+        <circle
+          cx="14"
+          cy="14"
+          r={r}
+          fill="none"
+          strokeWidth="3"
+          {...stylex.props(ringTrack.track)}
+        />
         <circle
           cx="14"
           cy="14"
@@ -160,8 +194,10 @@ export function ProgressRing({ value, label }: { value: number; label: string })
   );
 }
 
-export interface FileUploadProps
-  extends Omit<DropZoneProps, 'className' | 'style' | 'children' | 'onDrop'> {
+export interface FileUploadProps extends Omit<
+  DropZoneProps,
+  'className' | 'style' | 'children' | 'onDrop'
+> {
   /** Controlled file list (progress is up to the caller). */
   files?: UploadFile[];
   /** Called with newly picked / dropped files. */
@@ -202,7 +238,12 @@ export function FileUpload({
     if (files === undefined) {
       setOwn((cur) => [
         ...(multiple ? cur : []),
-        ...fs.map((f, i) => ({ id: `${uid}-${Date.now()}-${i}`, name: f.name, size: f.size, progress: 100 })),
+        ...fs.map((f, i) => ({
+          id: `${uid}-${Date.now()}-${i}`,
+          name: f.name,
+          size: f.size,
+          progress: 100,
+        })),
       ]);
     }
     onFilesAdded?.(fs);
@@ -215,11 +256,18 @@ export function FileUpload({
   const matches = (f: File) =>
     !accept ||
     accept.some((a) =>
-      a.startsWith('.') ? f.name.toLowerCase().endsWith(a.toLowerCase()) : a.endsWith('/*') ? f.type.startsWith(a.slice(0, -1)) : f.type === a,
+      a.startsWith('.')
+        ? f.name.toLowerCase().endsWith(a.toLowerCase())
+        : a.endsWith('/*')
+          ? f.type.startsWith(a.slice(0, -1))
+          : f.type === a,
     );
 
   return (
-    <div {...stylex.props(styles.root, xstyle)} className={cx(stylex.props(styles.root, xstyle).className, className)}>
+    <div
+      {...stylex.props(styles.root, xstyle)}
+      className={cx(stylex.props(styles.root, xstyle).className, className)}
+    >
       <DropZone
         {...rest}
         ref={ref}
@@ -267,7 +315,10 @@ export function FileUpload({
                 <span {...stylex.props(styles.meta)}>
                   <span {...stylex.props(styles.name)}>{f.name}</span>
                   <span {...stylex.props(f.error ? ff.error : ff.description, ff.tabular)}>
-                    {f.error ?? (done ? formatBytes(f.size) : `${formatBytes(f.size)} · ${Math.round(f.progress)}%`)}
+                    {f.error ??
+                      (done
+                        ? formatBytes(f.size)
+                        : `${formatBytes(f.size)} · ${Math.round(f.progress)}%`)}
                   </span>
                 </span>
                 {f.error ? (
@@ -277,7 +328,11 @@ export function FileUpload({
                 ) : (
                   <ProgressRing value={f.progress} label={`Uploading ${f.name}`} />
                 )}
-                <Button aria-label={`Remove ${f.name}`} onPress={() => remove(f.id)} {...stylex.props(fp.iconButton)}>
+                <Button
+                  aria-label={`Remove ${f.name}`}
+                  onPress={() => remove(f.id)}
+                  {...stylex.props(fp.iconButton)}
+                >
                   <X size={14} aria-hidden="true" />
                 </Button>
               </li>

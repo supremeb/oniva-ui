@@ -15,31 +15,33 @@ import { formatDuration } from '../../internal/ai-motion';
 import { TextShimmer } from '../TextShimmer';
 
 const styles = stylex.create({
-  root: { fontFamily: font.sans },
+  root: { fontFamily: font['--oniva-font-sans'] },
   trigger: {
     borderRadius: 8,
-    color: colors.textMuted,
-    paddingBlock: 4,
+    color: colors['--oniva-color-text-muted'],
+    paddingBlock: 2,
     width: 'auto',
   },
-  elapsed: { fontVariantNumeric: 'tabular-nums', fontWeight: font.weightRegular },
+  elapsed: { fontVariantNumeric: 'tabular-nums', fontWeight: font['--oniva-font-weight-regular'] },
   panel: {
-    borderInlineStartColor: colors.border,
+    borderInlineStartColor: colors['--oniva-color-border'],
     borderInlineStartStyle: 'solid',
     borderInlineStartWidth: 2,
-    color: colors.textMuted,
-    fontSize: font.size13,
-    lineHeight: font.lh13,
-    marginBlockStart: 4,
+    color: colors['--oniva-color-text-muted'],
+    fontSize: font['--oniva-font-size-13'],
+    lineHeight: font['--oniva-font-lh-13'],
+    marginBlockStart: 2,
     marginInlineStart: 9,
-    paddingBlock: 4,
+    paddingBlock: 2,
     paddingInlineStart: 14,
-    whiteSpace: 'pre-wrap',
+    whiteSpace: 'pre-line',
   },
 });
 
-export interface AgentThinkingProps
-  extends Omit<DisclosureProps, 'className' | 'style' | 'children'> {
+export interface AgentThinkingProps extends Omit<
+  DisclosureProps,
+  'className' | 'style' | 'children'
+> {
   /** Still reasoning: shows the shimmer label and a live timer. */
   isThinking?: boolean;
   /** Elapsed seconds. Omit to let the component count up while `isThinking`. */
@@ -70,11 +72,7 @@ export function AgentThinking({
   const elapsed = seconds ?? auto;
   const sx = stylex.props(styles.root, xstyle);
   return (
-    <Disclosure
-      {...rest}
-      ref={ref}
-      className={[sx.className, className].filter(Boolean).join(' ')}
-    >
+    <Disclosure {...rest} ref={ref} className={[sx.className, className].filter(Boolean).join(' ')}>
       {({ isExpanded }) => (
         <>
           <Heading level={3} {...stylex.props(aiStyles.heading)}>
@@ -88,7 +86,9 @@ export function AgentThinking({
               ) : (
                 <span>Thought for {formatDuration(elapsed)}</span>
               )}
-              {isThinking && <span {...stylex.props(styles.elapsed)}>{formatDuration(elapsed)}</span>}
+              {isThinking && (
+                <span {...stylex.props(styles.elapsed)}>{formatDuration(elapsed)}</span>
+              )}
               <ChevronRight
                 size={14}
                 aria-hidden="true"
@@ -97,7 +97,9 @@ export function AgentThinking({
             </AriaButton>
           </Heading>
           <DisclosurePanel>
-            <div {...stylex.props(styles.panel)}>{children}</div>
+            <div {...stylex.props(styles.panel)}>
+              {typeof children === 'string' ? children.trim() : children}
+            </div>
           </DisclosurePanel>
         </>
       )}

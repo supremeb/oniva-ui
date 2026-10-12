@@ -24,41 +24,41 @@ const styles = stylex.create({
   itemsCards: { gap: 8 },
   radio: {
     alignItems: 'flex-start',
-    color: colors.text,
+    color: colors['--oniva-color-text'],
     cursor: 'pointer',
     display: 'flex',
-    fontFamily: font.sans,
-    fontSize: font.size14,
-    fontWeight: font.weightMedium,
+    fontFamily: font['--oniva-font-sans'],
+    fontSize: font['--oniva-font-size-14'],
+    fontWeight: font['--oniva-font-weight-medium'],
     gap: 10,
-    lineHeight: font.lh14,
+    lineHeight: font['--oniva-font-lh-14'],
   },
   disabled: { cursor: 'not-allowed', opacity: 0.5 },
   dot: {
-    backgroundColor: colors.surface,
-    borderColor: colors.borderControl,
-    borderRadius: radius.full,
+    backgroundColor: colors['--oniva-color-surface'],
+    borderColor: colors['--oniva-color-border-control'],
+    borderRadius: radius['--oniva-radius-full'],
     borderStyle: 'solid',
     borderWidth: 1,
-    boxShadow: shadow.xs,
+    boxShadow: shadow['--oniva-shadow-xs'],
     boxSizing: 'border-box',
     flexShrink: 0,
     height: 16,
     marginTop: 2,
     position: 'relative',
-    transitionDuration: motion.durBase,
+    transitionDuration: motion['--oniva-motion-dur-base'],
     transitionProperty: 'border-color, background-color, box-shadow',
     width: 16,
   },
-  dotHover: { borderColor: colors.borderActive },
+  dotHover: { borderColor: colors['--oniva-color-border-active'] },
   dotOn: {
-    backgroundImage: `linear-gradient(180deg, ${accent.accent500}, ${accent.accent600})`,
+    backgroundImage: `linear-gradient(180deg, ${accent['--oniva-accent-500']}, ${accent['--oniva-accent-600']})`,
     borderColor: 'transparent',
-    boxShadow: shadow.accentInset,
+    boxShadow: shadow['--oniva-shadow-accent-inset'],
   },
   pip: {
-    backgroundColor: colors.accentFg,
-    borderRadius: radius.full,
+    backgroundColor: colors['--oniva-color-accent-fg'],
+    borderRadius: radius['--oniva-radius-full'],
     height: 6,
     insetBlockStart: 4,
     insetInlineStart: 4,
@@ -66,22 +66,29 @@ const styles = stylex.create({
     width: 6,
   },
   text: { display: 'flex', flexDirection: 'column', gap: 2 },
-  desc: { fontWeight: font.weightRegular },
+  desc: { fontWeight: font['--oniva-font-weight-regular'] },
   card: {
-    backgroundColor: colors.surface,
-    borderColor: colors.border,
-    borderRadius: radius.lg,
+    backgroundColor: colors['--oniva-color-surface'],
+    borderColor: colors['--oniva-color-border'],
+    borderRadius: radius['--oniva-radius-lg'],
     borderStyle: 'solid',
     borderWidth: 1,
-    boxShadow: shadow.xs,
+    boxShadow: shadow['--oniva-shadow-xs'],
     boxSizing: 'border-box',
     padding: 12,
-    transitionDuration: motion.durBase,
+    transitionDuration: motion['--oniva-motion-dur-base'],
     transitionProperty: 'border-color, background-color, box-shadow',
   },
-  cardHover: { borderColor: colors.borderHover },
-  cardOn: { backgroundColor: colors.accentTint, borderColor: colors.focusRing },
-  cardTrail: { fontVariantNumeric: 'tabular-nums', marginInlineStart: 'auto', fontWeight: font.weightSemibold },
+  cardHover: { borderColor: colors['--oniva-color-border-hover'] },
+  cardOn: {
+    backgroundColor: colors['--oniva-color-accent-tint'],
+    borderColor: colors['--oniva-color-focus-ring'],
+  },
+  cardTrail: {
+    fontVariantNumeric: 'tabular-nums',
+    marginInlineStart: 'auto',
+    fontWeight: font['--oniva-font-weight-semibold'],
+  },
 });
 
 export interface RadioProps extends Omit<AriaRadioProps, 'className' | 'style' | 'children'> {
@@ -152,7 +159,10 @@ export function Radio({
   );
 }
 
-export interface RadioGroupProps extends Omit<AriaRadioGroupProps, 'className' | 'style' | 'children'> {
+export interface RadioGroupProps extends Omit<
+  AriaRadioGroupProps,
+  'className' | 'style' | 'children'
+> {
   label?: ReactNode;
   description?: ReactNode;
   errorMessage?: string | ((v: ValidationResult) => string);

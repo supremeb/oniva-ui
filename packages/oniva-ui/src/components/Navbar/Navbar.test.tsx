@@ -6,7 +6,9 @@ describe('Navbar', () => {
   it('renders banner, labelled nav, links, brand and end slot', () => {
     render(
       <Navbar brand="Oniva" end={<button>Sign in</button>} aria-label="Primary" className="x">
-        <NavbarLink href="#a" isActive>Dashboard</NavbarLink>
+        <NavbarLink href="#a" isActive>
+          Dashboard
+        </NavbarLink>
         <NavbarLink href="#b">Reports</NavbarLink>
       </Navbar>,
     );
@@ -20,7 +22,11 @@ describe('Navbar', () => {
   it('floating variant changes classes', () => {
     const { rerender } = render(<Navbar>x</Navbar>);
     const a = screen.getByRole('banner').className;
-    rerender(<Navbar floating sticky>x</Navbar>);
+    rerender(
+      <Navbar floating sticky>
+        x
+      </Navbar>,
+    );
     expect(screen.getByRole('banner').className).not.toBe(a);
   });
 });

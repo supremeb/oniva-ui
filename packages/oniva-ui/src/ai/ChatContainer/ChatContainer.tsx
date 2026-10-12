@@ -1,6 +1,14 @@
 import * as stylex from '@stylexjs/stylex';
 import { ArrowDown } from 'lucide-react';
-import { useCallback, useEffect, useRef, useState, type HTMLAttributes, type ReactNode, type Ref } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type HTMLAttributes,
+  type ReactNode,
+  type Ref,
+} from 'react';
 import { colors } from '../../tokens/colors.stylex';
 import { motion } from '../../tokens/motion.stylex';
 import { shadow } from '../../tokens/shadow.stylex';
@@ -22,9 +30,9 @@ const styles = stylex.create({
     insetInlineStart: '50%',
     position: 'absolute',
     transform: 'translateX(-50%)',
-    transitionDuration: motion.durBase,
+    transitionDuration: motion['--oniva-motion-dur-base'],
   },
-  btn: { backgroundColor: colors.surface, boxShadow: shadow.md },
+  btn: { backgroundColor: colors['--oniva-color-surface'], boxShadow: shadow['--oniva-shadow-md'] },
 });
 
 export interface ScrollToBottomButtonProps {
@@ -36,7 +44,13 @@ export interface ScrollToBottomButtonProps {
 export function ScrollToBottomButton({ onPress, xstyle }: ScrollToBottomButtonProps) {
   return (
     <div {...stylex.props(styles.float)}>
-      <IconButton variant="secondary" size="sm" aria-label="Scroll to bottom" onPress={onPress} xstyle={[styles.btn, xstyle]}>
+      <IconButton
+        variant="secondary"
+        size="sm"
+        aria-label="Scroll to bottom"
+        onPress={onPress}
+        xstyle={[styles.btn, xstyle]}
+      >
         <ArrowDown size={16} aria-hidden="true" />
       </IconButton>
     </div>
@@ -52,7 +66,14 @@ export interface ChatContainerProps extends Omit<HTMLAttributes<HTMLDivElement>,
 }
 
 /** Scrollable message log that sticks to the bottom as content grows and shows a jump button when you scroll away. */
-export function ChatContainer({ children, threshold = 48, className, xstyle, ref, ...rest }: ChatContainerProps) {
+export function ChatContainer({
+  children,
+  threshold = 48,
+  className,
+  xstyle,
+  ref,
+  ...rest
+}: ChatContainerProps) {
   const scroller = useRef<HTMLDivElement>(null);
   const content = useRef<HTMLDivElement>(null);
   const stuck = useRef(true);
@@ -61,7 +82,14 @@ export function ChatContainer({ children, threshold = 48, className, xstyle, ref
   const toBottom = useCallback((smooth = true) => {
     const el = scroller.current;
     if (!el) return;
-    if (typeof el.scrollTo === 'function') el.scrollTo({ top: el.scrollHeight, behavior: smooth && !window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ? 'smooth' : 'auto' });
+    if (typeof el.scrollTo === 'function')
+      el.scrollTo({
+        top: el.scrollHeight,
+        behavior:
+          smooth && !window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+            ? 'smooth'
+            : 'auto',
+      });
     else el.scrollTop = el.scrollHeight;
   }, []);
 

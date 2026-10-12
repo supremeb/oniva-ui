@@ -9,17 +9,17 @@ const styles = stylex.create({
     borderWidth: 0,
     display: 'flex',
     flexDirection: 'column',
-    fontFamily: font.sans,
+    fontFamily: font['--oniva-font-sans'],
     gap: 16,
     margin: 0,
     minWidth: 0,
     padding: 0,
   },
   legend: {
-    color: colors.text,
-    fontSize: font.size16,
-    fontWeight: font.weightSemibold,
-    lineHeight: font.lh16,
+    color: colors['--oniva-color-text'],
+    fontSize: font['--oniva-font-size-16'],
+    fontWeight: font['--oniva-font-weight-semibold'],
+    lineHeight: font['--oniva-font-lh-16'],
     padding: 0,
   },
   desc: { margin: 0, marginBlockStart: -12 },
@@ -32,14 +32,20 @@ export interface FieldsetProps extends Omit<FieldsetHTMLAttributes<HTMLFieldSetE
   ref?: Ref<HTMLFieldSetElement>;
 }
 
-export function Fieldset({ legend, description, children, className, xstyle, ref, ...rest }: FieldsetProps) {
+export function Fieldset({
+  legend,
+  description,
+  children,
+  className,
+  xstyle,
+  ref,
+  ...rest
+}: FieldsetProps) {
   const sx = stylex.props(styles.root, xstyle);
   return (
     <fieldset {...rest} ref={ref} className={cx(sx.className, className)}>
       {legend != null && <legend {...stylex.props(styles.legend)}>{legend}</legend>}
-      {description != null && (
-        <p {...stylex.props(ff.description, styles.desc)}>{description}</p>
-      )}
+      {description != null && <p {...stylex.props(ff.description, styles.desc)}>{description}</p>}
       {children}
     </fieldset>
   );

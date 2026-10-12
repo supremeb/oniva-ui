@@ -1,4 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
+import { media } from '../../tokens/media.stylex';
 import type { HTMLAttributes, ReactNode, Ref } from 'react';
 import { colors } from '../../tokens/colors.stylex';
 import { radius } from '../../tokens/radius.stylex';
@@ -16,7 +17,7 @@ const breathe = stylex.keyframes({
 
 const styles = stylex.create({
   root: {
-    borderRadius: radius.card,
+    borderRadius: radius['--oniva-radius-card'],
     boxSizing: 'border-box',
     isolation: 'isolate',
     padding: 1.5,
@@ -29,24 +30,24 @@ const styles = stylex.create({
     pointerEvents: 'none',
     position: 'absolute',
   },
-  ring: { backgroundColor: colors.border },
+  ring: { backgroundColor: colors['--oniva-color-border'] },
   glow: {
     animationDuration: '2400ms',
     animationIterationCount: 'infinite',
-    animationName: { default: breathe, '@media (prefers-reduced-motion: reduce)': 'none' },
+    animationName: { default: breathe, [media.reducedMotion]: 'none' },
     filter: 'blur(10px)',
     inset: -2,
-    opacity: { default: 0.45, '@media (prefers-reduced-motion: reduce)': 0.3 },
+    opacity: { default: 0.45, [media.reducedMotion]: 0.3 },
     zIndex: -1,
   },
   orbit: {
     // A square far larger than the box so the rotating wedge always sweeps the full perimeter.
     animationDuration: '3200ms',
     animationIterationCount: 'infinite',
-    animationName: { default: orbit, '@media (prefers-reduced-motion: reduce)': 'none' },
+    animationName: { default: orbit, [media.reducedMotion]: 'none' },
     animationTimingFunction: 'linear',
     aspectRatio: '1 / 1',
-    backgroundImage: `conic-gradient(from 0deg, transparent 0deg, transparent 230deg, ${colors.chart4} 285deg, ${colors.chart5} 325deg, ${colors.chart3} 350deg, transparent 360deg)`,
+    backgroundImage: `conic-gradient(from 0deg, transparent 0deg, transparent 230deg, ${colors['--oniva-color-chart-4']} 285deg, ${colors['--oniva-color-chart-5']} 325deg, ${colors['--oniva-color-chart-3']} 350deg, transparent 360deg)`,
     insetBlockStart: '50%',
     insetInlineStart: '50%',
     position: 'absolute',
@@ -54,7 +55,7 @@ const styles = stylex.create({
     width: '240%',
   },
   inner: {
-    backgroundColor: colors.surface,
+    backgroundColor: colors['--oniva-color-surface'],
     borderRadius: 'inherit',
     position: 'relative',
   },
@@ -72,7 +73,14 @@ export interface ComposerLoaderProps extends Omit<HTMLAttributes<HTMLDivElement>
  * Wraps a composer with a light that orbits its border while the agent works.
  * Pure CSS (rotating conic-gradient behind an inset surface); static under reduced motion.
  */
-export function ComposerLoader({ active = true, children, className, xstyle, ref, ...rest }: ComposerLoaderProps) {
+export function ComposerLoader({
+  active = true,
+  children,
+  className,
+  xstyle,
+  ref,
+  ...rest
+}: ComposerLoaderProps) {
   const sx = stylex.props(styles.root, xstyle);
   return (
     <div {...rest} ref={ref} data-active={active || undefined} {...mergeSx(sx, className)}>

@@ -38,7 +38,7 @@ const segments: StageSegment[] = plan.map(([stage, len]) => {
 
 const demo: DemoModule = {
   meta: {
-    title: 'StageBars',
+    title: 'Stage bars',
     slug: 'stage-bars',
     category: 'Charts',
     description:

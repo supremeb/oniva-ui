@@ -37,7 +37,7 @@ function Single() {
 
 const demo: DemoModule = {
   meta: {
-    title: 'List Box',
+    title: 'List box',
     slug: 'list-box',
     category: 'Data display',
     description:

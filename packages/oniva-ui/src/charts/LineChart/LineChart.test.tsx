@@ -12,7 +12,7 @@ describe('LineChart', () => {
   it('renders one dot per point and one path per series', () => {
     const { container } = render(<LineChart data={tokenUsage} index="day" series={series} />);
     expect(container.querySelectorAll('circle')).toHaveLength(tokenUsage.length * series.length);
-    expect(screen.getByRole('img')).toHaveAttribute(
+    expect(screen.getByRole('group')).toHaveAttribute(
       'aria-label',
       expect.stringContaining('Line chart'),
     );

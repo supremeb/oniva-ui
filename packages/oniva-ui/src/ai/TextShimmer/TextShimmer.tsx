@@ -1,4 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
+import { media } from '../../tokens/media.stylex';
 import type { HTMLAttributes, ReactNode, Ref } from 'react';
 import { colors } from '../../tokens/colors.stylex';
 import { mergeSx } from '../../internal/sx';
@@ -14,24 +15,24 @@ const styles = stylex.create({
     animationIterationCount: 'infinite',
     animationName: {
       default: sweep,
-      '@media (prefers-reduced-motion: reduce)': 'none',
+      [media.reducedMotion]: 'none',
     },
     animationTimingFunction: 'linear',
     backgroundClip: 'text',
     backgroundImage: {
-      default: `linear-gradient(100deg, ${colors.textMuted} 0%, ${colors.textMuted} 38%, ${colors.text} 50%, ${colors.textMuted} 62%, ${colors.textMuted} 100%)`,
-      '@media (prefers-reduced-motion: reduce)': 'none',
+      default: `linear-gradient(100deg, ${colors['--oniva-color-text-muted']} 0%, ${colors['--oniva-color-text-muted']} 38%, ${colors['--oniva-color-text']} 50%, ${colors['--oniva-color-text-muted']} 62%, ${colors['--oniva-color-text-muted']} 100%)`,
+      [media.reducedMotion]: 'none',
     },
     backgroundSize: '250% 100%',
     color: {
       default: 'transparent',
-      '@media (prefers-reduced-motion: reduce)': colors.textMuted,
+      [media.reducedMotion]: colors['--oniva-color-text-muted'],
     },
     display: 'inline-block',
     WebkitBackgroundClip: 'text',
     WebkitTextFillColor: {
       default: 'transparent',
-      '@media (prefers-reduced-motion: reduce)': colors.textMuted,
+      [media.reducedMotion]: colors['--oniva-color-text-muted'],
     },
   },
 });

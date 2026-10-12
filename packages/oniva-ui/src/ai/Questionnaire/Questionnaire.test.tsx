@@ -3,8 +3,23 @@ import { describe, expect, it, vi } from 'vitest';
 import { Questionnaire } from './Questionnaire';
 
 const questions = [
-  { id: 'scope', prompt: 'Which period?', options: [{ id: 'q3', label: 'Q3 only' }, { id: 'ytd', label: 'Year to date' }] },
-  { id: 'cuts', prompt: 'Break down by', multiple: true, options: [{ id: 'seg', label: 'Segment' }, { id: 'reg', label: 'Region' }] },
+  {
+    id: 'scope',
+    prompt: 'Which period?',
+    options: [
+      { id: 'q3', label: 'Q3 only' },
+      { id: 'ytd', label: 'Year to date' },
+    ],
+  },
+  {
+    id: 'cuts',
+    prompt: 'Break down by',
+    multiple: true,
+    options: [
+      { id: 'seg', label: 'Segment' },
+      { id: 'reg', label: 'Region' },
+    ],
+  },
 ];
 
 describe('Questionnaire', () => {

@@ -11,19 +11,19 @@ import { mergeSx } from '../../internal/sx';
 
 const styles = stylex.create({
   root: {
-    backgroundColor: colors.surfaceInset,
-    borderColor: colors.border,
-    borderRadius: radius.xl,
+    backgroundColor: colors['--oniva-color-surface-inset'],
+    borderColor: colors['--oniva-color-border'],
+    borderRadius: radius['--oniva-radius-xl'],
     borderStyle: 'solid',
     borderWidth: 1,
-    boxShadow: shadow.card,
+    boxShadow: shadow['--oniva-shadow-card'],
     boxSizing: 'border-box',
-    fontFamily: font.sans,
+    fontFamily: font['--oniva-font-sans'],
     overflow: 'hidden',
   },
   header: {
     alignItems: 'center',
-    borderBottomColor: colors.border,
+    borderBottomColor: colors['--oniva-color-border'],
     borderBottomStyle: 'solid',
     borderBottomWidth: 1,
     boxSizing: 'border-box',
@@ -33,48 +33,48 @@ const styles = stylex.create({
     paddingInline: 12,
   },
   filename: {
-    color: colors.text,
-    fontSize: font.size12,
-    fontWeight: font.weightMedium,
+    color: colors['--oniva-color-text'],
+    fontSize: font['--oniva-font-size-12'],
+    fontWeight: font['--oniva-font-weight-medium'],
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
   },
   lang: {
-    color: colors.textMuted,
-    fontFamily: font.mono,
-    fontSize: font.size11,
-    letterSpacing: font.trackLabel,
+    color: colors['--oniva-color-text-muted'],
+    fontFamily: font['--oniva-font-mono'],
+    fontSize: font['--oniva-font-size-11'],
+    letterSpacing: font['--oniva-font-track-label'],
     marginInlineStart: 'auto',
     textTransform: 'uppercase',
   },
   copy: {
     alignItems: 'center',
     appearance: 'none',
-    backgroundColor: { default: 'transparent', ':hover': colors.surfaceTertiary },
-    borderRadius: radius.sm,
+    backgroundColor: { default: 'transparent', ':hover': colors['--oniva-color-surface-tertiary'] },
+    borderRadius: radius['--oniva-radius-sm'],
     borderWidth: 0,
-    color: colors.iconMuted,
+    color: colors['--oniva-color-icon-muted'],
     cursor: 'pointer',
     display: 'inline-flex',
     flexShrink: 0,
     height: 24,
     justifyContent: 'center',
-    outlineColor: colors.focusRing,
+    outlineColor: colors['--oniva-color-focus-ring'],
     outlineOffset: 1,
     outlineStyle: { default: 'none', ':focus-visible': 'solid' },
     outlineWidth: 2,
-    transitionDuration: motion.durBase,
+    transitionDuration: motion['--oniva-motion-dur-base'],
     transitionProperty: 'background-color, color',
     width: 24,
   },
-  copied: { color: colors.successSolid },
+  copied: { color: colors['--oniva-color-success-solid'] },
   pre: {
     boxSizing: 'border-box',
-    color: colors.text,
-    fontFamily: font.mono,
-    fontSize: font.size13,
-    lineHeight: font.lh13,
+    color: colors['--oniva-color-text'],
+    fontFamily: font['--oniva-font-mono'],
+    fontSize: font['--oniva-font-size-13'],
+    lineHeight: font['--oniva-font-lh-13'],
     margin: 0,
     maxHeight: 420,
     overflow: 'auto',
@@ -95,7 +95,15 @@ export interface CodeBlockProps extends Omit<HTMLAttributes<HTMLDivElement>, 'st
 }
 
 /** Monospace code panel with a filename/language header and a copy button. */
-export function CodeBlock({ code, language, filename, className, xstyle, ref, ...rest }: CodeBlockProps) {
+export function CodeBlock({
+  code,
+  language,
+  filename,
+  className,
+  xstyle,
+  ref,
+  ...rest
+}: CodeBlockProps) {
   const [copied, setCopied] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   useEffect(

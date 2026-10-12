@@ -1,4 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
+import { focus } from '../../internal/focus';
 import { Button as AriaButton } from 'react-aria-components';
 import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState, type CSSProperties, type Ref } from 'react';
@@ -15,69 +16,96 @@ const styles = stylex.create({
     alignItems: 'center',
     boxSizing: 'border-box',
     display: 'flex',
-    fontFamily: font.sans,
-    fontSize: font.size14,
+    fontFamily: font['--oniva-font-sans'],
+    fontSize: font['--oniva-font-size-14'],
     gap: 4,
   },
   footer: { justifyContent: 'space-between', width: '100%' },
-  summary: { color: colors.textMuted, fontVariantNumeric: 'tabular-nums' },
+  summary: { color: colors['--oniva-color-text-muted'], fontVariantNumeric: 'tabular-nums' },
   list: { alignItems: 'center', display: 'flex', gap: 4, listStyle: 'none', margin: 0, padding: 0 },
   btn: {
     alignItems: 'center',
     appearance: 'none',
-    backgroundColor: { default: 'transparent', ':hover': colors.surfaceInsetHover },
+    backgroundColor: {
+      default: 'transparent',
+      ':hover': colors['--oniva-color-surface-inset-hover'],
+    },
     borderColor: 'transparent',
-    borderRadius: radius.lg,
+    borderRadius: radius['--oniva-radius-lg'],
     borderStyle: 'solid',
     borderWidth: 1,
     boxSizing: 'border-box',
-    color: { default: colors.textMuted, ':hover': colors.text, ':disabled': colors.textDisabled },
+    color: {
+      default: colors['--oniva-color-text-muted'],
+      ':hover': colors['--oniva-color-text'],
+      ':disabled': colors['--oniva-color-text-disabled'],
+    },
     cursor: { default: 'pointer', ':disabled': 'not-allowed' },
     display: 'inline-flex',
-    fontFamily: font.sans,
-    fontSize: font.size14,
+    fontFamily: font['--oniva-font-sans'],
+    fontSize: font['--oniva-font-size-14'],
     fontVariantNumeric: 'tabular-nums',
-    fontWeight: font.weightMedium,
+    fontWeight: font['--oniva-font-weight-medium'],
     gap: 6,
     height: 32,
     justifyContent: 'center',
     minWidth: 32,
-    outlineColor: colors.focusRing,
-    outlineOffset: 2,
-    outlineStyle: { default: 'none', ':focus-visible': 'solid' },
-    outlineWidth: 2,
     paddingInline: 8,
-    transitionDuration: motion.durBase,
+    transitionDuration: motion['--oniva-motion-dur-base'],
     transitionProperty: 'background-color, color, box-shadow',
-    transitionTimingFunction: motion.easeStandard,
+    transitionTimingFunction: motion['--oniva-motion-ease-standard'],
   },
   outline: {
-    backgroundColor: { default: colors.surface, ':hover': colors.surfaceHover, ':disabled': colors.surface },
-    borderColor: colors.border,
-    boxShadow: shadow.xs,
-    color: { default: colors.text, ':disabled': colors.textDisabled },
+    backgroundColor: {
+      default: colors['--oniva-color-surface'],
+      ':hover': colors['--oniva-color-surface-hover'],
+      ':disabled': colors['--oniva-color-surface'],
+    },
+    borderColor: colors['--oniva-color-border'],
+    boxShadow: shadow['--oniva-shadow-xs'],
+    color: {
+      default: colors['--oniva-color-text'],
+      ':disabled': colors['--oniva-color-text-disabled'],
+    },
     paddingInline: 12,
   },
   current: {
-    backgroundColor: { default: colors.surface, ':hover': colors.surface },
-    borderColor: colors.border,
-    boxShadow: shadow.sm,
-    color: colors.text,
+    backgroundColor: {
+      default: colors['--oniva-color-surface'],
+      ':hover': colors['--oniva-color-surface'],
+    },
+    borderColor: colors['--oniva-color-border'],
+    boxShadow: shadow['--oniva-shadow-sm'],
+    color: colors['--oniva-color-text'],
   },
   currentAccent: {
     backgroundColor: { default: 'transparent', ':hover': 'transparent' },
-    backgroundImage: `linear-gradient(180deg, ${accent.accent500}, ${accent.accent600})`,
+    backgroundImage: `linear-gradient(180deg, ${accent['--oniva-accent-500']}, ${accent['--oniva-accent-600']})`,
     borderColor: 'transparent',
-    boxShadow: shadow.accentInset,
-    color: { default: colors.accentFg, ':hover': colors.accentFg },
+    boxShadow: shadow['--oniva-shadow-accent-inset'],
+    color: {
+      default: colors['--oniva-color-accent-fg'],
+      ':hover': colors['--oniva-color-accent-fg'],
+    },
   },
-  ellipsis: { alignItems: 'center', color: colors.textSubtle, display: 'inline-flex', height: 32, justifyContent: 'center', minWidth: 24 },
+  ellipsis: {
+    alignItems: 'center',
+    color: colors['--oniva-color-text-subtle'],
+    display: 'inline-flex',
+    height: 32,
+    justifyContent: 'center',
+    minWidth: 24,
+  },
 });
 
 export type PaginationItem = number | 'ellipsis-start' | 'ellipsis-end';
 
 /** Pages to render: always first/last, `siblings` around the current page, ellipses for gaps. */
-export function getPaginationRange(page: number, pageCount: number, siblings = 1): PaginationItem[] {
+export function getPaginationRange(
+  page: number,
+  pageCount: number,
+  siblings = 1,
+): PaginationItem[] {
   const total = siblings * 2 + 5;
   if (pageCount <= total) return Array.from({ length: pageCount }, (_, i) => i + 1);
   const left = Math.max(page - siblings, 1);
@@ -89,9 +117,19 @@ export function getPaginationRange(page: number, pageCount: number, siblings = 1
     return [...Array.from({ length: span }, (_, i) => i + 1), 'ellipsis-end', pageCount];
   }
   if (showLeft && !showRight) {
-    return [1, 'ellipsis-start', ...Array.from({ length: span }, (_, i) => pageCount - span + 1 + i)];
+    return [
+      1,
+      'ellipsis-start',
+      ...Array.from({ length: span }, (_, i) => pageCount - span + 1 + i),
+    ];
   }
-  return [1, 'ellipsis-start', ...Array.from({ length: right - left + 1 }, (_, i) => left + i), 'ellipsis-end', pageCount];
+  return [
+    1,
+    'ellipsis-start',
+    ...Array.from({ length: right - left + 1 }, (_, i) => left + i),
+    'ellipsis-end',
+    pageCount,
+  ];
 }
 
 export interface PaginationProps {
@@ -145,11 +183,19 @@ export function Pagination({
       <nav ref={ref} aria-label={ariaLabel} {...mergeSx(sx, className, style)}>
         <span {...stylex.props(styles.summary)}>{summary ?? `Page ${page} of ${pageCount}`}</span>
         <div {...stylex.props(styles.list)}>
-          <AriaButton isDisabled={page <= 1} onPress={() => go(page - 1)} {...stylex.props(styles.btn, styles.outline)}>
+          <AriaButton
+            isDisabled={page <= 1}
+            onPress={() => go(page - 1)}
+            {...stylex.props(styles.btn, focus.ring, styles.outline)}
+          >
             <ArrowLeft size={14} />
             Previous
           </AriaButton>
-          <AriaButton isDisabled={page >= pageCount} onPress={() => go(page + 1)} {...stylex.props(styles.btn, styles.outline)}>
+          <AriaButton
+            isDisabled={page >= pageCount}
+            onPress={() => go(page + 1)}
+            {...stylex.props(styles.btn, focus.ring, styles.outline)}
+          >
             Next
             <ArrowRight size={14} />
           </AriaButton>
@@ -163,7 +209,12 @@ export function Pagination({
     <nav ref={ref} aria-label={ariaLabel} {...mergeSx(sx, className, style)}>
       <ul {...stylex.props(styles.list)}>
         <li>
-          <AriaButton aria-label="Previous page" isDisabled={page <= 1} onPress={() => go(page - 1)} {...stylex.props(styles.btn)}>
+          <AriaButton
+            aria-label="Previous page"
+            isDisabled={page <= 1}
+            onPress={() => go(page - 1)}
+            {...stylex.props(styles.btn, focus.ring)}
+          >
             <ChevronLeft size={16} />
           </AriaButton>
         </li>
@@ -174,7 +225,11 @@ export function Pagination({
                 aria-label={`Page ${item}`}
                 aria-current={item === page ? 'page' : undefined}
                 onPress={() => go(item)}
-                {...stylex.props(styles.btn, item === page && (accentCurrent ? styles.currentAccent : styles.current))}
+                {...stylex.props(
+                  styles.btn,
+                  focus.ring,
+                  item === page && (accentCurrent ? styles.currentAccent : styles.current),
+                )}
               >
                 {item}
               </AriaButton>
@@ -186,7 +241,12 @@ export function Pagination({
           </li>
         ))}
         <li>
-          <AriaButton aria-label="Next page" isDisabled={page >= pageCount} onPress={() => go(page + 1)} {...stylex.props(styles.btn)}>
+          <AriaButton
+            aria-label="Next page"
+            isDisabled={page >= pageCount}
+            onPress={() => go(page + 1)}
+            {...stylex.props(styles.btn, focus.ring)}
+          >
             <ChevronRight size={16} />
           </AriaButton>
         </li>

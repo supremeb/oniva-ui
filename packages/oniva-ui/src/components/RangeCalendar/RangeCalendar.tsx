@@ -8,8 +8,10 @@ import type { Ref } from 'react';
 import { cx } from '../../internal/forms-field';
 import { CalendarBody, fc } from '../../internal/forms-calendar';
 
-export interface RangeCalendarProps<T extends DateValue>
-  extends Omit<AriaRangeCalendarProps<T>, 'className' | 'style' | 'children'> {
+export interface RangeCalendarProps<T extends DateValue> extends Omit<
+  AriaRangeCalendarProps<T>,
+  'className' | 'style' | 'children'
+> {
   bordered?: boolean;
   className?: string;
   xstyle?: stylex.StyleXStyles;

@@ -1,6 +1,13 @@
 import * as stylex from '@stylexjs/stylex';
 import type { Ref } from 'react';
-import { Card, CardHeader, CardHeaderText, CardTitle, CardDescription, Tile } from '../../components/Card';
+import {
+  Card,
+  CardHeader,
+  CardHeaderText,
+  CardTitle,
+  CardDescription,
+  Tile,
+} from '../../components/Card';
 import { FileUpload, formatBytes, type UploadFile } from '../../components/FileUpload';
 import { ProgressBar } from '../../components/ProgressBar';
 

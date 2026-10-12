@@ -13,15 +13,19 @@ const styles = stylex.create({
   left: { display: 'flex', flexDirection: 'column', gap: 8, minWidth: 0 },
   icon: {
     alignItems: 'center',
-    backgroundColor: colors.surfaceInset,
-    borderRadius: radius.md,
-    color: colors.iconMuted,
+    backgroundColor: colors['--oniva-color-surface-inset'],
+    borderRadius: radius['--oniva-radius-md'],
+    color: colors['--oniva-color-icon-muted'],
     display: 'inline-flex',
     height: 28,
     justifyContent: 'center',
     width: 28,
   },
-  hint: { color: colors.textMuted, fontSize: font.size12, lineHeight: font.lh12 },
+  hint: {
+    color: colors['--oniva-color-text-muted'],
+    fontSize: font['--oniva-font-size-12'],
+    lineHeight: font['--oniva-font-lh-12'],
+  },
   deltaRow: { alignItems: 'center', display: 'flex', gap: 8 },
 });
 

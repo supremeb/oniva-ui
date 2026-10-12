@@ -8,7 +8,7 @@ const reasoning = `The user wants Q3 revenue by segment.
 
 const demo: DemoModule = {
   meta: {
-    title: 'Agent Thinking',
+    title: 'Agent thinking',
     slug: 'agent-thinking',
     category: 'AI & Agent',
     description: 'Collapsible reasoning block with a shimmering label and elapsed time.',

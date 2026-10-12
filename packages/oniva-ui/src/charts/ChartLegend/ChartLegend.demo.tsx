@@ -3,7 +3,7 @@ import { ChartLegend } from './ChartLegend';
 
 const demo: DemoModule = {
   meta: {
-    title: 'ChartLegend',
+    title: 'Chart legend',
     slug: 'chart-legend',
     category: 'Charts',
     description:

@@ -23,7 +23,9 @@ describe('SegmentedControl', () => {
     render(
       <SegmentedControl aria-label="View" defaultValue="a">
         <SegmentedControlItem value="a">A</SegmentedControlItem>
-        <SegmentedControlItem value="b" isDisabled>B</SegmentedControlItem>
+        <SegmentedControlItem value="b" isDisabled>
+          B
+        </SegmentedControlItem>
         <SegmentedControlItem value="c">C</SegmentedControlItem>
       </SegmentedControl>,
     );

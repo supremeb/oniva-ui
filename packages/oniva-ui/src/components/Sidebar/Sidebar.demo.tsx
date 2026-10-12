@@ -26,7 +26,14 @@ import {
 } from './Sidebar';
 
 const frame = stylex.create({
-  box: { backgroundColor: colors.surfaceInset, borderRadius: radius.card, display: 'flex', height: 640, justifyContent: 'center', padding: 24 },
+  box: {
+    backgroundColor: colors['--oniva-color-surface-inset'],
+    borderRadius: radius['--oniva-radius-card'],
+    display: 'flex',
+    height: 640,
+    justifyContent: 'center',
+    padding: 24,
+  },
 });
 
 const demo: DemoModule = {
@@ -65,19 +72,37 @@ const demo: DemoModule = {
             <SidebarSearch hint="⌘L" />
             <SidebarContent>
               <SidebarSection>
-                <SidebarItem href="#" icon={<Home size={18} />} isActive badge="152">Home</SidebarItem>
-                <SidebarItem href="#" icon={<Columns3 size={18} />}>Project board</SidebarItem>
-                <SidebarItem href="#" icon={<Megaphone size={18} />}>Marketing</SidebarItem>
-                <SidebarItem href="#" icon={<Calendar size={18} />}>Calendar</SidebarItem>
-                <SidebarItem href="#" icon={<Landmark size={18} />}>Finance</SidebarItem>
-                <SidebarItem href="#" icon={<Bot size={18} />} badge="NEW">AI Chat</SidebarItem>
-                <SidebarItem href="#" icon={<UserRound size={18} />}>Profile</SidebarItem>
+                <SidebarItem href="#" icon={<Home size={18} />} isActive badge="152">
+                  Home
+                </SidebarItem>
+                <SidebarItem href="#" icon={<Columns3 size={18} />}>
+                  Project board
+                </SidebarItem>
+                <SidebarItem href="#" icon={<Megaphone size={18} />}>
+                  Marketing
+                </SidebarItem>
+                <SidebarItem href="#" icon={<Calendar size={18} />}>
+                  Calendar
+                </SidebarItem>
+                <SidebarItem href="#" icon={<Landmark size={18} />}>
+                  Finance
+                </SidebarItem>
+                <SidebarItem href="#" icon={<Bot size={18} />} badge="NEW">
+                  AI Chat
+                </SidebarItem>
+                <SidebarItem href="#" icon={<UserRound size={18} />}>
+                  Profile
+                </SidebarItem>
               </SidebarSection>
             </SidebarContent>
             <SidebarFooter>
               <SidebarMenu>
-                <SidebarItem href="#" icon={<LifeBuoy size={18} />}>Support</SidebarItem>
-                <SidebarItem href="#" icon={<Settings size={18} />}>Settings</SidebarItem>
+                <SidebarItem href="#" icon={<LifeBuoy size={18} />}>
+                  Support
+                </SidebarItem>
+                <SidebarItem href="#" icon={<Settings size={18} />}>
+                  Settings
+                </SidebarItem>
               </SidebarMenu>
               <SidebarAccount name="Aylin Demir" email="aylin@acme.co" />
             </SidebarFooter>
@@ -95,12 +120,20 @@ const demo: DemoModule = {
             <SidebarHeader name="Acme Finance" />
             <SidebarContent>
               <SidebarSection title="Getting started" collapsible>
-                <SidebarItem href="#" icon={<Home size={18} />} isActive>Overview</SidebarItem>
-                <SidebarItem href="#" icon={<Landmark size={18} />}>Accounts</SidebarItem>
+                <SidebarItem href="#" icon={<Home size={18} />} isActive>
+                  Overview
+                </SidebarItem>
+                <SidebarItem href="#" icon={<Landmark size={18} />}>
+                  Accounts
+                </SidebarItem>
               </SidebarSection>
               <SidebarSection title="Team" collapsible>
-                <SidebarItem href="#" icon={<UserRound size={18} />} badge="8">Members</SidebarItem>
-                <SidebarItem href="#" icon={<Calendar size={18} />}>Schedule</SidebarItem>
+                <SidebarItem href="#" icon={<UserRound size={18} />} badge="8">
+                  Members
+                </SidebarItem>
+                <SidebarItem href="#" icon={<Calendar size={18} />}>
+                  Schedule
+                </SidebarItem>
               </SidebarSection>
             </SidebarContent>
           </Sidebar>
@@ -109,9 +142,15 @@ const demo: DemoModule = {
             <SidebarSearch />
             <SidebarContent>
               <SidebarSection>
-                <SidebarItem href="#" icon={<Home size={18} />} isActive badge="152">Home</SidebarItem>
-                <SidebarItem href="#" icon={<Columns3 size={18} />}>Project board</SidebarItem>
-                <SidebarItem href="#" icon={<Calendar size={18} />}>Calendar</SidebarItem>
+                <SidebarItem href="#" icon={<Home size={18} />} isActive badge="152">
+                  Home
+                </SidebarItem>
+                <SidebarItem href="#" icon={<Columns3 size={18} />}>
+                  Project board
+                </SidebarItem>
+                <SidebarItem href="#" icon={<Calendar size={18} />}>
+                  Calendar
+                </SidebarItem>
               </SidebarSection>
             </SidebarContent>
             <SidebarFooter>

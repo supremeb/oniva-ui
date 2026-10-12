@@ -4,7 +4,7 @@ import { AlertDialog, AlertDialogTrigger } from './AlertDialog';
 
 const demo: DemoModule = {
   meta: {
-    title: 'Alert Dialog',
+    title: 'Alert dialog',
     slug: 'alert-dialog',
     category: 'Overlays',
     description:

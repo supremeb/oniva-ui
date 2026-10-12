@@ -6,7 +6,7 @@ import { font } from '../../tokens/font.stylex';
 import { ChartTooltip } from '../ChartTooltip/ChartTooltip';
 
 const styles = stylex.create({
-  root: { fontFamily: font.sans, position: 'relative', width: '100%' },
+  root: { fontFamily: font['--oniva-font-sans'], position: 'relative', width: '100%' },
   row: { display: 'flex', gap: 3, height: 36 },
   cell: {
     backgroundColor: 'currentColor',
@@ -20,10 +20,13 @@ const styles = stylex.create({
     padding: 0,
     transitionDuration: '150ms',
     transitionProperty: 'opacity',
-    boxShadow: { default: 'none', ':focus-visible': `0 0 0 2px ${colors.focusRing}` },
+    boxShadow: {
+      default: 'none',
+      ':focus-visible': `0 0 0 2px ${colors['--oniva-color-focus-ring']}`,
+    },
   },
-  danger: { color: colors.dangerSolid },
-  empty: { color: colors.chartTrack },
+  danger: { color: colors['--oniva-color-danger-solid'] },
+  empty: { color: colors['--oniva-color-chart-track'] },
 });
 
 export interface TrackerItem {

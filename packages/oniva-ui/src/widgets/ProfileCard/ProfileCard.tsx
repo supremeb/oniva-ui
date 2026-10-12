@@ -9,20 +9,35 @@ import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 
 const styles = stylex.create({
-  head: { alignItems: 'center', display: 'flex', flexDirection: 'column', gap: 12, paddingBlock: 16 },
+  head: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 12,
+    paddingBlock: 16,
+  },
   avatarWrap: { position: 'relative' },
-  avatar: { fontSize: font.size40, height: 92, lineHeight: font.lh40, width: 92 },
+  avatar: {
+    fontSize: font['--oniva-font-size-40'],
+    height: 92,
+    lineHeight: font['--oniva-font-lh-40'],
+    width: 92,
+  },
   add: { insetBlockStart: -2, insetInlineEnd: -2, position: 'absolute' },
   name: {
-    color: colors.text,
-    fontSize: font.size24,
-    fontWeight: font.weightMedium,
-    letterSpacing: font.trackHero,
-    lineHeight: font.lh24,
+    color: colors['--oniva-color-text'],
+    fontSize: font['--oniva-font-size-24'],
+    fontWeight: font['--oniva-font-weight-medium'],
+    letterSpacing: font['--oniva-font-track-hero'],
+    lineHeight: font['--oniva-font-lh-24'],
     margin: 0,
     textAlign: 'center',
   },
-  sub: { color: colors.textMuted, fontSize: font.size13, margin: 0 },
+  sub: {
+    color: colors['--oniva-color-text-muted'],
+    fontSize: font['--oniva-font-size-13'],
+    margin: 0,
+  },
   list: { padding: 0 },
 });
 

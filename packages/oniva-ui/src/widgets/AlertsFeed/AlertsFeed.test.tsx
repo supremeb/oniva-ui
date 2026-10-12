@@ -3,8 +3,20 @@ import { describe, expect, it } from 'vitest';
 import { AlertsFeed, type AlertItem } from './AlertsFeed';
 
 const alerts: AlertItem[] = [
-  { id: '1', title: 'Unusual sign-in', description: 'New device in Austin, TX.', date: 'Oct 9', severity: 'critical' },
-  { id: '2', title: 'Invoice overdue', description: 'INV-2041 is 3 days late.', date: 'Oct 8', severity: 'warning' },
+  {
+    id: '1',
+    title: 'Unusual sign-in',
+    description: 'New device in Austin, TX.',
+    date: 'Oct 9',
+    severity: 'critical',
+  },
+  {
+    id: '2',
+    title: 'Invoice overdue',
+    description: 'INV-2041 is 3 days late.',
+    date: 'Oct 8',
+    severity: 'warning',
+  },
 ];
 
 describe('AlertsFeed', () => {

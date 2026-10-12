@@ -1,7 +1,13 @@
 import type { DemoModule } from '../../internal/demo';
 import { Select, SelectItem } from './Select';
 
-const col = { display: 'flex', flexDirection: 'column', gap: 16, width: '100%', maxWidth: 320 } as const;
+const col = {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 16,
+  width: '100%',
+  maxWidth: 320,
+} as const;
 
 const demo: DemoModule = {
   meta: {
@@ -23,10 +29,18 @@ const demo: DemoModule = {
       Component: () => (
         <div style={col}>
           <Select label="Status" defaultSelectedKey="paid">
-            <SelectItem id="paid" dot="success">Paid</SelectItem>
-            <SelectItem id="pending" dot="warning">Pending</SelectItem>
-            <SelectItem id="failed" dot="danger">Failed</SelectItem>
-            <SelectItem id="draft" dot="neutral">Draft</SelectItem>
+            <SelectItem id="paid" dot="success">
+              Paid
+            </SelectItem>
+            <SelectItem id="pending" dot="warning">
+              Pending
+            </SelectItem>
+            <SelectItem id="failed" dot="danger">
+              Failed
+            </SelectItem>
+            <SelectItem id="draft" dot="neutral">
+              Draft
+            </SelectItem>
           </Select>
         </div>
       ),

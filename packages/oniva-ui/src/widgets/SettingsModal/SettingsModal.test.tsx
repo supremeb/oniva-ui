@@ -6,7 +6,12 @@ import { SettingsModal } from './SettingsModal';
 const pages = [
   { id: 'profile', label: 'Profile', content: <p>Display name settings</p> },
   { id: 'notifications', label: 'Notifications', content: <p>Email digest settings</p> },
-  { id: 'security', label: 'Security', heading: 'Sign-in & security', content: <p>2FA settings</p> },
+  {
+    id: 'security',
+    label: 'Security',
+    heading: 'Sign-in & security',
+    content: <p>2FA settings</p>,
+  },
 ];
 
 describe('SettingsModal', () => {

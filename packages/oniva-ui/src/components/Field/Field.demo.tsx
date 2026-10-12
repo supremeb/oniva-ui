@@ -27,7 +27,10 @@ const demo: DemoModule = {
           <TextField>
             <Field>
               <Label>Billing email</Label>
-              <RacInput {...stylex.props(ff.control, ff.md, ff.bare)} defaultValue="finance@acme.co" />
+              <RacInput
+                {...stylex.props(ff.control, ff.md, ff.bare)}
+                defaultValue="finance@acme.co"
+              />
               <Description>Invoices are sent here.</Description>
             </Field>
           </TextField>
@@ -48,7 +51,10 @@ const demo: DemoModule = {
           <TextField isInvalid>
             <Field>
               <Label>Tax ID</Label>
-              <RacInput {...stylex.props(ff.control, ff.md, ff.bare, ff.invalid)} defaultValue="12-345" />
+              <RacInput
+                {...stylex.props(ff.control, ff.md, ff.bare, ff.invalid)}
+                defaultValue="12-345"
+              />
               <FieldError>Enter a valid EIN (12-3456789).</FieldError>
             </Field>
           </TextField>

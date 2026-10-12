@@ -3,12 +3,7 @@ import { useState, type Ref } from 'react';
 import { Button as AriaButton } from 'react-aria-components';
 import { Button } from '../../components/Button';
 import { Card, CardHeader, CardHeaderText, CardTitle, Tile } from '../../components/Card';
-import {
-  isoDate,
-  MONTHS,
-  RangeSwitcher,
-  WEEKDAYS_SHORT,
-} from '../../internal/widgets-parts';
+import { isoDate, MONTHS, RangeSwitcher, WEEKDAYS_SHORT } from '../../internal/widgets-parts';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 import { motion } from '../../tokens/motion.stylex';
@@ -18,15 +13,15 @@ const styles = stylex.create({
   head: { alignItems: 'center', display: 'flex', gap: 8 },
   table: { borderCollapse: 'separate', borderSpacing: 4, tableLayout: 'fixed', width: '100%' },
   th: {
-    color: colors.textMuted,
-    fontSize: font.size12,
-    fontWeight: font.weightMedium,
+    color: colors['--oniva-color-text-muted'],
+    fontSize: font['--oniva-font-size-12'],
+    fontWeight: font['--oniva-font-weight-medium'],
     paddingBlock: 4,
     textAlign: 'start',
   },
   cell: {
-    backgroundColor: colors.surfaceInset,
-    borderRadius: radius.md,
+    backgroundColor: colors['--oniva-color-surface-inset'],
+    borderRadius: radius['--oniva-radius-md'],
     boxSizing: 'border-box',
     height: 92,
     overflow: 'hidden',
@@ -36,47 +31,69 @@ const styles = stylex.create({
   outside: { backgroundColor: 'transparent', opacity: 0.45 },
   day: {
     alignItems: 'center',
-    color: colors.text,
+    color: colors['--oniva-color-text'],
     display: 'inline-flex',
     fontFeatureSettings: "'tnum'",
-    fontSize: font.size12,
-    fontWeight: font.weightMedium,
+    fontSize: font['--oniva-font-size-12'],
+    fontWeight: font['--oniva-font-weight-medium'],
     height: 22,
     justifyContent: 'center',
     minWidth: 22,
     paddingInline: 4,
   },
   today: {
-    backgroundColor: colors.text,
-    borderRadius: radius.full,
-    color: colors.bg,
+    backgroundColor: colors['--oniva-color-text'],
+    borderRadius: radius['--oniva-radius-full'],
+    color: colors['--oniva-color-bg'],
   },
   pills: { display: 'flex', flexDirection: 'column', gap: 2, marginTop: 2 },
   pill: {
-    borderRadius: radius.xs,
+    borderRadius: radius['--oniva-radius-xs'],
     borderWidth: 0,
     cursor: 'pointer',
-    fontFamily: font.sans,
-    fontSize: font.size11,
-    fontWeight: font.weightMedium,
-    lineHeight: font.lh11,
-    outline: { default: 'none', ':focus-visible': `2px solid ${colors.focusRing}` },
+    fontFamily: font['--oniva-font-sans'],
+    fontSize: font['--oniva-font-size-11'],
+    fontWeight: font['--oniva-font-weight-medium'],
+    lineHeight: font['--oniva-font-lh-11'],
+    outline: {
+      default: 'none',
+      ':focus-visible': `2px solid ${colors['--oniva-color-focus-ring']}`,
+    },
     overflow: 'hidden',
     paddingBlock: 1,
     paddingInline: 5,
     textAlign: 'start',
     textOverflow: 'ellipsis',
-    transitionDuration: motion.durBase,
+    transitionDuration: motion['--oniva-motion-dur-base'],
     transitionProperty: 'filter',
     filter: { default: 'none', ':hover': 'brightness(0.96)' },
     whiteSpace: 'nowrap',
   },
-  accent: { backgroundColor: colors.accentSoft, color: colors.accentSoftFg },
-  success: { backgroundColor: colors.successBg, color: colors.successFg },
-  warning: { backgroundColor: colors.warningBg, color: colors.warningFg },
-  danger: { backgroundColor: colors.dangerBg, color: colors.dangerFg },
-  info: { backgroundColor: colors.infoBg, color: colors.infoFg },
-  more: { color: colors.textMuted, fontSize: font.size11, paddingInline: 5 },
+  accent: {
+    backgroundColor: colors['--oniva-color-accent-soft'],
+    color: colors['--oniva-color-accent-soft-fg'],
+  },
+  success: {
+    backgroundColor: colors['--oniva-color-success-bg'],
+    color: colors['--oniva-color-success-fg'],
+  },
+  warning: {
+    backgroundColor: colors['--oniva-color-warning-bg'],
+    color: colors['--oniva-color-warning-fg'],
+  },
+  danger: {
+    backgroundColor: colors['--oniva-color-danger-bg'],
+    color: colors['--oniva-color-danger-fg'],
+  },
+  info: {
+    backgroundColor: colors['--oniva-color-info-bg'],
+    color: colors['--oniva-color-info-fg'],
+  },
+  more: {
+    color: colors['--oniva-color-text-muted'],
+    fontSize: font['--oniva-font-size-11'],
+    paddingInline: 5,
+  },
 });
 
 export type EventTone = 'accent' | 'success' | 'warning' | 'danger' | 'info';
@@ -200,7 +217,9 @@ export function EventCalendar({
                           </AriaButton>
                         ))}
                         {list.length > maxPerDay && (
-                          <span {...stylex.props(styles.more)}>+{list.length - maxPerDay} more</span>
+                          <span {...stylex.props(styles.more)}>
+                            +{list.length - maxPerDay} more
+                          </span>
                         )}
                       </div>
                     </td>

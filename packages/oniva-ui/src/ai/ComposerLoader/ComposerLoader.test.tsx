@@ -18,6 +18,8 @@ describe('ComposerLoader', () => {
       </ComposerLoader>,
     );
     expect(screen.getByTestId('l')).not.toHaveAttribute('data-active');
-    expect(screen.getByTestId('l').querySelectorAll('[aria-hidden="true"]').length).toBeLessThan(activeLayers);
+    expect(screen.getByTestId('l').querySelectorAll('[aria-hidden="true"]').length).toBeLessThan(
+      activeLayers,
+    );
   });
 });

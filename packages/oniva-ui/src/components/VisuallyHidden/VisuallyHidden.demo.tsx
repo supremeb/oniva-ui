@@ -5,7 +5,7 @@ import { VisuallyHidden } from './VisuallyHidden';
 
 const demo: DemoModule = {
   meta: {
-    title: 'VisuallyHidden',
+    title: 'Visually hidden',
     slug: 'visually-hidden',
     category: 'Utilities',
     description: 'Hides content visually while keeping it readable by screen readers.',

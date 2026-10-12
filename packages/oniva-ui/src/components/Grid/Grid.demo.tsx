@@ -3,13 +3,13 @@ import type { DemoModule } from '../../internal/demo';
 import { demoStyles } from '../../internal/nav-demo';
 import { Grid } from './Grid';
 
-
 const demo: DemoModule = {
   meta: {
     title: 'Grid',
     slug: 'grid',
     category: 'Layout',
-    description: 'CSS grid primitive with fixed columns or responsive auto-fit columns, token-mapped gap.',
+    description:
+      'CSS grid primitive with fixed columns or responsive auto-fit columns, token-mapped gap.',
   },
   demos: [
     {

@@ -17,7 +17,13 @@ describe('Fieldset', () => {
   it('disables descendants and forwards ref', () => {
     let el: HTMLFieldSetElement | null = null;
     render(
-      <Fieldset legend="Locked" disabled ref={(n) => { el = n; }}>
+      <Fieldset
+        legend="Locked"
+        disabled
+        ref={(n) => {
+          el = n;
+        }}
+      >
         <input aria-label="x" />
       </Fieldset>,
     );

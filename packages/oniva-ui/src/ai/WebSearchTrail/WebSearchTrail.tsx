@@ -13,24 +13,41 @@ const styles = stylex.create({
   root: { display: 'flex', flexDirection: 'column', gap: 10, padding: 12 },
   head: {
     alignItems: 'center',
-    color: colors.textMuted,
+    color: colors['--oniva-color-text-muted'],
     display: 'flex',
-    fontSize: font.size13,
-    fontWeight: font.weightMedium,
+    fontSize: font['--oniva-font-size-13'],
+    fontWeight: font['--oniva-font-weight-medium'],
     gap: 6,
   },
-  list: { display: 'flex', flexDirection: 'column', gap: 6, listStyle: 'none', margin: 0, padding: 0 },
+  list: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 6,
+    listStyle: 'none',
+    margin: 0,
+    padding: 0,
+  },
   row: {
     alignItems: 'center',
-    color: colors.text,
+    color: colors['--oniva-color-text'],
     display: 'flex',
-    fontSize: font.size13,
+    fontSize: font['--oniva-font-size-13'],
     gap: 8,
-    lineHeight: font.lh13,
+    lineHeight: font['--oniva-font-lh-13'],
   },
-  count: { color: colors.textMuted, marginInlineStart: 'auto', fontVariantNumeric: 'tabular-nums' },
-  icon: { alignItems: 'center', display: 'inline-flex', flexShrink: 0, justifyContent: 'center', width: 16 },
-  ok: { color: colors.successSolid },
+  count: {
+    color: colors['--oniva-color-text-muted'],
+    marginInlineStart: 'auto',
+    fontVariantNumeric: 'tabular-nums',
+  },
+  icon: {
+    alignItems: 'center',
+    display: 'inline-flex',
+    flexShrink: 0,
+    justifyContent: 'center',
+    width: 16,
+  },
+  ok: { color: colors['--oniva-color-success-solid'] },
   sources: { display: 'flex', flexWrap: 'wrap', gap: 6 },
 });
 
@@ -53,7 +70,14 @@ export interface WebSearchTrailProps extends Omit<HTMLAttributes<HTMLDivElement>
 }
 
 /** Search queries the agent ran (with live status) plus the sources it read. */
-export function WebSearchTrail({ queries, sources = [], className, xstyle, ref, ...rest }: WebSearchTrailProps) {
+export function WebSearchTrail({
+  queries,
+  sources = [],
+  className,
+  xstyle,
+  ref,
+  ...rest
+}: WebSearchTrailProps) {
   const searching = queries.some((q) => q.status === 'searching');
   const sx = stylex.props(aiStyles.tile, styles.root, xstyle);
   return (
@@ -73,7 +97,9 @@ export function WebSearchTrail({ queries, sources = [], className, xstyle, ref, 
               )}
             </span>
             <span>{q.query}</span>
-            {q.resultCount != null && <span {...stylex.props(styles.count)}>{q.resultCount} results</span>}
+            {q.resultCount != null && (
+              <span {...stylex.props(styles.count)}>{q.resultCount} results</span>
+            )}
           </li>
         ))}
       </ul>

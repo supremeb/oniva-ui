@@ -10,7 +10,7 @@ const details = [
 
 const demo: DemoModule = {
   meta: {
-    title: 'ProfileCard',
+    title: 'Profile card',
     slug: 'profile-card',
     category: 'Widgets',
     description: 'Large initial avatar with add-photo button, name and key/value detail rows.',

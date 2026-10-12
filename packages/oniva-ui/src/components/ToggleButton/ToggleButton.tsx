@@ -1,11 +1,15 @@
 import * as stylex from '@stylexjs/stylex';
-import { ToggleButton as AriaToggleButton, type ToggleButtonProps as AriaToggleButtonProps } from 'react-aria-components';
+import { focus } from '../../internal/focus';
+import {
+  ToggleButton as AriaToggleButton,
+  type ToggleButtonProps as AriaToggleButtonProps,
+} from 'react-aria-components';
 import { use, type CSSProperties, type ReactNode, type Ref } from 'react';
 import {
   controlIconSize,
   controlStyles,
   ToggleGroupStyleContext,
-  type ControlSize,
+  type ButtonSize,
 } from '../../internal/feedback-control';
 import { mergeSx } from '../../internal/sx';
 import { colors } from '../../tokens/colors.stylex';
@@ -14,35 +18,43 @@ import { shadow } from '../../tokens/shadow.stylex';
 const styles = stylex.create({
   // selected states
   selectedSecondary: {
-    backgroundColor: colors.accentSoft,
-    borderColor: colors.accentSoftFg,
-    color: colors.accentSoftFg,
+    backgroundColor: colors['--oniva-color-accent-soft'],
+    borderColor: colors['--oniva-color-accent-soft-fg'],
+    color: colors['--oniva-color-accent-soft-fg'],
   },
-  selectedGhost: { backgroundColor: colors.surfaceTertiary, color: colors.text },
+  selectedGhost: {
+    backgroundColor: colors['--oniva-color-surface-tertiary'],
+    color: colors['--oniva-color-text'],
+  },
   selectedSoft: {
-    backgroundColor: colors.accentSoftActive,
-    color: colors.accentSoftFg,
+    backgroundColor: colors['--oniva-color-accent-soft-active'],
+    color: colors['--oniva-color-accent-soft-fg'],
   },
   // segmented (inside a ToggleButtonGroup track)
   segment: {
-    backgroundColor: { default: 'transparent', ':hover': colors.surfaceInsetHover },
+    backgroundColor: {
+      default: 'transparent',
+      ':hover': colors['--oniva-color-surface-inset-hover'],
+    },
     borderColor: 'transparent',
     boxShadow: 'none',
-    color: colors.textMuted,
+    color: colors['--oniva-color-text-muted'],
   },
   segmentSelected: {
-    backgroundColor: colors.surfaceInner,
-    boxShadow: shadow.sm,
-    color: colors.text,
+    backgroundColor: colors['--oniva-color-surface-inner'],
+    boxShadow: shadow['--oniva-shadow-sm'],
+    color: colors['--oniva-color-text'],
   },
 });
 
 export type ToggleButtonVariant = 'secondary' | 'ghost' | 'soft';
 
-export interface ToggleButtonProps
-  extends Omit<AriaToggleButtonProps, 'className' | 'style' | 'children'> {
+export interface ToggleButtonProps extends Omit<
+  AriaToggleButtonProps,
+  'className' | 'style' | 'children'
+> {
   variant?: ToggleButtonVariant;
-  size?: ControlSize;
+  size?: ButtonSize;
   isIconOnly?: boolean;
   startIcon?: ReactNode;
   children?: ReactNode;
@@ -74,7 +86,8 @@ export function ToggleButton({
   const size = sizeProp ?? group.size ?? 'md';
   const gv = group.variant;
   const segmented = gv === 'segmented';
-  const variant = variantProp ?? (segmented ? 'ghost' : ((gv as ToggleButtonVariant) ?? 'secondary'));
+  const variant =
+    variantProp ?? (segmented ? 'ghost' : ((gv as ToggleButtonVariant) ?? 'secondary'));
   return (
     <AriaToggleButton
       {...rest}
@@ -82,6 +95,7 @@ export function ToggleButton({
       className={(s) => {
         const sx = stylex.props(
           controlStyles.base,
+          focus.ring,
           controlStyles[variant],
           controlStyles[size],
           isIconOnly && controlStyles[controlIconSize[size]],

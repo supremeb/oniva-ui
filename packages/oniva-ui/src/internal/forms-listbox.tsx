@@ -21,7 +21,11 @@ export function FormsPopover({
   xstyle,
   auto,
   ...rest
-}: Omit<PopoverProps, 'className'> & { className?: string; xstyle?: stylex.StyleXStyles; auto?: boolean }) {
+}: Omit<PopoverProps, 'className'> & {
+  className?: string;
+  xstyle?: stylex.StyleXStyles;
+  auto?: boolean;
+}) {
   return (
     <Popover
       offset={6}
@@ -38,12 +42,7 @@ export function FormsListBox<T extends object>(
   props: Omit<ListBoxProps<T>, 'className'> & { className?: string; ref?: Ref<HTMLDivElement> },
 ) {
   const { className, ...rest } = props;
-  return (
-    <ListBox
-      {...rest}
-      className={() => cx(stylex.props(fp.listbox).className, className)}
-    />
-  );
+  return <ListBox {...rest} className={() => cx(stylex.props(fp.listbox).className, className)} />;
 }
 
 export interface FormsItemProps extends Omit<ListBoxItemProps, 'className' | 'children'> {
@@ -62,9 +61,16 @@ export function StatusDot({ tone }: { tone: DotTone }) {
   return <span aria-hidden="true" {...stylex.props(fp.dot, fp[dotKey[tone]])} />;
 }
 
-export function FormsItem({ children, dot, icon, description, className, hideCheck, ...rest }: FormsItemProps) {
-  const textValue =
-    rest.textValue ?? (typeof children === 'string' ? children : undefined);
+export function FormsItem({
+  children,
+  dot,
+  icon,
+  description,
+  className,
+  hideCheck,
+  ...rest
+}: FormsItemProps) {
+  const textValue = rest.textValue ?? (typeof children === 'string' ? children : undefined);
   return (
     <ListBoxItem
       {...rest}
@@ -97,7 +103,9 @@ export function FormsItem({ children, dot, icon, description, className, hideChe
               </Text>
             )}
           </span>
-          {isSelected && !hideCheck && <Check size={16} aria-hidden="true" {...stylex.props(fp.check)} />}
+          {isSelected && !hideCheck && (
+            <Check size={16} aria-hidden="true" {...stylex.props(fp.check)} />
+          )}
         </>
       )}
     </ListBoxItem>

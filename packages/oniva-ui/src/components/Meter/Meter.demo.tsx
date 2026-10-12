@@ -8,7 +8,8 @@ const demo: DemoModule = {
     title: 'Meter',
     slug: 'meter',
     category: 'Feedback',
-    description: 'A gauge for a known range, such as quota or seat usage. Color shifts at thresholds.',
+    description:
+      'A gauge for a known range, such as quota or seat usage. Color shifts at thresholds.',
   },
   demos: [
     {

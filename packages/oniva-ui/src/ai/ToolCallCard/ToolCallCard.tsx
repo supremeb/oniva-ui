@@ -17,11 +17,15 @@ import { Badge } from '../../components/Badge';
 const styles = stylex.create({
   root: { overflow: 'hidden' },
   trigger: { paddingBlock: 8, paddingInline: 12 },
-  name: { color: colors.text, fontFamily: font.mono, fontSize: font.size13 },
+  name: {
+    color: colors['--oniva-color-text'],
+    fontFamily: font['--oniva-font-mono'],
+    fontSize: font['--oniva-font-size-13'],
+  },
   summary: {
-    color: colors.textMuted,
-    fontFamily: font.mono,
-    fontSize: font.size12,
+    color: colors['--oniva-color-text-muted'],
+    fontFamily: font['--oniva-font-mono'],
+    fontSize: font['--oniva-font-size-12'],
     minWidth: 0,
     overflow: 'hidden',
     textOverflow: 'ellipsis',
@@ -29,7 +33,7 @@ const styles = stylex.create({
   },
   spacer: { flexGrow: 1 },
   body: {
-    borderTopColor: colors.border,
+    borderTopColor: colors['--oniva-color-border'],
     borderTopStyle: 'solid',
     borderTopWidth: 1,
     display: 'flex',
@@ -39,20 +43,20 @@ const styles = stylex.create({
     paddingInline: 12,
   },
   label: {
-    color: colors.textMuted,
-    fontSize: font.size11,
-    fontWeight: font.weightMedium,
-    letterSpacing: font.trackLabel,
+    color: colors['--oniva-color-text-muted'],
+    fontSize: font['--oniva-font-size-11'],
+    fontWeight: font['--oniva-font-weight-medium'],
+    letterSpacing: font['--oniva-font-track-label'],
     marginBlockEnd: 4,
     textTransform: 'uppercase',
   },
   pre: {
-    backgroundColor: colors.surfaceInset,
+    backgroundColor: colors['--oniva-color-surface-inset'],
     borderRadius: 8,
-    color: colors.text,
-    fontFamily: font.mono,
-    fontSize: font.size12,
-    lineHeight: font.lh13,
+    color: colors['--oniva-color-text'],
+    fontFamily: font['--oniva-font-mono'],
+    fontSize: font['--oniva-font-size-12'],
+    lineHeight: font['--oniva-font-lh-13'],
     margin: 0,
     maxHeight: 200,
     overflow: 'auto',
@@ -60,14 +64,16 @@ const styles = stylex.create({
     paddingInline: 10,
     whiteSpace: 'pre-wrap',
   },
-  ok: { color: colors.successSolid },
-  err: { color: colors.dangerSolid },
+  ok: { color: colors['--oniva-color-success-solid'] },
+  err: { color: colors['--oniva-color-danger-solid'] },
 });
 
 export type ToolCallStatus = 'pending' | 'running' | 'success' | 'error';
 
-export interface ToolCallCardProps
-  extends Omit<DisclosureProps, 'className' | 'style' | 'children'> {
+export interface ToolCallCardProps extends Omit<
+  DisclosureProps,
+  'className' | 'style' | 'children'
+> {
   /** Tool identifier, e.g. `query_warehouse`. */
   name: string;
   /** Arguments sent to the tool. */
@@ -84,8 +90,10 @@ export interface ToolCallCardProps
 
 function StatusIcon({ status }: { status: ToolCallStatus }) {
   if (status === 'running') return <Spinner size="xs" label="Running" />;
-  if (status === 'success') return <Check size={14} aria-label="Succeeded" {...stylex.props(styles.ok)} />;
-  if (status === 'error') return <AlertCircle size={14} aria-label="Failed" {...stylex.props(styles.err)} />;
+  if (status === 'success')
+    return <Check size={14} aria-label="Succeeded" {...stylex.props(styles.ok)} />;
+  if (status === 'error')
+    return <AlertCircle size={14} aria-label="Failed" {...stylex.props(styles.err)} />;
   return <Clock size={14} aria-label="Queued" />;
 }
 
@@ -101,7 +109,11 @@ export function ToolCallCard({
   ref,
   ...rest
 }: ToolCallCardProps) {
-  const argText = args ? Object.entries(args).map(([k, v]) => `${k}=${JSON.stringify(v)}`).join(' ') : '';
+  const argText = args
+    ? Object.entries(args)
+        .map(([k, v]) => `${k}=${JSON.stringify(v)}`)
+        .join(' ')
+    : '';
   const sx = stylex.props(aiStyles.tile, styles.root, xstyle);
   return (
     <Disclosure {...rest} ref={ref} className={[sx.className, className].filter(Boolean).join(' ')}>
