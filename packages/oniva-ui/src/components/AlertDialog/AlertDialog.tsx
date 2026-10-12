@@ -69,7 +69,7 @@ export function AlertDialog({
   title,
   children,
   variant = 'default',
-  confirmLabel = 'Confirm',
+  confirmLabel = variant === 'danger' ? 'Delete' : 'Confirm',
   cancelLabel = 'Cancel',
   onConfirm,
   onCancel,

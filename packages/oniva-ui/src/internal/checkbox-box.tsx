@@ -23,7 +23,7 @@ const styles = stylex.create({
     justifyContent: 'center',
     marginTop: 2,
     position: 'relative',
-    transform: { default: 'none', '[data-pressed]': 'scale(0.94)' },
+    transform: { default: 'none', '[data-pressed]': `scale(${motion['--oniva-motion-press-scale']})` },
     transitionDuration: motion['--oniva-motion-dur-press'],
     transitionProperty: 'background-color, border-color, box-shadow, transform',
     transitionTimingFunction: motion['--oniva-motion-ease-out'],
@@ -50,7 +50,7 @@ const styles = stylex.create({
   compact: { marginTop: 0 },
   hover: { borderColor: colors['--oniva-color-border-active'] },
   on: {
-    backgroundImage: `linear-gradient(180deg, ${accent['--oniva-accent-500']}, ${accent['--oniva-accent-600']})`,
+    backgroundImage: `linear-gradient(180deg, ${accent['--oniva-accent-solid']}, ${accent['--oniva-accent-solid-end']})`,
     borderColor: 'transparent',
     boxShadow: shadow['--oniva-shadow-accent-inset'],
   },
@@ -63,7 +63,7 @@ export interface CheckboxBoxProps {
   isFocusVisible?: boolean;
   isHovered?: boolean;
   isInvalid?: boolean;
-  /** Pointer-pressed (not keyboard): box scales to 0.94. */
+  /** Pointer-pressed (not keyboard): box scales to the press-scale token. */
   isPressed?: boolean;
   /** `compact` drops the label-alignment offset (table selection cells). */
   density?: 'default' | 'compact';

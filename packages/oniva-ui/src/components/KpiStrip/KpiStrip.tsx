@@ -1,10 +1,12 @@
 import * as stylex from '@stylexjs/stylex';
+import { media } from '../../tokens/media.stylex';
 import { ArrowDownRight, ArrowUpRight } from 'lucide-react';
 import type { HTMLAttributes, Ref } from 'react';
 import { Sparkline } from '../../charts/Sparkline';
 import { AnimatedNumber } from '../../motion/AnimatedNumber';
 import { dash } from '../../internal/dash-styles';
 import { focus } from '../../internal/focus';
+import { useFormatters } from '../../internal/format';
 import { mergeSx } from '../../internal/sx';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
@@ -38,7 +40,7 @@ const styles = stylex.create({
     appearance: 'none',
     backgroundColor: {
       default: colors['--oniva-color-surface'],
-      ':hover': colors['--oniva-color-surface-hover'],
+      ':hover': { default: null, [media.hover]: colors['--oniva-color-surface-hover'] },
     },
     borderColor: colors['--oniva-color-border'],
     borderRadius: radius['--oniva-radius-lg'],
@@ -85,9 +87,8 @@ export interface KpiStripProps extends Omit<HTMLAttributes<HTMLUListElement>, 's
   ref?: Ref<HTMLUListElement>;
 }
 
-const pct = new Intl.NumberFormat('en-US', { style: 'percent', maximumFractionDigits: 1 });
-
 export function KpiStrip({ items, onDrilldown, className, xstyle, ref, ...rest }: KpiStripProps) {
+  const { percent } = useFormatters();
   const sx = stylex.props(dash.root, styles.strip, xstyle);
   return (
     <ul {...rest} ref={ref} {...mergeSx(sx, className)}>
@@ -105,7 +106,7 @@ export function KpiStrip({ items, onDrilldown, className, xstyle, ref, ...rest }
                 <span {...stylex.props(styles.delta, good ? styles.good : styles.bad)}>
                   {up ? <ArrowUpRight size={14} aria-hidden="true" /> : <ArrowDownRight size={14} aria-hidden="true" />}
                   <span {...stylex.props(dash.sr)}>{up ? 'Up' : 'Down'}</span>
-                  <span {...stylex.props(dash.num)}>{pct.format(Math.abs(it.delta))}</span>
+                  <span {...stylex.props(dash.num)}>{percent(Math.abs(it.delta), 1)}</span>
                 </span>
               ) : (
                 <span />

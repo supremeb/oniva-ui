@@ -48,7 +48,7 @@ const styles = stylex.create({
     top: 0,
     transform: 'translate(var(--gx, 50%), var(--gy, 50%))',
     width: 320,
-    willChange: 'transform',
+    willChange: { default: 'auto', ':hover': 'transform', ':focus-within': 'transform' },
   },
   ringOrb: {
     backgroundImage: `radial-gradient(circle closest-side, ${accent['--oniva-accent-500']}, transparent)`,

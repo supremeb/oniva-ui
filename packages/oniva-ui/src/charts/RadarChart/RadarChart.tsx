@@ -1,3 +1,4 @@
+import { useLocale } from 'react-aria';
 import * as stylex from '@stylexjs/stylex';
 import type { Ref } from 'react';
 import {
@@ -40,7 +41,8 @@ export function RadarChart({
   xstyle,
   ref,
 }: RadarChartProps) {
-  const fmt = makeFormatter(valueFormat);
+  const { locale } = useLocale();
+  const fmt = makeFormatter(valueFormat, locale);
   const n = data.length;
   const num = (d: ChartDatum, k: string) => Number(d[k]) || 0;
   const top =

@@ -5,13 +5,10 @@ import { colors } from '@oniva-tokens/colors.stylex';
 import { font } from '@oniva-tokens/font.stylex';
 import { CodeBlock } from '../components/CodeBlock';
 import { getDemo } from '../demos';
+import { getDocPage } from '../content';
+import { DocPageView, Crumb } from '../components/doc/DocPageView';
 
 const styles = stylex.create({
-  crumb: {
-    color: colors['--oniva-color-text-muted'],
-    fontSize: font['--oniva-font-size-13'],
-    textDecoration: 'none',
-  },
   h1: {
     fontSize: font['--oniva-font-size-32'],
     fontWeight: font['--oniva-font-weight-medium'],
@@ -53,11 +50,11 @@ export function ComponentPage() {
       </>
     );
   }
+  const doc = getDocPage(slug);
+  if (doc) return <DocPageView key={slug} page={doc} mod={mod} />;
   return (
     <article>
-      <Link to="/components" {...stylex.props(styles.crumb)}>
-        ← Components
-      </Link>
+      <Crumb trail={[{ label: 'Components', to: '/components' }, { label: mod.meta.category }, { label: mod.meta.title }]} />
       <h1 {...stylex.props(styles.h1)}>{mod.meta.title}</h1>
       <p {...stylex.props(styles.lead)}>{mod.meta.description}</p>
       <div {...stylex.props(styles.stack)}>

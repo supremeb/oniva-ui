@@ -133,7 +133,7 @@ export function Message({
             )}
             {onRetry && (
               <Tooltip content="Retry">
-                <IconButton variant="ghost" size="xs" aria-label="Retry response" onPress={onRetry}>
+                <IconButton variant="ghost" size="xs" aria-label="Regenerate response" onPress={onRetry}>
                   <RotateCcw size={14} aria-hidden="true" />
                 </IconButton>
               </Tooltip>
@@ -143,7 +143,7 @@ export function Message({
                 <IconButton
                   variant="ghost"
                   size="xs"
-                  aria-label="Good response"
+                  aria-label="Mark response as good"
                   aria-pressed={feedback === 'up'}
                   onPress={() => onFeedback('up')}
                 >
@@ -156,7 +156,7 @@ export function Message({
                 <IconButton
                   variant="ghost"
                   size="xs"
-                  aria-label="Bad response"
+                  aria-label="Mark response as bad"
                   aria-pressed={feedback === 'down'}
                   onPress={() => onFeedback('down')}
                 >

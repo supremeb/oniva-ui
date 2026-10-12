@@ -1,4 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
+import { media } from '../../tokens/media.stylex';
 import { focus } from '../../internal/focus';
 import { Button as AriaButton } from 'react-aria-components';
 import { Menu } from 'lucide-react';
@@ -76,7 +77,7 @@ const styles = stylex.create({
     appearance: 'none',
     backgroundColor: {
       default: 'transparent',
-      ':hover': colors['--oniva-color-surface-inset-hover'],
+      ':hover': { default: null, [media.hover]: colors['--oniva-color-surface-inset-hover'] },
     },
     borderRadius: radius['--oniva-radius-md'],
     borderWidth: 0,

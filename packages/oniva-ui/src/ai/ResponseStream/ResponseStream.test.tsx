@@ -17,7 +17,7 @@ describe('ResponseStream', () => {
         onComplete={done}
       />,
     );
-    expect(screen.getByTestId('r')).toHaveTextContent('');
+    expect(screen.getByTestId('r')).not.toHaveTextContent('Reve');
     act(() => {
       vi.advanceTimersByTime(10);
     });

@@ -16,7 +16,7 @@ const styles = stylex.create({
     transitionDuration: motion['--oniva-motion-dur-sheet'],
     transitionProperty: 'transform',
     transitionTimingFunction: motion['--oniva-motion-ease-out-expo'],
-    willChange: 'transform',
+    willChange: { default: 'auto', ':hover': 'transform', ':focus-within': 'transform' },
   },
 });
 

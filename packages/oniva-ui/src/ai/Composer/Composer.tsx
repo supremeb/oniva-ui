@@ -241,7 +241,7 @@ export function Composer({
                   variant="ghost"
                   size="sm"
                   isDisabled={isDisabled}
-                  aria-label={`Permissions: ${currentMode.label}`}
+                  aria-label={`Permission mode: ${currentMode.label}`}
                   startIcon={<ShieldCheck size={14} aria-hidden="true" />}
                   endIcon={<ChevronDown size={14} aria-hidden="true" />}
                 >

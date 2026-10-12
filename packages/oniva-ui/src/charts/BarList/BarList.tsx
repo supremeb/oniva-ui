@@ -1,3 +1,4 @@
+import { useLocale } from 'react-aria';
 import * as stylex from '@stylexjs/stylex';
 import type { HTMLAttributes, ReactNode, Ref } from 'react';
 import { makeFormatter, type ValueFormat } from '../../internal/charts-math';
@@ -102,7 +103,8 @@ export function BarList({
   ref,
   ...rest
 }: BarListProps) {
-  const fmt = makeFormatter(valueFormat);
+  const { locale } = useLocale();
+  const fmt = makeFormatter(valueFormat, locale);
   const list = sort ? [...items].sort((a, b) => b.value - a.value) : items;
   const max = Math.max(1, ...list.map((i) => i.value));
   const sx = stylex.props(styles.list, xstyle);

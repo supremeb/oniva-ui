@@ -1,6 +1,7 @@
 import * as stylex from '@stylexjs/stylex';
 import type { ControlSize } from '../../internal/types';
 import type { CSSProperties, HTMLAttributes, ReactNode, Ref } from 'react';
+import { createFormatters, useFormatters } from '../../internal/format';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 import { motion } from '../../tokens/motion.stylex';
@@ -101,6 +102,8 @@ export interface ProgressSegmentsProps extends Omit<
   summary?: ReactNode;
   size?: ControlSize;
   showLegend?: boolean;
+  /** BCP 47 locale for numbers. Defaults to the active React Aria locale. */
+  locale?: string;
   xstyle?: stylex.StyleXStyles;
   ref?: Ref<HTMLDivElement>;
 }
@@ -115,17 +118,20 @@ export function ProgressSegments({
   summary,
   size = 'lg',
   showLegend = true,
+  locale,
   className,
   xstyle,
   ref,
   'aria-label': ariaLabel,
   ...rest
 }: ProgressSegmentsProps) {
+  const ctxFmts = useFormatters();
+  const f = locale ? createFormatters(locale) : ctxFmts;
   const sum = segments.reduce((a, s) => a + s.value, 0);
   const total = max ?? sum;
   const pct = total > 0 ? Math.round((sum / total) * 100) : 0;
   const auto = max
-    ? `${sum.toLocaleString('en-US')} / ${max.toLocaleString('en-US')} (${pct}%)`
+    ? `${f.number(sum)} / ${f.number(max)} (${f.percent(pct / 100)})`
     : undefined;
   const sx = stylex.props(progressStyles.root, xstyle);
   return (
@@ -146,7 +152,7 @@ export function ProgressSegments({
       <div
         role="img"
         aria-label={segments
-          .map((s) => `${s.label} ${s.display ?? s.value.toLocaleString('en-US')}`)
+          .map((s) => `${s.label} ${s.display ?? f.number(s.value)}`)
           .join(', ')}
         {...stylex.props(styles.bar, progressStyles[size])}
       >
@@ -176,7 +182,7 @@ export function ProgressSegments({
               />
               {s.label}
               <span {...stylex.props(styles.num)}>
-                {s.display ?? s.value.toLocaleString('en-US')}
+                {s.display ?? f.number(s.value)}
               </span>
             </li>
           ))}

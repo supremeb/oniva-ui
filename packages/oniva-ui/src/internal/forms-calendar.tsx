@@ -84,7 +84,7 @@ export const fc = stylex.create({
   disabled: { color: colors['--oniva-color-text-disabled'], cursor: 'not-allowed' },
   unavailable: { color: colors['--oniva-color-text-error'], textDecoration: 'line-through' },
   selected: {
-    backgroundImage: `linear-gradient(180deg, ${accent['--oniva-accent-500']}, ${accent['--oniva-accent-600']})`,
+    backgroundImage: `linear-gradient(180deg, ${accent['--oniva-accent-solid']}, ${accent['--oniva-accent-solid-end']})`,
     boxShadow: shadow['--oniva-shadow-accent-inset'],
     color: colors['--oniva-color-accent-fg'],
   },

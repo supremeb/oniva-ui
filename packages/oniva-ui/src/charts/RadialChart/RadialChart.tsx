@@ -1,3 +1,4 @@
+import { useLocale } from 'react-aria';
 import * as stylex from '@stylexjs/stylex';
 import { arc } from 'd3-shape';
 import { useMemo, type ReactNode, type Ref } from 'react';
@@ -75,7 +76,8 @@ export function RadialChart({
   xstyle,
   ref,
 }: RadialChartProps) {
-  const fmt = makeFormatter(valueFormat);
+  const { locale } = useLocale();
+  const fmt = makeFormatter(valueFormat, locale);
   const gap = 6;
   const { ref: viewRef, inView } = useInView<HTMLDivElement>({ threshold: 0.15 });
   const targets = useMemo(() => items.map((it) => Math.min(1, Math.max(0, it.value / (it.max ?? 100)))), [items]);

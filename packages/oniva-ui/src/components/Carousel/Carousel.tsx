@@ -120,7 +120,7 @@ export function Carousel({ children, autoPlay, loop = true, onIndexChange, class
         ref={viewport}
         id={`${id}-vp`}
         role="group"
-        aria-label={`${rest['aria-label']} slides`}
+        aria-label={rest['aria-label'] ? `${rest['aria-label']} slides` : 'Slides'}
         tabIndex={0}
         aria-live={playing ? 'off' : 'polite'}
         onScroll={onScroll}
@@ -137,7 +137,7 @@ export function Carousel({ children, autoPlay, loop = true, onIndexChange, class
         {...stylex.props(styles.viewport, focus.ring)}
       >
         {slides.map((s, i) => (
-          <div key={i} role="group" aria-roledescription="slide" aria-label={`${i + 1} of ${count}`} {...stylex.props(styles.slide)}>
+          <div key={i} role="group" aria-roledescription="slide" aria-label={`${i + 1} of ${count}`} inert={i !== index || undefined} {...stylex.props(styles.slide)}>
             {s}
           </div>
         ))}
@@ -148,7 +148,7 @@ export function Carousel({ children, autoPlay, loop = true, onIndexChange, class
         </IconButton>
         <div {...stylex.props(styles.dots)}>
           {slides.map((_, i) => (
-            <button key={i} type="button" aria-label={`Go to slide ${i + 1}`} aria-current={i === index} onClick={() => goTo(i)} {...stylex.props(styles.dotHit, focus.ring)}>
+            <button key={i} type="button" aria-label={`Go to slide ${i + 1}`} aria-current={i === index ? 'true' : undefined} onClick={() => goTo(i)} {...stylex.props(styles.dotHit, focus.ring)}>
               <span aria-hidden="true" {...stylex.props(styles.dot, i === index && styles.dotActive)} />
             </button>
           ))}

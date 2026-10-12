@@ -10,6 +10,7 @@ import {
 import { ChevronRight } from 'lucide-react';
 import type { ReactNode, Ref } from 'react';
 import { listStyles as s } from '../../internal/data-list-styles';
+import { media } from '../../tokens/media.stylex';
 import { motion } from '../../tokens/motion.stylex';
 
 const styles = stylex.create({
@@ -29,7 +30,7 @@ const styles = stylex.create({
   },
   chevronIcon: {
     transitionDuration: motion['--oniva-motion-dur-base'],
-    transitionProperty: 'transform',
+    transitionProperty: { default: 'transform', [media.reducedMotion]: 'none' },
     transitionTimingFunction: motion['--oniva-motion-ease-standard'],
   },
   chevronOpen: { transform: 'rotate(90deg)' },

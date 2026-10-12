@@ -1,3 +1,4 @@
+import { useLocale } from 'react-aria';
 import * as stylex from '@stylexjs/stylex';
 import type { Ref } from 'react';
 import { makeFormatter, roundedRectPath, type ValueFormat } from '../../internal/charts-math';
@@ -32,7 +33,8 @@ export function FunnelChart({
   xstyle,
   ref,
 }: FunnelChartProps) {
-  const fmt = makeFormatter(valueFormat);
+  const { locale } = useLocale();
+  const fmt = makeFormatter(valueFormat, locale);
   const first = steps[0]?.value || 1;
   return (
     <ChartFrame

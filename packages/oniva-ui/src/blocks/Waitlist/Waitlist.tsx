@@ -1,6 +1,7 @@
 import * as stylex from '@stylexjs/stylex';
+import { VisuallyHidden } from '../../components/VisuallyHidden/VisuallyHidden';
 import { ArrowRight } from 'lucide-react';
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import type { FormEvent, HTMLAttributes, Ref } from 'react';
 import { bs } from '../../internal/blocks-styles';
 import { mergeSx } from '../../internal/sx';
@@ -71,17 +72,28 @@ export interface WaitlistProps extends Omit<HTMLAttributes<HTMLElement>, 'style'
 export function Waitlist({ onJoin, className, xstyle, ref, ...rest }: WaitlistProps) {
   const [email, setEmail] = useState('');
   const [state, setState] = useState<'idle' | 'loading' | 'done'>('idle');
+  const errId = useId();
+  const [error, setError] = useState<string | null>(null);
   const sx = stylex.props(bs.section, xstyle);
   const submit = async (e: FormEvent) => {
     e.preventDefault();
     setState('loading');
-    await onJoin?.(email);
-    setState('done');
+    setError(null);
+    try {
+      await onJoin?.(email);
+      setState('done');
+    } catch {
+      setState('idle');
+      setError("Couldn't add you to the waitlist. Check your connection and try again.");
+    }
   };
   return (
     <section ref={ref} {...rest} {...mergeSx(sx, className)}>
       <div {...stylex.props(bs.inner)}>
-        <div {...stylex.props(styles.wrap)} aria-live="polite">
+        <div {...stylex.props(styles.wrap)}>
+          <VisuallyHidden>
+            <span role="status">{state === 'done' ? "You're on the list" : ''}</span>
+          </VisuallyHidden>
           {state === 'done' ? (
             <div {...stylex.props(styles.success)}>
               <span {...stylex.props(styles.badge)}>
@@ -89,18 +101,23 @@ export function Waitlist({ onJoin, className, xstyle, ref, ...rest }: WaitlistPr
                   <path d="M5 12.5 10 17.5 19 7.5" {...stylex.props(styles.path)} />
                 </svg>
               </span>
-              <h2 {...stylex.props(bs.h3)}>You are on the list</h2>
-              <p {...stylex.props(styles.count)}>We will email {email} when your invite is ready.</p>
+              <h2 {...stylex.props(bs.h3)}>You're on the list</h2>
+              <p {...stylex.props(styles.count)}>We'll email {email} when your invite is ready.</p>
             </div>
           ) : (
             <>
               <h2 {...stylex.props(bs.h2)}>Get early access</h2>
               <p {...stylex.props(bs.lead)}>Join 4,200 teams waiting for Oniva Agents. Invites go out weekly.</p>
               <form {...stylex.props(styles.form)} onSubmit={submit}>
-                <Input xstyle={styles.grow} type="email" aria-label="Email address" placeholder="you@company.com" isRequired value={email} onChange={setEmail} />
+                <Input xstyle={styles.grow} type="email" name="email" autoComplete="email" inputMode="email" aria-label="Email address" aria-describedby={error ? errId : undefined} isInvalid={error ? true : undefined} placeholder="you@company.com" isRequired value={email} onChange={setEmail} />
                 <Button type="submit" isLoading={state === 'loading'} xstyle={styles.btn} endIcon={<ArrowRight size={16} />}>
                   Join waitlist
                 </Button>
+                {error && (
+                  <p id={errId} role="alert" {...stylex.props(styles.count)}>
+                    {error}
+                  </p>
+                )}
               </form>
             </>
           )}

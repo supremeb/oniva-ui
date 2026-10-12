@@ -8,6 +8,7 @@ import { radius } from '../../tokens/radius.stylex';
 import { aiStyles } from '../../internal/ai-styles';
 import { hostOf, safeUrl } from '../../internal/ai-motion';
 import { mergeSx } from '../../internal/sx';
+import { useFormatters } from '../../internal/format';
 import { AnimatedHeight } from '../../motion/AnimatedHeight';
 
 const styles = stylex.create({
@@ -67,6 +68,8 @@ export interface SourceItem {
 
 export interface SourcesProps extends Omit<HTMLAttributes<HTMLDivElement>, 'style' | 'children'> {
   sources: SourceItem[];
+  /** Overrides the localized trigger text (default "Used N sources"). */
+  label?: string;
   defaultOpen?: boolean;
   xstyle?: stylex.StyleXStyles;
   ref?: Ref<HTMLDivElement>;
@@ -77,7 +80,8 @@ function Fav({ s }: { s: SourceItem }) {
 }
 
 /** "Used 6 sources" disclosure: stacked favicons in the trigger, numbered link list in the panel. */
-export function Sources({ sources, defaultOpen = false, className, xstyle, ref, ...rest }: SourcesProps) {
+export function Sources({ sources, defaultOpen = false, label, className, xstyle, ref, ...rest }: SourcesProps) {
+  const fmt = useFormatters();
   const [open, setOpen] = useState(defaultOpen);
   const uid = useId();
   const sx = stylex.props(styles.root, xstyle);
@@ -92,7 +96,7 @@ export function Sources({ sources, defaultOpen = false, className, xstyle, ref, 
           ))}
         </span>
         <span>
-          Used {sources.length} {sources.length === 1 ? 'source' : 'sources'}
+          {label ?? fmt.plural(sources.length, { one: 'Used # source', other: 'Used # sources' })}
         </span>
         <ChevronRight size={14} aria-hidden="true" {...stylex.props(aiStyles.chevron, open && aiStyles.chevronOpen)} />
       </button>

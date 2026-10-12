@@ -11,6 +11,7 @@ import {
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 import { aiStyles } from '../../internal/ai-styles';
+import { useFormatters } from '../../internal/format';
 import { RingProgress } from '../../components/RingProgress';
 import { TaskList, type TaskItem } from '../TaskList';
 
@@ -53,12 +54,13 @@ export function AgentProgress({
   defaultExpanded = true,
   ...rest
 }: AgentProgressProps) {
+  const fmt = useFormatters();
   const total = items.length;
   const done = items.filter((i) => i.status === 'done').length;
   const left = total - done;
   const running = items.find((i) => i.status === 'running');
   const heading =
-    title ?? (left === 0 ? 'All steps complete' : `${left} ${left === 1 ? 'step' : 'steps'} left`);
+    title ?? (left === 0 ? 'All steps complete' : fmt.plural(left, { one: '# step left', other: '# steps left' }));
   const sx = stylex.props(aiStyles.panel, styles.root, xstyle);
   return (
     <Disclosure
@@ -87,7 +89,7 @@ export function AgentProgress({
               <span {...stylex.props(styles.text)}>
                 <span {...stylex.props(styles.title)}>{heading}</span>
                 <span {...stylex.props(styles.sub, aiStyles.num)}>
-                  {running ? running.label : `${done} of ${total} done`}
+                  {running ? running.label : `${fmt.number(done)} of ${fmt.number(total)} done`}
                 </span>
               </span>
               <ChevronRight

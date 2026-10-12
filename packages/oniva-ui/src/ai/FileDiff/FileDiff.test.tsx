@@ -27,7 +27,7 @@ describe('FileDiff', () => {
   it('records per-hunk decisions and collapses hunks', () => {
     const onHunkDecision = vi.fn();
     render(<FileDiff fileName="a.ts" diff={diff} reviewable onHunkDecision={onHunkDecision} />);
-    fireEvent.click(screen.getByRole('button', { name: 'Accept hunk 1' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Accept change 1' }));
     expect(onHunkDecision).toHaveBeenCalledWith(0, 'accepted');
     expect(screen.getByText('Accepted')).toBeInTheDocument();
     const toggle = screen.getAllByRole('button', { expanded: true })[0]!;

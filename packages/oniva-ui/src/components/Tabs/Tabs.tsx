@@ -1,4 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
+import { media } from '../../tokens/media.stylex';
 import {
   Tab as AriaTab,
   TabList as AriaTabList,
@@ -53,7 +54,7 @@ const styles = stylex.create({
   },
   indPill: {
     backgroundColor: colors['--oniva-color-surface'],
-    borderRadius: radius['--oniva-radius-lg'],
+    borderRadius: radius['--oniva-radius-md'],
     boxShadow: shadow['--oniva-shadow-sm'],
     transitionTimingFunction: motion['--oniva-motion-ease-in-out'],
   },
@@ -67,9 +68,9 @@ const styles = stylex.create({
   },
   listLineV: {
     borderBottomWidth: 0,
-    borderRightColor: colors['--oniva-color-border'],
-    borderRightStyle: 'solid',
-    borderRightWidth: 1,
+    borderInlineEndColor: colors['--oniva-color-border'],
+    borderInlineEndStyle: 'solid',
+    borderInlineEndWidth: 1,
     gap: 4,
     paddingInlineEnd: 4,
   },
@@ -116,8 +117,8 @@ const styles = stylex.create({
     whiteSpace: 'nowrap',
   },
   focus: { outlineStyle: 'solid' },
-  tabMd: { height: 36, paddingInline: 4 },
-  tabSm: { height: 32, paddingInline: 2 },
+  tabMd: { minHeight: 36, paddingInline: 4 },
+  tabSm: { minHeight: 32, paddingInline: 2 },
   line: {
     borderBottomColor: 'transparent',
     borderBottomWidth: 2,
@@ -126,26 +127,26 @@ const styles = stylex.create({
   },
   lineV: {
     borderBottomWidth: 0,
-    borderRightColor: 'transparent',
-    borderRightWidth: 2,
+    borderInlineEndColor: 'transparent',
+    borderInlineEndWidth: 2,
     justifyContent: 'flex-start',
     marginBottom: 0,
-    marginRight: -1,
+    marginInlineEnd: -1,
     paddingInline: 12,
   },
   lineSelected: {
     color: colors['--oniva-color-text'],
   },
   lineIdle: {
-    color: { default: colors['--oniva-color-text-muted'], ':hover': colors['--oniva-color-text'] },
+    color: { default: colors['--oniva-color-text-muted'], ':hover': { default: null, [media.hover]: colors['--oniva-color-text'] } },
   },
-  pill: { borderRadius: radius['--oniva-radius-lg'], paddingInline: 12 },
-  pillSm: { borderRadius: radius['--oniva-radius-md'], paddingInline: 10 },
+  pill: { borderRadius: radius['--oniva-radius-md'], paddingInline: 12 },
+  pillSm: { borderRadius: radius['--oniva-radius-sm'], paddingInline: 10 },
   pillSelected: {
     color: colors['--oniva-color-text'],
   },
   pillIdle: {
-    color: { default: colors['--oniva-color-text-muted'], ':hover': colors['--oniva-color-text'] },
+    color: { default: colors['--oniva-color-text-muted'], ':hover': { default: null, [media.hover]: colors['--oniva-color-text'] } },
   },
   disabled: { color: colors['--oniva-color-text-disabled'] },
   badge: {

@@ -1,4 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
+import { media } from '../../tokens/media.stylex';
 import { focus } from '../../internal/focus';
 import type { CSSProperties, HTMLAttributes, ReactNode, Ref } from 'react';
 import { mergeSx } from '../../internal/sx';
@@ -16,7 +17,7 @@ const styles = stylex.create({
       backgroundClip: 'content-box',
       backgroundColor: {
         default: colors['--oniva-color-border-hover'],
-        ':hover': colors['--oniva-color-border-active'],
+        ':hover': { default: null, [media.hover]: colors['--oniva-color-border-active'] },
       },
       borderColor: 'transparent',
       borderRadius: radius['--oniva-radius-full'],

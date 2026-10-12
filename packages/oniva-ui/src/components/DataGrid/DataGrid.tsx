@@ -1,9 +1,11 @@
 import * as stylex from '@stylexjs/stylex';
+import { media } from '../../tokens/media.stylex';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { CSSProperties, HTMLAttributes, KeyboardEvent, PointerEvent, Ref } from 'react';
 import { dash } from '../../internal/dash-styles';
 import { fmt } from '../../internal/dash-data';
 import { focus } from '../../internal/focus';
+import { useFormatters } from '../../internal/format';
 import { mergeSx } from '../../internal/sx';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
@@ -38,6 +40,7 @@ const styles = stylex.create({
     borderWidth: 1,
     boxShadow: shadow['--oniva-shadow-xs'],
     overflow: 'hidden',
+    scrollPaddingBlockStart: HEADER_H,
   },
   scroller: { height: '100%', overflow: 'auto', position: 'relative' },
   row: { display: 'flex', position: 'absolute', left: 0 },
@@ -80,10 +83,10 @@ const styles = stylex.create({
   cellSelected: { backgroundColor: colors['--oniva-color-accent-tint'] },
   sticky: {
     backgroundColor: colors['--oniva-color-surface'],
-    borderRightColor: colors['--oniva-color-border'],
-    borderRightStyle: 'solid',
-    borderRightWidth: 1,
-    left: 0,
+    borderInlineEndColor: colors['--oniva-color-border'],
+    borderInlineEndStyle: 'solid',
+    borderInlineEndWidth: 1,
+    insetInlineStart: 0,
     position: 'sticky',
     zIndex: 2,
   },
@@ -93,7 +96,7 @@ const styles = stylex.create({
     fontSize: font['--oniva-font-size-12'],
     fontWeight: font['--oniva-font-weight-medium'],
   },
-  right: { justifyContent: 'flex-end', textAlign: 'right' },
+  right: { justifyContent: 'flex-end', textAlign: 'end' },
   body: { position: 'relative' },
   text: { overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
   sumText: { fontWeight: font['--oniva-font-weight-semibold'] },
@@ -112,7 +115,7 @@ const styles = stylex.create({
     width: 'calc(100% + 24px)',
   },
   resizer: {
-    backgroundColor: { default: 'transparent', ':hover': colors['--oniva-color-border-active'], ':focus-visible': colors['--oniva-color-focus-ring'] },
+    backgroundColor: { default: 'transparent', ':hover': { default: null, [media.hover]: colors['--oniva-color-border-active'] }, ':focus-visible': colors['--oniva-color-focus-ring'] },
     bottom: 0,
     cursor: 'col-resize',
     insetInlineEnd: 0,
@@ -125,9 +128,14 @@ const styles = stylex.create({
   resizerActive: { backgroundColor: colors['--oniva-color-border-active'] },
 });
 
-function format(v: DataGridValue | undefined, type: DataGridColumn['type']): string {
+function format(
+  v: DataGridValue | undefined,
+  type: DataGridColumn['type'],
+  locale?: string,
+  currency?: string,
+): string {
   if (v == null || v === '') return '';
-  if (type && type !== 'text' && typeof v === 'number') return fmt(v, type);
+  if (type && type !== 'text' && typeof v === 'number') return fmt(v, type, locale, currency);
   return String(v);
 }
 
@@ -154,6 +162,17 @@ export function parseCell(text: string, type: DataGridColumn['type']): DataGridV
   return type === 'percent' && /%/.test(text) ? n / 100 : n;
 }
 
+export interface DataGridLabels {
+  /** Summary label for the first column when it has no summary. Default `Total`. */
+  total?: string;
+  /** Prefix for average summaries. Default `Avg`. */
+  average?: string;
+  /** Count summary text. Default pluralised `# row` / `# rows`. */
+  rows?: (count: number) => string;
+  resize?: (header: string) => string;
+  edit?: (header: string) => string;
+}
+
 export interface DataGridProps extends Omit<HTMLAttributes<HTMLDivElement>, 'style' | 'onChange'> {
   /** Required accessible name. */
   'aria-label': string;
@@ -166,6 +185,12 @@ export interface DataGridProps extends Omit<HTMLAttributes<HTMLDivElement>, 'sty
   rowHeight?: number;
   /** Extra rows rendered above/below the viewport. */
   overscan?: number;
+  /** BCP 47 locale for numbers. Defaults to the active React Aria locale. */
+  locale?: string;
+  /** ISO 4217 code for `currency` columns. Default `USD`. */
+  currency?: string;
+  /** Override built-in strings (localisation). */
+  labels?: DataGridLabels;
   xstyle?: stylex.StyleXStyles;
   ref?: Ref<HTMLDivElement>;
 }
@@ -177,11 +202,16 @@ export function DataGrid({
   height = 420,
   rowHeight = 36,
   overscan = 6,
+  locale: localeProp,
+  currency,
+  labels,
   className,
   xstyle,
   ref,
   ...rest
 }: DataGridProps) {
+  const fmts = useFormatters();
+  const locale = localeProp ?? fmts.locale;
   const [widths, setWidths] = useState<Record<string, number>>({});
   const [active, setActive] = useState({ r: 0, c: 0 });
   const [editing, setEditing] = useState(false);
@@ -321,11 +351,11 @@ export function DataGrid({
               style={{ width: colW(c), height: HEADER_H }}
               {...stylex.props(styles.cell, styles.head, c.type && c.type !== 'text' && styles.right, sticky0(i) && styles.sticky, sticky0(i) && styles.stickyHead)}
             >
-              <span {...stylex.props(styles.text)}>{c.header}</span>
+              <span title={c.header} {...stylex.props(styles.text)}>{c.header}</span>
               <div
                 role="separator"
                 aria-orientation="vertical"
-                aria-label={`Resize ${c.header} column`}
+                aria-label={labels?.resize ? labels.resize(c.header) : `Resize ${c.header} column`}
                 aria-valuenow={colW(c)}
                 aria-valuemin={c.minWidth ?? MIN_W}
                 tabIndex={-1}
@@ -346,6 +376,7 @@ export function DataGrid({
                   const isActive = active.r === r && active.c === ci;
                   const isEditing = isActive && editing;
                   const numeric = c.type && c.type !== 'text';
+                  const cellText = format(row[c.id], c.type, locale, currency);
                   return (
                     <div
                       key={c.id}
@@ -369,7 +400,7 @@ export function DataGrid({
                     >
                       {isEditing ? (
                         <input
-                          aria-label={`Edit ${c.header}`}
+                          aria-label={labels?.edit ? labels.edit(c.header) : `Edit ${c.header}`}
                           value={draft}
                           inputMode={numeric ? 'decimal' : 'text'}
                           onChange={(e) => setDraft(e.target.value)}
@@ -390,7 +421,7 @@ export function DataGrid({
                           {...stylex.props(styles.editor, focus.inset)}
                         />
                       ) : (
-                        <span {...stylex.props(styles.text)}>{format(row[c.id], c.type)}</span>
+                        <span title={cellText} {...stylex.props(styles.text)}>{cellText}</span>
                       )}
                     </div>
                   );
@@ -414,7 +445,13 @@ export function DataGrid({
                   {...stylex.props(styles.cell, styles.head, dash.num, numeric && styles.right, sticky0(i) && styles.sticky, sticky0(i) && styles.stickyHead)}
                 >
                   <span {...stylex.props(styles.text, styles.sumText)}>
-                    {i === 0 && v == null ? 'Total' : v == null ? '' : `${c.summary === 'avg' ? 'Avg ' : c.summary === 'count' ? '' : ''}${c.summary === 'count' ? `${v} rows` : format(v, c.type)}`}
+                    {i === 0 && v == null
+                      ? (labels?.total ?? 'Total')
+                      : v == null
+                        ? ''
+                        : c.summary === 'count'
+                          ? (labels?.rows?.(v) ?? fmts.plural(v, { one: '# row', other: '# rows' }))
+                          : `${c.summary === 'avg' ? `${labels?.average ?? 'Avg'} ` : ''}${format(v, c.type, locale, currency)}`}
                   </span>
                 </div>
               );

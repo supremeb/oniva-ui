@@ -1,4 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
+import { media } from '../../tokens/media.stylex';
 import { ChevronDown } from 'lucide-react';
 import {
   Button,
@@ -28,7 +29,7 @@ const styles = stylex.create({
   trigger: {
     borderColor: {
       default: colors['--oniva-color-border'],
-      ':hover': colors['--oniva-color-border-hover'],
+      ':hover': { default: null, [media.hover]: colors['--oniva-color-border-hover'] },
       ':focus-visible': colors['--oniva-color-focus-ring'],
     },
     boxShadow: {
@@ -40,7 +41,7 @@ const styles = stylex.create({
   triggerInvalid: {
     borderColor: {
       default: colors['--oniva-color-error-border'],
-      ':hover': colors['--oniva-color-error-border'],
+      ':hover': { default: null, [media.hover]: colors['--oniva-color-error-border'] },
       ':focus-visible': colors['--oniva-color-error-border'],
     },
   },
@@ -72,7 +73,7 @@ export function Select<T extends object>({
   label,
   description,
   errorMessage,
-  placeholder = 'Select…',
+  placeholder = 'Select an option…',
   size = 'md',
   items,
   children,

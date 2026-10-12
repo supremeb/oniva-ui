@@ -1,4 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
+import { media } from '../../tokens/media.stylex';
 import {
   Children,
   cloneElement,
@@ -18,7 +19,7 @@ const styles = stylex.create({
   vMid: { borderRadius: 0, marginBlockStart: -1 },
   vLast: { borderStartEndRadius: 0, borderStartStartRadius: 0, marginBlockStart: -1 },
   // keep the focused/hovered button above its neighbours
-  raise: { zIndex: { default: 'auto', ':hover': 1, ':focus-visible': 2 } },
+  raise: { zIndex: { default: 'auto', ':hover': { default: null, [media.hover]: 1 }, ':focus-visible': 2 } },
 });
 
 export interface ButtonGroupProps extends Omit<HTMLAttributes<HTMLDivElement>, 'style'> {

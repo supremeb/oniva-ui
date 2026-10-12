@@ -85,7 +85,7 @@ const styles = stylex.create({
     appearance: 'none',
     backgroundColor: {
       default: 'transparent',
-      ':hover': colors['--oniva-color-surface-tertiary-hover'],
+      ':hover': { default: null, [media.hover]: colors['--oniva-color-surface-tertiary-hover'] },
     },
     borderRadius: radius['--oniva-radius-full'],
     borderWidth: 0,
@@ -142,7 +142,7 @@ export function MultiSelect({
   label,
   description,
   errorMessage,
-  placeholder = 'Select…',
+  placeholder = 'Select options…',
   options,
   value,
   defaultValue,

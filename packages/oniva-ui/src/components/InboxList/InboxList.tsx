@@ -1,7 +1,7 @@
 import * as stylex from '@stylexjs/stylex';
 import { Archive, Mail, MailOpen } from 'lucide-react';
 import { useRef, useState } from 'react';
-import type { PointerEvent, Ref } from 'react';
+import type { PointerEvent, ReactNode, Ref } from 'react';
 import { Button as AriaButton, GridList, GridListItem, type GridListProps } from 'react-aria-components';
 import { Avatar } from '../Avatar';
 import { dash } from '../../internal/dash-styles';
@@ -87,7 +87,7 @@ const styles = stylex.create({
   act: {
     alignItems: 'center',
     appearance: 'none',
-    backgroundColor: { default: 'transparent', ':hover': colors['--oniva-color-surface-tertiary'] },
+    backgroundColor: { default: 'transparent', ':hover': { default: null, [media.hover]: colors['--oniva-color-surface-tertiary'] } },
     borderRadius: radius['--oniva-radius-md'],
     borderWidth: 0,
     color: colors['--oniva-color-icon-muted'],
@@ -110,6 +110,8 @@ export interface InboxListProps extends Omit<GridListProps<InboxItem>, 'children
   onToggleRead?: (id: string) => void;
   /** Open an item (Enter or click). */
   onOpen?: (id: string) => void;
+  /** Replaces the default empty state. */
+  emptyState?: ReactNode;
   className?: string;
   xstyle?: stylex.StyleXStyles;
   ref?: Ref<HTMLDivElement>;
@@ -210,7 +212,7 @@ function Row({ item, hovered, focusVisible, onArchive, onToggleRead }: { item: I
 }
 
 /** Chat/email inbox list. Swipe left to archive, right to toggle read on touch; icon buttons on hover/focus for pointer + keyboard. */
-export function InboxList({ items, onArchive, onToggleRead, onOpen, className, xstyle, ref, ...rest }: InboxListProps) {
+export function InboxList({ items, onArchive, onToggleRead, onOpen, emptyState, className, xstyle, ref, ...rest }: InboxListProps) {
   const sx = stylex.props(dash.root, styles.list, xstyle);
   return (
     <GridList
@@ -221,7 +223,7 @@ export function InboxList({ items, onArchive, onToggleRead, onOpen, className, x
       items={items}
       onAction={(k) => onOpen?.(String(k))}
       {...mergeSx(sx, className)}
-      renderEmptyState={() => <p {...stylex.props(dash.label)}>Inbox zero. Nothing to read.</p>}
+      renderEmptyState={() => <p {...stylex.props(dash.label)}>{emptyState ?? "You're all caught up. No unread messages."}</p>}
     >
       {(item) => (
         <GridListItem id={item.id} textValue={`${item.unread ? 'Unread. ' : ''}${item.from}: ${item.subject ?? item.snippet}`} {...stylex.props(styles.row, styles.rowFocus)}>

@@ -36,7 +36,7 @@ const styles = stylex.create({
     backgroundColor: colors['--oniva-color-surface'],
     borderColor: {
       default: colors['--oniva-color-border'],
-      ':hover': colors['--oniva-color-border-hover'],
+      ':hover': { default: null, [media.hover]: colors['--oniva-color-border-hover'] },
       ':focus-within': colors['--oniva-color-focus-ring'],
     },
     borderRadius: radius['--oniva-radius-lg'],
@@ -61,7 +61,7 @@ const styles = stylex.create({
     backgroundColor: colors['--oniva-color-error-bg'],
     borderColor: {
       default: colors['--oniva-color-error-border'],
-      ':hover': colors['--oniva-color-error-border'],
+      ':hover': { default: null, [media.hover]: colors['--oniva-color-error-border'] },
       ':focus-within': colors['--oniva-color-error-border'],
     },
     outlineColor: colors['--oniva-color-error-border'],
@@ -72,9 +72,9 @@ const styles = stylex.create({
     boxShadow: 'none',
     color: colors['--oniva-color-text-disabled'],
   },
-  sm: { height: 32, paddingInline: 8 },
-  md: { height: 38, paddingInline: 10 },
-  lg: { height: 44, paddingInline: 12 },
+  sm: { minHeight: 32, paddingInline: 8 },
+  md: { minHeight: 38, paddingInline: 10 },
+  lg: { minHeight: 44, paddingInline: 12 },
   input: {
     appearance: 'none',
     backgroundColor: 'transparent',

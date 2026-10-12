@@ -7,7 +7,7 @@ describe('ImageGenerationLoader', () => {
     render(
       <ImageGenerationLoader aspectRatio="16 / 9" prompt="Quarterly revenue chart, isometric" />,
     );
-    const el = screen.getByRole('status', { name: 'Generating image' });
+    const el = screen.getByRole('status');
     expect(el.style.aspectRatio).toBe('16 / 9');
     expect(screen.getByText('Quarterly revenue chart, isometric')).toBeInTheDocument();
   });

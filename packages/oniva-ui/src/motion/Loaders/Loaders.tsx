@@ -5,6 +5,7 @@ import { mergeSx } from '../../internal/sx';
 import { colors } from '../../tokens/colors.stylex';
 import { media } from '../../tokens/media.stylex';
 import { useInView } from '../InView/useInView';
+import { VisuallyHidden } from '../../components/VisuallyHidden/VisuallyHidden';
 
 const pulse = stylex.keyframes({
   '0%, 100%': { opacity: 0.35, transform: 'scale(0.7)' },
@@ -118,7 +119,8 @@ export function Loader({ variant = 'dots', size = 16, label = 'Loading', classNa
   const sx = stylex.props(styles.root, variant === 'dots' && styles.dots, variant === 'bars' && styles.bars, variant === 'matrix' && styles.matrix, variant === 'typing' && styles.typing, xstyle);
   const part = variant === 'dots' ? styles.dot : variant === 'bars' ? styles.bar : variant === 'matrix' ? styles.cell : styles.key;
   return (
-    <span role="status" aria-label={label} {...rest} ref={mergeRefs(viewRef, ref)} data-variant={variant} {...mergeSx(sx, className, { fontSize: size } as CSSProperties)}>
+    <span role="status" {...rest} ref={mergeRefs(viewRef, ref)} data-variant={variant} {...mergeSx(sx, className, { fontSize: size } as CSSProperties)}>
+      <VisuallyHidden>{label}</VisuallyHidden>
       {variant === 'comet' ? (
         <span aria-hidden="true" data-paused={paused} {...stylex.props(styles.comet)} />
       ) : (

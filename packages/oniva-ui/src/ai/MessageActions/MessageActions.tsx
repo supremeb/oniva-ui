@@ -45,16 +45,16 @@ export function MessageActions({ text, onRegenerate, onShare, onBranch, feedback
         <IconSwap on={copied} a={<Copy size={14} />} b={<Check size={14} />} />
       </IconButton>
       {onRegenerate && (
-        <IconButton size="xs" variant="ghost" aria-label="Regenerate" onPress={onRegenerate}>
+        <IconButton size="xs" variant="ghost" aria-label="Regenerate response" onPress={onRegenerate}>
           <RotateCcw size={14} />
         </IconButton>
       )}
       {showFeedback && (
         <>
-          <IconButton size="xs" variant="ghost" aria-label="Good response" aria-pressed={value === 'like'} onPress={() => set('like')} xstyle={value === 'like' ? styles.active : undefined}>
+          <IconButton size="xs" variant="ghost" aria-label="Mark response as good" aria-pressed={value === 'like'} onPress={() => set('like')} xstyle={value === 'like' ? styles.active : undefined}>
             <ThumbsUp size={14} fill={value === 'like' ? 'currentColor' : 'none'} />
           </IconButton>
-          <IconButton size="xs" variant="ghost" aria-label="Bad response" aria-pressed={value === 'dislike'} onPress={() => set('dislike')} xstyle={value === 'dislike' ? styles.active : undefined}>
+          <IconButton size="xs" variant="ghost" aria-label="Mark response as bad" aria-pressed={value === 'dislike'} onPress={() => set('dislike')} xstyle={value === 'dislike' ? styles.active : undefined}>
             <ThumbsDown size={14} fill={value === 'dislike' ? 'currentColor' : 'none'} />
           </IconButton>
         </>

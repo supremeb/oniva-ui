@@ -5,6 +5,18 @@ import { font } from '../../tokens/font.stylex';
 import { mergeSx } from '../../internal/sx';
 import { TextReveal } from '../../motion/TextReveal/TextReveal';
 
+const srOnlyStyle = {
+  border: 0,
+  clip: 'rect(0 0 0 0)',
+  height: 1,
+  margin: -1,
+  overflow: 'hidden',
+  padding: 0,
+  position: 'absolute',
+  whiteSpace: 'nowrap',
+  width: 1,
+} as const;
+
 const styles = stylex.create({
   root: {
     color: colors['--oniva-color-text'],
@@ -86,8 +98,13 @@ export function ResponseStream({
   });
   const sx = stylex.props(styles.root, xstyle);
   return (
-    <div {...rest} ref={ref} aria-busy={!isComplete} aria-live="polite" {...mergeSx(sx, className)}>
-      {render ? render(visible, isComplete) : <TextReveal text={visible} staggerMs={30} maxDelayMs={240} />}
+    <div {...rest} ref={ref} aria-busy={!isComplete} {...mergeSx(sx, className)}>
+      <div aria-hidden={isComplete ? undefined : true}>
+        {render ? render(visible, isComplete) : <TextReveal text={visible} staggerMs={30} maxDelayMs={240} />}
+      </div>
+      <span role="status" style={srOnlyStyle}>
+        {isComplete ? 'Response complete' : 'Generating response…'}
+      </span>
     </div>
   );
 }

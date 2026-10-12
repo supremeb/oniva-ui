@@ -129,7 +129,7 @@ export function Artifact({ open, onClose, title, version, copyText, onDownload, 
             </IconButton>
           )}
           {onDownload && (
-            <IconButton size="xs" variant="ghost" aria-label="Download" onPress={onDownload}>
+            <IconButton size="xs" variant="ghost" aria-label="Download artifact" onPress={onDownload}>
               <Download size={14} />
             </IconButton>
           )}
@@ -139,7 +139,7 @@ export function Artifact({ open, onClose, title, version, copyText, onDownload, 
             </IconButton>
           )}
           {onClose && (
-            <IconButton size="xs" variant="ghost" aria-label="Close" onPress={onClose}>
+            <IconButton size="xs" variant="ghost" aria-label="Close artifact" onPress={onClose}>
               <X size={14} />
             </IconButton>
           )}

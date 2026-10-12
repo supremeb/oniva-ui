@@ -5,6 +5,7 @@ import {
   SliderOutput,
   SliderThumb,
   SliderTrack,
+  useLocale,
   type SliderProps as AriaSliderProps,
 } from 'react-aria-components';
 import type { ReactNode, Ref } from 'react';
@@ -42,7 +43,7 @@ const styles = stylex.create({
     right: 0,
   },
   fill: {
-    backgroundImage: `linear-gradient(90deg, ${accent['--oniva-accent-500']}, ${accent['--oniva-accent-600']})`,
+    backgroundImage: `linear-gradient(90deg, ${accent['--oniva-accent-solid']}, ${accent['--oniva-accent-solid-end']})`,
     borderRadius: radius['--oniva-radius-full'],
     height: 6,
     position: 'absolute',
@@ -90,6 +91,7 @@ export function Slider<T extends number | number[]>({
   ref,
   ...rest
 }: SliderProps<T>) {
+  const { direction } = useLocale();
   return (
     <AriaSlider
       {...rest}
@@ -119,7 +121,7 @@ export function Slider<T extends number | number[]>({
                   <div {...stylex.props(styles.rail)} />
                   <div
                     {...stylex.props(styles.fill)}
-                    style={{ left: `${start}%`, width: `${end - start}%` }}
+                    style={{ [direction === 'rtl' ? 'right' : 'left']: `${start}%`, width: `${end - start}%` }}
                   />
                   {s.values.map((_, i) => (
                     <SliderThumb

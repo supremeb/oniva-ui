@@ -1,4 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
+import { media } from '../../tokens/media.stylex';
 import { focus } from '../../internal/focus';
 import {
   ToggleButton as AriaToggleButton,
@@ -34,7 +35,7 @@ const styles = stylex.create({
   segment: {
     backgroundColor: {
       default: 'transparent',
-      ':hover': colors['--oniva-color-surface-inset-hover'],
+      ':hover': { default: null, [media.hover]: colors['--oniva-color-surface-inset-hover'] },
     },
     borderColor: 'transparent',
     boxShadow: 'none',

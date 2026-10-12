@@ -91,7 +91,7 @@ export function MemoryPanel({ memories, title = 'Memory', onEdit, onForget, clas
           </li>
         ))}
       </ul>
-      {memories.length === 0 && <p {...stylex.props(aib.meta, styles.empty)}>Nothing remembered yet.</p>}
+      {memories.length === 0 && <p {...stylex.props(aib.meta, styles.empty)}>No memories yet. They appear as you chat.</p>}
     </div>
   );
 }

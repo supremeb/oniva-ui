@@ -1,3 +1,4 @@
+import { useLocale } from 'react-aria';
 import * as stylex from '@stylexjs/stylex';
 import { sankey, sankeyLinkHorizontal, type SankeyLink, type SankeyNode } from 'd3-sankey';
 import { useMemo, type Ref } from 'react';
@@ -49,7 +50,8 @@ export function SankeyChart({
   xstyle,
   ref,
 }: SankeyChartProps) {
-  const fmt = makeFormatter(valueFormat);
+  const { locale } = useLocale();
+  const fmt = makeFormatter(valueFormat, locale);
   const toneOf = useMemo(
     () => new Map(nodes.map((n, i) => [n.id, n.tone ?? (i % 10) + 1])),
     [nodes],

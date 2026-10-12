@@ -13,7 +13,8 @@ import {
   type SortingState,
 } from '@tanstack/react-table';
 import { ArrowLeft, ArrowRight, Search } from 'lucide-react';
-import { useMemo, useState, type Ref } from 'react';
+import { useMemo, useState, type ReactNode, type Ref } from 'react';
+import { createFormatters, useFormatters } from '../../internal/format';
 import {
   Input as AriaInput,
   SearchField,
@@ -122,10 +123,17 @@ export interface DataTableProps<TData extends object> {
   data: TData[];
   columns: ColumnDef<TData, any>[]; // eslint-disable-line @typescript-eslint/no-explicit-any
   'aria-label': string;
-  /** Header caption above the count. Default "Total Results". */
+  /** Header caption above the count. Default "Total results". */
   title?: string;
-  /** Plural noun after the count. Default "results". */
-  itemLabel?: string;
+  /**
+   * Noun after the count. Default "results". Pass `{ one, other }` for correct singular/plural
+   * (use `#` for the count, e.g. `{ one: '# order', other: '# orders' }`); a plain string is the plural noun.
+   */
+  itemLabel?: string | { one: string; other: string };
+  /** Replaces the default empty state (shown when no rows match). */
+  emptyState?: ReactNode;
+  /** BCP 47 locale for the count. Defaults to the active React Aria locale. */
+  locale?: string;
   filters?: DataTableFilter[];
   /** Show the global search field. Default true. */
   searchable?: boolean;
@@ -157,8 +165,10 @@ function pageList(current: number, total: number): (number | 'gap-start' | 'gap-
 export function DataTable<TData extends object>({
   data: initialData,
   columns,
-  title = 'Total Results',
+  title = 'Total results',
   itemLabel = 'results',
+  emptyState,
+  locale,
   filters = [],
   searchable = true,
   selectable = true,
@@ -172,6 +182,8 @@ export function DataTable<TData extends object>({
   ref,
   ...rest
 }: DataTableProps<TData>) {
+  const ctxFmts = useFormatters();
+  const fmts = useMemo(() => (locale ? createFormatters(locale) : ctxFmts), [locale, ctxFmts]);
   const [data, setData] = useState(initialData);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
@@ -246,7 +258,9 @@ export function DataTable<TData extends object>({
         <div {...stylex.props(styles.total)}>
           <span {...stylex.props(styles.totalLabel)}>{title}</span>
           <span {...stylex.props(styles.totalValue)}>
-            {total.toLocaleString('en-US')} {itemLabel}
+            {typeof itemLabel === 'string'
+              ? `${fmts.number(total)} ${total === 1 && itemLabel === 'results' ? 'result' : itemLabel}`
+              : fmts.plural(total, itemLabel)}
           </span>
         </div>
         {filters.map((f) => {
@@ -309,7 +323,16 @@ export function DataTable<TData extends object>({
         </TableHeader>
         <TableBody
           items={rows}
-          renderEmptyState={() => <div {...stylex.props(styles.empty)}>No results found</div>}
+          renderEmptyState={() => (
+            <div {...stylex.props(styles.empty)}>
+              {emptyState ?? (
+                <>
+                  <div>No results</div>
+                  <div>Try a different search or clear filters.</div>
+                </>
+              )}
+            </div>
+          )}
         >
           {(row) => (
             <Row id={row.id} textValue={row.id}>

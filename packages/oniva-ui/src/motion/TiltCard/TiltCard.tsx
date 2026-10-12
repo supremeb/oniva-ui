@@ -27,7 +27,7 @@ const styles = stylex.create({
     transitionDuration: 'var(--tilt-dur, 1000ms)',
     transitionProperty: 'transform',
     transitionTimingFunction: EASE,
-    willChange: 'transform',
+    willChange: { default: 'auto', ':hover': 'transform', ':focus-within': 'transform' },
   },
   glare: {
     backgroundImage: `radial-gradient(circle closest-side at var(--gx, 50%) var(--gy, 50%), color-mix(in srgb, ${colors['--oniva-color-bg']} 55%, transparent), transparent)`,

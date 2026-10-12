@@ -9,7 +9,7 @@ describe('Waitlist', () => {
     render(<Waitlist onJoin={onJoin} />);
     await userEvent.type(screen.getByLabelText('Email address'), 'ada@example.com');
     await userEvent.click(screen.getByRole('button', { name: /join waitlist/i }));
-    expect(await screen.findByText('You are on the list')).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: "You're on the list" })).toBeInTheDocument();
     expect(onJoin).toHaveBeenCalledWith('ada@example.com');
     expect(screen.getByText(/ada@example.com/)).toBeInTheDocument();
   });

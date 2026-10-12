@@ -1,4 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
+import { media } from '../tokens/media.stylex';
 import { colors } from '../tokens/colors.stylex';
 import { font } from '../tokens/font.stylex';
 import { motion } from '../tokens/motion.stylex';
@@ -19,6 +20,7 @@ export const fp = stylex.create({
     fontFamily: font['--oniva-font-sans'],
     minWidth: 'var(--trigger-width)',
     overflow: 'auto',
+    overscrollBehavior: 'contain',
     zIndex: 50,
   },
   popoverAuto: { minWidth: 0 },
@@ -30,6 +32,7 @@ export const fp = stylex.create({
     maxHeight: 280,
     outline: 'none',
     overflow: 'auto',
+    overscrollBehavior: 'contain',
     padding: 4,
   },
   item: {
@@ -131,7 +134,7 @@ export const fp = stylex.create({
   iconButton: {
     alignItems: 'center',
     appearance: 'none',
-    backgroundColor: { default: 'transparent', ':hover': colors['--oniva-color-surface-active'] },
+    backgroundColor: { default: 'transparent', ':hover': { default: null, [media.hover]: colors['--oniva-color-surface-active'] } },
     borderRadius: radius['--oniva-radius-sm'],
     borderWidth: 0,
     color: colors['--oniva-color-icon-muted'],

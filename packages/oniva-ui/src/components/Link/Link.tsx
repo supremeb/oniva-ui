@@ -1,4 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
+import { media } from '../../tokens/media.stylex';
 import { focus } from '../../internal/focus';
 import { Link as AriaLink, type LinkProps as AriaLinkProps } from 'react-aria-components';
 import type { CSSProperties, ReactNode, Ref } from 'react';
@@ -14,7 +15,7 @@ const styles = stylex.create({
     cursor: { default: 'pointer', '[data-disabled]': 'not-allowed' },
     fontFamily: 'inherit',
     fontWeight: font['--oniva-font-weight-medium'],
-    textDecorationLine: { default: 'none', ':hover': 'underline' },
+    textDecorationLine: { default: 'none', ':hover': { default: null, [media.hover]: 'underline' } },
     textDecorationThickness: 1,
     textUnderlineOffset: 3,
     transitionDuration: motion['--oniva-motion-dur-base'],
@@ -23,12 +24,15 @@ const styles = stylex.create({
   },
   accent: {
     color: {
-      default: colors['--oniva-color-accent-soft-fg'],
-      ':hover': colors['--oniva-color-text'],
+      default: colors['--oniva-color-accent-text'],
+      ':hover': { default: null, [media.hover]: colors['--oniva-color-text'] },
     },
   },
   muted: {
-    color: { default: colors['--oniva-color-text-muted'], ':hover': colors['--oniva-color-text'] },
+    color: {
+      default: colors['--oniva-color-text-muted'],
+      ':hover': { default: null, [media.hover]: colors['--oniva-color-text'] },
+    },
   },
   inherit: { color: 'inherit' },
   underline: { textDecorationLine: 'underline' },

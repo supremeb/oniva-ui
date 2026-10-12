@@ -16,8 +16,8 @@ const NARROW = '@media (max-width: 860px)';
 
 const styles = stylex.create({
   toggle: { display: 'flex', justifyContent: 'center', marginBottom: 32 },
-  grid: { alignItems: 'stretch', display: 'grid', gap: 16, gridTemplateColumns: { default: 'repeat(3, 1fr)', [NARROW]: '1fr' } },
-  plan: { display: 'flex', flexDirection: 'column', gap: 20, height: '100%' },
+  grid: { alignItems: 'stretch', display: 'grid', gap: 16, gridTemplateColumns: { default: 'repeat(auto-fit, minmax(min(100%, 260px), 1fr))', [NARROW]: 'minmax(0, 1fr)' } },
+  plan: { display: 'flex', flexDirection: 'column', gap: 20, height: '100%', minWidth: 0, overflowWrap: 'anywhere' },
   featured: { borderColor: colors['--oniva-color-border-active'], borderWidth: 2 },
   top: { alignItems: 'center', display: 'flex', justifyContent: 'space-between' },
   price: { alignItems: 'baseline', display: 'flex', gap: 6 },

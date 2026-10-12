@@ -15,23 +15,27 @@ export const textStyles = stylex.create({
     fontSize: font['--oniva-font-size-14'],
     fontWeight: font['--oniva-font-weight-regular'],
     lineHeight: font['--oniva-font-lh-14'],
+    textWrap: 'pretty',
   },
   headline: {
     fontSize: font['--oniva-font-size-16'],
     fontWeight: font['--oniva-font-weight-semibold'],
     lineHeight: font['--oniva-font-lh-16'],
+    textWrap: 'balance',
   },
   title: {
     fontSize: font['--oniva-font-size-24'],
     fontWeight: font['--oniva-font-weight-semibold'],
     letterSpacing: font['--oniva-font-track-hero'],
     lineHeight: font['--oniva-font-lh-24'],
+    textWrap: 'balance',
   },
   display: {
     fontSize: font['--oniva-font-size-40'],
     fontWeight: font['--oniva-font-weight-semibold'],
     letterSpacing: font['--oniva-font-track-hero'],
     lineHeight: font['--oniva-font-lh-40'],
+    textWrap: 'balance',
   },
   default: { color: colors['--oniva-color-text'] },
   muted: { color: colors['--oniva-color-text-muted'] },
@@ -80,6 +84,8 @@ export function Text({
     <Tag
       {...rest}
       ref={ref as Ref<never>}
+      // truncated text keeps a way back to the full value
+      title={rest.title ?? (truncate && typeof rest.children === 'string' ? rest.children : undefined)}
       {...sx}
       className={[sx.className, className].filter(Boolean).join(' ')}
     />

@@ -9,7 +9,7 @@ describe('SankeyChart', () => {
       <SankeyChart nodes={sankeyFlows.nodes} links={sankeyFlows.links} />,
     );
     expect(screen.getAllByText('Landing page').length).toBeGreaterThan(0);
-    expect(container.querySelectorAll('path[tabindex="0"]')).toHaveLength(sankeyFlows.links.length);
+    expect(container.querySelectorAll('path[tabindex="-1"]')).toHaveLength(sankeyFlows.links.length);
   });
   it('tooltip names source and target', () => {
     render(<SankeyChart nodes={sankeyFlows.nodes} links={sankeyFlows.links} />);

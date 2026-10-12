@@ -1,4 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
+import { media } from '../../tokens/media.stylex';
 import type { ControlSize } from '../../internal/types';
 import { Button as AriaButton, type ButtonProps as AriaButtonProps } from 'react-aria-components';
 import { X } from 'lucide-react';
@@ -14,11 +15,14 @@ const styles = stylex.create({
     appearance: 'none',
     backgroundColor: {
       default: 'transparent',
-      ':hover': colors['--oniva-color-surface-inset-hover'],
+      ':hover': { default: null, [media.hover]: colors['--oniva-color-surface-inset-hover'] },
       ':active': colors['--oniva-color-surface-tertiary-hover'],
     },
     borderWidth: 0,
-    color: { default: colors['--oniva-color-icon-muted'], ':hover': colors['--oniva-color-text'] },
+    color: {
+      default: colors['--oniva-color-icon-muted'],
+      ':hover': { default: null, [media.hover]: colors['--oniva-color-text'] },
+    },
     cursor: 'pointer',
     display: 'inline-flex',
     flexShrink: 0,

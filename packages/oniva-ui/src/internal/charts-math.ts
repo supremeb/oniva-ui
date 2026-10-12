@@ -32,25 +32,25 @@ export function seriesTone(s: ChartSeries, i: number): number {
 }
 
 export type ValueFormat = 'number' | 'compact' | 'currency' | 'percent' | ((n: number) => string);
-export function makeFormatter(format: ValueFormat = 'number'): (n: number) => string {
+export function makeFormatter(format: ValueFormat = 'number', locale = 'en-US'): (n: number) => string {
   if (typeof format === 'function') return format;
   const f = {
-    number: new Intl.NumberFormat('en-US', { maximumFractionDigits: 1 }),
-    compact: new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 }),
-    currency: new Intl.NumberFormat('en-US', {
+    number: new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }),
+    compact: new Intl.NumberFormat(locale, { notation: 'compact', maximumFractionDigits: 1 }),
+    currency: new Intl.NumberFormat(locale, {
       style: 'currency',
       currency: 'USD',
       maximumFractionDigits: 0,
     }),
-    percent: new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }),
+    percent: new Intl.NumberFormat(locale, { maximumFractionDigits: 0 }),
   }[format];
   return (n) => (format === 'percent' ? `${f.format(n)}%` : f.format(n));
 }
 /** Compact formatter for axis ticks ($12K, 1.2M). */
-export function makeAxisFormatter(format: ValueFormat = 'number'): (n: number) => string {
+export function makeAxisFormatter(format: ValueFormat = 'number', locale = 'en-US'): (n: number) => string {
   if (typeof format === 'function') return format;
   if (format === 'currency') {
-    const f = new Intl.NumberFormat('en-US', {
+    const f = new Intl.NumberFormat(locale, {
       style: 'currency',
       currency: 'USD',
       notation: 'compact',
@@ -58,8 +58,8 @@ export function makeAxisFormatter(format: ValueFormat = 'number'): (n: number) =
     });
     return (n) => f.format(n);
   }
-  if (format === 'number') return makeFormatter('compact');
-  return makeFormatter(format);
+  if (format === 'number') return makeFormatter('compact', locale);
+  return makeFormatter(format, locale);
 }
 
 /** Nice axis ticks from 0 (or `min`) to a rounded max. */

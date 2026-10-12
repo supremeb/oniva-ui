@@ -138,7 +138,7 @@ export interface HeaderProps {
   onAccentChange: (a: AccentName) => void;
 }
 
-export function Header({ theme, onThemeChange, accent, onAccentChange }: HeaderProps) {
+export function HeaderUtilities({ theme, onThemeChange, accent, onAccentChange }: HeaderProps) {
   const navigate = useNavigate();
   // The command-palette demo page owns ⌘K; avoid two palettes opening at once.
   const { pathname } = useLocation();
@@ -173,34 +173,8 @@ export function Header({ theme, onThemeChange, accent, onAccentChange }: HeaderP
     (theme === 'system' &&
       typeof window !== 'undefined' &&
       window.matchMedia?.('(prefers-color-scheme: dark)').matches);
-  const navCls = ({ isActive }: { isActive: boolean }) =>
-    stylex.props(styles.link, styles.linkNoWrap, isActive && styles.linkActive).className ?? '';
   return (
-    <header {...stylex.props(styles.header)}>
-      <Link to="/" {...stylex.props(styles.logo, styles.noShrink)} aria-label="oniva/ui home">
-        <span {...stylex.props(styles.mark)} aria-hidden="true" />
-        <span {...stylex.props(styles.logoText)}>
-          oniva<span {...stylex.props(styles.logoMuted)}>/ui</span>
-        </span>
-      </Link>
-      <nav aria-label="Primary" {...stylex.props(styles.nav)}>
-        <NavLink to="/components" className={navCls}>
-          Components
-        </NavLink>
-        <NavLink to="/charts" className={navCls}>
-          Charts
-        </NavLink>
-        <NavLink to="/foundations/motion" className={navCls}>
-          Motion
-        </NavLink>
-        <NavLink to="/templates/dashboard" className={navCls}>
-          Templates
-        </NavLink>
-        <a href={SITE.github} {...stylex.props(styles.link, styles.linkNoWrap, styles.hideSm)} rel="noreferrer">
-          GitHub
-        </a>
-      </nav>
-      <div {...stylex.props(styles.spacer)} />
+    <>
       <button
         type="button"
         aria-label="Quick search"
@@ -257,6 +231,40 @@ export function Header({ theme, onThemeChange, accent, onAccentChange }: HeaderP
       >
         {isDark ? <Sun size={16} /> : <Moon size={16} />}
       </Button>
+    </>
+  );
+}
+
+export function Header({ theme, onThemeChange, accent, onAccentChange }: HeaderProps) {
+  const navCls = ({ isActive }: { isActive: boolean }) =>
+    stylex.props(styles.link, styles.linkNoWrap, isActive && styles.linkActive).className ?? '';
+  return (
+    <header {...stylex.props(styles.header)}>
+      <Link to="/" {...stylex.props(styles.logo, styles.noShrink)} aria-label="oniva/ui home">
+        <span {...stylex.props(styles.mark)} aria-hidden="true" />
+        <span {...stylex.props(styles.logoText)}>
+          oniva<span {...stylex.props(styles.logoMuted)}>/ui</span>
+        </span>
+      </Link>
+      <nav aria-label="Primary" {...stylex.props(styles.nav)}>
+        <NavLink to="/components" className={navCls}>
+          Components
+        </NavLink>
+        <NavLink to="/charts" className={navCls}>
+          Charts
+        </NavLink>
+        <NavLink to="/foundations/motion" className={navCls}>
+          Motion
+        </NavLink>
+        <NavLink to="/templates/dashboard" className={navCls}>
+          Templates
+        </NavLink>
+        <a href={SITE.github} {...stylex.props(styles.link, styles.linkNoWrap, styles.hideSm)} rel="noreferrer">
+          GitHub
+        </a>
+      </nav>
+      <div {...stylex.props(styles.spacer)} />
+      <HeaderUtilities theme={theme} onThemeChange={onThemeChange} accent={accent} onAccentChange={onAccentChange} />
     </header>
   );
 }

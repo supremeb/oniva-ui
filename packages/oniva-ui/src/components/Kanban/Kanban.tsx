@@ -18,6 +18,7 @@ import { dash } from '../../internal/dash-styles';
 import { focus } from '../../internal/focus';
 import { mergeSx } from '../../internal/sx';
 import { colors } from '../../tokens/colors.stylex';
+import { useFormatters } from '../../internal/format';
 import { font } from '../../tokens/font.stylex';
 import { media } from '../../tokens/media.stylex';
 import { motion } from '../../tokens/motion.stylex';
@@ -157,7 +158,7 @@ const styles = stylex.create({
   grip: {
     alignItems: 'center',
     appearance: 'none',
-    backgroundColor: { default: 'transparent', ':hover': colors['--oniva-color-surface-hover'] },
+    backgroundColor: { default: 'transparent', ':hover': { default: null, [media.hover]: colors['--oniva-color-surface-hover'] } },
     borderRadius: radius['--oniva-radius-sm'],
     borderWidth: 0,
     color: colors['--oniva-color-icon-muted'],
@@ -202,10 +203,60 @@ const styles = stylex.create({
 
 const priorityTone = { low: 'neutral', medium: 'info', high: 'warning', urgent: 'danger' } as const;
 
-function fmtDue(iso: string) {
+function fmtDue(iso: string, locale = 'en-US') {
   const [y, m, d] = iso.split('-').map(Number);
-  return new Date(y!, (m ?? 1) - 1, d).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  return new Date(y!, (m ?? 1) - 1, d).toLocaleDateString(locale, { month: 'short', day: 'numeric' });
 }
+
+export interface KanbanLabels {
+  /** Default `Board`. */
+  board?: string;
+  /** Default `Over work-in-progress limit.` */
+  overLimit?: string;
+  /** Visible WIP text. Default `WIP limit {n}`. */
+  wipLimit?: (limit: number) => string;
+  /** Screen-reader count suffix. Default `cards` / `cards, limit {n}`. */
+  cardCount?: (count: number, limit?: number) => string;
+  /** Default `{column} cards`. */
+  cardsOf?: (column: string) => string;
+  /** Default `Drop cards here`. */
+  dropHere?: string;
+  /** Default `Overdue, due`. */
+  overdue?: string;
+  /** Default `Due`. */
+  due?: string;
+  /** Default `Assignees`. */
+  assignees?: string;
+  /** Default `New card title in {column}`. */
+  newCardTitle?: (column: string) => string;
+  /** Default `Card title…`. */
+  cardTitlePlaceholder?: string;
+  /** Default `Add card`. */
+  addCard?: string;
+  /** Default `Add card to {column}`. */
+  addCardTo?: (column: string) => string;
+  cancel?: string;
+  /** Priority badge text. Default: capitalized key. */
+  priority?: (p: string) => string;
+}
+
+const defaultLabels: Required<KanbanLabels> = {
+  board: 'Board',
+  overLimit: 'Over work-in-progress limit.',
+  wipLimit: (n) => `WIP limit ${n}`,
+  cardCount: (_c, limit) => ` cards${limit != null ? `, limit ${limit}` : ''}`,
+  cardsOf: (c) => `${c} cards`,
+  dropHere: 'Drop cards here',
+  overdue: 'Overdue, due',
+  due: 'Due',
+  assignees: 'Assignees',
+  newCardTitle: (c) => `New card title in ${c}`,
+  cardTitlePlaceholder: 'Card title…',
+  addCard: 'Add card',
+  addCardTo: (c) => `Add card to ${c}`,
+  cancel: 'Cancel',
+  priority: (p) => p[0]!.toUpperCase() + p.slice(1),
+};
 
 export interface KanbanProps extends Omit<HTMLAttributes<HTMLDivElement>, 'style' | 'onChange'> {
   columns: KanbanColumnData[];
@@ -214,6 +265,8 @@ export interface KanbanProps extends Omit<HTMLAttributes<HTMLDivElement>, 'style
   onAddCard?: (columnId: string, title: string) => void;
   /** ISO date used to flag overdue cards. Defaults to today. */
   today?: string;
+  /** Override the built-in English strings (partial). */
+  labels?: KanbanLabels;
   xstyle?: stylex.StyleXStyles;
   ref?: Ref<HTMLDivElement>;
 }
@@ -223,6 +276,7 @@ export function Kanban({
   onColumnsChange,
   onAddCard,
   today,
+  labels,
   className,
   xstyle,
   ref,
@@ -236,10 +290,11 @@ export function Kanban({
     },
     [onColumnsChange],
   );
+  const L = { ...defaultLabels, ...labels };
   const nowIso = today ?? new Date().toISOString().slice(0, 10);
   const sx = stylex.props(dash.root, styles.board, xstyle);
   return (
-    <div role="group" aria-label="Board" {...rest} ref={ref} {...mergeSx(sx, className)}>
+    <div role="group" aria-label={L.board} {...rest} ref={ref} {...mergeSx(sx, className)}>
       {columns.map((col) => (
         <KanbanColumn
           key={col.id}
@@ -248,6 +303,7 @@ export function Kanban({
           commit={commit}
           settledId={settledId}
           today={nowIso}
+          L={L}
           onAddCard={onAddCard}
         />
       ))}
@@ -261,8 +317,10 @@ function KanbanColumn({
   commit,
   settledId,
   today,
+  L,
   onAddCard,
 }: {
+  L: Required<KanbanLabels>;
   col: KanbanColumnData;
   columns: KanbanColumnData[];
   commit: (next: KanbanColumnData[], movedId?: string) => void;
@@ -271,6 +329,7 @@ function KanbanColumn({
   onAddCard?: (columnId: string, title: string) => void;
 }) {
   const headingId = useId();
+  const { locale } = useFormatters();
   const [adding, setAdding] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const over = col.wipLimit != null && col.cards.length > col.wipLimit;
@@ -321,24 +380,24 @@ function KanbanColumn({
         {over && (
           <span {...stylex.props(styles.due, styles.wipWarn)}>
             <TriangleAlert size={14} aria-hidden="true" />
-            <span {...stylex.props(dash.sr)}>Over work-in-progress limit.</span>
-            <span aria-hidden="true">WIP limit {col.wipLimit}</span>
+            <span {...stylex.props(dash.sr)}>{L.overLimit}</span>
+            <span aria-hidden="true">{L.wipLimit(col.wipLimit!)}</span>
           </span>
         )}
         <Badge shape="square" variant={over ? 'warning' : 'neutral'}>
           <span aria-hidden="true">{col.wipLimit != null ? `${col.cards.length}/${col.wipLimit}` : col.cards.length}</span>
-          <span {...stylex.props(dash.sr)}>{` cards${col.wipLimit != null ? `, limit ${col.wipLimit}` : ''}`}</span>
+          <span {...stylex.props(dash.sr)}>{L.cardCount(col.cards.length, col.wipLimit ?? undefined)}</span>
         </Badge>
       </header>
       <GridList
-        aria-label={`${col.title} cards`}
+        aria-label={L.cardsOf(col.title)}
         items={col.cards}
         dragAndDropHooks={dragAndDropHooks}
         keyboardNavigationBehavior="tab"
         {...stylex.props(styles.list)}
         renderEmptyState={() => (
           <p {...stylex.props(dash.label, styles.empty)}>
-            Drop cards here
+            {L.dropHere}
           </p>
         )}
       >
@@ -362,19 +421,19 @@ function KanbanColumn({
             <div {...stylex.props(styles.meta)}>
               {card.priority && (
                 <Badge size="sm" dot variant={priorityTone[card.priority]}>
-                  {card.priority[0]!.toUpperCase() + card.priority.slice(1)}
+                  {L.priority(card.priority)}
                 </Badge>
               )}
               {card.due && (
                 <span {...stylex.props(styles.due, card.due < today && styles.dueLate)}>
                   <CalendarDays size={12} aria-hidden="true" />
-                  <span {...stylex.props(dash.sr)}>{card.due < today ? 'Overdue, due' : 'Due'}</span>
-                  {fmtDue(card.due)}
+                  <span {...stylex.props(dash.sr)}>{card.due < today ? L.overdue : L.due}</span>
+                  {fmtDue(card.due, locale)}
                 </span>
               )}
               <span {...stylex.props(styles.spacer)} />
               {card.assignees && card.assignees.length > 0 && (
-                <AvatarGroup size="xs" max={3} aria-label="Assignees">
+                <AvatarGroup size="xs" max={3} aria-label={L.assignees}>
                   {card.assignees.map((n) => (
                     <Avatar key={n} name={n} size="xs" />
                   ))}
@@ -389,24 +448,24 @@ function KanbanColumn({
           <input
             ref={inputRef}
             autoFocus
-            aria-label={`New card title in ${col.title}`}
-            placeholder="Card title…"
+            aria-label={L.newCardTitle(col.title)}
+            placeholder={L.cardTitlePlaceholder}
             autoComplete="off"
             onKeyDown={(e) => e.key === 'Escape' && setAdding(false)}
             {...stylex.props(styles.field)}
           />
           <div {...stylex.props(styles.formActions)}>
             <Button type="submit" size="sm">
-              Add card
+              {L.addCard}
             </Button>
             <Button size="sm" variant="ghost" onPress={() => setAdding(false)}>
-              Cancel
+              {L.cancel}
             </Button>
           </div>
         </form>
       ) : (
-        <Button variant="ghost" size="sm" startIcon={<Plus size={14} aria-hidden="true" />} onPress={() => setAdding(true)} aria-label={`Add card to ${col.title}`}>
-          Add card
+        <Button variant="ghost" size="sm" startIcon={<Plus size={14} aria-hidden="true" />} onPress={() => setAdding(true)} aria-label={L.addCardTo(col.title)}>
+          {L.addCard}
         </Button>
       )}
     </section>

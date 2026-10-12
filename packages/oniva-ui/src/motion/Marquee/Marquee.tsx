@@ -32,7 +32,6 @@ const styles = stylex.create({
     display: 'flex',
     flexShrink: 0,
     gap: 'var(--marquee-gap, 16px)',
-    willChange: 'transform',
   },
   copyX: {
     animationName: { default: scrollX, [media.reducedMotion]: 'none' },

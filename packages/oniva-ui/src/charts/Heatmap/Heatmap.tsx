@@ -1,6 +1,7 @@
 import * as stylex from '@stylexjs/stylex';
 import type { Ref } from 'react';
 import { clamp } from '../../internal/charts-math';
+import { useFormatters } from '../../internal/format';
 import { chartMotion, svgText, toneStyle, tones } from '../../internal/charts-styles';
 import { ChartFrame } from '../_shared/ChartFrame';
 
@@ -159,6 +160,8 @@ export function ContributionHeatmap({
   xstyle,
   ref,
 }: ContributionHeatmapProps) {
+  const fmt = useFormatters();
+  const unitCount = (n: number) => fmt.plural(n, { one: `# ${unit}`, other: `# ${unit}s` });
   const sorted = [...data].sort((a, b) => a.date.localeCompare(b.date));
   const days = range === 'weekly' ? 7 : range === 'monthly' ? 35 : 371;
   const slice = sorted.slice(-days);
@@ -173,7 +176,7 @@ export function ContributionHeatmap({
     <ChartFrame
       label={
         label ??
-        `Contribution calendar, ${total} ${unit}${total === 1 ? '' : 's'} over the last ${range === 'yearly' ? 'year' : range === 'monthly' ? '5 weeks' : '7 days'}`
+        `Contribution calendar, ${unitCount(total)} over the last ${range === 'yearly' ? 'year' : range === 'monthly' ? '5 weeks' : '7 days'}`
       }
       height={(w) => {
         const left = weekly ? 0 : range === 'yearly' ? 30 : 34;
@@ -265,7 +268,7 @@ export function ContributionHeatmap({
                   style={{ animationDelay: `${col * 8}ms` }}
                   {...bind(
                     { title: fullDate(dt), rows: [{ label: `${unit}s`, value: d.value, tone }] },
-                    `${fullDate(dt)}: ${d.value} ${unit}${d.value === 1 ? '' : 's'}`,
+                    `${fullDate(dt)}: ${unitCount(d.value)}`,
                   )}
                 />
               );

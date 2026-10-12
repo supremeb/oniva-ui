@@ -1,3 +1,4 @@
+import { useLocale } from 'react-aria';
 import * as stylex from '@stylexjs/stylex';
 import { scaleBand, scaleLinear } from 'd3-scale';
 import { line } from 'd3-shape';
@@ -52,8 +53,9 @@ export function ComboChart({
   xstyle,
   ref,
 }: ComboChartProps) {
-  const fb = makeFormatter(barFormat);
-  const fl = makeFormatter(lineFormat);
+  const { locale } = useLocale();
+  const fb = makeFormatter(barFormat, locale);
+  const fl = makeFormatter(lineFormat, locale);
   const all = [...bars, ...lines];
   return (
     <ChartFrame
@@ -119,7 +121,7 @@ export function ComboChart({
               y={yb}
               x1={left}
               x2={left + innerW}
-              format={makeAxisFormatter(barFormat)}
+              format={makeAxisFormatter(barFormat, locale)}
             />
             {dualAxis && (
               <g aria-hidden="true">
@@ -131,7 +133,7 @@ export function ComboChart({
                     dy="0.32em"
                     {...stylex.props(svgText.axis)}
                   >
-                    {makeAxisFormatter(lineFormat)(t)}
+                    {makeAxisFormatter(lineFormat, locale)(t)}
                   </text>
                 ))}
               </g>

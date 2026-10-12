@@ -93,7 +93,7 @@ export function ToolApproval({ toolName, description, args, status, onApprove, o
       <div {...stylex.props(styles.head)}>
         {st === 'approved' ? <Check size={16} aria-hidden="true" {...stylex.props(styles.ok)} /> : st === 'denied' ? <X size={16} aria-hidden="true" {...stylex.props(styles.no)} /> : <ShieldQuestion size={16} aria-hidden="true" />}
         <div {...stylex.props(styles.titles)}>
-          <span {...stylex.props(styles.title)}>{description ?? 'Run tool'}</span>
+          <span {...stylex.props(styles.title)}>{description ?? 'Allow this tool to run?'}</span>
           <span {...stylex.props(styles.status, styles.tool)}>{toolName}</span>
         </div>
         <span role="status" key={st} data-state="entering" {...stylex.props(styles.status, enterExit.blur, st === 'approved' && styles.ok, st === 'denied' && styles.no)}>

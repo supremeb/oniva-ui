@@ -8,6 +8,7 @@ import { radius } from '../../tokens/radius.stylex';
 import { compactNumber } from '../../internal/ai-motion';
 import { aiStyles } from '../../internal/ai-styles';
 import { aib } from '../../internal/aib-styles';
+import { useFormatters } from '../../internal/format';
 import { mergeSx } from '../../internal/sx';
 import { AnimatedNumber } from '../../motion/AnimatedNumber';
 
@@ -55,15 +56,21 @@ export interface CostBadgeProps extends Omit<HTMLAttributes<HTMLSpanElement>, 's
   /** Cost in USD. */
   cost: number;
   tokens?: number;
+  /** BCP 47 locale for number formatting. Defaults to the active locale. */
+  locale?: string;
+  /** ISO 4217 currency code. Default `USD`. */
+  currency?: string;
   xstyle?: stylex.StyleXStyles;
   ref?: Ref<HTMLSpanElement>;
 }
 
 /** Compact `$0.043 · 12.4k tokens` chip for a message or run. */
-export function CostBadge({ cost, tokens, className, xstyle, ref, ...rest }: CostBadgeProps) {
+export function CostBadge({ cost, tokens, locale, currency = 'USD', className, xstyle, ref, ...rest }: CostBadgeProps) {
+  const fmt = useFormatters();
+  const loc = locale ?? fmt.locale;
   return (
     <span {...rest} ref={ref} {...mergeSx(stylex.props(styles.badge, xstyle), className)}>
-      <AnimatedNumber value={cost} format={{ style: 'currency', currency: 'USD', minimumFractionDigits: 3, maximumFractionDigits: 3 }} />
+      <AnimatedNumber value={cost} locale={loc} format={{ style: 'currency', currency, minimumFractionDigits: 3, maximumFractionDigits: 3 }} />
       {tokens != null && (
         <>
           <span aria-hidden="true" {...stylex.props(styles.sep)}>·</span>
@@ -83,6 +90,10 @@ export interface UsageMeterProps extends Omit<HTMLAttributes<HTMLDivElement>, 's
   /** Period caption, e.g. `Oct 1 - Oct 31`. */
   period?: string;
   breakdown?: { label: string; value: number }[];
+  /** BCP 47 locale for number formatting. Defaults to the active locale. */
+  locale?: string;
+  /** ISO 4217 currency code. Default `USD`. */
+  currency?: string;
   xstyle?: stylex.StyleXStyles;
   ref?: Ref<HTMLDivElement>;
 }
@@ -94,6 +105,8 @@ export function UsageMeter({
   budget,
   period,
   breakdown = [],
+  locale,
+  currency = 'USD',
   className,
   xstyle,
   ref,
@@ -101,7 +114,10 @@ export function UsageMeter({
 }: UsageMeterProps) {
   const pct = Math.min(1, spent / budget);
   const tone = spent > budget ? styles.over : pct >= 0.8 ? styles.warn : styles.ok;
-  const usd = { style: 'currency', currency: 'USD' } as const;
+  const fmt = useFormatters();
+  const loc = locale ?? fmt.locale;
+  const money = (n: number, opts?: Intl.NumberFormatOptions) => new Intl.NumberFormat(loc, { style: 'currency', currency, ...opts }).format(n);
+  const usd = { style: 'currency', currency } as const;
   return (
     <div {...rest} ref={ref} {...mergeSx(stylex.props(aiStyles.tile, styles.meter, xstyle), className)}>
       <div {...stylex.props(styles.top)}>
@@ -109,8 +125,8 @@ export function UsageMeter({
         {period && <span {...stylex.props(aib.meta)}>{period}</span>}
       </div>
       <div {...stylex.props(styles.top)}>
-        <AnimatedNumber value={spent} format={{ ...usd, maximumFractionDigits: 2 }} {...stylex.props(styles.big, aiStyles.num)} />
-        <span {...stylex.props(aib.meta, aiStyles.num)}>of ${budget.toLocaleString('en-US')}</span>
+        <AnimatedNumber value={spent} locale={loc} format={{ ...usd, maximumFractionDigits: 2 }} {...stylex.props(styles.big, aiStyles.num)} />
+        <span {...stylex.props(aib.meta, aiStyles.num)}>of {money(budget, { maximumFractionDigits: 0 })}</span>
       </div>
       <div
         role="meter"
@@ -118,7 +134,7 @@ export function UsageMeter({
         aria-valuemin={0}
         aria-valuemax={budget}
         aria-valuenow={spent}
-        aria-valuetext={`$${spent.toFixed(2)} of $${budget}`}
+        aria-valuetext={`${money(spent)} of ${money(budget)}`}
         {...stylex.props(styles.track)}
       >
         <div {...stylex.props(styles.fill, tone)} style={{ transform: `scaleX(${pct})` }} />

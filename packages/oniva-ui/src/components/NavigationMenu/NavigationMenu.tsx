@@ -11,6 +11,7 @@ import {
 import { ChevronDown } from 'lucide-react';
 import type { CSSProperties, HTMLAttributes, ReactNode, Ref } from 'react';
 import { mergeSx, sxClass } from '../../internal/sx';
+import { media } from '../../tokens/media.stylex';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 import { motion } from '../../tokens/motion.stylex';
@@ -25,13 +26,13 @@ const styles = stylex.create({
     appearance: 'none',
     backgroundColor: {
       default: 'transparent',
-      ':hover': colors['--oniva-color-surface-inset'],
+      ':hover': { default: null, [media.hover]: colors['--oniva-color-surface-inset'] },
       ':is([data-pressed])': colors['--oniva-color-surface-inset-hover'],
     },
     borderRadius: radius['--oniva-radius-lg'],
     borderWidth: 0,
     boxSizing: 'border-box',
-    color: { default: colors['--oniva-color-text-muted'], ':hover': colors['--oniva-color-text'] },
+    color: { default: colors['--oniva-color-text-muted'], ':hover': { default: null, [media.hover]: colors['--oniva-color-text'] } },
     cursor: 'pointer',
     display: 'inline-flex',
     fontFamily: font['--oniva-font-sans'],
@@ -45,7 +46,7 @@ const styles = stylex.create({
   },
   chevron: {
     transitionDuration: motion['--oniva-motion-dur-base'],
-    transitionProperty: 'transform',
+    transitionProperty: { default: 'transform', [media.reducedMotion]: 'none' },
   },
   chevronOpen: { transform: 'rotate(180deg)' },
   link: {
@@ -68,8 +69,8 @@ const styles = stylex.create({
   linkFocus: { outlineStyle: 'solid' },
   linkNoFocus: { outlineStyle: 'none' },
   linkIdle: {
-    backgroundColor: { default: 'transparent', ':hover': colors['--oniva-color-surface-inset'] },
-    color: { default: colors['--oniva-color-text-muted'], ':hover': colors['--oniva-color-text'] },
+    backgroundColor: { default: 'transparent', ':hover': { default: null, [media.hover]: colors['--oniva-color-surface-inset'] } },
+    color: { default: colors['--oniva-color-text-muted'], ':hover': { default: null, [media.hover]: colors['--oniva-color-text'] } },
   },
   linkActive: {
     backgroundColor: colors['--oniva-color-surface-inset-hover'],

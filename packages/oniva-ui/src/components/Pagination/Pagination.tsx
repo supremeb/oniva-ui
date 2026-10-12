@@ -1,4 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
+import { media } from '../../tokens/media.stylex';
 import { focus } from '../../internal/focus';
 import { Button as AriaButton } from 'react-aria-components';
 import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
@@ -28,7 +29,7 @@ const styles = stylex.create({
     appearance: 'none',
     backgroundColor: {
       default: 'transparent',
-      ':hover': colors['--oniva-color-surface-inset-hover'],
+      ':hover': { default: null, [media.hover]: colors['--oniva-color-surface-inset-hover'] },
     },
     borderColor: 'transparent',
     borderRadius: radius['--oniva-radius-lg'],
@@ -37,7 +38,7 @@ const styles = stylex.create({
     boxSizing: 'border-box',
     color: {
       default: colors['--oniva-color-text-muted'],
-      ':hover': colors['--oniva-color-text'],
+      ':hover': { default: null, [media.hover]: colors['--oniva-color-text'] },
       ':disabled': colors['--oniva-color-text-disabled'],
     },
     cursor: { default: 'pointer', ':disabled': 'not-allowed' },
@@ -58,7 +59,7 @@ const styles = stylex.create({
   outline: {
     backgroundColor: {
       default: colors['--oniva-color-surface'],
-      ':hover': colors['--oniva-color-surface-hover'],
+      ':hover': { default: null, [media.hover]: colors['--oniva-color-surface-hover'] },
       ':disabled': colors['--oniva-color-surface'],
     },
     borderColor: colors['--oniva-color-border'],
@@ -72,20 +73,20 @@ const styles = stylex.create({
   current: {
     backgroundColor: {
       default: colors['--oniva-color-surface'],
-      ':hover': colors['--oniva-color-surface'],
+      ':hover': { default: null, [media.hover]: colors['--oniva-color-surface'] },
     },
     borderColor: colors['--oniva-color-border'],
     boxShadow: shadow['--oniva-shadow-sm'],
     color: colors['--oniva-color-text'],
   },
   currentAccent: {
-    backgroundColor: { default: 'transparent', ':hover': 'transparent' },
-    backgroundImage: `linear-gradient(180deg, ${accent['--oniva-accent-500']}, ${accent['--oniva-accent-600']})`,
+    backgroundColor: { default: 'transparent', ':hover': { default: null, [media.hover]: 'transparent' } },
+    backgroundImage: `linear-gradient(180deg, ${accent['--oniva-accent-solid']}, ${accent['--oniva-accent-solid-end']})`,
     borderColor: 'transparent',
     boxShadow: shadow['--oniva-shadow-accent-inset'],
     color: {
       default: colors['--oniva-color-accent-fg'],
-      ':hover': colors['--oniva-color-accent-fg'],
+      ':hover': { default: null, [media.hover]: colors['--oniva-color-accent-fg'] },
     },
   },
   ellipsis: {
@@ -147,6 +148,15 @@ export interface PaginationProps {
   /** Highlight current page with the accent gradient. */
   accentCurrent?: boolean;
   'aria-label'?: string;
+  /** Override built-in strings (localisation). */
+  labels?: {
+    previous?: string;
+    next?: string;
+    previousPage?: string;
+    nextPage?: string;
+    page?: (page: number) => string;
+    summary?: (page: number, pageCount: number) => string;
+  };
   className?: string;
   style?: CSSProperties;
   xstyle?: stylex.StyleXStyles;
@@ -162,6 +172,7 @@ export function Pagination({
   variant = 'numbers',
   summary,
   accentCurrent = false,
+  labels,
   'aria-label': ariaLabel = 'Pagination',
   className,
   style,
@@ -181,7 +192,7 @@ export function Pagination({
     const sx = stylex.props(styles.root, styles.footer, xstyle);
     return (
       <nav ref={ref} aria-label={ariaLabel} {...mergeSx(sx, className, style)}>
-        <span {...stylex.props(styles.summary)}>{summary ?? `Page ${page} of ${pageCount}`}</span>
+        <span {...stylex.props(styles.summary)}>{summary ?? labels?.summary?.(page, pageCount) ?? `Page ${page} of ${pageCount}`}</span>
         <div {...stylex.props(styles.list)}>
           <AriaButton
             isDisabled={page <= 1}
@@ -189,14 +200,14 @@ export function Pagination({
             {...stylex.props(styles.btn, focus.ring, styles.outline)}
           >
             <ArrowLeft size={14} />
-            Previous
+            {labels?.previous ?? 'Previous'}
           </AriaButton>
           <AriaButton
             isDisabled={page >= pageCount}
             onPress={() => go(page + 1)}
             {...stylex.props(styles.btn, focus.ring, styles.outline)}
           >
-            Next
+            {labels?.next ?? 'Next'}
             <ArrowRight size={14} />
           </AriaButton>
         </div>
@@ -210,7 +221,7 @@ export function Pagination({
       <ul {...stylex.props(styles.list)}>
         <li>
           <AriaButton
-            aria-label="Previous page"
+            aria-label={labels?.previousPage ?? 'Previous page'}
             isDisabled={page <= 1}
             onPress={() => go(page - 1)}
             {...stylex.props(styles.btn, focus.ring)}
@@ -222,7 +233,7 @@ export function Pagination({
           <li key={item}>
             {typeof item === 'number' ? (
               <AriaButton
-                aria-label={`Page ${item}`}
+                aria-label={labels?.page ? labels.page(item) : `Page ${item}`}
                 aria-current={item === page ? 'page' : undefined}
                 onPress={() => go(item)}
                 {...stylex.props(
@@ -242,7 +253,7 @@ export function Pagination({
         ))}
         <li>
           <AriaButton
-            aria-label="Next page"
+            aria-label={labels?.nextPage ?? 'Next page'}
             isDisabled={page >= pageCount}
             onPress={() => go(page + 1)}
             {...stylex.props(styles.btn, focus.ring)}

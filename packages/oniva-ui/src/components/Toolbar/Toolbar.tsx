@@ -1,4 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
+import { media } from '../../tokens/media.stylex';
 import {
   Button as AriaButton,
   Separator as AriaSeparator,
@@ -62,9 +63,9 @@ const styles = stylex.create({
   idle: {
     backgroundColor: {
       default: 'transparent',
-      ':hover': colors['--oniva-color-surface-inset-hover'],
+      ':hover': { default: null, [media.hover]: colors['--oniva-color-surface-inset-hover'] },
     },
-    color: { default: colors['--oniva-color-text-muted'], ':hover': colors['--oniva-color-text'] },
+    color: { default: colors['--oniva-color-text-muted'], ':hover': { default: null, [media.hover]: colors['--oniva-color-text'] } },
   },
   on: { backgroundColor: accent['--oniva-accent-100'], color: accent['--oniva-accent-700'] },
   disabled: { color: colors['--oniva-color-text-disabled'] },

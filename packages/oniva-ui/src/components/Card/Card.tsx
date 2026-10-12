@@ -60,7 +60,7 @@ const styles = stylex.create({
   },
   tile: {
     backgroundColor: colors['--oniva-color-surface-inner'],
-    borderRadius: radius['--oniva-radius-lg'],
+    borderRadius: radius['--oniva-radius-md'],
     boxShadow: shadow['--oniva-shadow-xs'],
     boxSizing: 'border-box',
   },

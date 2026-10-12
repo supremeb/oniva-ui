@@ -1,3 +1,4 @@
+import { useLocale } from 'react-aria';
 import * as stylex from '@stylexjs/stylex';
 import { arc } from 'd3-shape';
 import type { ReactNode, Ref } from 'react';
@@ -69,7 +70,8 @@ export function Gauge({
   xstyle,
   ref,
 }: GaugeProps) {
-  const fmt = makeFormatter(valueFormat);
+  const { locale } = useLocale();
+  const fmt = makeFormatter(valueFormat, locale);
   const f = clamp((value - min) / (max - min || 1), 0, 1);
   const R = width / 2 - 2;
   const height = R + 6;
@@ -178,7 +180,8 @@ export function Speedometer({
   xstyle,
   ref,
 }: SpeedometerProps) {
-  const fmt = makeFormatter(valueFormat);
+  const { locale } = useLocale();
+  const fmt = makeFormatter(valueFormat, locale);
   const sweep = (240 * Math.PI) / 180;
   const a0 = -sweep / 2;
   const R = width / 2 - 8;

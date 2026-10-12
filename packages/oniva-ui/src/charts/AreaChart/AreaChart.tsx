@@ -1,3 +1,4 @@
+import { useLocale } from 'react-aria';
 import * as stylex from '@stylexjs/stylex';
 import { area, line } from 'd3-shape';
 import { useMemo, type Ref } from 'react';
@@ -65,7 +66,8 @@ export function AreaChart({
   xstyle,
   ref,
 }: AreaChartProps) {
-  const fmt = makeFormatter(valueFormat);
+  const { locale } = useLocale();
+  const fmt = makeFormatter(valueFormat, locale);
   const intl = intlOptionsFor(valueFormat);
   const fill: ChartFill = fillProp ?? (gradient ? 'gradient' : 'solid');
   const seriesKeys = useMemo(() => series.map((s) => s.key), [series]);

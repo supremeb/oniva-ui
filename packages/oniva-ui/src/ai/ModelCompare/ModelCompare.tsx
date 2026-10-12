@@ -5,6 +5,7 @@ import { colors } from '../../tokens/colors.stylex';
 import { aiStyles } from '../../internal/ai-styles';
 import { aib } from '../../internal/aib-styles';
 import { mergeSx } from '../../internal/sx';
+import { useFormatters } from '../../internal/format';
 import { Badge } from '../../components/Badge';
 import { Button } from '../../components/Button';
 import { Stagger } from '../../motion/Stagger';
@@ -40,6 +41,7 @@ export interface ModelCompareProps extends Omit<HTMLAttributes<HTMLDivElement>, 
 
 /** Side-by-side model outputs with latency and cost; fastest/cheapest are flagged. */
 export function ModelCompare({ prompt, responses, selectedId, onSelect, className, xstyle, ref, ...rest }: ModelCompareProps) {
+  const fmt = useFormatters();
   const fastest = Math.min(...responses.map((r) => r.latencyMs));
   const cheapest = Math.min(...responses.map((r) => r.cost));
   return (
@@ -59,8 +61,8 @@ export function ModelCompare({ prompt, responses, selectedId, onSelect, classNam
             <p {...stylex.props(styles.body)}>{r.text}</p>
             <div {...stylex.props(styles.stats)}>
               <Badge variant={r.latencyMs === fastest ? 'success' : 'neutral'}>{(r.latencyMs / 1000).toFixed(1)}s{r.latencyMs === fastest ? ' · fastest' : ''}</Badge>
-              <Badge variant={r.cost === cheapest ? 'success' : 'neutral'}>${r.cost.toFixed(3)}{r.cost === cheapest ? ' · cheapest' : ''}</Badge>
-              {r.tokens != null && <Badge variant="neutral">{r.tokens.toLocaleString('en-US')} tok</Badge>}
+              <Badge variant={r.cost === cheapest ? 'success' : 'neutral'}>{fmt.currency(r.cost, 'USD', { minimumFractionDigits: 3, maximumFractionDigits: 3 })}{r.cost === cheapest ? ' · cheapest' : ''}</Badge>
+              {r.tokens != null && <Badge variant="neutral">{fmt.number(r.tokens)} tok</Badge>}
             </div>
             <Button size="sm" variant={selectedId === r.id ? 'soft' : 'secondary'} startIcon={selectedId === r.id ? <Check size={14} /> : undefined} onPress={() => onSelect?.(r.id)}>
               {selectedId === r.id ? 'Chosen' : 'Use this one'}

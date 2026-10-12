@@ -71,10 +71,18 @@ export function DateCell({ value, locale = 'en-US' }: { value: Date | string; lo
   return <time dateTime={d.toISOString()}>{text}</time>;
 }
 
-export function PriceCell({ value, currency = 'USD' }: { value: number; currency?: string }) {
+export function PriceCell({
+  value,
+  currency = 'USD',
+  locale = 'en-US',
+}: {
+  value: number;
+  currency?: string;
+  locale?: string;
+}) {
   return (
     <span {...stylex.props(s.pricePill)}>
-      {value.toLocaleString('en-US', { style: 'currency', currency })}
+      {value.toLocaleString(locale, { style: 'currency', currency })}
     </span>
   );
 }

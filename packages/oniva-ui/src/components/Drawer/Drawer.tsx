@@ -58,11 +58,11 @@ const outBottom = stylex.keyframes({
 const styles = stylex.create({
   overlay: {
     backgroundColor: colors['--oniva-color-overlay'],
-    height: '100vh',
+    bottom: 0,
     left: 0,
     position: 'fixed',
     top: 0,
-    width: '100vw',
+    right: 0,
     zIndex: 100,
   },
   overlayEntering: {

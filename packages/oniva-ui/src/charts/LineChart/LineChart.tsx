@@ -1,3 +1,4 @@
+import { useLocale } from 'react-aria';
 import * as stylex from '@stylexjs/stylex';
 import { line } from 'd3-shape';
 import { useMemo, type Ref } from 'react';
@@ -60,7 +61,8 @@ export function LineChart({
   xstyle,
   ref,
 }: LineChartProps) {
-  const fmt = makeFormatter(valueFormat);
+  const { locale } = useLocale();
+  const fmt = makeFormatter(valueFormat, locale);
   const axisFmt = makeAxisFormatter(valueFormat);
   const intl = intlOptionsFor(valueFormat);
   const seriesKeys = useMemo(() => series.map((s) => s.key), [series]);

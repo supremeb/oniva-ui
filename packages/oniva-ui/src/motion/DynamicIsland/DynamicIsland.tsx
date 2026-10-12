@@ -33,7 +33,7 @@ const styles = stylex.create({
     transformOrigin: 'top center',
     transition: `transform ${T}`,
     width: FULL.w,
-    willChange: 'transform',
+    willChange: { default: 'auto', ':hover': 'transform', ':focus-within': 'transform' },
   },
   aside: {
     backgroundColor: colors['--oniva-color-text'],

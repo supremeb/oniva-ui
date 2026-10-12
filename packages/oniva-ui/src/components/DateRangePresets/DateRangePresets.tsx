@@ -1,4 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
+import { media } from '../../tokens/media.stylex';
 import { CalendarDate, getLocalTimeZone, startOfMonth, startOfYear, today } from '@internationalized/date';
 import type { DateValue, RangeValue } from 'react-aria-components';
 import { useRef } from 'react';
@@ -67,7 +68,7 @@ const styles = stylex.create({
     appearance: 'none',
     backgroundColor: {
       default: 'transparent',
-      ':hover': colors['--oniva-color-surface-inset-hover'],
+      ':hover': { default: null, [media.hover]: colors['--oniva-color-surface-inset-hover'] },
     },
     borderRadius: radius['--oniva-radius-md'],
     borderWidth: 0,

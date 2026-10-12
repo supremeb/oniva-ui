@@ -15,37 +15,46 @@ export const darkTheme = stylex.createTheme(colors, {
   '--oniva-color-bg': '#121212',
   '--oniva-color-surface': '#262626',
   '--oniva-color-surface-hover': 'rgba(64, 64, 64, 0.6)',
-  '--oniva-color-surface-active': '#262626',
+  '--oniva-color-surface-active': '#333333',
   '--oniva-color-surface-inner': 'rgba(38, 38, 38, 0.6)',
   '--oniva-color-surface-inset': '#171717',
   '--oniva-color-surface-inset-hover': '#262626',
-  '--oniva-color-surface-tertiary': '#262626',
+  '--oniva-color-surface-tertiary': '#303030',
   '--oniva-color-surface-tertiary-hover': '#404040',
   '--oniva-color-overlay': 'rgba(0, 0, 0, 0.6)',
   '--oniva-color-overlay-hover': 'rgba(255, 255, 255, 0.08)',
 
   '--oniva-color-border': '#404040',
   '--oniva-color-border-hover': '#737373',
-  '--oniva-color-border-active': '#525252',
-  '--oniva-color-border-control': '#404040',
+  '--oniva-color-border-active': '#a1a1a1', // > border-hover (#737373)
+  '--oniva-color-border-control': '#8a8a8a',
+  '--oniva-color-focus-ring': accent['--oniva-accent-400'], // >= 3:1 on #121212/#262626/#171717 for all 8 accents
   '--oniva-color-separator': '#262626',
 
   '--oniva-color-text': '#fafafa',
   '--oniva-color-text-muted': '#b0b0b0', // AA on selected blue-900 rows
   '--oniva-color-text-on-tertiary': '#d4d4d4',
-  '--oniva-color-text-subtle': '#909090', // AA on #262626 and #171717
-  '--oniva-color-text-disabled': '#262626',
+  '--oniva-color-text-subtle': '#a1a1a1', // AA on surface, inset, surface-hover and tertiary
+  '--oniva-color-text-disabled': '#737373',
   '--oniva-color-text-placeholder': '#a1a1a1',
   '--oniva-color-text-error': '#ff6467',
   '--oniva-color-icon-muted': '#737373',
-  '--oniva-color-icon-subtle': '#525252',
+  '--oniva-color-icon-subtle': '#8a8a8a',
   '--oniva-color-kbd-bg': '#404040',
-  '--oniva-color-kbd-fg': '#a1a1a1',
+  '--oniva-color-kbd-fg': '#d4d4d4',
+  '--oniva-color-accent-text': accent['--oniva-accent-300'],
+  '--oniva-color-accent-fg': accent['--oniva-accent-on-solid'],
+  '--oniva-color-text-inverse': '#0a0a0a',
+  '--oniva-color-danger-solid': '#fb2c36',
+  '--oniva-color-danger-on-solid': '#0a0a0a',
+  '--oniva-color-success-solid': '#00c950',
+  '--oniva-color-warning-solid': '#f0b100',
+  '--oniva-color-on-chart': '#0a0a0a',
 
   '--oniva-color-accent-soft': accent['--oniva-accent-900'],
   '--oniva-color-accent-soft-hover': accent['--oniva-accent-800'],
   '--oniva-color-accent-soft-active': accent['--oniva-accent-700'],
-  '--oniva-color-accent-soft-fg': accent['--oniva-accent-300'],
+  '--oniva-color-accent-soft-fg': accent['--oniva-accent-50'], // >= 4.5:1 on soft (900), hover (800) and active (700)
   '--oniva-color-accent-soft-disabled': accent['--oniva-accent-950'],
   '--oniva-color-accent-soft-disabled-fg': accent['--oniva-accent-700'],
   '--oniva-color-accent-tint': `color-mix(in srgb, ${accent['--oniva-accent-500']} 15%, transparent)`,
@@ -76,8 +85,19 @@ export const darkTheme = stylex.createTheme(colors, {
   '--oniva-color-danger-halo': 'rgba(130, 24, 26, 0.4)',
   '--oniva-color-info-halo': 'rgba(55, 42, 172, 0.4)',
 
-  '--oniva-color-chart-track': '#262626',
-  '--oniva-color-chart-cursor': '#404040',
+  '--oniva-color-chart-track': '#404040',
+  '--oniva-color-chart-cursor': '#525252',
+  // dark keeps the original bright palette (the light palette is tuned for white)
+  '--oniva-color-chart-1': '#00debf',
+  '--oniva-color-chart-2': '#9df000',
+  '--oniva-color-chart-3': '#fe66b7',
+  '--oniva-color-chart-4': '#00bfff',
+  '--oniva-color-chart-5': '#bf7bff',
+  '--oniva-color-chart-6': '#317cff',
+  '--oniva-color-chart-7': '#00c48c',
+  '--oniva-color-chart-8': '#f3b700',
+  '--oniva-color-chart-9': '#7b7be0',
+  '--oniva-color-chart-10': '#9b979f',
 });
 
 export const darkShadowTheme = stylex.createTheme(shadow, {
@@ -105,6 +125,14 @@ export const accentBlue = stylex.createTheme(accent, {
   '--oniva-accent-800': '#193cb8',
   '--oniva-accent-900': '#1c398e',
   '--oniva-accent-950': '#162556',
+  '--oniva-accent-on-solid': '#ffffff',
+  '--oniva-accent-solid': '#155dfc',
+  '--oniva-accent-solid-end': '#1447e6',
+  '--oniva-accent-solid-hover': '#1447e6',
+  '--oniva-accent-solid-hover-end': '#193cb8',
+  '--oniva-accent-solid-active': '#193cb8',
+  '--oniva-accent-solid-active-end': '#1c398e',
+  '--oniva-accent-focus': '#155dfc',
 });
 
 export const accentViolet = stylex.createTheme(accent, {
@@ -119,6 +147,14 @@ export const accentViolet = stylex.createTheme(accent, {
   '--oniva-accent-800': '#5d0ec0',
   '--oniva-accent-900': '#4d179a',
   '--oniva-accent-950': '#2f0d68',
+  '--oniva-accent-on-solid': '#ffffff',
+  '--oniva-accent-solid': '#7f22fe',
+  '--oniva-accent-solid-end': '#7008e7',
+  '--oniva-accent-solid-hover': '#7008e7',
+  '--oniva-accent-solid-hover-end': '#5d0ec0',
+  '--oniva-accent-solid-active': '#5d0ec0',
+  '--oniva-accent-solid-active-end': '#4d179a',
+  '--oniva-accent-focus': '#7f22fe',
 });
 
 export const accentPink = stylex.createTheme(accent, {
@@ -133,6 +169,14 @@ export const accentPink = stylex.createTheme(accent, {
   '--oniva-accent-800': '#a3004c',
   '--oniva-accent-900': '#861043',
   '--oniva-accent-950': '#510424',
+  '--oniva-accent-on-solid': '#ffffff',
+  '--oniva-accent-solid': '#e60076',
+  '--oniva-accent-solid-end': '#c6005c',
+  '--oniva-accent-solid-hover': '#c6005c',
+  '--oniva-accent-solid-hover-end': '#a3004c',
+  '--oniva-accent-solid-active': '#a3004c',
+  '--oniva-accent-solid-active-end': '#861043',
+  '--oniva-accent-focus': '#e60076',
 });
 
 export const accentRed = stylex.createTheme(accent, {
@@ -147,6 +191,14 @@ export const accentRed = stylex.createTheme(accent, {
   '--oniva-accent-800': '#9f0712',
   '--oniva-accent-900': '#82181a',
   '--oniva-accent-950': '#460809',
+  '--oniva-accent-on-solid': '#ffffff',
+  '--oniva-accent-solid': '#e7000b',
+  '--oniva-accent-solid-end': '#c10007',
+  '--oniva-accent-solid-hover': '#c10007',
+  '--oniva-accent-solid-hover-end': '#9f0712',
+  '--oniva-accent-solid-active': '#9f0712',
+  '--oniva-accent-solid-active-end': '#82181a',
+  '--oniva-accent-focus': '#e7000b',
 });
 
 export const accentAmber = stylex.createTheme(accent, {
@@ -161,6 +213,14 @@ export const accentAmber = stylex.createTheme(accent, {
   '--oniva-accent-800': '#973c00',
   '--oniva-accent-900': '#7b3306',
   '--oniva-accent-950': '#461901',
+  '--oniva-accent-on-solid': '#0a0a0a',
+  '--oniva-accent-solid': '#fe9a00',
+  '--oniva-accent-solid-end': '#e17100',
+  '--oniva-accent-solid-hover': '#ffb900',
+  '--oniva-accent-solid-hover-end': '#fe9a00',
+  '--oniva-accent-solid-active': '#e17100',
+  '--oniva-accent-solid-active-end': '#e17100',
+  '--oniva-accent-focus': '#bb4d00',
 });
 
 export const accentEmerald = stylex.createTheme(accent, {
@@ -175,6 +235,14 @@ export const accentEmerald = stylex.createTheme(accent, {
   '--oniva-accent-800': '#006045',
   '--oniva-accent-900': '#004f3b',
   '--oniva-accent-950': '#002c22',
+  '--oniva-accent-on-solid': '#0a0a0a',
+  '--oniva-accent-solid': '#00bc7d',
+  '--oniva-accent-solid-end': '#009966',
+  '--oniva-accent-solid-hover': '#00d492',
+  '--oniva-accent-solid-hover-end': '#00bc7d',
+  '--oniva-accent-solid-active': '#009966',
+  '--oniva-accent-solid-active-end': '#009966',
+  '--oniva-accent-focus': '#009966',
 });
 
 export const accentCyan = stylex.createTheme(accent, {
@@ -189,6 +257,14 @@ export const accentCyan = stylex.createTheme(accent, {
   '--oniva-accent-800': '#005f78',
   '--oniva-accent-900': '#104e64',
   '--oniva-accent-950': '#053345',
+  '--oniva-accent-on-solid': '#0a0a0a',
+  '--oniva-accent-solid': '#00b8db',
+  '--oniva-accent-solid-end': '#0092b8',
+  '--oniva-accent-solid-hover': '#00d3f2',
+  '--oniva-accent-solid-hover-end': '#00b8db',
+  '--oniva-accent-solid-active': '#0092b8',
+  '--oniva-accent-solid-active-end': '#0092b8',
+  '--oniva-accent-focus': '#0092b8',
 });
 
 export const accentIndigo = stylex.createTheme(accent, {
@@ -203,6 +279,14 @@ export const accentIndigo = stylex.createTheme(accent, {
   '--oniva-accent-800': '#372aac',
   '--oniva-accent-900': '#312c85',
   '--oniva-accent-950': '#1e1a4d',
+  '--oniva-accent-on-solid': '#ffffff',
+  '--oniva-accent-solid': '#4f39f6',
+  '--oniva-accent-solid-end': '#432dd7',
+  '--oniva-accent-solid-hover': '#432dd7',
+  '--oniva-accent-solid-hover-end': '#372aac',
+  '--oniva-accent-solid-active': '#372aac',
+  '--oniva-accent-solid-active-end': '#312c85',
+  '--oniva-accent-focus': '#4f39f6',
 });
 
 export const accentThemes = {

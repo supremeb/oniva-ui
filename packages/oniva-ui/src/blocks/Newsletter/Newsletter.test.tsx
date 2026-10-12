@@ -10,7 +10,7 @@ describe('Newsletter', () => {
     await userEvent.type(screen.getByLabelText('Email address'), 'a@b.co');
     await userEvent.click(screen.getByRole('button', { name: 'Subscribe' }));
     expect(onSubscribe).toHaveBeenCalledWith('a@b.co');
-    expect(screen.getByText(/Check a@b.co/)).toBeInTheDocument();
+    expect((await screen.findAllByText(/Check a@b.co/)).length).toBeGreaterThan(0);
     expect(screen.getByTestId('n')).toHaveClass('x');
   });
 });

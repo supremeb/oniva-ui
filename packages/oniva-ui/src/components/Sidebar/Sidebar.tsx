@@ -1,4 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
+import { media } from '../../tokens/media.stylex';
 import {
   Button as AriaButton,
   Input as AriaInput,
@@ -76,7 +77,7 @@ const styles = stylex.create({
     ...focusRing,
     alignItems: 'center',
     appearance: 'none',
-    backgroundColor: { default: 'transparent', ':hover': colors['--oniva-color-surface-inset'] },
+    backgroundColor: { default: 'transparent', ':hover': { default: null, [media.hover]: colors['--oniva-color-surface-inset'] } },
     borderRadius: radius['--oniva-radius-xl'],
     borderWidth: 0,
     color: colors['--oniva-color-text'],
@@ -102,7 +103,7 @@ const styles = stylex.create({
     appearance: 'none',
     backgroundColor: {
       default: 'transparent',
-      ':hover': colors['--oniva-color-surface-inset-hover'],
+      ':hover': { default: null, [media.hover]: colors['--oniva-color-surface-inset-hover'] },
     },
     borderRadius: radius['--oniva-radius-md'],
     borderWidth: 0,
@@ -242,7 +243,7 @@ const styles = stylex.create({
   itemFocus: { outlineStyle: 'solid' },
   pillActive: {
     backgroundColor: 'transparent',
-    backgroundImage: `linear-gradient(180deg, ${accent['--oniva-accent-500']}, ${accent['--oniva-accent-600']})`,
+    backgroundImage: `linear-gradient(180deg, ${accent['--oniva-accent-solid']}, ${accent['--oniva-accent-solid-end']})`,
     borderRadius: radius['--oniva-radius-lg'],
     boxShadow: shadow['--oniva-shadow-accent-inset'],
     transitionTimingFunction: motion['--oniva-motion-ease-in-out'],
@@ -250,7 +251,7 @@ const styles = stylex.create({
   pillHover: { backgroundColor: colors['--oniva-color-surface-inset'], borderRadius: radius['--oniva-radius-lg'] },
   itemCollapsed: { justifyContent: 'center', paddingInline: 0 },
   itemIdle: {
-    color: { default: colors['--oniva-color-text-muted'], ':hover': colors['--oniva-color-text'] },
+    color: { default: colors['--oniva-color-text-muted'], ':hover': { default: null, [media.hover]: colors['--oniva-color-text'] } },
   },
   itemActive: {
     color: colors['--oniva-color-accent-fg'],
@@ -280,7 +281,7 @@ const styles = stylex.create({
     appearance: 'none',
     backgroundColor: {
       default: colors['--oniva-color-surface-inset'],
-      ':hover': colors['--oniva-color-surface-inset-hover'],
+      ':hover': { default: null, [media.hover]: colors['--oniva-color-surface-inset-hover'] },
     },
     borderColor: colors['--oniva-color-border'],
     borderRadius: radius['--oniva-radius-xl'],
@@ -402,7 +403,7 @@ export function SidebarHeader({
         <Avatar name={name} src={avatarSrc} size="md" />
         {!collapsed && (
           <>
-            <span {...stylex.props(styles.switcherName)}>{name}</span>
+            <span title={typeof name === 'string' ? name : undefined} {...stylex.props(styles.switcherName)}>{name}</span>
             <ChevronsUpDown size={16} aria-hidden="true" {...stylex.props(styles.chevrons)} />
           </>
         )}
@@ -432,7 +433,7 @@ export interface SidebarSearchProps extends Omit<
 }
 
 export function SidebarSearch({
-  placeholder = 'Quick Search',
+  placeholder = 'Quick search',
   hint = '⌘L',
   xstyle,
   className,
@@ -619,7 +620,11 @@ export function SidebarItem({
             {icon}
           </span>
         )}
-        {!collapsed && <span {...stylex.props(styles.itemLabel)}>{children}</span>}
+        {!collapsed && (
+          <span title={typeof children === 'string' ? children : undefined} {...stylex.props(styles.itemLabel)}>
+            {children}
+          </span>
+        )}
         {!collapsed && badge !== undefined && (
           <span {...stylex.props(styles.badge, isActive && styles.badgeActive)}>{badge}</span>
         )}

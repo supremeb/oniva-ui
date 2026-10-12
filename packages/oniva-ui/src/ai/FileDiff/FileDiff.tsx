@@ -126,10 +126,10 @@ function Hunk({ hunk, index, view, reviewable, decision, onDecide }: { hunk: Dif
             </span>
           ) : (
             <>
-              <Button size="xs" variant="ghost" aria-label={`Reject hunk ${index + 1}`} onPress={() => onDecide('rejected')}>
+              <Button size="xs" variant="ghost" aria-label={`Reject change ${index + 1}`} onPress={() => onDecide('rejected')}>
                 <X size={12} aria-hidden="true" /> Reject
               </Button>
-              <Button size="xs" variant="soft" aria-label={`Accept hunk ${index + 1}`} onPress={() => onDecide('accepted')}>
+              <Button size="xs" variant="soft" aria-label={`Accept change ${index + 1}`} onPress={() => onDecide('accepted')}>
                 <Check size={12} aria-hidden="true" /> Accept
               </Button>
             </>

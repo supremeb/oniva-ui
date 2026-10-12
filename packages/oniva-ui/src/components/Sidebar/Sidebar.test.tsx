@@ -43,7 +43,7 @@ describe('Sidebar', () => {
     const home = screen.getByRole('link', { name: /Home/ });
     expect(home).toHaveAttribute('aria-current', 'page');
     expect(home).toHaveTextContent('152');
-    expect(screen.getByRole('searchbox', { name: 'Quick Search' })).toBeInTheDocument();
+    expect(screen.getByRole('searchbox', { name: 'Quick search' })).toBeInTheDocument();
   });
   it('collapses via the toggle, hiding labels but keeping accessible names', async () => {
     const onChange = vi.fn();

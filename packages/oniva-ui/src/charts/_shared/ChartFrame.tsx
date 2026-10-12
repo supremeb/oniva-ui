@@ -49,7 +49,7 @@ export interface TooltipContent {
 
 /** Spread onto an SVG element to make it a hover/focus target that shows a tooltip. */
 export interface TipBind {
-  tabIndex: 0;
+  tabIndex: -1;
   role: 'graphics-symbol';
   'aria-roledescription': 'data point';
   'aria-label'?: string;
@@ -123,7 +123,7 @@ export function ChartFrame({
 
   const bind = useCallback(
     (data: TooltipContent | null, ariaLabel?: string): TipBind => ({
-      tabIndex: 0,
+      tabIndex: -1,
       role: 'graphics-symbol',
       'aria-roledescription': 'data point',
       'aria-label': ariaLabel,
@@ -141,6 +141,24 @@ export function ChartFrame({
     [at],
   );
 
+  const onSvgKeyDown = useCallback((e: KeyboardEvent<SVGSVGElement>) => {
+    const keys = ['ArrowRight', 'ArrowLeft', 'ArrowDown', 'ArrowUp', 'Home', 'End'];
+    if (!keys.includes(e.key)) return;
+    const pts = Array.from(
+      e.currentTarget.querySelectorAll<SVGElement>('[role="graphics-symbol"]'),
+    );
+    if (!pts.length) return;
+    e.preventDefault();
+    const cur = pts.indexOf(document.activeElement as SVGElement);
+    const rtl = getComputedStyle(e.currentTarget).direction === 'rtl';
+    const fwd = e.key === 'ArrowDown' || e.key === (rtl ? 'ArrowLeft' : 'ArrowRight');
+    let next = cur < 0 ? 0 : cur;
+    if (e.key === 'Home') next = 0;
+    else if (e.key === 'End') next = pts.length - 1;
+    else if (cur >= 0) next = Math.min(pts.length - 1, Math.max(0, cur + (fwd ? 1 : -1)));
+    pts[next]?.focus();
+  }, []);
+
   const sx = stylex.props(styles.root, xstyle);
   const align = tip ? (tip.x < 80 ? 'left' : tip.x > width - 80 ? 'right' : 'center') : 'center';
   return (
@@ -154,6 +172,8 @@ export function ChartFrame({
         role="group"
         aria-roledescription="chart"
         aria-label={label}
+        tabIndex={0}
+        onKeyDown={onSvgKeyDown}
         ref={viewRef}
         style={{ '--oniva-chart-play': inView ? 'running' : 'paused' } as CSSProperties}
         width={width}

@@ -89,3 +89,11 @@ Canonical example: `packages/oniva-ui/src/components/Button/` (read all four fil
 - `stylex-vitest-and-theming.md`: compiling StyleX in Vitest, themes/portals/accent composition
 - `locked-down-machine-native-binaries.md`: when native `.node`/browser binaries are blocked locally
 - `docs-landing-templates-gotchas.md`: docs landing/templates/charts gallery, Preview helper, sr-only table fix
+
+## Color & type rules (loop 6)
+- Text on an accent fill uses `--oniva-color-accent-fg` (= `--oniva-accent-on-solid`, white or near-black per accent). Never hard-code white. Solid fills use `--oniva-accent-solid*` stops, not `accent-500/600` directly. Accent-colored text on neutral surfaces uses `--oniva-color-accent-text`; text on soft fills uses `accent-soft-fg`.
+- Status solids: pair `*-solid` with `--oniva-color-{success,warning,danger,info}-on-solid`; danger gradient pairs with `--oniva-color-on-solid`.
+- Focus: always compose `focus.ring` / `focus.inset` from `internal/focus.ts` (>= 3:1 ring, wider under `prefers-contrast: more`, `Highlight` in forced colors). No ad-hoc outlines.
+- Hover: write `':hover': { default: null, [media.hover]: x }` (`media` from `tokens/media.stylex`) so taps never leave a sticky hover. Press scale comes from `--oniva-motion-press-scale`, never a literal.
+- Numbers (counts, prices, sizes, times, kbd, badges, table cells) get `fontVariantNumeric: 'tabular-nums'`, not `fontFeatureSettings`. Format numbers/currency/dates/plurals via `internal/format.ts` (`useFormatters`, `pluralize`); no inline `'en-US'`/`$`.
+- Any color token VALUE change must keep `node packages/oniva-ui/scripts/check-contrast.mjs` (and `tokens/contrast.test.ts`) green; add a pair there when you add a text/background role. Unit migration of font size/line-height tokens to rem/unitless is deferred (public calc() consumers).

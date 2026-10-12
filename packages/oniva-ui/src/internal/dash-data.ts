@@ -13,14 +13,19 @@ export function personName(id: string): string {
 }
 
 /** Formats a number with Intl; shared by DataGrid + KpiStrip + InvoiceCard. */
-export function fmt(value: number, kind: 'number' | 'currency' | 'percent' | 'compact' = 'number') {
+export function fmt(
+  value: number,
+  kind: 'number' | 'currency' | 'percent' | 'compact' = 'number',
+  locale = 'en-US',
+  currency = 'USD',
+) {
   const opts: Intl.NumberFormatOptions =
     kind === 'currency'
-      ? { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }
+      ? { style: 'currency', currency, maximumFractionDigits: 0 }
       : kind === 'percent'
         ? { style: 'percent', maximumFractionDigits: 1 }
         : kind === 'compact'
           ? { notation: 'compact', maximumFractionDigits: 1 }
           : { maximumFractionDigits: 2 };
-  return new Intl.NumberFormat('en-US', opts).format(value);
+  return new Intl.NumberFormat(locale, opts).format(value);
 }

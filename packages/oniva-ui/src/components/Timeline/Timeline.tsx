@@ -1,6 +1,7 @@
 import * as stylex from '@stylexjs/stylex';
 import { ChevronDown } from 'lucide-react';
 import { useId, useState } from 'react';
+import { useFormatters } from '../../internal/format';
 import type { HTMLAttributes, ReactNode, Ref } from 'react';
 import { dash } from '../../internal/dash-styles';
 import { focus } from '../../internal/focus';
@@ -66,7 +67,7 @@ const styles = stylex.create({
   toggle: {
     alignItems: 'center',
     borderRadius: radius['--oniva-radius-sm'],
-    color: { default: colors['--oniva-color-text-muted'], ':hover': colors['--oniva-color-text'] },
+    color: { default: colors['--oniva-color-text-muted'], ':hover': { default: null, [media.hover]: colors['--oniva-color-text'] } },
     display: 'inline-flex',
     fontSize: font['--oniva-font-size-12'],
     gap: 2,
@@ -100,10 +101,10 @@ export function dayKey(iso: string): string {
   return iso.slice(0, 10);
 }
 
-function dayLabel(key: string, today?: string): string {
+function dayLabel(key: string, today?: string, locale = 'en-US'): string {
   const [y, m, d] = key.split('-').map(Number);
   const date = new Date(Date.UTC(y!, m! - 1, d));
-  const base = date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', timeZone: 'UTC' });
+  const base = date.toLocaleDateString(locale, { weekday: 'long', month: 'long', day: 'numeric', timeZone: 'UTC' });
   if (today) {
     const diff = Math.round((Date.parse(today) - date.getTime()) / 86400000);
     if (diff === 0) return `Today · ${base}`;
@@ -169,12 +170,16 @@ export interface TimelineProps extends Omit<HTMLAttributes<HTMLDivElement>, 'sty
   events: TimelineEvent[];
   /** ISO date (YYYY-MM-DD) used for "Today"/"Yesterday" labels. */
   today?: string;
+  /** BCP 47 locale for day headings. Defaults to the active React Aria locale. */
+  locale?: string;
   xstyle?: stylex.StyleXStyles;
   ref?: Ref<HTMLDivElement>;
 }
 
 /** Vertical activity timeline grouped by day (newest first by input order). */
-export function Timeline({ events, today, className, xstyle, ref, ...rest }: TimelineProps) {
+export function Timeline({ events, today, locale: localeProp, className, xstyle, ref, ...rest }: TimelineProps) {
+  const { locale: ctxLocale } = useFormatters();
+  const locale = localeProp ?? ctxLocale;
   const groups: [string, TimelineEvent[]][] = [];
   for (const ev of events) {
     const k = dayKey(ev.time);
@@ -186,8 +191,8 @@ export function Timeline({ events, today, className, xstyle, ref, ...rest }: Tim
   return (
     <div {...rest} ref={ref} {...mergeSx(sx, className)}>
       {groups.map(([key, evs]) => (
-        <section key={key} aria-label={dayLabel(key, today)}>
-          <h3 {...stylex.props(styles.day)}>{dayLabel(key, today)}</h3>
+        <section key={key} aria-label={dayLabel(key, today, locale)}>
+          <h3 {...stylex.props(styles.day)}>{dayLabel(key, today, locale)}</h3>
           <ol {...stylex.props(styles.group)}>
             {evs.map((ev, i) => (
               <Item key={ev.id} ev={ev} last={i === evs.length - 1} />

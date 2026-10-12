@@ -11,7 +11,7 @@ describe('MessageActions', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Copy' }));
     expect(writeText).toHaveBeenCalledWith('hello');
     expect(screen.getByRole('button', { name: 'Copied' })).toBeInTheDocument();
-    const like = screen.getByRole('button', { name: 'Good response' });
+    const like = screen.getByRole('button', { name: 'Mark response as good' });
     fireEvent.click(like);
     expect(like).toHaveAttribute('aria-pressed', 'true');
     expect(onFeedback).toHaveBeenLastCalledWith('like');

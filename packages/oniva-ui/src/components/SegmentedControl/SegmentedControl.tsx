@@ -31,14 +31,14 @@ const styles = stylex.create({
   },
   indicator: {
     backgroundColor: colors['--oniva-color-surface'],
-    borderRadius: radius['--oniva-radius-md'],
+    borderRadius: radius['--oniva-radius-sm'],
     boxShadow: shadow['--oniva-shadow-xs'],
     transitionTimingFunction: motion['--oniva-motion-ease-in-out'],
   },
   full: { display: 'flex', width: '100%' },
   item: {
     alignItems: 'center',
-    borderRadius: radius['--oniva-radius-md'],
+    borderRadius: radius['--oniva-radius-sm'],
     boxSizing: 'border-box',
     cursor: 'pointer',
     display: 'inline-flex',

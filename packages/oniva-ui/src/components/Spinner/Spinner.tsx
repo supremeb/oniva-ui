@@ -3,6 +3,7 @@ import { media } from '../../tokens/media.stylex';
 import type { HTMLAttributes, Ref } from 'react';
 import { useInView } from '../../motion/InView/useInView';
 import { colors } from '../../tokens/colors.stylex';
+import { VisuallyHidden } from '../VisuallyHidden';
 
 const spin = stylex.keyframes({
   from: { transform: 'rotate(0deg)' },
@@ -75,6 +76,7 @@ export function Spinner({
       {...sx}
       className={[sx.className, className].filter(Boolean).join(' ')}
     >
+      <VisuallyHidden>{label}</VisuallyHidden>
       <svg {...stylex.props(styles.svg)} width={d} height={d} viewBox="0 0 24 24" fill="none" aria-hidden="true">
         <circle cx="12" cy="12" r="9" stroke="currentColor" strokeOpacity="0.2" strokeWidth="3" />
         <path

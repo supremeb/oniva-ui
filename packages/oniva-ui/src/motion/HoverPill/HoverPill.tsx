@@ -26,7 +26,7 @@ const styles = stylex.create({
     transitionProperty: 'transform, opacity',
     transitionTimingFunction: `${motion['--oniva-motion-ease-in-out']}, ${motion['--oniva-motion-ease-out']}`,
     width: 'var(--pw, 0px)',
-    willChange: 'transform',
+    willChange: { default: 'auto', ':hover': 'transform', ':focus-within': 'transform' },
     zIndex: 0,
   },
   item: { position: 'relative', zIndex: 1 },

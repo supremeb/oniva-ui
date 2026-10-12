@@ -13,8 +13,8 @@ describe('Artifact', () => {
     );
     expect(screen.getByRole('complementary', { name: 'Retention memo' })).toBeInTheDocument();
     expect(screen.getByText('v2')).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: 'Download' }));
-    fireEvent.click(screen.getByRole('button', { name: 'Close' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Download artifact' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Close artifact' }));
     expect(onDownload).toHaveBeenCalled();
     expect(onClose).toHaveBeenCalled();
   });

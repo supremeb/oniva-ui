@@ -26,7 +26,7 @@ const styles = stylex.create({
   disc: {
     backgroundColor: colors['--oniva-color-success-solid'],
     borderRadius: '50%',
-    filter: { default: 'blur(10px)', '[data-status="success"]': 'blur(0)' },
+    filter: { default: 'blur(4px)', '[data-status="success"]': 'blur(0)' },
     opacity: { default: 0, '[data-status="success"]': 1 },
     transform: {
       default: 'translateY(-12px) rotate(-80deg) scale(0.6)',
@@ -62,7 +62,7 @@ export interface SuccessCheckProps extends Omit<HTMLAttributes<HTMLSpanElement>,
   ref?: Ref<HTMLSpanElement>;
 }
 
-/** Spinner that morphs into a drawn check (500ms recipe: blur 10px to 0, rotate from -80deg, SVG path draw delayed 80ms). */
+/** Spinner that morphs into a drawn check (500ms recipe: blur 4px to 0, rotate from -80deg, SVG path draw delayed 80ms). */
 export function SuccessCheck({ status = 'loading', size = 40, labels, className, xstyle, ref, ...rest }: SuccessCheckProps) {
   const label = { idle: '', loading: 'Loading', success: 'Success', ...labels }[status];
   return (

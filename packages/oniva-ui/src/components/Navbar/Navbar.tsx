@@ -1,4 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
+import { media } from '../../tokens/media.stylex';
 import { Link as AriaLink, type LinkProps as AriaLinkProps } from 'react-aria-components';
 import type { CSSProperties, HTMLAttributes, ReactNode, Ref } from 'react';
 import { mergeSx, sxClass } from '../../internal/sx';
@@ -72,8 +73,8 @@ const styles = stylex.create({
   linkFocus: { outlineStyle: 'solid' },
   linkNoFocus: { outlineStyle: 'none' },
   linkIdle: {
-    backgroundColor: { default: 'transparent', ':hover': colors['--oniva-color-surface-inset'] },
-    color: { default: colors['--oniva-color-text-muted'], ':hover': colors['--oniva-color-text'] },
+    backgroundColor: { default: 'transparent', ':hover': { default: null, [media.hover]: colors['--oniva-color-surface-inset'] } },
+    color: { default: colors['--oniva-color-text-muted'], ':hover': { default: null, [media.hover]: colors['--oniva-color-text'] } },
   },
   linkActive: {
     backgroundColor: colors['--oniva-color-surface-inset-hover'],

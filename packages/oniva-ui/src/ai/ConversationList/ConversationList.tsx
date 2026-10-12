@@ -11,7 +11,7 @@ import { mergeSx } from '../../internal/sx';
 
 const styles = stylex.create({
   search: { margin: 4, position: 'relative' },
-  icon: { color: colors['--oniva-color-icon-muted'], left: 10, pointerEvents: 'none', position: 'absolute', top: 9 },
+  icon: { color: colors['--oniva-color-icon-muted'], insetInlineStart: 10, pointerEvents: 'none', position: 'absolute', top: 9 },
   group: { color: colors['--oniva-color-text-subtle'], fontSize: font['--oniva-font-size-11'], fontWeight: font['--oniva-font-weight-medium'], letterSpacing: font['--oniva-font-track-label'], margin: 0, paddingBlock: 8, paddingInline: 10, textTransform: 'uppercase' },
   list: { display: 'flex', flexDirection: 'column', gap: 2, listStyle: 'none', margin: 0, padding: 0 },
   item: {

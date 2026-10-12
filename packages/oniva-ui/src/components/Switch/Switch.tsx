@@ -45,7 +45,7 @@ const styles = stylex.create({
     transitionTimingFunction: motion['--oniva-motion-ease-standard'],
   },
   trackOn: {
-    backgroundImage: `linear-gradient(180deg, ${accent['--oniva-accent-500']}, ${accent['--oniva-accent-600']})`,
+    backgroundImage: `linear-gradient(180deg, ${accent['--oniva-accent-solid']}, ${accent['--oniva-accent-solid-end']})`,
     borderColor: { default: 'transparent', '@media (forced-colors: active)': 'Highlight' },
     boxShadow: shadow['--oniva-shadow-accent-inset'],
   },

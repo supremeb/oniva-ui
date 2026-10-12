@@ -34,13 +34,13 @@ describe('Message', () => {
     );
     fireEvent.click(screen.getByRole('button', { name: 'Copy message' }));
     expect(writeText).toHaveBeenCalledWith('Q3 revenue was $4.82M');
-    fireEvent.click(screen.getByRole('button', { name: 'Retry response' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Regenerate response' }));
     expect(onRetry).toHaveBeenCalled();
-    expect(screen.getByRole('button', { name: 'Good response' })).toHaveAttribute(
+    expect(screen.getByRole('button', { name: 'Mark response as good' })).toHaveAttribute(
       'aria-pressed',
       'true',
     );
-    fireEvent.click(screen.getByRole('button', { name: 'Bad response' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Mark response as bad' }));
     expect(onFeedback).toHaveBeenCalledWith('down');
   });
 });

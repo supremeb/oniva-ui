@@ -1,3 +1,4 @@
+import { useLocale } from 'react-aria';
 import * as stylex from '@stylexjs/stylex';
 import { scaleLinear, scaleSqrt } from 'd3-scale';
 import type { Ref } from 'react';
@@ -52,8 +53,9 @@ export function ScatterChart({
   xstyle,
   ref,
 }: ScatterChartProps) {
-  const fx = makeFormatter(xFormat);
-  const fy = makeFormatter(yFormat);
+  const { locale } = useLocale();
+  const fx = makeFormatter(xFormat, locale);
+  const fy = makeFormatter(yFormat, locale);
   const groups = groupKey ? [...new Set(data.map((d) => String(d[groupKey])))] : [];
   const num = (d: ChartDatum, k: string) => Number(d[k]) || 0;
   return (

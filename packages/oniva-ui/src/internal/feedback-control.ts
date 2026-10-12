@@ -47,9 +47,9 @@ export const controlStyles = stylex.create({
   primary: {
     borderColor: { default: 'transparent', '@media (forced-colors: active)': 'ButtonText' },
     backgroundImage: {
-      default: `linear-gradient(180deg, ${accent['--oniva-accent-500']}, ${accent['--oniva-accent-600']})`,
-      ':hover': `linear-gradient(180deg, ${accent['--oniva-accent-400']}, ${accent['--oniva-accent-500']})`,
-      ':active': `linear-gradient(180deg, ${accent['--oniva-accent-600']}, ${accent['--oniva-accent-700']})`,
+      default: `linear-gradient(180deg, ${accent['--oniva-accent-solid']}, ${accent['--oniva-accent-solid-end']})`,
+      ':hover': { default: null, [media.hover]: `linear-gradient(180deg, ${accent['--oniva-accent-solid-hover']}, ${accent['--oniva-accent-solid-hover-end']})` },
+      ':active': `linear-gradient(180deg, ${accent['--oniva-accent-solid-active']}, ${accent['--oniva-accent-solid-active-end']})`,
       ':disabled': `linear-gradient(180deg, ${colors['--oniva-color-disabled-from']}, ${colors['--oniva-color-disabled-to']})`,
     },
     boxShadow: { default: shadow['--oniva-shadow-accent-inset'], ':disabled': 'none' },
@@ -62,7 +62,7 @@ export const controlStyles = stylex.create({
     borderColor: { default: 'transparent', '@media (forced-colors: active)': 'ButtonText' },
     backgroundImage: {
       default: `linear-gradient(180deg, ${colors['--oniva-color-danger-from']}, ${colors['--oniva-color-danger-to']})`,
-      ':hover': `linear-gradient(180deg, ${colors['--oniva-color-danger-hover-from']}, ${colors['--oniva-color-danger-hover-to']})`,
+      ':hover': { default: null, [media.hover]: `linear-gradient(180deg, ${colors['--oniva-color-danger-hover-from']}, ${colors['--oniva-color-danger-hover-to']})` },
       ':active': `linear-gradient(180deg, ${colors['--oniva-color-danger-active-from']}, ${colors['--oniva-color-danger-active-to']})`,
       ':disabled': `linear-gradient(180deg, ${colors['--oniva-color-disabled-from']}, ${colors['--oniva-color-disabled-to']})`,
     },
@@ -75,13 +75,13 @@ export const controlStyles = stylex.create({
   secondary: {
     backgroundColor: {
       default: colors['--oniva-color-surface'],
-      ':hover': colors['--oniva-color-surface-hover'],
+      ':hover': { default: null, [media.hover]: colors['--oniva-color-surface-hover'] },
       ':active': colors['--oniva-color-surface-active'],
       ':disabled': colors['--oniva-color-surface-hover'],
     },
     borderColor: {
       default: colors['--oniva-color-border'],
-      ':hover': colors['--oniva-color-border-hover'],
+      ':hover': { default: null, [media.hover]: colors['--oniva-color-border-hover'] },
       ':active': colors['--oniva-color-border-active'],
       ':disabled': colors['--oniva-color-border'],
     },
@@ -94,12 +94,12 @@ export const controlStyles = stylex.create({
   ghost: {
     backgroundColor: {
       default: 'transparent',
-      ':hover': colors['--oniva-color-surface-inset-hover'],
+      ':hover': { default: null, [media.hover]: colors['--oniva-color-surface-inset-hover'] },
       ':active': colors['--oniva-color-surface-tertiary-hover'],
     },
     color: {
       default: colors['--oniva-color-text-muted'],
-      ':hover': colors['--oniva-color-text'],
+      ':hover': { default: null, [media.hover]: colors['--oniva-color-text'] },
       ':disabled': colors['--oniva-color-text-disabled'],
     },
   },
@@ -107,7 +107,7 @@ export const controlStyles = stylex.create({
     borderColor: { default: 'transparent', '@media (forced-colors: active)': 'ButtonText' },
     backgroundColor: {
       default: colors['--oniva-color-accent-soft'],
-      ':hover': colors['--oniva-color-accent-soft-hover'],
+      ':hover': { default: null, [media.hover]: colors['--oniva-color-accent-soft-hover'] },
       ':active': colors['--oniva-color-accent-soft-active'],
       ':disabled': colors['--oniva-color-accent-soft-disabled'],
     },

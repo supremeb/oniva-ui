@@ -5,6 +5,7 @@ import { Badge, type BadgeVariant } from '../../components/Badge';
 import { Button } from '../../components/Button';
 import { dash } from '../../internal/dash-styles';
 import { mergeSx } from '../../internal/sx';
+import { createFormatters, useFormatters } from '../../internal/format';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 import { radius } from '../../tokens/radius.stylex';
@@ -67,12 +68,12 @@ const styles = stylex.create({
   dd0: { margin: 0 },
 });
 
-function money(n: number, currency = 'USD') {
-  return new Intl.NumberFormat('en-US', { style: 'currency', currency }).format(n);
+function money(n: number, currency = 'USD', locale = 'en-US') {
+  return createFormatters(locale).currency(n, currency);
 }
-function date(iso: string) {
+function date(iso: string, locale = 'en-US') {
   const [y, m, d] = iso.split('-').map(Number);
-  return new Date(y!, m! - 1, d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  return createFormatters(locale).date(new Date(y!, m! - 1, d));
 }
 
 /** Totals helper (exported for tests). */
@@ -83,6 +84,8 @@ export function invoiceTotals(inv: Pick<Invoice, 'lines' | 'taxRate'>) {
 }
 
 export interface InvoiceCardProps extends Omit<HTMLAttributes<HTMLElement>, 'style'> {
+  /** BCP 47 locale for money/dates. Defaults to the active React Aria locale. */
+  locale?: string;
   invoice: Invoice;
   onPay?: () => void;
   onDownload?: () => void;
@@ -90,7 +93,9 @@ export interface InvoiceCardProps extends Omit<HTMLAttributes<HTMLElement>, 'sty
   ref?: Ref<HTMLElement>;
 }
 
-export function InvoiceCard({ invoice, onPay, onDownload, className, xstyle, ref, ...rest }: InvoiceCardProps) {
+export function InvoiceCard({ invoice, onPay, onDownload, locale, className, xstyle, ref, ...rest }: InvoiceCardProps) {
+  const loc = useFormatters().locale;
+  const L = locale ?? loc;
   const { subtotal, tax, total } = invoiceTotals(invoice);
   const c = invoice.currency;
   const sx = stylex.props(dash.root, styles.card, xstyle);
@@ -115,9 +120,9 @@ export function InvoiceCard({ invoice, onPay, onDownload, className, xstyle, ref
           <div>
             <dt {...stylex.props(styles.dt)}>Dates</dt>
             <dd {...stylex.props(styles.dd, dash.num)}>
-              Issued {date(invoice.issued)}
+              Issued {date(invoice.issued, L)}
               <br />
-              Due {date(invoice.due)}
+              Due {date(invoice.due, L)}
             </dd>
           </div>
         </dl>
@@ -136,7 +141,7 @@ export function InvoiceCard({ invoice, onPay, onDownload, className, xstyle, ref
               <tr key={l.description}>
                 <td {...stylex.props(styles.td)}>{l.description}</td>
                 <td {...stylex.props(styles.td, styles.r, dash.num)}>{l.quantity}</td>
-                <td {...stylex.props(styles.td, styles.r, dash.num)}>{money(l.quantity * l.unitPrice, c)}</td>
+                <td {...stylex.props(styles.td, styles.r, dash.num)}>{money(l.quantity * l.unitPrice, c, L)}</td>
               </tr>
             ))}
           </tbody>
@@ -144,15 +149,15 @@ export function InvoiceCard({ invoice, onPay, onDownload, className, xstyle, ref
         <dl {...stylex.props(styles.totals, dash.num)}>
           <div {...stylex.props(styles.trow)}>
             <dt>Subtotal</dt>
-            <dd {...stylex.props(styles.dd0)}>{money(subtotal, c)}</dd>
+            <dd {...stylex.props(styles.dd0)}>{money(subtotal, c, L)}</dd>
           </div>
           <div {...stylex.props(styles.trow)}>
             <dt>Tax{invoice.taxRate ? ` (${(invoice.taxRate * 100).toFixed(2).replace(/\.?0+$/, '')}%)` : ''}</dt>
-            <dd {...stylex.props(styles.dd0)}>{money(tax, c)}</dd>
+            <dd {...stylex.props(styles.dd0)}>{money(tax, c, L)}</dd>
           </div>
           <div {...stylex.props(styles.trow, styles.grand)}>
             <dt>Total</dt>
-            <dd {...stylex.props(styles.dd0)}>{money(total, c)}</dd>
+            <dd {...stylex.props(styles.dd0)}>{money(total, c, L)}</dd>
           </div>
         </dl>
       </div>
@@ -162,7 +167,7 @@ export function InvoiceCard({ invoice, onPay, onDownload, className, xstyle, ref
         </Button>
         {invoice.status !== 'paid' && (
           <Button xstyle={styles.grow} onPress={onPay}>
-            Pay {money(total, c)}
+            Pay {money(total, c, L)}
           </Button>
         )}
       </div>

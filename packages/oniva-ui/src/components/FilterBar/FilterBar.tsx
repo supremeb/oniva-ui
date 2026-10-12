@@ -89,7 +89,7 @@ const styles = stylex.create({
   chipMain: {
     alignItems: 'center',
     appearance: 'none',
-    backgroundColor: { default: 'transparent', ':hover': colors['--oniva-color-surface-hover'] },
+    backgroundColor: { default: 'transparent', ':hover': { default: null, [media.hover]: colors['--oniva-color-surface-hover'] } },
     borderWidth: 0,
     color: colors['--oniva-color-text'],
     cursor: 'pointer',
@@ -105,7 +105,7 @@ const styles = stylex.create({
   chipX: {
     alignItems: 'center',
     appearance: 'none',
-    backgroundColor: { default: 'transparent', ':hover': colors['--oniva-color-surface-hover'] },
+    backgroundColor: { default: 'transparent', ':hover': { default: null, [media.hover]: colors['--oniva-color-surface-hover'] } },
     borderColor: colors['--oniva-color-border'],
     borderStyle: 'solid',
     borderWidth: 0,
@@ -122,6 +122,50 @@ const styles = stylex.create({
   spacer: { flexGrow: 1 },
 });
 
+export interface FilterBarLabels {
+  /** Group label of the whole bar. Default `Filters`. */
+  filters?: string;
+  addFilter?: string;
+  clearAll?: string;
+  views?: string;
+  savedViews?: string;
+  saveCurrentView?: string;
+  operator?: string;
+  value?: string;
+  done?: string;
+  enterNumber?: string;
+  enterValue?: string;
+  /** Shown when a filter has no value. Default `any`. */
+  anyValue?: string;
+  /** Default `{field} filter`. */
+  filterOf?: (field: string) => string;
+  /** Default `Edit {field} filter: {operator} {value}`. */
+  editFilter?: (field: string, operator: string, value: string) => string;
+  /** Default `Remove {field} filter`. */
+  removeFilter?: (field: string) => string;
+  /** Default `View {n}`. */
+  viewName?: (n: number) => string;
+}
+
+const defaultLabels: Required<FilterBarLabels> = {
+  filters: 'Filters',
+  addFilter: 'Add filter',
+  clearAll: 'Clear all',
+  views: 'Views',
+  savedViews: 'Saved views',
+  saveCurrentView: 'Save current view',
+  operator: 'Operator',
+  value: 'Value',
+  done: 'Done',
+  enterNumber: 'Enter a number',
+  enterValue: 'Enter a value',
+  anyValue: 'any',
+  filterOf: (field) => `${field} filter`,
+  editFilter: (field, operator, value) => `Edit ${field} filter: ${operator} ${value}`,
+  removeFilter: (field) => `Remove ${field} filter`,
+  viewName: (n) => `View ${n}`,
+};
+
 export interface FilterBarProps extends Omit<HTMLAttributes<HTMLDivElement>, 'style' | 'onChange'> {
   fields: FilterField[];
   filters: FilterValue[];
@@ -129,11 +173,14 @@ export interface FilterBarProps extends Omit<HTMLAttributes<HTMLDivElement>, 'st
   /** Initial saved views; the "Save current view" action appends to the internal list. */
   savedViews?: SavedView[];
   onSaveView?: (view: SavedView) => void;
+  /** Override the built-in English strings (partial). */
+  labels?: FilterBarLabels;
   xstyle?: stylex.StyleXStyles;
   ref?: Ref<HTMLDivElement>;
 }
 
-export function FilterBar({ fields, filters, onFiltersChange, savedViews = [], onSaveView, className, xstyle, ref, ...rest }: FilterBarProps) {
+export function FilterBar({ fields, filters, onFiltersChange, savedViews = [], onSaveView, labels, className, xstyle, ref, ...rest }: FilterBarProps) {
+  const L = { ...defaultLabels, ...labels };
   const [openId, setOpenId] = useState<string | null>(null);
   const [views, setViews] = useState(savedViews);
   const fieldOf = (id: string) => fields.find((f) => f.id === id)!;
@@ -149,27 +196,27 @@ export function FilterBar({ fields, filters, onFiltersChange, savedViews = [], o
   };
 
   const saveView = () => {
-    const view: SavedView = { id: `v${views.length + 1}`, name: `View ${views.length + 1}`, filters };
+    const view: SavedView = { id: `v${views.length + 1}`, name: L.viewName(views.length + 1), filters };
     setViews([...views, view]);
     onSaveView?.(view);
   };
 
   const sx = stylex.props(dash.root, styles.bar, xstyle);
   return (
-    <div role="group" aria-label="Filters" {...rest} ref={ref} {...mergeSx(sx, className)}>
+    <div role="group" aria-label={L.filters} {...rest} ref={ref} {...mergeSx(sx, className)}>
       {filters.map((f) => {
         const field = fieldOf(f.field);
         return (
-          <span key={f.id} role="group" aria-label={`${field.label} filter`} {...stylex.props(styles.chip)}>
+          <span key={f.id} role="group" aria-label={L.filterOf(field.label)} {...stylex.props(styles.chip)}>
             <PopoverTrigger isOpen={openId === f.id} onOpenChange={(o) => setOpenId(o ? f.id : null)}>
-              <button type="button" aria-label={`Edit ${field.label} filter: ${f.operator} ${f.value || 'any'}`} {...stylex.props(dash.reset, styles.chipMain, focus.inset)}>
+              <button type="button" aria-label={L.editFilter(field.label, f.operator, f.value || L.anyValue)} {...stylex.props(dash.reset, styles.chipMain, focus.inset)}>
                 <span {...stylex.props(styles.chipField)}>{field.label}</span>
                 <span {...stylex.props(styles.chipField)}>{f.operator}</span>
                 <span {...stylex.props(styles.chipValue)}>{f.value || '…'}</span>
               </button>
-              <Popover placement="bottom start" aria-label={`${field.label} filter`}>
+              <Popover placement="bottom start" aria-label={L.filterOf(field.label)}>
                 <div {...stylex.props(styles.editor)}>
-                  <Select aria-label="Operator" size="sm" selectedKey={f.operator} onSelectionChange={(k) => update(f.id, { operator: String(k) as FilterOperator })}>
+                  <Select aria-label={L.operator} size="sm" selectedKey={f.operator} onSelectionChange={(k) => update(f.id, { operator: String(k) as FilterOperator })}>
                     {operatorsFor[field.type].map((op) => (
                       <SelectItem key={op} id={op}>
                         {op}
@@ -177,7 +224,7 @@ export function FilterBar({ fields, filters, onFiltersChange, savedViews = [], o
                     ))}
                   </Select>
                   {field.type === 'select' ? (
-                    <Select aria-label="Value" size="sm" selectedKey={f.value} onSelectionChange={(k) => update(f.id, { value: String(k) })}>
+                    <Select aria-label={L.value} size="sm" selectedKey={f.value} onSelectionChange={(k) => update(f.id, { value: String(k) })}>
                       {(field.options ?? []).map((o) => (
                         <SelectItem key={o} id={o}>
                           {o}
@@ -185,15 +232,15 @@ export function FilterBar({ fields, filters, onFiltersChange, savedViews = [], o
                       ))}
                     </Select>
                   ) : (
-                    <Input aria-label="Value" size="sm" autoFocus value={f.value} inputMode={field.type === 'number' ? 'decimal' : 'text'} placeholder={field.type === 'number' ? 'Enter a number' : 'Enter a value'} onChange={(v) => update(f.id, { value: v })} />
+                    <Input aria-label={L.value} size="sm" autoFocus value={f.value} inputMode={field.type === 'number' ? 'decimal' : 'text'} placeholder={field.type === 'number' ? L.enterNumber : L.enterValue} onChange={(v) => update(f.id, { value: v })} />
                   )}
                   <Button size="sm" onPress={() => setOpenId(null)}>
-                    Done
+                    {L.done}
                   </Button>
                 </div>
               </Popover>
             </PopoverTrigger>
-            <button type="button" aria-label={`Remove ${field.label} filter`} onClick={() => remove(f.id)} {...stylex.props(dash.reset, styles.chipX, focus.inset)}>
+            <button type="button" aria-label={L.removeFilter(field.label)} onClick={() => remove(f.id)} {...stylex.props(dash.reset, styles.chipX, focus.inset)}>
               <X size={14} aria-hidden="true" />
             </button>
           </span>
@@ -201,9 +248,9 @@ export function FilterBar({ fields, filters, onFiltersChange, savedViews = [], o
       })}
       <DropdownMenu>
         <Button variant="secondary" size="sm" startIcon={<Plus size={14} aria-hidden="true" />}>
-          Add filter
+          {L.addFilter}
         </Button>
-        <DropdownMenuContent aria-label="Add filter" placement="bottom start" onAction={(k) => add(String(k))}>
+        <DropdownMenuContent aria-label={L.addFilter} placement="bottom start" onAction={(k) => add(String(k))}>
           {fields.map((f) => (
             <DropdownMenuItem key={f.id} id={f.id} icon={<ListFilter size={16} aria-hidden="true" />}>
               {f.label}
@@ -213,16 +260,16 @@ export function FilterBar({ fields, filters, onFiltersChange, savedViews = [], o
       </DropdownMenu>
       {filters.length > 0 && (
         <Button variant="ghost" size="sm" onPress={() => onFiltersChange([])}>
-          Clear all
+          {L.clearAll}
         </Button>
       )}
       <span {...stylex.props(styles.spacer)} />
       <DropdownMenu>
         <Button variant="secondary" size="sm" startIcon={<Bookmark size={14} aria-hidden="true" />}>
-          Views
+          {L.views}
         </Button>
         <DropdownMenuContent
-          aria-label="Saved views"
+          aria-label={L.savedViews}
           placement="bottom end"
           onAction={(k) => {
             if (k === '__save') return saveView();
@@ -237,7 +284,7 @@ export function FilterBar({ fields, filters, onFiltersChange, savedViews = [], o
           ))}
           {views.length > 0 && <DropdownMenuSeparator />}
           <DropdownMenuItem id="__save" isDisabled={filters.length === 0}>
-            Save current view
+            {L.saveCurrentView}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

@@ -1,4 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
+import { media } from '../../tokens/media.stylex';
 import { AlertCircle, Check, FileText, UploadCloud, X } from 'lucide-react';
 import { useId, useState, type ReactNode, type Ref } from 'react';
 import { Button, DropZone, FileTrigger, Text, type DropZoneProps } from 'react-aria-components';
@@ -70,7 +71,7 @@ const styles = stylex.create({
     cursor: 'pointer',
     font: 'inherit',
     padding: 0,
-    textDecoration: { default: 'none', ':hover': 'underline' },
+    textDecoration: { default: 'none', ':hover': { default: null, [media.hover]: 'underline' } },
   },
   list: {
     display: 'flex',
@@ -207,6 +208,16 @@ export interface FileUploadProps extends Omit<
   accept?: string[];
   multiple?: boolean;
   title?: ReactNode;
+  /** Text of the browse button. Default `Choose files` (`Choose file` when `multiple` is false). */
+  browseLabel?: string;
+  /** Override built-in strings (localisation). */
+  labels?: {
+    uploadFailed?: string;
+    uploadComplete?: string;
+    list?: string;
+    remove?: (name: string) => string;
+    uploading?: (name: string) => string;
+  };
   hint?: ReactNode;
   isDisabled?: boolean;
   className?: string;
@@ -220,7 +231,9 @@ export function FileUpload({
   onRemove,
   accept,
   multiple = true,
-  title = 'Drag & drop files here, or',
+  title = 'Drag files here or',
+  browseLabel,
+  labels,
   hint,
   isDisabled,
   className,
@@ -298,14 +311,14 @@ export function FileUpload({
             onSelect={(fl) => add(fl ? Array.from(fl) : [])}
           >
             <Button isDisabled={isDisabled} {...stylex.props(styles.browse)}>
-              browse
+              {browseLabel ?? (multiple ? 'Choose files' : 'Choose file')}
             </Button>
           </FileTrigger>
         </Text>
         {hint != null && <span {...stylex.props(ff.description)}>{hint}</span>}
       </DropZone>
       {list.length > 0 && (
-        <ul aria-label="Uploaded files" {...stylex.props(styles.list)}>
+        <ul aria-label={labels?.list ?? 'Uploaded files'} {...stylex.props(styles.list)}>
           {list.map((f) => {
             const done = f.progress >= 100 && !f.error;
             return (
@@ -314,7 +327,7 @@ export function FileUpload({
                   <FileText size={18} />
                 </span>
                 <span {...stylex.props(styles.meta)}>
-                  <span {...stylex.props(styles.name)}>{f.name}</span>
+                  <span title={f.name} {...stylex.props(styles.name)}>{f.name}</span>
                   <span {...stylex.props(f.error ? ff.error : ff.description, ff.tabular)}>
                     {f.error ??
                       (done
@@ -323,14 +336,14 @@ export function FileUpload({
                   </span>
                 </span>
                 {f.error ? (
-                  <AlertCircle size={20} aria-label="Upload failed" {...stylex.props(styles.bad)} />
+                  <AlertCircle size={20} role="img" aria-label={labels?.uploadFailed ?? 'Upload failed'} {...stylex.props(styles.bad)} />
                 ) : done ? (
-                  <Check size={20} aria-label="Upload complete" {...stylex.props(styles.ok)} />
+                  <Check size={20} role="img" aria-label={labels?.uploadComplete ?? 'Upload complete'} {...stylex.props(styles.ok)} />
                 ) : (
-                  <ProgressRing value={f.progress} label={`Uploading ${f.name}`} />
+                  <ProgressRing value={f.progress} label={labels?.uploading ? labels.uploading(f.name) : `Uploading ${f.name}`} />
                 )}
                 <Button
-                  aria-label={`Remove ${f.name}`}
+                  aria-label={labels?.remove ? labels.remove(f.name) : `Remove ${f.name}`}
                   onPress={() => remove(f.id)}
                   {...stylex.props(fp.iconButton)}
                 >

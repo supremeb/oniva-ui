@@ -5,6 +5,6 @@ import { VoiceOrb } from './VoiceOrb';
 describe('VoiceOrb', () => {
   it('exposes the agent state as a status', () => {
     render(<VoiceOrb name="Atlas" state="thinking" />);
-    expect(screen.getByRole('status', { name: 'Atlas: Thinking…' })).toBeInTheDocument();
+    expect(screen.getByRole('status')).toHaveTextContent('Atlas: Thinking…');
   });
 });

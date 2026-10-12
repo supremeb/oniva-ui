@@ -12,6 +12,7 @@ import {
 import { ChevronDown } from 'lucide-react';
 import { createContext, useContext, type ReactNode, type Ref } from 'react';
 import { AnimatedHeight } from '../../motion/AnimatedHeight';
+import { media } from '../../tokens/media.stylex';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 import { motion } from '../../tokens/motion.stylex';
@@ -63,7 +64,7 @@ const styles = stylex.create({
   trigger: {
     alignItems: 'center',
     appearance: 'none',
-    backgroundColor: { default: 'transparent', ':hover': colors['--oniva-color-surface-hover'] },
+    backgroundColor: { default: 'transparent', ':hover': { default: null, [media.hover]: colors['--oniva-color-surface-hover'] } },
     borderWidth: 0,
     borderRadius: radius['--oniva-radius-lg'],
     boxSizing: 'border-box',
@@ -92,7 +93,7 @@ const styles = stylex.create({
     color: colors['--oniva-color-icon-muted'],
     flexShrink: 0,
     transitionDuration: motion['--oniva-motion-dur-enter'],
-    transitionProperty: 'transform',
+    transitionProperty: { default: 'transform', [media.reducedMotion]: 'none' },
     transitionTimingFunction: motion['--oniva-motion-ease-out'],
   },
   chevronOpen: { transform: 'rotate(180deg)' },

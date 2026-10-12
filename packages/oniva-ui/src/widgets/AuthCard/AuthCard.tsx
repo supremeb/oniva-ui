@@ -85,7 +85,7 @@ export function AuthCard({
     try {
       await onSubmit?.({ email, password });
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Sign in failed');
+      setError(err instanceof Error ? err.message : 'Unable to sign in. Check your email and password, then try again.');
     } finally {
       setBusy(false);
     }

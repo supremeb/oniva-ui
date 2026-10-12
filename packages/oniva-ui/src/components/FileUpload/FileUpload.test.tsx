@@ -7,7 +7,7 @@ describe('FileUpload', () => {
   it('renders a browse button and adds picked files to the list', async () => {
     const onFilesAdded = vi.fn();
     const { container } = render(<FileUpload onFilesAdded={onFilesAdded} hint="PDF up to 10 MB" />);
-    expect(screen.getByRole('button', { name: 'browse' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Choose files' })).toBeInTheDocument();
     expect(screen.getByText('PDF up to 10 MB')).toBeInTheDocument();
     const input = container.querySelector('input[type="file"]') as HTMLInputElement;
     const file = new File(['abc'], 'statement.pdf', { type: 'application/pdf' });

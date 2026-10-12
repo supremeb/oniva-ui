@@ -1,4 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
+import { media } from '../tokens/media.stylex';
 import type { ControlSize } from './types';
 import { colors } from '../tokens/colors.stylex';
 import { font } from '../tokens/font.stylex';
@@ -35,7 +36,7 @@ export const ff = stylex.create({
     backgroundColor: colors['--oniva-color-surface'],
     borderColor: {
       default: colors['--oniva-color-border'],
-      ':hover': colors['--oniva-color-border-hover'],
+      ':hover': { default: null, [media.hover]: colors['--oniva-color-border-hover'] },
       ':focus-within': colors['--oniva-color-focus-ring'],
     },
     borderRadius: radius['--oniva-radius-lg'],
@@ -58,7 +59,7 @@ export const ff = stylex.create({
     backgroundColor: colors['--oniva-color-error-bg'],
     borderColor: {
       default: colors['--oniva-color-error-border'],
-      ':hover': colors['--oniva-color-error-border'],
+      ':hover': { default: null, [media.hover]: colors['--oniva-color-error-border'] },
       ':focus-within': colors['--oniva-color-error-border'],
     },
     boxShadow: {
@@ -72,9 +73,9 @@ export const ff = stylex.create({
     color: colors['--oniva-color-text-disabled'],
     cursor: 'not-allowed',
   },
-  sm: { height: 32, paddingInline: 8 },
-  md: { height: 38, paddingInline: 10 },
-  lg: { height: 44, paddingInline: 12 },
+  sm: { minHeight: 32, paddingInline: 8 },
+  md: { minHeight: 38, paddingInline: 10 },
+  lg: { minHeight: 44, paddingInline: 12 },
   bare: {
     appearance: 'none',
     backgroundColor: 'transparent',

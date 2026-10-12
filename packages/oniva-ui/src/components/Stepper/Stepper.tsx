@@ -60,14 +60,14 @@ const styles = stylex.create({
     width: 32,
   },
   complete: {
-    backgroundImage: `linear-gradient(180deg, ${accent['--oniva-accent-500']}, ${accent['--oniva-accent-600']})`,
+    backgroundImage: `linear-gradient(180deg, ${accent['--oniva-accent-solid']}, ${accent['--oniva-accent-solid-end']})`,
     borderColor: 'transparent',
     boxShadow: shadow['--oniva-shadow-accent-inset'],
     color: colors['--oniva-color-accent-fg'],
   },
   current: {
     backgroundColor: colors['--oniva-color-surface'],
-    borderColor: accent['--oniva-accent-500'],
+    borderColor: accent['--oniva-accent-solid'],
     boxShadow: `0 0 0 4px ${colors['--oniva-color-accent-tint']}`,
     color: colors['--oniva-color-accent-soft-fg'],
   },
@@ -99,7 +99,7 @@ const styles = stylex.create({
   },
   lineH: { flexGrow: 1, height: 2, minWidth: 16 },
   lineV: { flexGrow: 1, minHeight: 16, width: 2 },
-  lineDone: { backgroundColor: accent['--oniva-accent-500'] },
+  lineDone: { backgroundColor: accent['--oniva-accent-solid'] },
   vh: {
     borderWidth: 0,
     clipPath: 'inset(50%)',

@@ -7,6 +7,7 @@ import { font } from '../../tokens/font.stylex';
 import { radius } from '../../tokens/radius.stylex';
 import { mergeSx } from '../../internal/sx';
 import { TextShimmer } from '../TextShimmer';
+import { VisuallyHidden } from '../../components/VisuallyHidden/VisuallyHidden';
 
 const drift = stylex.keyframes({
   '0%': { backgroundPosition: '0% 20%' },
@@ -78,12 +79,13 @@ export function ImageGenerationLoader({
   const sx = stylex.props(styles.root, xstyle);
   const m = mergeSx(sx, className, { aspectRatio });
   return (
-    <div role="status" aria-label="Generating image" {...rest} ref={ref} {...m}>
+    <div role="status" {...rest} ref={ref} {...m}>
+      <VisuallyHidden>Generating image</VisuallyHidden>
       <div {...stylex.props(styles.frame)} />
       <div aria-hidden="true" {...stylex.props(styles.canvas)} />
       <div {...stylex.props(styles.label)}>
         <ImageIcon size={20} aria-hidden="true" />
-        <TextShimmer>Generating image…</TextShimmer>
+        <span aria-hidden="true"><TextShimmer>Generating image…</TextShimmer></span>
         {prompt && <span {...stylex.props(styles.prompt)}>{prompt}</span>}
       </div>
     </div>

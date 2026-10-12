@@ -1,4 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
+import { media } from '../tokens/media.stylex';
 import { colors } from '../tokens/colors.stylex';
 import { font } from '../tokens/font.stylex';
 import { motion } from '../tokens/motion.stylex';
@@ -65,7 +66,7 @@ export const tableStyles = stylex.create({
   row: {
     backgroundColor: {
       default: colors['--oniva-color-surface'],
-      ':hover': colors['--oniva-color-surface-hover'],
+      ':hover': { default: null, [media.hover]: colors['--oniva-color-surface-hover'] },
     },
     color: colors['--oniva-color-text'],
     cursor: 'default',
@@ -80,7 +81,7 @@ export const tableStyles = stylex.create({
   rowSelected: {
     backgroundColor: {
       default: colors['--oniva-color-surface-hover'],
-      ':hover': colors['--oniva-color-surface-active'],
+      ':hover': { default: null, [media.hover]: colors['--oniva-color-surface-active'] },
     },
   },
   rowFocus: { outlineStyle: 'solid' },
@@ -117,7 +118,7 @@ export const tableStyles = stylex.create({
     appearance: 'none',
     backgroundColor: {
       default: colors['--oniva-color-surface'],
-      ':hover': colors['--oniva-color-surface-hover'],
+      ':hover': { default: null, [media.hover]: colors['--oniva-color-surface-hover'] },
     },
     borderColor: colors['--oniva-color-border'],
     borderRadius: radius['--oniva-radius-lg'],
@@ -162,7 +163,7 @@ export const tableStyles = stylex.create({
   },
   option: {
     alignItems: 'center',
-    backgroundColor: { default: 'transparent', ':hover': colors['--oniva-color-surface-hover'] },
+    backgroundColor: { default: 'transparent', ':hover': { default: null, [media.hover]: colors['--oniva-color-surface-hover'] } },
     borderRadius: radius['--oniva-radius-md'],
     color: colors['--oniva-color-text'],
     cursor: 'pointer',

@@ -46,7 +46,7 @@ const styles = stylex.create({
     height: 16,
     marginTop: 2,
     position: 'relative',
-    transform: { default: 'none', '[data-pressed]': 'scale(0.94)' },
+    transform: { default: 'none', '[data-pressed]': `scale(${motion['--oniva-motion-press-scale']})` },
     transitionDuration: motion['--oniva-motion-dur-press'],
     transitionProperty: 'border-color, background-color, box-shadow, transform',
     transitionTimingFunction: motion['--oniva-motion-ease-out'],
@@ -54,7 +54,7 @@ const styles = stylex.create({
   },
   dotHover: { borderColor: colors['--oniva-color-border-active'] },
   dotOn: {
-    backgroundImage: `linear-gradient(180deg, ${accent['--oniva-accent-500']}, ${accent['--oniva-accent-600']})`,
+    backgroundImage: `linear-gradient(180deg, ${accent['--oniva-accent-solid']}, ${accent['--oniva-accent-solid-end']})`,
     borderColor: 'transparent',
     boxShadow: shadow['--oniva-shadow-accent-inset'],
   },

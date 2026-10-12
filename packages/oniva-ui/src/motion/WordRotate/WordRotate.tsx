@@ -46,10 +46,17 @@ export function WordRotate({ words, interval = 2400, className, xstyle, ref, onP
   const [held, setHeld] = useState(false);
   const cur = useRef(0);
   cur.current = idx;
+  const passes = useRef(0);
 
   useEffect(() => {
     if (reduced || !inView || held || words.length < 2) return;
     const id = setInterval(() => {
+      // Stop after one full pass of the words (WCAG 2.2.2): rests on the first word.
+      if (passes.current >= words.length) {
+        clearInterval(id);
+        return;
+      }
+      passes.current += 1;
       setPrev(cur.current);
       setIdx((cur.current + 1) % words.length);
     }, interval);
@@ -64,6 +71,14 @@ export function WordRotate({ words, interval = 2400, className, xstyle, ref, onP
       onPointerEnter={(e) => {
         setHeld(true);
         onPointerEnter?.(e);
+      }}
+      onFocus={(e) => {
+        setHeld(true);
+        rest.onFocus?.(e);
+      }}
+      onBlur={(e) => {
+        setHeld(false);
+        rest.onBlur?.(e);
       }}
       onPointerLeave={(e) => {
         setHeld(false);

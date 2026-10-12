@@ -1,3 +1,4 @@
+import { useLocale } from 'react-aria';
 import * as stylex from '@stylexjs/stylex';
 import { scaleBand, scaleLinear } from 'd3-scale';
 import { stack, stackOffsetExpand, stackOffsetNone } from 'd3-shape';
@@ -70,7 +71,8 @@ export function BarChart({
   xstyle,
   ref,
 }: BarChartProps) {
-  const fmt = makeFormatter(valueFormat);
+  const { locale } = useLocale();
+  const fmt = makeFormatter(valueFormat, locale);
   const intl = intlOptionsFor(valueFormat);
   const seriesKeys = useMemo(() => series.map((s) => s.key), [series]);
   const shown = useTweenedData(data, seriesKeys);
@@ -79,7 +81,7 @@ export function BarChart({
   const axisFmt =
     layout === 'percent'
       ? (n: number) => `${Math.round(n * 100)}%`
-      : makeAxisFormatter(valueFormat);
+      : makeAxisFormatter(valueFormat, locale);
   return (
     <ChartFrame
       label={

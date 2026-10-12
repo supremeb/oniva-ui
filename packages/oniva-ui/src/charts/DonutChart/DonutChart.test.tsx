@@ -7,7 +7,7 @@ describe('DonutChart', () => {
   it('shows the total in the centre and a slice per datum', () => {
     const { container } = render(<DonutChart data={sleepStages} />);
     expect(screen.getByText('440')).toBeInTheDocument();
-    expect(container.querySelectorAll('path[tabindex="0"]')).toHaveLength(sleepStages.length);
+    expect(container.querySelectorAll('path[tabindex="-1"]')).toHaveLength(sleepStages.length);
   });
   it('shows slice tooltip on focus', () => {
     render(<DonutChart data={sleepStages} />);

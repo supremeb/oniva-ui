@@ -34,7 +34,7 @@ const styles = stylex.create({
     transitionProperty: 'opacity',
     transitionTimingFunction: motion['--oniva-motion-ease-out'],
     width: 360,
-    willChange: 'transform',
+    willChange: { default: 'auto', ':hover': 'transform', ':focus-within': 'transform' },
     zIndex: -1,
     display: { default: null, [media.reducedMotion]: 'none' },
   },

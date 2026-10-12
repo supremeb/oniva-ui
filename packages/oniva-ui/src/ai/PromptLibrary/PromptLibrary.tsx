@@ -8,6 +8,7 @@ import { radius } from '../../tokens/radius.stylex';
 import { aiStyles } from '../../internal/ai-styles';
 import { aib } from '../../internal/aib-styles';
 import { mergeSx } from '../../internal/sx';
+import { useFormatters } from '../../internal/format';
 import { Badge } from '../../components/Badge';
 import { Button } from '../../components/Button';
 import { AnimatedHeight } from '../../motion/AnimatedHeight';
@@ -39,7 +40,7 @@ const styles = stylex.create({
   label: { display: 'flex', flexDirection: 'column', gap: 4 },
   foot: { display: 'flex', gap: 8, justifyContent: 'flex-end', padding: 12, paddingTop: 0 },
   search: { position: 'relative' },
-  searchIcon: { color: colors['--oniva-color-icon-muted'], left: 10, pointerEvents: 'none', position: 'absolute', top: 9 },
+  searchIcon: { color: colors['--oniva-color-icon-muted'], insetInlineStart: 10, pointerEvents: 'none', position: 'absolute', top: 9 },
 });
 
 export interface SavedPrompt {
@@ -65,6 +66,7 @@ export const fillTemplate = (t: string, v: Record<string, string>) => t.replace(
 
 /** Saved prompts with search, `{{variable}}` inputs and a live-filled preview. */
 export function PromptLibrary({ prompts, title = 'Prompt library', onUse, className, xstyle, ref, ...rest }: PromptLibraryProps) {
+  const fmt = useFormatters();
   const [q, setQ] = useState('');
   const [open, setOpen] = useState<string | null>(null);
   const [vals, setVals] = useState<Record<string, string>>({});
@@ -92,7 +94,7 @@ export function PromptLibrary({ prompts, title = 'Prompt library', onUse, classN
                 <span {...stylex.props(aib.iconBox)}><Sparkles size={16} /></span>
                 <span {...stylex.props(aib.grow)}>
                   <span {...stylex.props(aib.name)} style={{ display: 'block' }}>{p.name}</span>
-                  <span {...stylex.props(aib.meta)} style={{ display: 'block' }}>{vars.length} variable{vars.length === 1 ? '' : 's'}</span>
+                  <span {...stylex.props(aib.meta)} style={{ display: 'block' }}>{fmt.plural(vars.length, { one: '# variable', other: '# variables' })}</span>
                 </span>
                 {p.tags?.slice(0, 2).map((t) => <Badge key={t} variant="neutral">{t}</Badge>)}
               </button>

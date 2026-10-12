@@ -17,13 +17,13 @@ describe('Heatmap', () => {
         ]}
       />,
     );
-    expect(container.querySelectorAll('rect[tabindex="0"]')).toHaveLength(6);
+    expect(container.querySelectorAll('rect[tabindex="-1"]')).toHaveLength(6);
   });
   it('contribution calendar respects the range', () => {
     const { container, rerender } = render(<ContributionHeatmap data={year} range="yearly" />);
-    const yearly = container.querySelectorAll('rect[tabindex="0"]').length;
+    const yearly = container.querySelectorAll('rect[tabindex="-1"]').length;
     rerender(<ContributionHeatmap data={year} range="weekly" />);
-    expect(container.querySelectorAll('rect[tabindex="0"]')).toHaveLength(7);
+    expect(container.querySelectorAll('rect[tabindex="-1"]')).toHaveLength(7);
     expect(yearly).toBeGreaterThan(300);
   });
   it('shows a dated tooltip on focus', () => {

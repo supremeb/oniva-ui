@@ -25,7 +25,7 @@ const styles = stylex.create({
     animationDuration: { default: '0s', '[data-entering]': '80ms', '[data-exiting]': '80ms' },
     animationName: { default: 'none', '[data-entering]': fadeIn, '[data-exiting]': fadeOut },
     animationTimingFunction: 'ease-out',
-    maxWidth: 'calc(100vw - 32px)',
+    maxWidth: 'calc(100% - 32px)',
     width: 560,
   },
   searchRow: {
@@ -151,7 +151,7 @@ export function CommandPalette({
   onOpenChange,
   placeholder = 'Search commands…',
   hotkey = true,
-  emptyMessage = 'No results found.',
+  emptyMessage = 'No commands found. Try a different search.',
   'aria-label': ariaLabel = 'Command palette',
   xstyle,
   className,

@@ -1,4 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
+import { media } from '../tokens/media.stylex';
 import { colors } from '../tokens/colors.stylex';
 import { font } from '../tokens/font.stylex';
 import { motion } from '../tokens/motion.stylex';
@@ -29,7 +30,7 @@ export const listStyles = stylex.create({
   },
   item: {
     alignItems: 'center',
-    backgroundColor: { default: 'transparent', ':hover': colors['--oniva-color-surface-hover'] },
+    backgroundColor: { default: 'transparent', ':hover': { default: null, [media.hover]: colors['--oniva-color-surface-hover'] } },
     borderRadius: radius['--oniva-radius-md'],
     boxSizing: 'border-box',
     color: colors['--oniva-color-text'],
@@ -56,7 +57,7 @@ export const listStyles = stylex.create({
   itemSelected: {
     backgroundColor: {
       default: colors['--oniva-color-accent-soft'],
-      ':hover': colors['--oniva-color-accent-soft-hover'],
+      ':hover': { default: null, [media.hover]: colors['--oniva-color-accent-soft-hover'] },
     },
     color: colors['--oniva-color-accent-soft-fg'],
   },

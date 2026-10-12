@@ -38,7 +38,7 @@ const styles = stylex.create({
     top: '50%',
     transform: 'translate(-50%, -50%)',
     width: '400%',
-    willChange: 'transform',
+    willChange: { default: 'auto', ':hover': 'transform', ':focus-within': 'transform' },
   },
   beam: {
     backgroundImage: `conic-gradient(from 0deg, transparent 0deg, transparent 300deg, ${accent['--oniva-accent-400']} 335deg, ${accent['--oniva-accent-600']} 355deg, transparent 360deg)`,

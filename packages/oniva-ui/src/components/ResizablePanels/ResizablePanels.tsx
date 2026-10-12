@@ -45,8 +45,16 @@ const styles = stylex.create({
     position: 'relative',
     touchAction: 'none',
   },
-  handleH: { cursor: 'col-resize', width: 12 },
-  handleV: { cursor: 'row-resize', height: 12 },
+  handleH: {
+    cursor: 'col-resize',
+    width: 12,
+    '::before': { content: '""', insetBlock: 0, insetInline: -6, position: 'absolute' },
+  },
+  handleV: {
+    cursor: 'row-resize',
+    height: 12,
+    '::before': { content: '""', insetBlock: -6, insetInline: 0, position: 'absolute' },
+  },
   grip: {
     backgroundColor: colors['--oniva-color-border'],
     borderRadius: radius['--oniva-radius-full'],

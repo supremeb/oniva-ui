@@ -23,8 +23,10 @@ import {
 } from 'react';
 import { OnivaToastQueue } from '../../internal/overlays-toast';
 import { mergeSx } from '../../internal/sx';
+import { useReducedMotion } from '../../internal/motion-hooks';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
+import { media } from '../../tokens/media.stylex';
 import { motion } from '../../tokens/motion.stylex';
 import { radius } from '../../tokens/radius.stylex';
 import { shadow } from '../../tokens/shadow.stylex';
@@ -48,14 +50,14 @@ const styles = stylex.create({
     pointerEvents: 'none',
     position: 'fixed',
     width: 392,
-    maxWidth: '100vw',
+    maxWidth: '100%',
     zIndex: 200,
   },
   bottom: { bottom: 0 },
   top: { top: 0 },
   left: { left: 0 },
   right: { right: 0 },
-  centerX: { left: '50%', marginLeft: -196 },
+  centerX: { left: '50%', transform: 'translateX(-50%)' },
   /** Positioned/transformed slot. Layout vars are written inline: --ty --s --sx. */
   slot: {
     left: INSET,
@@ -64,7 +66,10 @@ const styles = stylex.create({
     touchAction: 'pan-y',
     transform: 'translate3d(var(--sx, 0px), var(--ty, 0px), 0) scale(var(--s, 1))',
     transitionDuration: `${motion['--oniva-motion-dur-sheet']}, ${motion['--oniva-motion-dur-base']}, ${motion['--oniva-motion-dur-sheet']}`,
-    transitionProperty: 'transform, opacity, clip-path',
+    transitionProperty: {
+      default: 'transform, opacity, clip-path',
+      [media.reducedMotion]: 'opacity, clip-path',
+    },
     transitionTimingFunction: motion['--oniva-motion-ease-drawer'],
     // pointer hit area across the gap so the stack does not collapse mid-hover
     '::before': {
@@ -139,11 +144,11 @@ const styles = stylex.create({
     appearance: 'none',
     backgroundColor: {
       default: 'transparent',
-      ':hover': colors['--oniva-color-surface-inset-hover'],
+      ':hover': { default: null, [media.hover]: colors['--oniva-color-surface-inset-hover'] },
     },
     borderRadius: radius['--oniva-radius-sm'],
     borderWidth: 0,
-    color: { default: colors['--oniva-color-text-muted'], ':hover': colors['--oniva-color-text'] },
+    color: { default: colors['--oniva-color-text-muted'], ':hover': { default: null, [media.hover]: colors['--oniva-color-text'] } },
     cursor: 'pointer',
     display: 'inline-flex',
     flexShrink: 0,
@@ -178,7 +183,10 @@ export interface ToastData {
 }
 
 export interface ToastOptions extends Omit<ToastData, 'title'> {
-  /** Auto-dismiss delay in ms. Default 5000. Use `Infinity` for a persistent toast. */
+  /**
+   * Auto-dismiss delay in ms. Default 5000, except toasts with an `action` or a `danger`/`warning`
+   * variant, which stay until dismissed. Use `Infinity` for a persistent toast.
+   */
   duration?: number;
   onClose?: () => void;
 }
@@ -198,10 +206,14 @@ function normalize(titleOrData: ToastInput, options: ToastOptions = {}, variant?
   const merged = isData
     ? (titleOrData as ToastOptions & { title: ReactNode })
     : { ...options, title: titleOrData as ReactNode };
-  const { duration = 5000, onClose, ...data } = merged;
+  const { duration, onClose, ...data } = merged;
+  const resolvedVariant = data.variant ?? variant ?? 'default';
+  // Toasts the user must read or act on never run on a timer (WCAG 2.2.1).
+  const sticky = data.action != null || resolvedVariant === 'danger' || resolvedVariant === 'warning';
+  const ms = duration ?? (sticky ? Infinity : 5000);
   return {
-    content: { ...data, variant: data.variant ?? variant ?? 'default' } as ToastData,
-    timeout: Number.isFinite(duration) ? duration : undefined,
+    content: { ...data, variant: resolvedVariant } as ToastData,
+    timeout: Number.isFinite(ms) ? ms : undefined,
     onClose,
   };
 }
@@ -224,7 +236,7 @@ function promiseToast<T>(promise: Promise<T>, opts: ToastPromiseOptions<T>): str
   const settle = <V,>(msg: PromiseMessage<V>, value: V, variant: ToastVariant) => {
     const resolved = typeof msg === 'function' ? (msg as (v: V) => ToastInput)(value) : msg;
     const { content, timeout } = normalize(resolved, shared, variant);
-    toastQueue.update(key, content, timeout ?? 5000);
+    toastQueue.update(key, content, timeout);
   };
   promise.then(
     (v) => settle(success, v, 'success'),
@@ -385,11 +397,12 @@ function ToastItem({
     }
   };
 
+  const reduced = useReducedMotion();
   const swipedSign = swipedOut.current;
-  const exitTy = swipedSign ? layout.ty : layout.ty - dir * 0.6 * 70;
-  const enterTy = -dir * 70;
+  const exitTy = reduced || swipedSign ? layout.ty : layout.ty - dir * 0.6 * 70;
+  const enterTy = reduced ? layout.ty : -dir * 70;
   const ty = !mounted ? enterTy : exiting ? exitTy : layout.ty;
-  const scale = !mounted ? 1 : layout.scale;
+  const scale = !mounted || reduced ? 1 : layout.scale;
   const opacity = !mounted || exiting || layout.hidden ? 0 : 1;
   const clip = !mounted || expanded || layout.clipEdge <= 0 ? 0 : layout.clipEdge;
   const clipPath = top

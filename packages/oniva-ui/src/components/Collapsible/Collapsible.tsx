@@ -10,6 +10,7 @@ import {
 import { ChevronRight } from 'lucide-react';
 import type { ReactNode, Ref } from 'react';
 import { AnimatedHeight } from '../../motion/AnimatedHeight';
+import { media } from '../../tokens/media.stylex';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 import { motion } from '../../tokens/motion.stylex';
@@ -25,7 +26,7 @@ const styles = stylex.create({
     appearance: 'none',
     backgroundColor: {
       default: 'transparent',
-      ':hover': colors['--oniva-color-surface-inset-hover'],
+      ':hover': { default: null, [media.hover]: colors['--oniva-color-surface-inset-hover'] },
     },
     borderRadius: radius['--oniva-radius-md'],
     borderWidth: 0,
@@ -49,7 +50,7 @@ const styles = stylex.create({
   chevron: {
     color: colors['--oniva-color-icon-muted'],
     transitionDuration: motion['--oniva-motion-dur-enter'],
-    transitionProperty: 'transform',
+    transitionProperty: { default: 'transform', [media.reducedMotion]: 'none' },
     transitionTimingFunction: motion['--oniva-motion-ease-out'],
   },
   chevronOpen: { transform: 'rotate(90deg)' },

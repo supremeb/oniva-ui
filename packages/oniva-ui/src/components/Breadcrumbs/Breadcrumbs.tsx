@@ -1,4 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
+import { media } from '../../tokens/media.stylex';
 import {
   Breadcrumb as AriaBreadcrumb,
   Breadcrumbs as AriaBreadcrumbs,
@@ -30,7 +31,7 @@ const styles = stylex.create({
   link: {
     alignItems: 'center',
     borderRadius: radius['--oniva-radius-sm'],
-    color: { default: colors['--oniva-color-text-muted'], ':hover': colors['--oniva-color-text'] },
+    color: { default: colors['--oniva-color-text-muted'], ':hover': { default: null, [media.hover]: colors['--oniva-color-text'] } },
     cursor: 'pointer',
     display: 'inline-flex',
     fontWeight: font['--oniva-font-weight-medium'],

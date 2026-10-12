@@ -70,4 +70,22 @@ describe('Toast', () => {
     expect(slots.length).toBe(2);
     expect(slots[0]!.getAttribute('data-front')).toBe('true');
   });
+
+  it('keeps action and danger toasts until dismissed (no default timer)', () => {
+    vi.useFakeTimers();
+    try {
+      render(<ToastProvider />);
+      act(() => {
+        toast.danger('Payout failed');
+        toast('Archived', { action: { label: 'Undo' } });
+      });
+      act(() => {
+        vi.advanceTimersByTime(30000);
+      });
+      expect(screen.getByText('Payout failed')).toBeInTheDocument();
+      expect(screen.getByText('Archived')).toBeInTheDocument();
+    } finally {
+      vi.useRealTimers();
+    }
+  });
 });

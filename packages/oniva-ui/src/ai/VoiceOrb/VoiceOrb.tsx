@@ -7,6 +7,7 @@ import { media } from '../../tokens/media.stylex';
 import { motion } from '../../tokens/motion.stylex';
 import { radius } from '../../tokens/radius.stylex';
 import { mergeSx } from '../../internal/sx';
+import { VisuallyHidden } from '../../components/VisuallyHidden/VisuallyHidden';
 
 const breathe = stylex.keyframes({
   '0%, 100%': { transform: 'scale(1)' },
@@ -120,7 +121,8 @@ export function VoiceOrb({
   const sx = stylex.props(styles.root, xstyle);
   const m = mergeSx(sx, className, { ['--orb' as string]: `${size}px` });
   return (
-    <div {...rest} ref={ref} role="status" aria-label={`${name ?? 'Agent'}: ${captions[state]}`} {...m}>
+    <div {...rest} ref={ref} role="status" {...m}>
+      <VisuallyHidden>{`${name ?? 'Agent'}: ${captions[state]}`}</VisuallyHidden>
       <div {...stylex.props(styles.stage)}>
         {state === 'listening' && (
           <>

@@ -1,4 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
+import { media } from '../tokens/media.stylex';
 import { colors } from '../tokens/colors.stylex';
 
 /**
@@ -7,15 +8,21 @@ import { colors } from '../tokens/colors.stylex';
  */
 export const focus = stylex.create({
   ring: {
-    outlineColor: colors['--oniva-color-focus-ring'],
+    outlineColor: {
+      default: colors['--oniva-color-focus-ring'],
+      [media.forcedColors]: 'Highlight',
+    },
     outlineOffset: 2,
     outlineStyle: { default: 'none', ':focus-visible': 'solid' },
-    outlineWidth: 2,
+    outlineWidth: { default: 2, [media.contrast]: 3 },
   },
   inset: {
-    outlineColor: colors['--oniva-color-focus-ring'],
+    outlineColor: {
+      default: colors['--oniva-color-focus-ring'],
+      [media.forcedColors]: 'Highlight',
+    },
     outlineOffset: -2,
     outlineStyle: { default: 'none', ':focus-visible': 'solid' },
-    outlineWidth: 2,
+    outlineWidth: { default: 2, [media.contrast]: 3 },
   },
 });

@@ -5,6 +5,7 @@ import { media } from '../../tokens/media.stylex';
 import { motion } from '../../tokens/motion.stylex';
 import { radius } from '../../tokens/radius.stylex';
 import { mergeSx } from '../../internal/sx';
+import { VisuallyHidden } from '../../components/VisuallyHidden/VisuallyHidden';
 
 const wave = stylex.keyframes({
   '0%, 60%, 100%': { opacity: 0.4, transform: 'translateY(0)' },
@@ -41,7 +42,8 @@ export interface TypingIndicatorProps extends Omit<HTMLAttributes<HTMLSpanElemen
 export function TypingIndicator({ label = 'Assistant is typing', className, xstyle, ref, ...rest }: TypingIndicatorProps) {
   const sx = stylex.props(styles.root, xstyle);
   return (
-    <span {...rest} ref={ref} role="status" aria-label={label} {...mergeSx(sx, className)}>
+    <span {...rest} ref={ref} role="status" {...mergeSx(sx, className)}>
+      <VisuallyHidden>{label}</VisuallyHidden>
       {[0, 1, 2].map((i) => (
         <span key={i} aria-hidden="true" style={{ '--oniva-i': i } as CSSProperties} {...stylex.props(styles.dot)} />
       ))}

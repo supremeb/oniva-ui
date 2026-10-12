@@ -1,3 +1,4 @@
+import { useLocale } from 'react-aria';
 import * as stylex from '@stylexjs/stylex';
 import { arc, pie } from 'd3-shape';
 import { useMemo, type ReactNode, type Ref } from 'react';
@@ -79,7 +80,8 @@ export function DonutChart({
   xstyle,
   ref,
 }: DonutChartProps) {
-  const fmt = makeFormatter(valueFormat);
+  const { locale } = useLocale();
+  const fmt = makeFormatter(valueFormat, locale);
   const total = data.reduce((s, d) => s + d.value, 0);
   const intl = intlOptionsFor(valueFormat);
   const { ref: viewRef, inView } = useInView<HTMLDivElement>({ threshold: 0.15 });

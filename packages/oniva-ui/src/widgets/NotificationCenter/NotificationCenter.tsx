@@ -194,7 +194,7 @@ export function NotificationCenter({
               Mentions
             </Tab>
           </TabList>
-          <TabPanel id="all">{renderList(items, 'No notifications yet.')}</TabPanel>
+          <TabPanel id="all">{renderList(items, 'No notifications yet. Workspace activity shows up here.')}</TabPanel>
           <TabPanel id="unread">{renderList(unread, 'You are all caught up.')}</TabPanel>
           <TabPanel id="mentions">{renderList(mentions, 'No mentions.')}</TabPanel>
         </Tabs>

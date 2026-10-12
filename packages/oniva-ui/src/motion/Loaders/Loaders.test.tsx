@@ -5,6 +5,6 @@ import { Loader } from './Loaders';
 describe('Loaders', () => {
   it('renders and forwards props', () => {
     render(<Loader variant="matrix" label="Syncing" />);
-    expect(screen.getByRole('status', { name: 'Syncing' })).toHaveAttribute('data-variant', 'matrix');
+    expect(screen.getByRole('status')).toHaveAttribute('data-variant', 'matrix');
   });
 });

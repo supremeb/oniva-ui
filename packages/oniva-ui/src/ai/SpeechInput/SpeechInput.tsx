@@ -97,7 +97,7 @@ export function SpeechInput({
   onRecorded,
   demo = false,
   onError,
-  idleLabel = 'Tap to dictate',
+  idleLabel = 'Select to dictate',
   className,
   xstyle,
   ref,

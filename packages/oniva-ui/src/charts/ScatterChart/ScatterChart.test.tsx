@@ -14,7 +14,7 @@ describe('ScatterChart', () => {
         nameKey="name"
       />,
     );
-    expect(container.querySelectorAll('circle[tabindex="0"]')).toHaveLength(
+    expect(container.querySelectorAll('circle[tabindex="-1"]')).toHaveLength(
       customersScatter.length,
     );
     fireEvent.focus(screen.getByLabelText(/^Umbrella:/));

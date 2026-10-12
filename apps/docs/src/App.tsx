@@ -9,10 +9,11 @@ import { ComponentPage } from './pages/ComponentPage';
 import { ChartsGallery } from './pages/ChartsGallery';
 import { TemplatePage } from './pages/TemplatePage';
 import { MotionFoundations } from './pages/MotionFoundations';
+import { StaticPageView } from './pages/StaticPageView';
+import { DocsShell } from './shell/DocsShell';
 
 const styles = stylex.create({
   shell: { minHeight: '100vh' },
-  main: { marginInline: 'auto', maxWidth: 1120, paddingBlock: 32, paddingInline: 24 },
   wide: {
     marginInline: 'auto',
     maxWidth: 1280,
@@ -56,6 +57,7 @@ export function App() {
     theme === 'dark' ||
     (theme === 'system' && typeof window !== 'undefined' && !!window.matchMedia?.('(prefers-color-scheme: dark)').matches);
 
+  const isDocsRoute = !(pathname === '/' || pathname === '/charts' || pathname.startsWith('/templates/'));
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
@@ -66,7 +68,7 @@ export function App() {
 
   return (
     <ThemeProvider theme={theme} accent={accent} xstyle={styles.shell}>
-      <Header theme={theme} onThemeChange={setTheme} accent={accent} onAccentChange={setAccent} />
+      {!isDocsRoute ? <Header theme={theme} onThemeChange={setTheme} accent={accent} onAccentChange={setAccent} /> : null}
       <Routes>
         <Route
           path="/"
@@ -101,14 +103,17 @@ export function App() {
         <Route
           path="*"
           element={
-            <main id="main" {...stylex.props(styles.main)}>
+            <DocsShell theme={theme} onThemeChange={setTheme} accent={accent} onAccentChange={setAccent}>
               <Routes>
+                <Route path="/getting-started/:slug" element={<StaticPageView />} />
                 <Route path="/foundations/motion" element={<MotionFoundations />} />
+                <Route path="/foundations/:slug" element={<StaticPageView />} />
+                <Route path="/patterns/:slug" element={<StaticPageView />} />
                 <Route path="/components" element={<ComponentsIndex />} />
                 <Route path="/components/:slug" element={<ComponentPage />} />
                 <Route path="*" element={<ComponentsIndex />} />
               </Routes>
-            </main>
+            </DocsShell>
           }
         />
       </Routes>

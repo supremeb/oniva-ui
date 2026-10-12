@@ -1,4 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
+import { media } from '../../tokens/media.stylex';
 import {
   Tag as AriaTag,
   TagGroup as AriaTagGroup,
@@ -102,7 +103,7 @@ const styles = stylex.create({
   remove: {
     alignItems: 'center',
     appearance: 'none',
-    backgroundColor: { default: 'transparent', ':hover': colors['--oniva-color-overlay-hover'] },
+    backgroundColor: { default: 'transparent', ':hover': { default: null, [media.hover]: colors['--oniva-color-overlay-hover'] } },
     borderRadius: radius['--oniva-radius-sm'],
     borderWidth: 0,
     color: 'inherit',
@@ -114,7 +115,10 @@ const styles = stylex.create({
     outlineStyle: { default: 'none', ':focus-visible': 'solid' },
     outlineWidth: 2,
     padding: 0,
+    position: 'relative',
     width: 18,
+    // 24x24 hit area (WCAG 2.5.8) without growing the 18px visual
+    '::after': { content: '""', inset: -3, position: 'absolute' },
   },
   desc: { color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-12'] },
 });
