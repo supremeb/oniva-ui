@@ -1,6 +1,6 @@
 import * as stylex from '@stylexjs/stylex';
 import type { ControlSize } from '../../internal/types';
-import type { HTMLAttributes, ReactNode, Ref } from 'react';
+import type { CSSProperties, HTMLAttributes, ReactNode, Ref } from 'react';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 import { motion } from '../../tokens/motion.stylex';
@@ -11,16 +11,22 @@ const styles = stylex.create({
   bar: {
     backgroundColor: colors['--oniva-color-chart-track'],
     borderRadius: radius['--oniva-radius-full'],
-    display: 'flex',
-    gap: 2,
     overflow: 'hidden',
+    position: 'relative',
     width: '100%',
   },
+  /** Absolutely positioned full-width layer; `--oniva-off` / `--oniva-p` (0-1) place and size it via transform only. */
   seg: {
     height: '100%',
-    transitionDuration: motion['--oniva-motion-dur-slow'],
-    transitionProperty: 'width',
-    transitionTimingFunction: motion['--oniva-motion-ease-standard'],
+    insetBlockStart: 0,
+    insetInlineStart: 0,
+    position: 'absolute',
+    transform: 'translateX(calc(var(--oniva-off, 0) * 100%)) scaleX(var(--oniva-p, 0))',
+    transformOrigin: 'left center',
+    transitionDuration: motion['--oniva-motion-dur-slower'],
+    transitionProperty: 'transform',
+    transitionTimingFunction: motion['--oniva-motion-ease-out'],
+    width: '100%',
   },
   legend: {
     color: colors['--oniva-color-text-muted'],
@@ -144,13 +150,21 @@ export function ProgressSegments({
           .join(', ')}
         {...stylex.props(styles.bar, progressStyles[size])}
       >
-        {segments.map((s, i) => (
-          <div
-            key={s.id}
-            {...stylex.props(styles.seg, styles[s.color ?? cycle[i % cycle.length]!])}
-            style={{ width: `${total > 0 ? (s.value / total) * 100 : 0}%` }}
-          />
-        ))}
+        {segments.map((s, i) => {
+          const before = segments.slice(0, i).reduce((a, x) => a + x.value, 0);
+          return (
+            <div
+              key={s.id}
+              {...stylex.props(styles.seg, styles[s.color ?? cycle[i % cycle.length]!])}
+              style={
+                {
+                  '--oniva-off': total > 0 ? before / total : 0,
+                  '--oniva-p': total > 0 ? s.value / total : 0,
+                } as CSSProperties
+              }
+            />
+          );
+        })}
       </div>
       {showLegend && (
         <ul {...stylex.props(styles.legend)}>

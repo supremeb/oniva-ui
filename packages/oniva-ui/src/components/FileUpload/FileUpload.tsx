@@ -265,6 +265,7 @@ export function FileUpload({
 
   return (
     <div
+      aria-disabled={isDisabled || undefined}
       {...stylex.props(styles.root, xstyle)}
       className={cx(stylex.props(styles.root, xstyle).className, className)}
     >

@@ -53,7 +53,7 @@ const demo: DemoModule = {
     slug: 'drawer',
     category: 'Overlays',
     description:
-      'Sheet that slides in from the left, right or bottom edge. Same focus trap and Esc handling as Dialog.',
+      'Sheet that slides in from the left, right or bottom edge on the 0.32/0.72/0/1 curve (400ms in, 300ms out). Drag it toward its edge to dismiss: pointer plus velocity, rubber-banding the other way, backdrop tied to the drag. Same focus trap and Esc handling as Dialog.',
   },
   demos: [
     {

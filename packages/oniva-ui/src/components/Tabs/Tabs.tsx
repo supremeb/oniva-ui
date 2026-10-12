@@ -4,12 +4,14 @@ import {
   TabList as AriaTabList,
   TabPanel as AriaTabPanel,
   Tabs as AriaTabs,
+  TabListStateContext,
   type TabListProps as AriaTabListProps,
   type TabPanelProps as AriaTabPanelProps,
   type TabProps as AriaTabProps,
   type TabsProps as AriaTabsProps,
 } from 'react-aria-components';
-import { createContext, use, type CSSProperties, type ReactNode, type Ref } from 'react';
+import { createContext, use, useRef, type CSSProperties, type ReactNode, type Ref } from 'react';
+import { SlidingIndicator } from '../../motion/SlidingIndicator';
 import { sxClass } from '../../internal/sx';
 import { accent } from '../../tokens/accent.stylex';
 import { colors } from '../../tokens/colors.stylex';
@@ -30,7 +32,31 @@ const Ctx = createContext<{ variant: TabsVariant; size: TabsSize; vertical: bool
 const styles = stylex.create({
   root: { display: 'flex', flexDirection: 'column', fontFamily: font['--oniva-font-sans'] },
   rootV: { flexDirection: 'row', gap: 16 },
-  list: { alignItems: 'center', display: 'flex', gap: 4 },
+  wrap: { alignSelf: 'flex-start', display: 'flex', position: 'relative' },
+  wrapStretch: { alignSelf: 'stretch' },
+  wrapV: { alignSelf: 'stretch', flexDirection: 'column' },
+  list: { alignItems: 'center', display: 'flex', flexGrow: 1, gap: 4 },
+  indLine: {
+    backgroundColor: accent['--oniva-accent-500'],
+    borderRadius: radius['--oniva-radius-full'],
+    height: 2,
+    transform: 'translate(var(--oniva-indicator-x, 0px), calc(var(--oniva-indicator-y, 0px) + var(--oniva-indicator-h, 0px) - 2px))',
+    transitionTimingFunction: motion['--oniva-motion-ease-in-out'],
+  },
+  indLineV: {
+    backgroundColor: accent['--oniva-accent-500'],
+    borderRadius: radius['--oniva-radius-full'],
+    height: 'var(--oniva-indicator-h, 0px)',
+    transform: 'translate(calc(var(--oniva-indicator-x, 0px) + var(--oniva-indicator-w, 0px) - 2px), var(--oniva-indicator-y, 0px))',
+    transitionTimingFunction: motion['--oniva-motion-ease-in-out'],
+    width: 2,
+  },
+  indPill: {
+    backgroundColor: colors['--oniva-color-surface'],
+    borderRadius: radius['--oniva-radius-lg'],
+    boxShadow: shadow['--oniva-shadow-sm'],
+    transitionTimingFunction: motion['--oniva-motion-ease-in-out'],
+  },
   listV: { alignItems: 'stretch', flexDirection: 'column' },
   listLine: {
     alignSelf: 'stretch',
@@ -76,9 +102,16 @@ const styles = stylex.create({
     outlineOffset: 2,
     outlineStyle: 'none',
     outlineWidth: 2,
+    position: 'relative',
+    touchAction: 'manipulation',
+    transform: {
+      default: 'none',
+      ':active:not([data-disabled])': `scale(${motion['--oniva-motion-press-scale']})`,
+    },
     transitionDuration: motion['--oniva-motion-dur-base'],
-    transitionProperty: 'background-color, color, box-shadow, border-color',
-    transitionTimingFunction: motion['--oniva-motion-ease-standard'],
+    transitionProperty: 'background-color, color, box-shadow, border-color, transform',
+    transitionTimingFunction: motion['--oniva-motion-ease-out'],
+    zIndex: 1,
     userSelect: 'none',
     whiteSpace: 'nowrap',
   },
@@ -101,8 +134,6 @@ const styles = stylex.create({
     paddingInline: 12,
   },
   lineSelected: {
-    borderBottomColor: accent['--oniva-accent-500'],
-    borderRightColor: accent['--oniva-accent-500'],
     color: colors['--oniva-color-text'],
   },
   lineIdle: {
@@ -111,8 +142,6 @@ const styles = stylex.create({
   pill: { borderRadius: radius['--oniva-radius-lg'], paddingInline: 12 },
   pillSm: { borderRadius: radius['--oniva-radius-md'], paddingInline: 10 },
   pillSelected: {
-    backgroundColor: colors['--oniva-color-surface'],
-    boxShadow: shadow['--oniva-shadow-sm'],
     color: colors['--oniva-color-text'],
   },
   pillIdle: {
@@ -188,7 +217,17 @@ export function TabList<T extends object>({
   ...rest
 }: TabListProps<T>) {
   const { variant, vertical: v } = use(Ctx);
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const selectedKey = use(TabListStateContext)?.selectedKey;
   return (
+    <div
+      ref={wrapRef}
+      {...stylex.props(
+        styles.wrap,
+        variant === 'line' && !v && styles.wrapStretch,
+        v && styles.wrapV,
+      )}
+    >
     <AriaTabList
       {...rest}
       ref={ref}
@@ -206,6 +245,13 @@ export function TabList<T extends object>({
         );
       }}
     />
+    <SlidingIndicator
+      containerRef={wrapRef}
+      activeKey={selectedKey}
+      selector='[role="tab"][aria-selected="true"]'
+      xstyle={variant === 'pill' ? styles.indPill : v ? styles.indLineV : styles.indLine}
+    />
+    </div>
   );
 }
 

@@ -387,6 +387,15 @@ const styles = stylex.create({
 
 const WORDS = ['Dashboards', 'Agent Interfaces', 'Healthcare', 'Finance'] as const;
 
+const VISUALLY_HIDDEN = {
+  position: 'absolute',
+  width: 1,
+  height: 1,
+  overflow: 'hidden',
+  clip: 'rect(0 0 0 0)',
+  whiteSpace: 'nowrap',
+} as const;
+
 function RotatingWord() {
   const [i, setI] = useState(0);
   useEffect(() => {
@@ -587,7 +596,10 @@ export function Home() {
           <span>v0.1 is out</span>
         </Link>
         <h1 id="hero-title" {...stylex.props(styles.h1)}>
-          React design system for <RotatingWord />
+          <span style={VISUALLY_HIDDEN}>React design system for dashboards &amp; agent interfaces</span>
+          <span aria-hidden="true">
+            React design system for <RotatingWord />
+          </span>
         </h1>
         <p {...stylex.props(styles.sub)}>
           oniva/ui is an open source React design system with {counts.total} components, including{' '}

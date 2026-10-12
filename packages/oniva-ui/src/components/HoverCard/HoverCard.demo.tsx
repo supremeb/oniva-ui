@@ -12,7 +12,7 @@ const linkStyle = {
 } as const;
 const meta = {
   alignItems: 'center',
-  color: 'var(--textMuted, #6b6b6b)',
+  color: 'var(--oniva-color-text-muted)',
   display: 'flex',
   fontSize: 12,
   gap: 6,
@@ -45,7 +45,7 @@ const demo: DemoModule = {
                 <Avatar name="Maria Chen" />
                 <div style={{ display: 'grid', gap: 6 }}>
                   <div style={{ fontWeight: 600 }}>Maria Chen</div>
-                  <div style={{ color: 'var(--textMuted, #6b6b6b)', fontSize: 13 }}>
+                  <div style={{ color: 'var(--oniva-color-text-muted)', fontSize: 13 }}>
                     Controller at Northwind Traders. Approves invoices over $2,500.
                   </div>
                   <div style={meta}>

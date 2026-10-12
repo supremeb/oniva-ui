@@ -31,9 +31,9 @@ export const darkTheme = stylex.createTheme(colors, {
   '--oniva-color-separator': '#262626',
 
   '--oniva-color-text': '#fafafa',
-  '--oniva-color-text-muted': '#a1a1a1',
+  '--oniva-color-text-muted': '#b0b0b0', // AA on selected blue-900 rows
   '--oniva-color-text-on-tertiary': '#d4d4d4',
-  '--oniva-color-text-subtle': '#525252',
+  '--oniva-color-text-subtle': '#909090', // AA on #262626 and #171717
   '--oniva-color-text-disabled': '#262626',
   '--oniva-color-text-placeholder': '#a1a1a1',
   '--oniva-color-text-error': '#ff6467',

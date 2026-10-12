@@ -31,6 +31,20 @@ React 19 · TypeScript strict · StyleX (Meta) · react-aria-components · Vite 
 - **Charts:** use `ChartFrame` (role group + graphics-symbol points); add an axe test for new chart types.
 - **Demos:** `meta.title` is a human sentence-case title (`Activity widget`); `code` strings must use current prop names.
 
+## Motion rules (loop 5)
+
+Quality bar: Emil Kowalski's animation review rules. No animation dependency; pure StyleX keyframes/transitions + WAAPI + RAC `data-entering`/`data-exiting`.
+
+- **Curves:** default `ease-out` (0.23,1,0.32,1) for enter/exit/press; `ease-in-out` (0.77,0,0.175,1) for movement already on screen (indicators); `ease-drawer` (0.32,0.72,0,1) for sheets/drawers; `ease-out-expo` for number roll; `ease-spring` only for small overshoot (badges, digits). NEVER `ease-in` for UI.
+- **Durations by interaction:** hover/highlight `dur-instant` 40; press `dur-press` 120; state/color `dur-base` 150; popover/menu/dialog enter `dur-enter` 200; indicators/modal content `dur-slow` 250; text/number `dur-deliberate` 350; drawer `dur-sheet` 400. UI stays under 300ms except sheets and decorative.
+- **Exits** run ~60-75% of the enter (enter 200 -> exit 100-140) and use ease-out, never ease-in.
+- **Only** `transform`, `opacity`, `filter: blur()` (<=4px) and (via `AnimatedHeight`) `grid-template-rows`. Never animate width/height/left/top on in-flow elements. No `transition: all`; list exact properties.
+- **Origin-aware:** popovers scale from the trigger: `motionStyles.originAware` (`var(--trigger-anchor-point)`); modals scale from center. Never scale from 0 (start at `pop-scale` 0.96).
+- **No animation** on keyboard-initiated high-frequency actions (command palette items, menu arrow navigation, typing). Highlights are instant. Press scale is pointer-only (`:active` / `usePressScale`).
+- **Interruptible:** prefer CSS transitions for state, keyframes only for one-shot enter/exit; re-triggering must not jump.
+- **Reduced motion:** use duration tokens (collapse to 0.01ms) and `media.reducedMotion`; transform presets fall back to opacity-only fades, loops freeze to static.
+- **Which primitive:** conditional mount/unmount -> `Presence` (RAC overlays already have `data-entering/exiting`; use `enterExit.*` presets); expand/collapse -> `AnimatedHeight`; active-item pill in Tabs/Segmented/Sidebar -> `SlidingIndicator`; pressable surface -> `motionStyles.pressScale` (native button) or `usePressScale`; changing numbers -> `AnimatedNumber`; lists appearing -> `Stagger` (cap 6); scroll reveal / pausing loops -> `useInView`/`InView`; streamed text -> `TextReveal`; pending label -> `Shimmer`; skeleton to content -> `CrossFade`.
+
 ## Commands
 
 ```bash
@@ -63,6 +77,8 @@ Canonical example: `packages/oniva-ui/src/components/Button/` (read all four fil
 9. `createTheme` values must be literals (no variables/imports). Effects must not return non-functions (use block bodies).
 
 ## Learnings index
+
+- `motion-system-stylex.md`: motion tokens, primitives, StyleX keyframes with RAC data-entering/exiting, animating height, WAAPI interop
 
 - `stylex-stable-public-css-variables.md`: how `--oniva-*` names work, constraints, how to add tokens
 - `loop-4-api-consolidation.md`: shared style composition, focus helper, sx helpers, chart a11y roles

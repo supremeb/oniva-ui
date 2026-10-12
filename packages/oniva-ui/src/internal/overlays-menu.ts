@@ -16,6 +16,22 @@ const popOut = stylex.keyframes({
   to: { opacity: 0, transform: 'scale(0.96)' },
 });
 
+/**
+ * Origin-aware transform-origin for anchored surfaces. RAC sets `--trigger-anchor-point` (the
+ * trigger's centre in popover space); the placement value is only the fallback.
+ */
+export const originStyles = stylex.create({
+  aware: {
+    transformOrigin: {
+      default: 'var(--trigger-anchor-point, center)',
+      '[data-placement^="top"]': 'var(--trigger-anchor-point, bottom center)',
+      '[data-placement^="bottom"]': 'var(--trigger-anchor-point, top center)',
+      '[data-placement^="left"]': 'var(--trigger-anchor-point, right center)',
+      '[data-placement^="right"]': 'var(--trigger-anchor-point, left center)',
+    },
+  },
+});
+
 /** Shared surface + item styles for DropdownMenu, ContextMenu and CommandPalette. */
 export const menuStyles = stylex.create({
   popup: {
@@ -30,7 +46,13 @@ export const menuStyles = stylex.create({
     minWidth: 200,
     outline: 'none',
     overflow: 'hidden',
-    transformOrigin: 'var(--trigger-anchor-point, center)',
+    transformOrigin: {
+      default: 'var(--trigger-anchor-point, center)',
+      '[data-placement^="top"]': 'var(--trigger-anchor-point, bottom center)',
+      '[data-placement^="bottom"]': 'var(--trigger-anchor-point, top center)',
+      '[data-placement^="left"]': 'var(--trigger-anchor-point, right center)',
+      '[data-placement^="right"]': 'var(--trigger-anchor-point, left center)',
+    },
   },
   popupEntering: {
     animationDuration: motion['--oniva-motion-dur-base'],
@@ -39,10 +61,10 @@ export const menuStyles = stylex.create({
     animationTimingFunction: motion['--oniva-motion-ease-out'],
   },
   popupExiting: {
-    animationDuration: motion['--oniva-motion-dur-fast'],
+    animationDuration: { default: '120ms', [media.reducedMotion]: '0.01ms' },
     animationFillMode: 'both',
     animationName: { default: popOut, [media.reducedMotion]: 'none' },
-    animationTimingFunction: motion['--oniva-motion-ease-in'],
+    animationTimingFunction: motion['--oniva-motion-ease-out'],
   },
   menu: {
     boxSizing: 'border-box',
@@ -53,6 +75,7 @@ export const menuStyles = stylex.create({
     maxHeight: 'inherit',
     outline: 'none',
     overflow: 'auto',
+    overscrollBehavior: 'contain',
     padding: 4,
   },
   item: {
@@ -72,14 +95,23 @@ export const menuStyles = stylex.create({
     paddingBlock: 6,
     paddingInline: 8,
     textDecoration: 'none',
-    transitionDuration: motion['--oniva-motion-dur-fast'],
+    // highlight is instant in (focused/open styles set 0ms), soft out over 120ms
+    transitionDuration: '120ms',
     transitionProperty: 'background-color, color',
+    transitionTimingFunction: motion['--oniva-motion-ease-out'],
     userSelect: 'none',
   },
-  itemFocused: { backgroundColor: colors['--oniva-color-surface-inset-hover'] },
-  itemOpen: { backgroundColor: colors['--oniva-color-surface-inset-hover'] },
+  itemFocused: {
+    backgroundColor: colors['--oniva-color-surface-inset-hover'],
+    transitionDuration: '0ms',
+  },
+  itemOpen: {
+    backgroundColor: colors['--oniva-color-surface-inset-hover'],
+    transitionDuration: '0ms',
+  },
   itemDanger: { color: colors['--oniva-color-text-error'] },
   itemDangerFocused: {
+    transitionDuration: '0ms',
     backgroundColor: colors['--oniva-color-error-bg'],
     color: colors['--oniva-color-danger-fg'],
   },

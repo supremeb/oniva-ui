@@ -47,7 +47,7 @@ describe('Tabs', () => {
     await userEvent.click(screen.getByRole('tab', { name: 'Team' }));
     expect(screen.getByRole('tab', { name: 'Team' })).toHaveAttribute('aria-selected', 'false');
     const a = screen.getByRole('tablist').className;
-    expect(screen.getByRole('tablist').parentElement).toHaveClass('x');
+    expect(screen.getByRole('tablist').parentElement?.parentElement).toHaveClass('x');
     rerender(<Example variant="pill" />);
     expect(screen.getByRole('tablist').className).not.toBe(a);
   });

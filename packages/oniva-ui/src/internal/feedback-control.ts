@@ -32,8 +32,15 @@ export const controlStyles = stylex.create({
       default: motion['--oniva-motion-dur-base'],
       [media.reducedMotion]: '0.01ms',
     },
-    transitionProperty: 'background-color, background-image, border-color, box-shadow, color',
-    transitionTimingFunction: motion['--oniva-motion-ease-standard'],
+    transitionProperty: 'background-color, background-image, border-color, box-shadow, color, transform',
+    transitionTimingFunction: motion['--oniva-motion-ease-out'],
+    // Pointer-only press feedback (:active); 0.97 per Emil. Disabled / pending buttons don't scale.
+    transform: {
+      default: 'none',
+      ':active:not(:disabled):not([data-disabled]):not([data-pending])': `scale(${motion['--oniva-motion-press-scale']})`,
+    },
+    touchAction: 'manipulation',
+    WebkitTapHighlightColor: 'transparent',
     userSelect: 'none',
     whiteSpace: 'nowrap',
   },
@@ -142,5 +149,7 @@ export type { ButtonSize, Tone as StatusTone } from './types';
 export interface ToggleGroupContextValue {
   size?: ButtonSize;
   variant?: ControlVariant | 'segmented';
+  /** Segmented single-select: a SlidingIndicator draws the selected tile. */
+  slide?: boolean;
 }
 export const ToggleGroupStyleContext = createContext<ToggleGroupContextValue>({});

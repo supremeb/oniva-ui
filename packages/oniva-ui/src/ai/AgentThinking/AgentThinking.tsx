@@ -12,7 +12,8 @@ import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 import { aiStyles } from '../../internal/ai-styles';
 import { formatDuration } from '../../internal/ai-motion';
-import { TextShimmer } from '../TextShimmer';
+import { AnimatedHeight } from '../../motion/AnimatedHeight/AnimatedHeight';
+import { Shimmer } from '../../motion/Shimmer/Shimmer';
 
 const styles = stylex.create({
   root: { fontFamily: font['--oniva-font-sans'] },
@@ -22,6 +23,8 @@ const styles = stylex.create({
     paddingBlock: 2,
     width: 'auto',
   },
+  // RAC hides the collapsed panel with [hidden]; keep it rendered so AnimatedHeight can animate.
+  panelHost: { contentVisibility: 'visible', display: 'block' },
   elapsed: { fontVariantNumeric: 'tabular-nums', fontWeight: font['--oniva-font-weight-regular'] },
   panel: {
     borderInlineStartColor: colors['--oniva-color-border'],
@@ -82,7 +85,7 @@ export function AgentThinking({
             >
               <Sparkles size={14} aria-hidden="true" />
               {isThinking ? (
-                <TextShimmer>Thinking…</TextShimmer>
+                <Shimmer>Thinking…</Shimmer>
               ) : (
                 <span>Thought for {formatDuration(elapsed)}</span>
               )}
@@ -96,10 +99,12 @@ export function AgentThinking({
               />
             </AriaButton>
           </Heading>
-          <DisclosurePanel>
-            <div {...stylex.props(styles.panel)}>
-              {typeof children === 'string' ? children.trim() : children}
-            </div>
+          <DisclosurePanel {...stylex.props(styles.panelHost)}>
+            <AnimatedHeight isOpen={isExpanded}>
+              <div {...stylex.props(styles.panel)}>
+                {typeof children === 'string' ? children.trim() : children}
+              </div>
+            </AnimatedHeight>
           </DisclosurePanel>
         </>
       )}

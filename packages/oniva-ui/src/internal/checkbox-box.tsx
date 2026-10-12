@@ -1,5 +1,4 @@
 import * as stylex from '@stylexjs/stylex';
-import { Check, Minus } from 'lucide-react';
 import { accent } from '../tokens/accent.stylex';
 import { colors } from '../tokens/colors.stylex';
 import { motion } from '../tokens/motion.stylex';
@@ -23,10 +22,30 @@ const styles = stylex.create({
     height: 16,
     justifyContent: 'center',
     marginTop: 2,
-    transitionDuration: motion['--oniva-motion-dur-base'],
-    transitionProperty: 'background-color, border-color, box-shadow',
-    transitionTimingFunction: motion['--oniva-motion-ease-standard'],
+    position: 'relative',
+    transform: { default: 'none', '[data-pressed]': 'scale(0.94)' },
+    transitionDuration: motion['--oniva-motion-dur-press'],
+    transitionProperty: 'background-color, border-color, box-shadow, transform',
+    transitionTimingFunction: motion['--oniva-motion-ease-out'],
     width: 16,
+  },
+  svg: { display: 'block', height: 16, left: -1, position: 'absolute', top: -1, width: 16 },
+  stroke: {
+    fill: 'none',
+    stroke: 'currentColor',
+    strokeDasharray: 1,
+    strokeDashoffset: 1,
+    strokeLinecap: 'round',
+    strokeLinejoin: 'round',
+    strokeWidth: 2.25,
+    transitionDuration: motion['--oniva-motion-dur-fast'],
+    transitionProperty: 'stroke-dashoffset',
+    transitionTimingFunction: motion['--oniva-motion-ease-out'],
+  },
+  strokeOn: {
+    strokeDashoffset: 0,
+    transitionDelay: '60ms',
+    transitionDuration: motion['--oniva-motion-dur-base'],
   },
   compact: { marginTop: 0 },
   hover: { borderColor: colors['--oniva-color-border-active'] },
@@ -44,6 +63,8 @@ export interface CheckboxBoxProps {
   isFocusVisible?: boolean;
   isHovered?: boolean;
   isInvalid?: boolean;
+  /** Pointer-pressed (not keyboard): box scales to 0.94. */
+  isPressed?: boolean;
   /** `compact` drops the label-alignment offset (table selection cells). */
   density?: 'default' | 'compact';
 }
@@ -55,12 +76,14 @@ export function CheckboxBox({
   isFocusVisible,
   isHovered,
   isInvalid,
+  isPressed,
   density = 'default',
 }: CheckboxBoxProps) {
   const on = isSelected || isIndeterminate;
   return (
     <span
       aria-hidden="true"
+      data-pressed={isPressed ? '' : undefined}
       {...stylex.props(
         styles.box,
         density === 'compact' && styles.compact,
@@ -70,11 +93,18 @@ export function CheckboxBox({
         isFocusVisible && ff.focusRing,
       )}
     >
-      {isIndeterminate ? (
-        <Minus size={12} strokeWidth={3} />
-      ) : isSelected ? (
-        <Check size={12} strokeWidth={3} />
-      ) : null}
+      <svg viewBox="0 0 16 16" {...stylex.props(styles.svg)}>
+        <path
+          d="M4 8.5l2.75 2.75L12 5"
+          pathLength={1}
+          {...stylex.props(styles.stroke, isSelected && !isIndeterminate && styles.strokeOn)}
+        />
+        <path
+          d="M4.5 8h7"
+          pathLength={1}
+          {...stylex.props(styles.stroke, isIndeterminate && styles.strokeOn)}
+        />
+      </svg>
     </span>
   );
 }

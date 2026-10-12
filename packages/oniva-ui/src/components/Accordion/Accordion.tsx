@@ -11,6 +11,7 @@ import {
 } from 'react-aria-components';
 import { ChevronDown } from 'lucide-react';
 import { createContext, useContext, type ReactNode, type Ref } from 'react';
+import { AnimatedHeight } from '../../motion/AnimatedHeight';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 import { motion } from '../../tokens/motion.stylex';
@@ -57,6 +58,8 @@ const styles = stylex.create({
     boxShadow: shadow['--oniva-shadow-xs'],
   },
   heading: { margin: 0 },
+  // RAC hides the collapsed panel with [hidden]; keep it rendered so AnimatedHeight can animate.
+  panelHost: { contentVisibility: 'visible', display: 'block' },
   trigger: {
     alignItems: 'center',
     appearance: 'none',
@@ -88,9 +91,9 @@ const styles = stylex.create({
   chevron: {
     color: colors['--oniva-color-icon-muted'],
     flexShrink: 0,
-    transitionDuration: motion['--oniva-motion-dur-base'],
+    transitionDuration: motion['--oniva-motion-dur-enter'],
     transitionProperty: 'transform',
-    transitionTimingFunction: motion['--oniva-motion-ease-standard'],
+    transitionTimingFunction: motion['--oniva-motion-ease-out'],
   },
   chevronOpen: { transform: 'rotate(180deg)' },
   panel: {
@@ -185,8 +188,10 @@ export function AccordionItem({ title, icon, children, xstyle, ...rest }: Accord
               />
             </AriaButton>
           </Heading>
-          <DisclosurePanel>
-            <div {...stylex.props(styles.panel)}>{children}</div>
+          <DisclosurePanel {...stylex.props(styles.panelHost)}>
+            <AnimatedHeight isOpen={isExpanded}>
+              <div {...stylex.props(styles.panel)}>{children}</div>
+            </AnimatedHeight>
           </DisclosurePanel>
         </>
       )}

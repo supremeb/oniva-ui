@@ -104,7 +104,7 @@ export function Slider<T extends number | number[]>({
       {({ isDisabled }) => (
         <>
           {(label != null || !hideOutput) && (
-            <div {...stylex.props(styles.head)}>
+            <div aria-disabled={isDisabled || undefined} {...stylex.props(styles.head)}>
               {label != null ? <Label {...stylex.props(ff.label)}>{label}</Label> : <span />}
               {!hideOutput && <SliderOutput {...stylex.props(styles.output)} />}
             </div>

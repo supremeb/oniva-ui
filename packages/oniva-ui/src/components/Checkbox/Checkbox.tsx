@@ -3,7 +3,7 @@ import {
   Checkbox as AriaCheckbox,
   type CheckboxProps as AriaCheckboxProps,
 } from 'react-aria-components';
-import type { ReactNode, Ref } from 'react';
+import { useState, type ReactNode, type Ref } from 'react';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 import { CheckboxBox } from '../../internal/checkbox-box';
@@ -42,9 +42,19 @@ export function Checkbox({
   ref,
   ...rest
 }: CheckboxProps) {
+  // pointer-only press (keyboard Space must not scale)
+  const [pressed, setPressed] = useState(false);
   return (
     <AriaCheckbox
       {...rest}
+      onPressStart={(e) => {
+        setPressed(e.pointerType !== 'keyboard' && e.pointerType !== 'virtual');
+        rest.onPressStart?.(e);
+      }}
+      onPressEnd={(e) => {
+        setPressed(false);
+        rest.onPressEnd?.(e);
+      }}
       ref={ref}
       className={({ isDisabled }) =>
         cx(
@@ -55,7 +65,7 @@ export function Checkbox({
     >
       {(state) => (
         <>
-          <CheckboxBox {...state} />
+          <CheckboxBox {...state} isPressed={pressed && !state.isDisabled} />
           {(children != null || description != null) && (
             <span {...stylex.props(styles.text)}>
               {children}

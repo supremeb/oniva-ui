@@ -23,7 +23,7 @@ const field = {
 const input = {
   height: 36,
   borderRadius: 10,
-  border: '1px solid var(--border, #ebebeb)',
+  border: '1px solid var(--oniva-color-border)',
   padding: '0 12px',
   font: 'inherit',
   fontWeight: 400,

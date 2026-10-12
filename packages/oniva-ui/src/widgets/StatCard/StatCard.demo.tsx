@@ -21,7 +21,8 @@ const demo: DemoModule = {
       name: 'KPI row',
       code: `<StatCard
   label="Monthly revenue"
-  value="$48,210"
+  value={48210}
+            valueFormat={{ style: 'currency', currency: 'USD', maximumFractionDigits: 0 }}
   delta={8.2}
   deltaLabel="vs last month"
   icon={<DollarSign size={16} />}
@@ -31,7 +32,8 @@ const demo: DemoModule = {
         <div style={grid}>
           <StatCard
             label="Monthly revenue"
-            value="$48,210"
+            value={48210}
+            valueFormat={{ style: 'currency', currency: 'USD', maximumFractionDigits: 0 }}
             delta={8.2}
             deltaLabel="vs last month"
             icon={<DollarSign size={16} />}
@@ -39,7 +41,7 @@ const demo: DemoModule = {
           />
           <StatCard
             label="Active customers"
-            value="2,940"
+            value={2940}
             delta={-1.4}
             deltaLabel="vs last month"
             icon={<Users size={16} />}

@@ -8,6 +8,7 @@ import { ComponentsIndex } from './pages/ComponentsIndex';
 import { ComponentPage } from './pages/ComponentPage';
 import { ChartsGallery } from './pages/ChartsGallery';
 import { TemplatePage } from './pages/TemplatePage';
+import { MotionFoundations } from './pages/MotionFoundations';
 
 const styles = stylex.create({
   shell: { minHeight: '100vh' },
@@ -93,6 +94,7 @@ export function App() {
           element={
             <main id="main" {...stylex.props(styles.main)}>
               <Routes>
+                <Route path="/foundations/motion" element={<MotionFoundations />} />
                 <Route path="/components" element={<ComponentsIndex />} />
                 <Route path="/components/:slug" element={<ComponentPage />} />
                 <Route path="*" element={<ComponentsIndex />} />

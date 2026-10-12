@@ -1,8 +1,9 @@
 import * as stylex from '@stylexjs/stylex';
+import { AnimatedNumber } from '../../motion/AnimatedNumber/AnimatedNumber';
 import { useState, type Ref } from 'react';
 import { BarChart } from '../../charts/BarChart';
 import { Card, CardHeader, CardHeaderText, CardTitle } from '../../components/Card';
-import { fmtInt, RangeSwitcher, wstyles } from '../../internal/widgets-parts';
+import { RangeSwitcher, wstyles } from '../../internal/widgets-parts';
 
 const styles = stylex.create({ chart: { paddingInline: 4 } });
 
@@ -50,7 +51,7 @@ export function StepsWidget({
         <CardHeaderText>
           <CardTitle>Steps</CardTitle>
           <div {...stylex.props(wstyles.valueRow)}>
-            <p {...stylex.props(wstyles.value)}>{fmtInt(total)}</p>
+            <p {...stylex.props(wstyles.value)}><AnimatedNumber value={total} format={{ maximumFractionDigits: 0 }} /></p>
             <span {...stylex.props(wstyles.unit)}>total steps</span>
           </div>
         </CardHeaderText>

@@ -8,6 +8,7 @@ import {
 } from 'react-aria-components';
 import type { ReactNode, Ref } from 'react';
 import { mergeSx } from '../../internal/sx';
+import { originStyles } from '../../internal/overlays-menu';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 import { motion } from '../../tokens/motion.stylex';
@@ -15,12 +16,12 @@ import { radius } from '../../tokens/radius.stylex';
 import { shadow } from '../../tokens/shadow.stylex';
 
 const popIn = stylex.keyframes({
-  from: { opacity: 0, transform: 'translateY(4px) scale(0.97)' },
-  to: { opacity: 1, transform: 'translateY(0) scale(1)' },
+  from: { opacity: 0, transform: 'scale(0.96)' },
+  to: { opacity: 1, transform: 'scale(1)' },
 });
 const popOut = stylex.keyframes({
   from: { opacity: 1, transform: 'scale(1)' },
-  to: { opacity: 0, transform: 'scale(0.97)' },
+  to: { opacity: 0, transform: 'scale(0.96)' },
 });
 
 const styles = stylex.create({
@@ -50,7 +51,7 @@ const styles = stylex.create({
     animationDuration: motion['--oniva-motion-dur-fast'],
     animationFillMode: 'both',
     animationName: { default: popOut, [media.reducedMotion]: 'none' },
-    animationTimingFunction: motion['--oniva-motion-ease-in'],
+    animationTimingFunction: motion['--oniva-motion-ease-out'],
   },
 });
 
@@ -60,7 +61,7 @@ export interface HoverCardProps extends Omit<PreviewTriggerProps, 'children'> {
 }
 
 /** Opens a rich, interactive card on hover, focus or long-press. Unlike Tooltip, content may contain links/buttons. */
-export function HoverCard({ delay = 400, closeDelay = 200, ...props }: HoverCardProps) {
+export function HoverCard({ delay = 500, closeDelay = 150, ...props }: HoverCardProps) {
   return <PreviewTrigger delay={delay} closeDelay={closeDelay} {...props} />;
 }
 
@@ -93,6 +94,7 @@ export function HoverCardContent({
         mergeSx(
           stylex.props(
             styles.card,
+            originStyles.aware,
             isEntering && styles.entering,
             isExiting && styles.exiting,
             xstyle,

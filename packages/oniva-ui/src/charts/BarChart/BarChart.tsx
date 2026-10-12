@@ -1,7 +1,7 @@
 import * as stylex from '@stylexjs/stylex';
 import { scaleBand, scaleLinear } from 'd3-scale';
 import { stack, stackOffsetExpand, stackOffsetNone } from 'd3-shape';
-import type { Ref } from 'react';
+import { useMemo, type Ref } from 'react';
 import {
   makeAxisFormatter,
   makeFormatter,
@@ -12,7 +12,10 @@ import {
   type ChartSeries,
   type ValueFormat,
 } from '../../internal/charts-math';
+import { intlOptionsFor, staggerDelay, useTweenedData } from '../../internal/charts-motion';
 import { chartMotion, svgText, toneStyle, tones } from '../../internal/charts-styles';
+import { fillUrl, glowUrl, SeriesDefs, type ChartFill } from '../_shared/ChartDefs';
+import { tipRows } from '../_shared/tipRows';
 import { ChartFrame } from '../_shared/ChartFrame';
 
 export interface BarChartProps {
@@ -24,6 +27,12 @@ export interface BarChartProps {
   layout?: 'grouped' | 'stacked' | 'percent';
   /** Render a full-height rounded track behind each bar (BoardUI "Steps" style). */
   track?: boolean;
+  /** `blocks` renders each bar as a stack of small rounded blocks (unit-style). */
+  variant?: 'solid' | 'blocks';
+  /** Fill treatment: solid, gradient, or an SVG pattern (dots, lines, grid). */
+  fill?: ChartFill;
+  /** Soft blur glow behind the bars. */
+  glow?: boolean;
   /** Corner radius of bars in px. */
   barRadius?: number;
   /** Space between category bands, 0..1. */
@@ -46,6 +55,9 @@ export function BarChart({
   orientation = 'vertical',
   layout = 'grouped',
   track = false,
+  variant = 'solid',
+  fill = 'solid',
+  glow = false,
   barRadius = 8,
   padding,
   valueFormat = 'number',
@@ -59,6 +71,9 @@ export function BarChart({
   ref,
 }: BarChartProps) {
   const fmt = makeFormatter(valueFormat);
+  const intl = intlOptionsFor(valueFormat);
+  const seriesKeys = useMemo(() => series.map((s) => s.key), [series]);
+  const shown = useTweenedData(data, seriesKeys);
   const horizontal = orientation === 'horizontal';
   const pad = padding ?? (track ? 0.14 : 0.32);
   const axisFmt =
@@ -80,7 +95,7 @@ export function BarChart({
         rows: data.map((d) => [String(d[index]), ...series.map((s) => fmt(Number(d[s.key]) || 0))]),
       }}
     >
-      {({ width, height: h, bind }) => {
+      {({ width, height: h, bind, id }) => {
         const categories = data.map((d) => String(d[index]));
         const keys = series.map((s) => s.key);
         const value = (d: ChartDatum, k: string) => Number(d[k]) || 0;
@@ -89,9 +104,9 @@ export function BarChart({
           ? stack<ChartDatum>()
               .keys(keys)
               .value(value)
-              .offset(layout === 'percent' ? stackOffsetExpand : stackOffsetNone)(data)
+              .offset(layout === 'percent' ? stackOffsetExpand : stackOffsetNone)(shown)
               .map((s) => s.map((p) => [p[0], p[1]] as [number, number]))
-          : keys.map((k) => data.map((d) => [0, value(d, k)] as [number, number]));
+          : keys.map((k) => shown.map((d) => [0, value(d, k)] as [number, number]));
         const rawMax = Math.max(0, ...layers.flatMap((l) => l.map((p) => p[1])));
         const nice =
           layout === 'percent'
@@ -126,8 +141,11 @@ export function BarChart({
         const r = Math.min(barRadius, cat.bandwidth() / 2);
         const grid = nice.ticks;
 
+        const blockLen = 8;
+        const blockGap = 3;
         return (
           <>
+            <SeriesDefs id={id} series={series} fill={fill} glow={glow} gradient={[0.95, 0.45]} />
             <g aria-hidden="true">
               {showGrid &&
                 !track &&
@@ -205,7 +223,7 @@ export function BarChart({
                 return <path key={c} d={d} fill="currentColor" {...stylex.props(tones.track)} />;
               })}
             {series.map((s, si) => (
-              <g key={s.key} {...stylex.props(toneStyle(seriesTone(s, si)))}>
+              <g key={s.key} filter={glowUrl(id, glow)} {...stylex.props(toneStyle(seriesTone(s, si)))}>
                 {data.map((_, i) => {
                   const [v0, v1] = layers[si]![i]!;
                   if (v1 - v0 <= 0) return null;
@@ -237,13 +255,34 @@ export function BarChart({
                   const d = horizontal
                     ? roundedRectPath(val(v0), base, Math.max(1, val(v1) - val(v0)), bw, full)
                     : roundedRectPath(base, val(v1), bw, Math.max(1, val(v0) - val(v1)), full);
+                  const motionStyle = stylex.props(horizontal ? chartMotion.growX : chartMotion.grow);
+                  const delay = { animationDelay: `${staggerDelay(i, data.length) + Math.min(si * 40, 80)}ms` };
+                  if (variant === 'blocks') {
+                    const len = horizontal ? val(v1) - val(v0) : val(v0) - val(v1);
+                    const n = Math.max(1, Math.floor((len + blockGap) / (blockLen + blockGap)));
+                    return (
+                      <g key={i} {...motionStyle} style={delay}>
+                        {Array.from({ length: n }, (_, k) => (
+                          <rect
+                            key={k}
+                            rx={Math.min(3, bw / 2)}
+                            {...(horizontal
+                              ? { x: val(v0) + k * (blockLen + blockGap), y: base, width: blockLen, height: bw }
+                              : { x: base, y: val(v0) - (k + 1) * blockLen - k * blockGap, width: bw, height: blockLen })}
+                            fill={fillUrl(id, si, fill)}
+                            fillOpacity={0.35 + (0.65 * (k + 1)) / n}
+                          />
+                        ))}
+                      </g>
+                    );
+                  }
                   return (
                     <path
                       key={i}
                       d={d}
-                      fill="currentColor"
-                      {...stylex.props(horizontal ? chartMotion.growX : chartMotion.grow)}
-                      style={{ animationDelay: `${i * 40 + si * 60}ms` }}
+                      fill={fillUrl(id, si, fill)}
+                      {...motionStyle}
+                      style={delay}
                     />
                   );
                 })}
@@ -265,11 +304,7 @@ export function BarChart({
                   {...bind(
                     {
                       title: c,
-                      rows: series.map((s, si) => ({
-                        label: s.label ?? s.key,
-                        value: fmt(value(d, s.key)),
-                        tone: seriesTone(s, si),
-                      })),
+                      rows: tipRows(series, d, fmt, intl),
                     },
                     `${c}: ${series.map((s) => `${s.label ?? s.key} ${fmt(value(d, s.key))}`).join(', ')}`,
                   )}

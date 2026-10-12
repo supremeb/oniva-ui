@@ -1,13 +1,35 @@
 import * as stylex from '@stylexjs/stylex';
-import { Check } from 'lucide-react';
 import type { HTMLAttributes, Ref } from 'react';
+import { media } from '../../tokens/media.stylex';
+import { motion } from '../../tokens/motion.stylex';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 import { radius } from '../../tokens/radius.stylex';
 import { Spinner } from '../../components/Spinner';
 import { mergeSx } from '../../internal/sx';
 
+const swapIn = stylex.keyframes({
+  from: { opacity: 0, transform: 'scale(0.8)' },
+  to: { opacity: 1, transform: 'scale(1)' },
+});
+const drawCheck = stylex.keyframes({ from: { strokeDashoffset: 1 }, to: { strokeDashoffset: 0 } });
+
 const styles = stylex.create({
+  /** Status icon swap (pending -> running -> done): scale .8 -> 1 + fade, 160ms ease-out. */
+  swap: {
+    animationDuration: { default: '160ms', [media.reducedMotion]: '0.01ms' },
+    animationFillMode: 'backwards',
+    animationName: swapIn,
+    animationTimingFunction: motion['--oniva-motion-ease-out'],
+  },
+  check: {
+    animationDelay: '80ms',
+    animationDuration: { default: '220ms', [media.reducedMotion]: '0.01ms' },
+    animationFillMode: 'backwards',
+    animationName: drawCheck,
+    animationTimingFunction: motion['--oniva-motion-ease-out'],
+    strokeDasharray: 1,
+  },
   list: {
     display: 'flex',
     flexDirection: 'column',
@@ -48,9 +70,16 @@ const styles = stylex.create({
     height: 18,
     width: 18,
   },
+  // line-through is always on; its colour fades in so completion "strikes" smoothly instead of popping.
+  label: {
+    textDecorationColor: 'transparent',
+    textDecorationLine: 'line-through',
+    transitionDuration: '160ms',
+    transitionProperty: 'color, text-decoration-color',
+    transitionTimingFunction: motion['--oniva-motion-ease-out'],
+  },
   textDone: {
     color: colors['--oniva-color-text-muted'],
-    textDecorationLine: 'line-through',
     textDecorationColor: colors['--oniva-color-text-subtle'],
   },
   textRunning: {
@@ -91,17 +120,32 @@ export function TaskList({ items, className, xstyle, ref, ...rest }: TaskListPro
         <li key={it.id} {...stylex.props(styles.item)} data-status={it.status}>
           <span {...stylex.props(styles.mark)}>
             {it.status === 'done' && (
-              <span {...stylex.props(styles.mark, styles.done)}>
-                <Check size={12} strokeWidth={3} aria-hidden="true" />
+              <span key="done" {...stylex.props(styles.mark, styles.done, styles.swap)}>
+                <svg width={12} height={12} viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path
+                    d="M5 12.5l4.5 4.5L19 7.5"
+                    stroke="currentColor"
+                    strokeWidth={3}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    pathLength={1}
+                    {...stylex.props(styles.check)}
+                  />
+                </svg>
               </span>
             )}
-            {it.status === 'running' && <Spinner size="sm" label="In progress" />}
+            {it.status === 'running' && (
+              <span key="running" {...stylex.props(styles.mark, styles.swap)}>
+                <Spinner size="sm" label="In progress" />
+              </span>
+            )}
             {it.status === 'pending' && (
-              <span aria-hidden="true" {...stylex.props(styles.pending)} />
+              <span key="pending" aria-hidden="true" {...stylex.props(styles.pending)} />
             )}
           </span>
           <span
             {...stylex.props(
+              styles.label,
               it.status === 'done' && styles.textDone,
               it.status === 'running' && styles.textRunning,
               it.status === 'pending' && styles.textPending,

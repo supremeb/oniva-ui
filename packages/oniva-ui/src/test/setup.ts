@@ -1,3 +1,4 @@
+import './animation-event'; // must run before react-dom is imported
 import '@testing-library/jest-dom/vitest';
 import { cleanup } from '@testing-library/react';
 import { afterEach } from 'vitest';
@@ -26,3 +27,4 @@ if (!('ResizeObserver' in window)) {
   }
   (window as unknown as { ResizeObserver: typeof RO }).ResizeObserver = RO;
 }
+

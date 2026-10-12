@@ -3,6 +3,7 @@ import {
   useCallback,
   useRef,
   useState,
+  type CSSProperties,
   type FocusEvent,
   type KeyboardEvent,
   type PointerEvent,
@@ -10,6 +11,7 @@ import {
   type Ref,
 } from 'react';
 import { mergeRefs, useChartDimensions } from '../../internal/charts-math';
+import { useInView } from '../../motion/InView/useInView';
 import { chartMotion } from '../../internal/charts-styles';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
@@ -41,6 +43,8 @@ export interface TooltipContent {
   title?: ReactNode;
   rows?: ChartTooltipRow[];
   content?: ReactNode;
+  /** Pin the tooltip to an SVG-space point (scrub charts) instead of following the pointer. */
+  anchor?: { x: number; y: number };
 }
 
 /** Spread onto an SVG element to make it a hover/focus target that shows a tooltip. */
@@ -62,6 +66,8 @@ export interface FrameApi {
   bind: (tip: TooltipContent | null, label?: string) => TipBind;
   /** Stable per-instance id for gradients/clip paths. */
   id: string;
+  /** True once the chart has scrolled into view (entrance animations are released then). */
+  inView: boolean;
 }
 
 export interface DataTable {
@@ -103,11 +109,16 @@ export function ChartFrame({
   const height = typeof heightProp === 'function' ? heightProp(width) : heightProp;
   const [tip, setTip] = useState<{ x: number; y: number; data: TooltipContent } | null>(null);
   const [id] = useState(() => `oc${++counter}`);
+  const { ref: viewRef, inView } = useInView<SVGSVGElement>({ threshold: 0.15 });
 
   const at = useCallback((cx: number, cy: number, data: TooltipContent | null) => {
     const r = rootRef.current?.getBoundingClientRect();
     if (!r || !data) return setTip(null);
-    setTip({ x: cx - r.left, y: cy - r.top, data });
+    setTip(
+      data.anchor
+        ? { x: data.anchor.x, y: data.anchor.y, data }
+        : { x: cx - r.left, y: cy - r.top, data },
+    );
   }, []);
 
   const bind = useCallback(
@@ -143,12 +154,14 @@ export function ChartFrame({
         role="group"
         aria-roledescription="chart"
         aria-label={label}
+        ref={viewRef}
+        style={{ '--oniva-chart-play': inView ? 'running' : 'paused' } as CSSProperties}
         width={width}
         height={height}
         viewBox={`0 0 ${width} ${height}`}
         {...stylex.props(styles.svg, chartMotion.fade)}
       >
-        {children({ width, height, bind, id })}
+        {children({ width, height, bind, id, inView })}
       </svg>
       {tip && (
         <ChartTooltip x={tip.x} y={tip.y} align={align} title={tip.data.title} rows={tip.data.rows}>

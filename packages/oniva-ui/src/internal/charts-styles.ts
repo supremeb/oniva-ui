@@ -10,49 +10,72 @@ const growX = stylex.keyframes({
 });
 const fade = stylex.keyframes({ from: { opacity: 0 }, to: { opacity: 1 } });
 const draw = stylex.keyframes({ from: { strokeDashoffset: 1 }, to: { strokeDashoffset: 0 } });
+const wipe = stylex.keyframes({
+  from: { clipPath: 'inset(0 100% 0 0)' },
+  to: { clipPath: 'inset(0 0 0 0)' },
+});
 const pop = stylex.keyframes({
   from: { opacity: 0, transform: 'scale(0.6)' },
   to: { opacity: 1, transform: 'scale(1)' },
 });
 
-const ease = 'cubic-bezier(0.22, 1, 0.36, 1)';
+/** Entrances start paused and are released by ChartFrame (`--oniva-chart-play: running`) on first in-view, so they play once. */
 
-/** Draw-in animations (disabled for reduced motion). Stagger with inline `animationDelay`. */
+/** Entrance animations (ease-out, <=450ms; collapse to 0ms for reduced motion). Stagger with `staggerDelay()`. */
 export const chartMotion = stylex.create({
   grow: {
-    animationDuration: { default: '600ms', [media.reducedMotion]: '0ms' },
+    animationDuration: { default: '450ms', [media.reducedMotion]: '0ms' },
     animationFillMode: 'backwards',
     animationName: grow,
-    animationTimingFunction: ease,
+    // eslint-disable-next-line @stylexjs/valid-styles -- var() lets ChartFrame release the entrance on first in-view
+    animationPlayState: 'var(--oniva-chart-play, running)',
+    animationTimingFunction: 'cubic-bezier(0.23, 1, 0.32, 1)',
     transformBox: 'fill-box',
     transformOrigin: '50% 100%',
   },
   growX: {
-    animationDuration: { default: '600ms', [media.reducedMotion]: '0ms' },
+    animationDuration: { default: '450ms', [media.reducedMotion]: '0ms' },
     animationFillMode: 'backwards',
     animationName: growX,
-    animationTimingFunction: ease,
+    // eslint-disable-next-line @stylexjs/valid-styles -- var() lets ChartFrame release the entrance on first in-view
+    animationPlayState: 'var(--oniva-chart-play, running)',
+    animationTimingFunction: 'cubic-bezier(0.23, 1, 0.32, 1)',
     transformBox: 'fill-box',
     transformOrigin: '0% 50%',
   },
   fade: {
-    animationDuration: { default: '600ms', [media.reducedMotion]: '0ms' },
+    animationDuration: { default: '400ms', [media.reducedMotion]: '0ms' },
     animationFillMode: 'backwards',
     animationName: fade,
-    animationTimingFunction: ease,
+    // eslint-disable-next-line @stylexjs/valid-styles -- var() lets ChartFrame release the entrance on first in-view
+    animationPlayState: 'var(--oniva-chart-play, running)',
+    animationTimingFunction: 'cubic-bezier(0.23, 1, 0.32, 1)',
   },
   draw: {
-    animationDuration: { default: '900ms', [media.reducedMotion]: '0ms' },
+    animationDuration: { default: '800ms', [media.reducedMotion]: '0ms' },
     animationFillMode: 'backwards',
     animationName: draw,
-    animationTimingFunction: ease,
+    // eslint-disable-next-line @stylexjs/valid-styles -- var() lets ChartFrame release the entrance on first in-view
+    animationPlayState: 'var(--oniva-chart-play, running)',
+    animationTimingFunction: 'cubic-bezier(0.23, 1, 0.32, 1)',
     strokeDasharray: 1,
   },
+  /** Left-to-right clip reveal (area fills). */
+  wipe: {
+    animationDuration: { default: '800ms', [media.reducedMotion]: '0ms' },
+    animationFillMode: 'backwards',
+    animationName: wipe,
+    // eslint-disable-next-line @stylexjs/valid-styles -- var() lets ChartFrame release the entrance on first in-view
+    animationPlayState: 'var(--oniva-chart-play, running)',
+    animationTimingFunction: 'cubic-bezier(0.23, 1, 0.32, 1)',
+  },
   pop: {
-    animationDuration: { default: '600ms', [media.reducedMotion]: '0ms' },
+    animationDuration: { default: '350ms', [media.reducedMotion]: '0ms' },
     animationFillMode: 'backwards',
     animationName: pop,
-    animationTimingFunction: ease,
+    // eslint-disable-next-line @stylexjs/valid-styles -- var() lets ChartFrame release the entrance on first in-view
+    animationPlayState: 'var(--oniva-chart-play, running)',
+    animationTimingFunction: 'cubic-bezier(0.23, 1, 0.32, 1)',
     transformBox: 'fill-box',
     transformOrigin: '50% 50%',
   },

@@ -13,6 +13,7 @@ import {
 import type { ReactNode, Ref } from 'react';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
+import { ShakeDiv } from '../../internal/controls-motion';
 import { motion } from '../../tokens/motion.stylex';
 import { radius } from '../../tokens/radius.stylex';
 import { shadow } from '../../tokens/shadow.stylex';
@@ -151,13 +152,9 @@ export function Input({
       {({ isInvalid, isDisabled }) => (
         <>
           {label != null && <Label {...stylex.props(styles.label)}>{label}</Label>}
-          <div
-            {...stylex.props(
-              styles.field,
-              styles[size],
-              isInvalid && styles.invalid,
-              isDisabled && styles.disabled,
-            )}
+          <ShakeDiv
+            isInvalid={isInvalid}
+            styles={[styles.field, styles[size], isInvalid && styles.invalid, isDisabled && styles.disabled]}
           >
             {prefix != null && (
               <span aria-hidden="true" {...stylex.props(styles.adornment)}>
@@ -166,7 +163,7 @@ export function Input({
             )}
             <AriaInput ref={ref} placeholder={placeholder} {...stylex.props(styles.input)} />
             {suffix != null && <span {...stylex.props(styles.adornment)}>{suffix}</span>}
-          </div>
+          </ShakeDiv>
           {description != null && (
             <Text slot="description" {...stylex.props(styles.description)}>
               {description}

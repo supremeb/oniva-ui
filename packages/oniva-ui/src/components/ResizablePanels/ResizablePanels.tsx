@@ -219,9 +219,9 @@ export function ResizablePanels({
           minSize = 10,
           'aria-label': pLabel,
         } = p.props;
-        const panelSx = stylex.props(styles.panel, styles.size(sizes[i] ?? 0), pStyle);
+        const panelSx = stylex.props(styles.panel, focus.inset, styles.size(sizes[i] ?? 0), pStyle);
         return [
-          <div key={`p${i}`} role="group" aria-label={pLabel} {...mergeSx(panelSx, pClass)}>
+          <div key={`p${i}`} role="group" aria-label={pLabel} tabIndex={0} {...mergeSx(panelSx, pClass)}>
             {content}
           </div>,
           i < panels.length - 1 && (

@@ -1,0 +1,117 @@
+import * as stylex from '@stylexjs/stylex';
+import { colors } from '../tokens/colors.stylex';
+import { font } from '../tokens/font.stylex';
+import { motion } from '../tokens/motion.stylex';
+import { radius } from '../tokens/radius.stylex';
+
+/** Shared bits for AI batch B (rows, titles, meta text, native icon buttons, text inputs). */
+export const aib = stylex.create({
+  stack: { display: 'flex', flexDirection: 'column', gap: 8 },
+  pad: { padding: 8 },
+  head: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: 8,
+    justifyContent: 'space-between',
+    paddingBlock: 4,
+    paddingInline: 8,
+  },
+  title: {
+    color: colors['--oniva-color-text'],
+    fontSize: font['--oniva-font-size-14'],
+    fontWeight: font['--oniva-font-weight-medium'],
+    margin: 0,
+  },
+  name: {
+    color: colors['--oniva-color-text'],
+    fontSize: font['--oniva-font-size-13'],
+    fontWeight: font['--oniva-font-weight-medium'],
+    lineHeight: font['--oniva-font-lh-18'],
+    margin: 0,
+  },
+  meta: {
+    color: colors['--oniva-color-text-muted'],
+    fontSize: font['--oniva-font-size-12'],
+    lineHeight: font['--oniva-font-lh-16'],
+    margin: 0,
+  },
+  mono: { fontFamily: font['--oniva-font-mono'] },
+  row: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: 12,
+    paddingBlock: 10,
+    paddingInline: 12,
+  },
+  grow: { flexGrow: 1, minWidth: 0 },
+  clamp: { overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
+  divider: { borderTopColor: colors['--oniva-color-separator'], borderTopStyle: 'solid', borderTopWidth: 1 },
+  iconBox: {
+    alignItems: 'center',
+    backgroundColor: colors['--oniva-color-surface-inset'],
+    borderRadius: radius['--oniva-radius-md'],
+    color: colors['--oniva-color-icon-muted'],
+    display: 'flex',
+    flexShrink: 0,
+    height: 32,
+    justifyContent: 'center',
+    width: 32,
+  },
+  /** Small native text/icon button (24-28px) with hover bg + visible focus ring; press scale is pointer-only. */
+  mini: {
+    alignItems: 'center',
+    appearance: 'none',
+    backgroundColor: {
+      default: 'transparent',
+      ':hover': colors['--oniva-color-surface-inset-hover'],
+    },
+    borderWidth: 0,
+    borderRadius: radius['--oniva-radius-md'],
+    color: colors['--oniva-color-text-muted'],
+    cursor: 'pointer',
+    display: 'inline-flex',
+    fontFamily: font['--oniva-font-sans'],
+    fontSize: font['--oniva-font-size-12'],
+    fontWeight: font['--oniva-font-weight-medium'],
+    gap: 4,
+    height: 28,
+    justifyContent: 'center',
+    minWidth: 28,
+    outlineColor: colors['--oniva-color-focus-ring'],
+    outlineOffset: 1,
+    outlineStyle: { default: 'none', ':focus-visible': 'solid' },
+    outlineWidth: 2,
+    paddingInline: 6,
+    transform: { default: 'none', ':active': 'scale(0.97)' },
+    transitionDuration: `${motion['--oniva-motion-dur-instant']}, ${motion['--oniva-motion-dur-press']}`,
+    transitionProperty: 'background-color, transform',
+    transitionTimingFunction: motion['--oniva-motion-ease-out'],
+  },
+  field: {
+    backgroundColor: colors['--oniva-color-surface'],
+    borderColor: { default: colors['--oniva-color-border-control'], ':focus': colors['--oniva-color-focus-ring'] },
+    borderRadius: radius['--oniva-radius-md'],
+    borderStyle: 'solid',
+    borderWidth: 1,
+    boxSizing: 'border-box',
+    color: colors['--oniva-color-text'],
+    fontFamily: font['--oniva-font-sans'],
+    fontSize: font['--oniva-font-size-13'],
+    height: 32,
+    outlineStyle: 'none',
+    paddingInline: 10,
+    transitionDuration: motion['--oniva-motion-dur-base'],
+    transitionProperty: 'border-color',
+    width: '100%',
+  },
+  /** One-shot list-row enter (transform + opacity). */
+  rowIn: {
+    animationDuration: motion['--oniva-motion-dur-enter'],
+    animationFillMode: 'both',
+    animationName: stylex.keyframes({
+      from: { opacity: 0, transform: `translateY(${motion['--oniva-motion-travel']})` },
+      to: { opacity: 1, transform: 'translateY(0)' },
+    }),
+    animationTimingFunction: motion['--oniva-motion-ease-out'],
+  },
+});

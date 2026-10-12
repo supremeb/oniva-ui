@@ -5,10 +5,10 @@ import { ContextMenu } from './ContextMenu';
 
 const area = {
   alignItems: 'center',
-  background: 'var(--surfaceInset, #f7f7f7)',
-  border: '1px dashed var(--borderHover, #d4d4d4)',
+  background: 'var(--oniva-color-surface-inset)',
+  border: '1px dashed var(--oniva-color-border-hover)',
   borderRadius: 16,
-  color: 'var(--textMuted, #6b6b6b)',
+  color: 'var(--oniva-color-text-muted)',
   display: 'flex',
   fontSize: 14,
   height: 140,

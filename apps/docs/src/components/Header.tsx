@@ -2,7 +2,7 @@ import * as stylex from '@stylexjs/stylex';
 import { Moon, Search, Sun } from 'lucide-react';
 import { GithubIcon } from './GithubIcon';
 import { useMemo, useState } from 'react';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { Button as RacButton } from 'react-aria-components';
 import {
   Button,
@@ -128,6 +128,9 @@ export interface HeaderProps {
 
 export function Header({ theme, onThemeChange, accent, onAccentChange }: HeaderProps) {
   const navigate = useNavigate();
+  // The command-palette demo page owns ⌘K; avoid two palettes opening at once.
+  const { pathname } = useLocation();
+  const headerHotkey = pathname !== '/components/command-palette';
   const [open, setOpen] = useState(false);
   const groups = useMemo<CommandGroup[]>(
     () => [
@@ -175,6 +178,9 @@ export function Header({ theme, onThemeChange, accent, onAccentChange }: HeaderP
         <NavLink to="/charts" className={navCls}>
           Charts
         </NavLink>
+        <NavLink to="/foundations/motion" className={navCls}>
+          Motion
+        </NavLink>
         <NavLink to="/templates/dashboard" className={navCls}>
           Templates
         </NavLink>
@@ -199,7 +205,7 @@ export function Header({ theme, onThemeChange, accent, onAccentChange }: HeaderP
         groups={groups}
         isOpen={open}
         onOpenChange={setOpen}
-        hotkey
+        hotkey={headerHotkey}
         placeholder="Jump to a component, chart or template…"
         onSelect={(item) => navigate(item.id)}
       />

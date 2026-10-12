@@ -56,7 +56,17 @@ const styles = stylex.create({
     transitionDuration: motion['--oniva-motion-dur-base'],
     transitionProperty: 'background-color, border-color, color',
   },
-  selectable: { cursor: 'pointer' },
+  selectable: {
+    cursor: 'pointer',
+    touchAction: 'manipulation',
+    transform: {
+      default: 'none',
+      ':active:not([data-disabled])': `scale(${motion['--oniva-motion-press-scale']})`,
+    },
+    transitionDuration: motion['--oniva-motion-dur-press'],
+    transitionProperty: 'background-color, border-color, color, transform',
+    transitionTimingFunction: motion['--oniva-motion-ease-out'],
+  },
   removable: { paddingInlineEnd: 2 },
   neutral: {
     backgroundColor: colors['--oniva-color-surface-tertiary'],

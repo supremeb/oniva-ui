@@ -4,7 +4,7 @@ import type { DemoModule } from '../../internal/demo';
 import { Popover, PopoverTrigger } from './Popover';
 
 const label = { fontSize: 13, fontWeight: 500 } as const;
-const muted = { fontSize: 12, color: 'var(--textMuted, #6b6b6b)', margin: 0 } as const;
+const muted = { fontSize: 12, color: 'var(--oniva-color-text-muted)', margin: 0 } as const;
 
 const demo: DemoModule = {
   meta: {

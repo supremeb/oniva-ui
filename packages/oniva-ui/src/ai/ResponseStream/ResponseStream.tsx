@@ -3,6 +3,7 @@ import * as stylex from '@stylexjs/stylex';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 import { mergeSx } from '../../internal/sx';
+import { TextReveal } from '../../motion/TextReveal/TextReveal';
 
 const styles = stylex.create({
   root: {
@@ -86,7 +87,7 @@ export function ResponseStream({
   const sx = stylex.props(styles.root, xstyle);
   return (
     <div {...rest} ref={ref} aria-busy={!isComplete} aria-live="polite" {...mergeSx(sx, className)}>
-      {render ? render(visible, isComplete) : visible}
+      {render ? render(visible, isComplete) : <TextReveal text={visible} staggerMs={30} maxDelayMs={240} />}
     </div>
   );
 }

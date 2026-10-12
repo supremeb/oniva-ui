@@ -7,8 +7,9 @@ import {
   type TooltipProps as AriaTooltipProps,
   type TooltipTriggerComponentProps,
 } from 'react-aria-components';
-import type { ReactNode, Ref } from 'react';
+import { useState, type ReactNode, type Ref } from 'react';
 import { mergeSx } from '../../internal/sx';
+import { originStyles } from '../../internal/overlays-menu';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 import { motion } from '../../tokens/motion.stylex';
@@ -23,6 +24,10 @@ const fadeOut = stylex.keyframes({
   from: { opacity: 1, transform: 'scale(1)' },
   to: { opacity: 0, transform: 'scale(0.96)' },
 });
+
+/** Module-level so every Tooltip shares one "warm" window. */
+let lastClosedAt = 0;
+const WARM_MS = 300;
 
 const styles = stylex.create({
   tooltip: {
@@ -48,11 +53,13 @@ const styles = stylex.create({
     animationTimingFunction: motion['--oniva-motion-ease-out'],
   },
   exiting: {
-    animationDuration: motion['--oniva-motion-dur-fast'],
+    animationDuration: motion['--oniva-motion-dur-micro'],
     animationFillMode: 'both',
     animationName: { default: fadeOut, [media.reducedMotion]: 'none' },
-    animationTimingFunction: motion['--oniva-motion-ease-in'],
+    animationTimingFunction: motion['--oniva-motion-ease-out'],
   },
+  /** Warm hover (another tooltip closed <300ms ago): appear instantly, no re-animation. */
+  instant: { animationDuration: '0.01ms', animationName: 'none' },
   arrow: { display: 'block', fill: colors['--oniva-color-text'] },
   arrowBottom: { transform: 'rotate(180deg)' },
   arrowLeft: { transform: 'rotate(-90deg)' },
@@ -73,7 +80,7 @@ export interface TooltipProps
   ref?: Ref<HTMLDivElement>;
 }
 
-/** Short text hint on hover/focus. `<Tooltip content="Copy link"><Button …/></Tooltip>` */
+/** Short text hint on hover/focus; skips its enter animation within 300ms of another tooltip closing. Wraps a pressable trigger. */
 export function Tooltip({
   content,
   children,
@@ -89,12 +96,17 @@ export function Tooltip({
   ref,
   ...rest
 }: TooltipProps) {
+  const [instant, setInstant] = useState(false);
   return (
     <AriaTooltipTrigger
       delay={delay}
       closeDelay={closeDelay}
       isDisabled={isDisabled}
       trigger={trigger}
+      onOpenChange={(open) => {
+        if (open) setInstant(Date.now() - lastClosedAt < WARM_MS);
+        else lastClosedAt = Date.now();
+      }}
     >
       {children}
       <AriaTooltip
@@ -106,8 +118,9 @@ export function Tooltip({
           mergeSx(
             stylex.props(
               styles.tooltip,
-              isEntering && styles.entering,
-              isExiting && styles.exiting,
+              originStyles.aware,
+              isEntering && (instant ? styles.instant : styles.entering),
+              isExiting && (instant ? styles.instant : styles.exiting),
               xstyle,
             ),
             className,

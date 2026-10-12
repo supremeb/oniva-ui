@@ -28,7 +28,8 @@ const styles = stylex.create({
     padding: 6,
     verticalAlign: 'top',
   },
-  outside: { backgroundColor: 'transparent', opacity: 0.45 },
+  outside: { backgroundColor: 'transparent' },
+  dayOutside: { color: colors['--oniva-color-text-subtle'] },
   day: {
     alignItems: 'center',
     color: colors['--oniva-color-text'],
@@ -201,7 +202,7 @@ export function EventCalendar({
                       aria-label={iso}
                       {...stylex.props(styles.cell, outside && styles.outside)}
                     >
-                      <span {...stylex.props(styles.day, iso === todayIso && styles.today)}>
+                      <span {...stylex.props(styles.day, outside && styles.dayOutside, iso === todayIso && styles.today)}>
                         {d.getUTCDate()}
                       </span>
                       <div {...stylex.props(styles.pills)}>

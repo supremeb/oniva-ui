@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import { MultiSelect } from './MultiSelect';
@@ -33,7 +33,8 @@ describe('MultiSelect', () => {
       />,
     );
     await userEvent.click(screen.getByRole('button', { name: 'Remove Design' }));
-    expect(onChange).toHaveBeenLastCalledWith(['eng']);
+    // chip plays a 100ms exit before the value commits
+    await waitFor(() => expect(onChange).toHaveBeenLastCalledWith(['eng']));
     expect(screen.queryByRole('button', { name: 'Remove Design' })).toBeNull();
   });
 });

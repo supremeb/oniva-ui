@@ -123,6 +123,48 @@ const demo: DemoModule = {
         </div>
       ),
     },
+    {
+      name: 'Blocks + patterns',
+      code: `<BarChart data={revenueByMonth} index="month" variant="blocks" series={…} />
+<BarChart … fill="lines" glow />`,
+      Component: () => (
+        <div style={{ ...box, display: 'grid', gap: 16 }}>
+          <ChartCard title='variant="blocks"' legend={<ChartLegend items={rev as never} />}>
+            <BarChart
+              data={revenueByMonth}
+              index="month"
+              series={rev.slice(0, 1)}
+              variant="blocks"
+              barRadius={4}
+              valueFormat="currency"
+              height={200}
+            />
+          </ChartCard>
+          <ChartCard title='fill="lines" glow' legend={<ChartLegend items={rev as never} />}>
+            <BarChart
+              data={revenueByMonth}
+              index="month"
+              series={rev}
+              fill="lines"
+              glow
+              valueFormat="currency"
+              height={200}
+            />
+          </ChartCard>
+          <ChartCard title='fill="gradient" stacked' legend={<ChartLegend items={rev as never} />}>
+            <BarChart
+              data={revenueByMonth}
+              index="month"
+              series={rev}
+              layout="stacked"
+              fill="gradient"
+              valueFormat="currency"
+              height={200}
+            />
+          </ChartCard>
+        </div>
+      ),
+    },
   ],
 };
 export default demo;

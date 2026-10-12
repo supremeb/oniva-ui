@@ -1,5 +1,6 @@
 import * as stylex from '@stylexjs/stylex';
 import type { ReactNode, Ref } from 'react';
+import { AnimatedNumber } from '../../motion/AnimatedNumber/AnimatedNumber';
 import { Card, CardHeader, CardHeaderText, CardTitle, Tile } from '../../components/Card';
 import { Sparkline } from '../../charts/Sparkline';
 import { wstyles } from '../../internal/widgets-parts';
@@ -31,8 +32,10 @@ const styles = stylex.create({
 
 export interface StatCardProps {
   label: string;
-  /** Preformatted headline value, e.g. "$48,210". */
+  /** Headline value. A number rolls via AnimatedNumber (use `valueFormat`); a node renders as-is, e.g. "$48,210". */
   value: ReactNode;
+  /** `Intl.NumberFormat` options when `value` is a number. */
+  valueFormat?: Intl.NumberFormatOptions;
   /** Signed percentage change. */
   delta?: number;
   /** Lower is better (flips delta colors). */
@@ -53,6 +56,7 @@ export interface StatCardProps {
 export function StatCard({
   label,
   value,
+  valueFormat,
   delta,
   invertDelta,
   deltaLabel,
@@ -78,7 +82,9 @@ export function StatCard({
       <Tile>
         <div {...stylex.props(styles.body)}>
           <div {...stylex.props(styles.left)}>
-            <p {...stylex.props(wstyles.value)}>{value}</p>
+            <p {...stylex.props(wstyles.value)}>
+              {typeof value === 'number' ? <AnimatedNumber value={value} format={valueFormat} /> : value}
+            </p>
             {delta !== undefined && (
               <div {...stylex.props(styles.deltaRow)}>
                 <DeltaBadge value={delta} invert={invertDelta} size="sm" />

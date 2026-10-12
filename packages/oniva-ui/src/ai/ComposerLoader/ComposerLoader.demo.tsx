@@ -22,7 +22,7 @@ const demo: DemoModule = {
         return (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 560 }}>
             <ComposerLoader active={on}>
-              <div style={{ padding: '18px 18px 44px', fontSize: 14, color: '#6b6b6b' }}>
+              <div style={{ padding: '18px 18px 44px', fontSize: 14, color: 'var(--oniva-color-text-muted)' }}>
                 Analyze Q3 revenue by segment…
               </div>
             </ComposerLoader>

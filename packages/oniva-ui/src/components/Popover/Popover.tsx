@@ -9,6 +9,7 @@ import {
 } from 'react-aria-components';
 import type { ReactNode, Ref } from 'react';
 import { mergeSx } from '../../internal/sx';
+import { originStyles } from '../../internal/overlays-menu';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 import { motion } from '../../tokens/motion.stylex';
@@ -51,7 +52,7 @@ const styles = stylex.create({
     animationDuration: motion['--oniva-motion-dur-fast'],
     animationFillMode: 'both',
     animationName: { default: popOut, [media.reducedMotion]: 'none' },
-    animationTimingFunction: motion['--oniva-motion-ease-in'],
+    animationTimingFunction: motion['--oniva-motion-ease-out'],
   },
   dialog: { boxSizing: 'border-box', outline: 'none', padding: 16 },
   noPad: { padding: 0 },
@@ -107,6 +108,7 @@ export function Popover({
         mergeSx(
           stylex.props(
             styles.popover,
+            originStyles.aware,
             isEntering && styles.entering,
             isExiting && styles.exiting,
             xstyle,

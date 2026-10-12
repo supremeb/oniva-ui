@@ -28,11 +28,11 @@ export const colors = stylex.defineVars({
 
   // text + icon
   '--oniva-color-text': '#0a0a0a',
-  '--oniva-color-text-muted': '#6b6b6b', // n500 nudged darker for AA on #f7f7f7
+  '--oniva-color-text-muted': '#595959', // AA on inset #f7f7f7, #ebebeb and blue-100 selected rows
   '--oniva-color-text-on-tertiary': '#525252', // text on tertiary fills (badges, avatars)
-  '--oniva-color-text-subtle': '#a1a1a1',
+  '--oniva-color-text-subtle': '#666666', // AA (4.5:1) on white, inset and error-bg
   '--oniva-color-text-disabled': '#d4d4d4',
-  '--oniva-color-text-placeholder': '#a1a1a1',
+  '--oniva-color-text-placeholder': '#666666', // AA on white, inset and error-bg
   '--oniva-color-text-error': '#e7000b', // red-600: AA on white (red-500 is 3.8:1)
   '--oniva-color-icon-muted': '#737373',
   '--oniva-color-icon-subtle': '#a1a1a1',

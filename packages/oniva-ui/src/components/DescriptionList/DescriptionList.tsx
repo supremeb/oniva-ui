@@ -32,6 +32,7 @@ const styles = stylex.create({
   col1: { gridTemplateColumns: '1fr' },
   col2: { gridTemplateColumns: 'repeat(2, minmax(0, 1fr))' },
   item: {
+    alignContent: 'center',
     alignItems: 'center',
     backgroundColor: colors['--oniva-color-surface-inner'],
     borderColor: colors['--oniva-color-border'],
@@ -40,10 +41,11 @@ const styles = stylex.create({
     borderWidth: 1,
     boxShadow: shadow['--oniva-shadow-xs'],
     boxSizing: 'border-box',
-    display: 'flex',
-    gap: 12,
+    columnGap: 12,
+    display: 'grid',
     margin: 0,
     minHeight: 56,
+    rowGap: 2,
     paddingBlock: 10,
     paddingInline: 12,
   },
@@ -54,17 +56,20 @@ const styles = stylex.create({
     color: colors['--oniva-color-icon-muted'],
     display: 'inline-flex',
     flexShrink: 0,
+    gridRow: '1 / span 2',
     height: 32,
     justifyContent: 'center',
     width: 32,
   },
-  text: { display: 'flex', flexDirection: 'column', gap: 2, minWidth: 0 },
+  withIcon: { gridTemplateColumns: 'auto minmax(0, 1fr)' },
   term: {
     color: colors['--oniva-color-text-muted'],
     fontSize: font['--oniva-font-size-12'],
     fontWeight: font['--oniva-font-weight-medium'],
     letterSpacing: font['--oniva-font-track-caption'],
     lineHeight: font['--oniva-font-lh-12'],
+    margin: 0,
+    minWidth: 0,
   },
   value: {
     color: colors['--oniva-color-text'],
@@ -73,6 +78,7 @@ const styles = stylex.create({
     fontWeight: font['--oniva-font-weight-medium'],
     lineHeight: font['--oniva-font-lh-14'],
     margin: 0,
+    minWidth: 0,
   },
 });
 
@@ -125,16 +131,14 @@ export interface DescriptionItemProps {
 
 export function DescriptionItem({ label, icon, children, xstyle }: DescriptionItemProps) {
   return (
-    <div {...stylex.props(styles.item, xstyle)}>
+    <div {...stylex.props(styles.item, !!icon && styles.withIcon, xstyle)}>
       {icon && (
         <span aria-hidden="true" {...stylex.props(styles.icon)}>
           {icon}
         </span>
       )}
-      <span {...stylex.props(styles.text)}>
-        <dt {...stylex.props(styles.term)}>{label}</dt>
-        <dd {...stylex.props(styles.value)}>{children}</dd>
-      </span>
+      <dt {...stylex.props(styles.term)}>{label}</dt>
+      <dd {...stylex.props(styles.value)}>{children}</dd>
     </div>
   );
 }

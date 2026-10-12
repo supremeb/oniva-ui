@@ -10,7 +10,7 @@ const demo: DemoModule = {
     title: 'Spinner',
     slug: 'spinner',
     category: 'Feedback',
-    description: 'Indeterminate loader. Slows down under prefers-reduced-motion.',
+    description: 'Indeterminate loader. Pauses offscreen; pulses instead of spinning under prefers-reduced-motion.',
   },
   demos: [
     {

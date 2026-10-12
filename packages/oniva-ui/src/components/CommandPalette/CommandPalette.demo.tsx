@@ -76,7 +76,7 @@ const demo: DemoModule = {
             <Button variant="secondary" onPress={() => setOpen(true)}>
               Open palette (⌘K)
             </Button>
-            <span style={{ fontSize: 13, color: 'var(--textMuted, #6b6b6b)' }}>
+            <span style={{ fontSize: 13, color: 'var(--oniva-color-text-muted)' }}>
               Last command: {picked}
             </span>
             <CommandPalette

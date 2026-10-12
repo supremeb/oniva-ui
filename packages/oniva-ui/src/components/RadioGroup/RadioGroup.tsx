@@ -9,7 +9,7 @@ import {
   type RadioProps as AriaRadioProps,
   type ValidationResult,
 } from 'react-aria-components';
-import type { ReactNode, Ref } from 'react';
+import { useState, type ReactNode, type Ref } from 'react';
 import { accent } from '../../tokens/accent.stylex';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
@@ -46,8 +46,10 @@ const styles = stylex.create({
     height: 16,
     marginTop: 2,
     position: 'relative',
-    transitionDuration: motion['--oniva-motion-dur-base'],
-    transitionProperty: 'border-color, background-color, box-shadow',
+    transform: { default: 'none', '[data-pressed]': 'scale(0.94)' },
+    transitionDuration: motion['--oniva-motion-dur-press'],
+    transitionProperty: 'border-color, background-color, box-shadow, transform',
+    transitionTimingFunction: motion['--oniva-motion-ease-out'],
     width: 16,
   },
   dotHover: { borderColor: colors['--oniva-color-border-active'] },
@@ -62,9 +64,15 @@ const styles = stylex.create({
     height: 6,
     insetBlockStart: 4,
     insetInlineStart: 4,
+    opacity: 0,
     position: 'absolute',
+    transform: 'scale(0.5)',
+    transitionDuration: motion['--oniva-motion-dur-base'],
+    transitionProperty: 'opacity, transform',
+    transitionTimingFunction: motion['--oniva-motion-ease-out'],
     width: 6,
   },
+  pipOn: { opacity: 1, transform: 'scale(1)' },
   text: { display: 'flex', flexDirection: 'column', gap: 2 },
   desc: { fontWeight: font['--oniva-font-weight-regular'] },
   card: {
@@ -114,10 +122,19 @@ export function Radio({
   ...rest
 }: RadioProps) {
   const isCard = variant === 'card';
+  const [pressed, setPressed] = useState(false); // pointer-only
   return (
     <AriaRadio
       {...rest}
       ref={ref}
+      onPressStart={(e) => {
+        setPressed(e.pointerType !== 'keyboard' && e.pointerType !== 'virtual');
+        rest.onPressStart?.(e);
+      }}
+      onPressEnd={(e) => {
+        setPressed(false);
+        rest.onPressEnd?.(e);
+      }}
       className={({ isDisabled, isSelected, isHovered, isFocusVisible }) =>
         cx(
           stylex.props(
@@ -137,6 +154,7 @@ export function Radio({
         <>
           <span
             aria-hidden="true"
+            data-pressed={pressed ? '' : undefined}
             {...stylex.props(
               styles.dot,
               isHovered && !isSelected && styles.dotHover,
@@ -144,7 +162,7 @@ export function Radio({
               !isCard && isFocusVisible && ff.focusRing,
             )}
           >
-            {isSelected && <span {...stylex.props(styles.pip)} />}
+            <span {...stylex.props(styles.pip, isSelected && styles.pipOn)} />
           </span>
           <span {...stylex.props(styles.text)}>
             {children}

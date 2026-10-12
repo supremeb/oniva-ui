@@ -1,6 +1,6 @@
 import * as stylex from '@stylexjs/stylex';
 import { area, line } from 'd3-shape';
-import type { Ref } from 'react';
+import { useMemo, type Ref } from 'react';
 import {
   curveFor,
   makeAxisFormatter,
@@ -11,7 +11,11 @@ import {
   type CurveType,
   type ValueFormat,
 } from '../../internal/charts-math';
+import { intlOptionsFor, useTweenedData } from '../../internal/charts-motion';
 import { chartMotion, svgText, toneStyle, tones } from '../../internal/charts-styles';
+import { fillUrl, glowUrl, SeriesDefs, type ChartFill } from '../_shared/ChartDefs';
+import { Crosshair, useScrub } from '../_shared/Crosshair';
+import { tipRows } from '../_shared/tipRows';
 import { XLabels, YGrid } from '../_shared/Axes';
 import { layoutCartesian } from '../_shared/cartesian';
 import { ChartFrame } from '../_shared/ChartFrame';
@@ -24,8 +28,12 @@ export interface AreaChartProps {
   /** Stack series; `'percent'` normalises to 100%. */
   stacked?: boolean | 'percent';
   curve?: CurveType;
-  /** Gradient fade under each line (default true). */
+  /** Gradient fade under each line (default true). Shorthand for `fill`. */
   gradient?: boolean;
+  /** Fill treatment: solid, gradient, or an SVG pattern (dots, lines, grid). Overrides `gradient`. */
+  fill?: ChartFill;
+  /** Soft blur glow behind the lines. */
+  glow?: boolean;
   valueFormat?: ValueFormat;
   height?: number;
   showGrid?: boolean;
@@ -45,6 +53,8 @@ export function AreaChart({
   stacked = false,
   curve = 'monotone',
   gradient = true,
+  fill: fillProp,
+  glow = false,
   valueFormat = 'number',
   height = 240,
   showGrid = true,
@@ -56,6 +66,11 @@ export function AreaChart({
   ref,
 }: AreaChartProps) {
   const fmt = makeFormatter(valueFormat);
+  const intl = intlOptionsFor(valueFormat);
+  const fill: ChartFill = fillProp ?? (gradient ? 'gradient' : 'solid');
+  const seriesKeys = useMemo(() => series.map((s) => s.key), [series]);
+  const shown = useTweenedData(data, seriesKeys);
+  const { hi, wrap } = useScrub();
   const axisFmt =
     stacked === 'percent'
       ? (n: number) => `${Math.round(n * 100)}%`
@@ -77,7 +92,7 @@ export function AreaChart({
     >
       {({ width, height: h, bind, id }) => {
         const L = layoutCartesian({
-          data,
+          data: shown,
           index,
           series,
           width,
@@ -99,26 +114,7 @@ export function AreaChart({
             .curve(curveFor(curve))(L.layers[li]!.points) ?? '';
         return (
           <>
-            <defs>
-              {series.map((s, i) => (
-                <linearGradient
-                  key={s.key}
-                  id={`${id}-g${i}`}
-                  x1="0"
-                  x2="0"
-                  y1="0"
-                  y2="1"
-                  {...stylex.props(toneStyle(seriesTone(s, i)))}
-                >
-                  <stop offset="0%" stopColor="currentColor" stopOpacity={stacked ? 0.55 : 0.4} />
-                  <stop
-                    offset="100%"
-                    stopColor="currentColor"
-                    stopOpacity={stacked ? 0.25 : 0.02}
-                  />
-                </linearGradient>
-              ))}
-            </defs>
+            <SeriesDefs id={id} series={series} fill={fill} glow={glow} gradient={stacked ? [0.55, 0.25] : [0.4, 0.02]} />
             <YGrid
               ticks={L.ticks}
               y={L.y}
@@ -135,10 +131,10 @@ export function AreaChart({
                 <g key={s.key} {...stylex.props(toneStyle(seriesTone(s, i)))}>
                   <path
                     d={areaGen(i)}
-                    fill={gradient ? `url(#${id}-g${i})` : 'currentColor'}
-                    fillOpacity={gradient ? 1 : stacked ? 0.8 : 0.15}
+                    fill={fillUrl(id, i, fill)}
+                    fillOpacity={fill !== 'solid' ? 1 : stacked ? 0.8 : 0.15}
                     stroke="none"
-                    {...stylex.props(chartMotion.fade)}
+                    {...stylex.props(chartMotion.wipe)}
                   />
                   <path
                     d={lineGen(i)}
@@ -148,11 +144,19 @@ export function AreaChart({
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     pathLength={1}
+                    filter={glowUrl(id, glow)}
                     {...stylex.props(chartMotion.draw)}
                   />
                 </g>
               );
             })}
+            <Crosshair
+              x={hi != null ? L.x(hi) : null}
+              top={L.top}
+              bottom={L.baseY}
+              series={series}
+              ys={hi != null ? L.layers.map((l) => L.y(l.points[hi]?.[1] ?? 0)) : []}
+            />
             {data.map((d, i) => (
               <rect
                 key={i}
@@ -164,16 +168,16 @@ export function AreaChart({
                 }
                 height={L.innerH}
                 {...stylex.props(tones.cursor, svgText.band)}
-                {...bind(
-                  {
-                    title: L.categories[i],
-                    rows: series.map((s, si) => ({
-                      label: s.label ?? s.key,
-                      value: fmt(Number(d[s.key]) || 0),
-                      tone: seriesTone(s, si),
-                    })),
-                  },
-                  `${L.categories[i]}: ${series.map((s) => `${s.label ?? s.key} ${fmt(Number(d[s.key]) || 0)}`).join(', ')}`,
+                {...wrap(
+                  bind(
+                    {
+                      title: L.categories[i],
+                      rows: tipRows(series, d, fmt, intl),
+                      anchor: { x: L.x(i), y: Math.max(64, Math.min(...L.layers.map((l) => L.y(l.points[i]?.[1] ?? 0)))) },
+                    },
+                    `${L.categories[i]}: ${series.map((s) => `${s.label ?? s.key} ${fmt(Number(d[s.key]) || 0)}`).join(', ')}`,
+                  ),
+                  i,
                 )}
               />
             ))}

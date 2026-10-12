@@ -9,6 +9,7 @@ import {
   type ValidationResult,
 } from 'react-aria-components';
 import type { ReactNode, Ref } from 'react';
+import { ShakeDiv } from '../../internal/controls-motion';
 import { cx, ff } from '../../internal/forms-field';
 
 const styles = stylex.create({
@@ -61,13 +62,9 @@ export function Textarea({
       {({ isInvalid, isDisabled }) => (
         <>
           {label != null && <Label {...stylex.props(ff.label)}>{label}</Label>}
-          <div
-            {...stylex.props(
-              ff.control,
-              styles.area,
-              isInvalid && ff.invalid,
-              isDisabled && ff.disabled,
-            )}
+          <ShakeDiv
+            isInvalid={isInvalid}
+            styles={[ff.control, styles.area, isInvalid && ff.invalid, isDisabled && ff.disabled]}
           >
             <AriaTextArea
               ref={ref}
@@ -79,7 +76,7 @@ export function Textarea({
                 resize === 'none' ? styles.resizeNone : styles.resizeY,
               )}
             />
-          </div>
+          </ShakeDiv>
           <div {...stylex.props(styles.footer)}>
             <div {...stylex.props(styles.footerText)}>
               {description != null && (

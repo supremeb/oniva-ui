@@ -1,6 +1,9 @@
 import * as stylex from '@stylexjs/stylex';
 import type { CSSProperties, HTMLAttributes, ReactNode, Ref } from 'react';
 import { toneStyle } from '../../internal/charts-styles';
+import { AnimatedNumber } from '../../motion/AnimatedNumber/AnimatedNumber';
+import { media } from '../../tokens/media.stylex';
+import { motion } from '../../tokens/motion.stylex';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 import { radius } from '../../tokens/radius.stylex';
@@ -28,7 +31,14 @@ const styles = stylex.create({
     whiteSpace: 'nowrap',
     zIndex: 5,
   },
-  floating: { position: 'absolute' },
+  floating: {
+    insetInlineStart: 0,
+    insetBlockStart: 0,
+    position: 'absolute',
+    transitionDuration: { default: '70ms', [media.reducedMotion]: '0.01ms' },
+    transitionProperty: 'translate',
+    transitionTimingFunction: motion['--oniva-motion-ease-out'],
+  },
   center: { transform: 'translate(-50%, calc(-100% - 12px))' },
   left: { transform: 'translate(-12px, calc(-100% - 12px))' },
   right: { transform: 'translate(calc(-100% + 12px), calc(-100% - 12px))' },
@@ -52,6 +62,9 @@ export interface ChartTooltipRow {
   value: ReactNode;
   /** 1-based palette index for the swatch. */
   tone?: number;
+  /** When set, `value` is ignored and this number rolls via AnimatedNumber using `numberFormat`. */
+  raw?: number;
+  numberFormat?: Intl.NumberFormatOptions;
 }
 
 export interface ChartTooltipProps extends Omit<HTMLAttributes<HTMLDivElement>, 'style' | 'title'> {
@@ -87,7 +100,7 @@ export function ChartTooltip({
     floating && styles[align],
     xstyle,
   );
-  const pos = floating ? { left: x, top: y } : undefined;
+  const pos = floating ? { translate: `${x}px ${y}px` } : undefined;
   return (
     <div
       role="tooltip"
@@ -106,7 +119,9 @@ export function ChartTooltip({
             )}
             {r.label}
           </span>
-          <span {...stylex.props(styles.value)}>{r.value}</span>
+          <span {...stylex.props(styles.value)}>
+            {r.raw != null ? <AnimatedNumber value={r.raw} format={r.numberFormat} /> : r.value}
+          </span>
         </div>
       ))}
       {children}

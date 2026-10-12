@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { Button } from '../../components/Button';
 import type { DemoModule } from '../../internal/demo';
 import { sleepStages, trafficSources } from '../_data/datasets';
 import { ChartCard } from '../ChartCard';
@@ -69,6 +71,29 @@ const demo: DemoModule = {
           <div style={row}>
             <DonutChart data={data} valueFormat="compact" centerLabel="Sessions" />
             <PieChart data={data} valueFormat="compact" size={180} />
+          </div>
+        );
+      },
+    },
+    {
+      name: 'Morph between periods',
+      code: `<DonutChart data={period === 'q3' ? q3 : q4} valueFormat="compact" centerLabel="Visits" />`,
+      Component: () => {
+        const [p, setP] = useState<'q3' | 'q4'>('q3');
+        const q4 = trafficSources.map((d, i) => ({
+          ...d,
+          value: Math.round(d.value * [0.7, 1.4, 1.1, 0.5, 1.9][i]!),
+        }));
+        return (
+          <div style={{ display: 'grid', gap: 12, justifyItems: 'center' }}>
+            <Button size="sm" onPress={() => setP((v) => (v === 'q3' ? 'q4' : 'q3'))}>
+              Switch to {p === 'q3' ? 'Q4' : 'Q3'}
+            </Button>
+            <DonutChart
+              data={p === 'q3' ? trafficSources : q4}
+              valueFormat="compact"
+              centerLabel={p === 'q3' ? 'Q3 visits' : 'Q4 visits'}
+            />
           </div>
         );
       },

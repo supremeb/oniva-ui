@@ -52,7 +52,6 @@ const styles = stylex.create({
     fontSize: font['--oniva-font-size-12'],
     gap: 4,
     lineHeight: font['--oniva-font-lh-12'],
-    opacity: 0.85,
   },
   open: {
     alignItems: 'center',

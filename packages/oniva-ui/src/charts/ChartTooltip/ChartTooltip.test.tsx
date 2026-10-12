@@ -16,6 +16,6 @@ describe('ChartTooltip', () => {
   });
   it('positions absolutely when x/y are given', () => {
     render(<ChartTooltip x={10} y={20} title="t" />);
-    expect(screen.getByRole('tooltip')).toHaveStyle({ left: '10px', top: '20px' });
+    expect(screen.getByRole('tooltip')).toHaveStyle({ translate: '10px 20px' });
   });
 });

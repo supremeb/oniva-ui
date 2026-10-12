@@ -2,6 +2,7 @@ import * as stylex from '@stylexjs/stylex';
 import { ArrowDownRight, ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import type { ReactNode, Ref } from 'react';
 import { Button, ToggleButton, ToggleButtonGroup, type Key } from 'react-aria-components';
+import { AnimatedNumber } from '../../motion/AnimatedNumber/AnimatedNumber';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 import { radius } from '../../tokens/radius.stylex';
@@ -113,8 +114,9 @@ export interface ChartDelta {
 
 export interface ChartCardProps {
   title: ReactNode;
-  /** Big headline number. */
+  /** Big headline number. A number rolls via AnimatedNumber (use `valueFormat`). */
   value?: ReactNode;
+  valueFormat?: Intl.NumberFormatOptions;
   /** Small muted text after the value ("total steps"). */
   unit?: ReactNode;
   delta?: ChartDelta;
@@ -134,6 +136,7 @@ export interface ChartCardProps {
 export function ChartCard({
   title,
   value,
+  valueFormat,
   unit,
   delta,
   actions,
@@ -152,7 +155,9 @@ export function ChartCard({
           <CardTitle>{title}</CardTitle>
           {(value != null || delta) && (
             <div {...stylex.props(styles.valueRow)}>
-              {value != null && <span {...stylex.props(styles.value)}>{value}</span>}
+              {value != null && <span {...stylex.props(styles.value)}>
+                  {typeof value === 'number' ? <AnimatedNumber value={value} format={valueFormat} /> : value}
+                </span>}
               {unit != null && <span {...stylex.props(styles.unit)}>{unit}</span>}
               {delta && (
                 <Badge variant={good ? 'success' : 'danger'} size="sm">

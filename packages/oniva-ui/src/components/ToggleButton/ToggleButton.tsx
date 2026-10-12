@@ -27,7 +27,7 @@ const styles = stylex.create({
     color: colors['--oniva-color-text'],
   },
   selectedSoft: {
-    backgroundColor: colors['--oniva-color-accent-soft-active'],
+    backgroundColor: colors['--oniva-color-accent-soft-hover'],
     color: colors['--oniva-color-accent-soft-fg'],
   },
   // segmented (inside a ToggleButtonGroup track)
@@ -39,7 +39,9 @@ const styles = stylex.create({
     borderColor: 'transparent',
     boxShadow: 'none',
     color: colors['--oniva-color-text-muted'],
+    zIndex: 1,
   },
+  segmentSlide: { color: colors['--oniva-color-text'] },
   segmentSelected: {
     backgroundColor: colors['--oniva-color-surface-inner'],
     boxShadow: shadow['--oniva-shadow-sm'],
@@ -101,7 +103,7 @@ export function ToggleButton({
           isIconOnly && controlStyles[controlIconSize[size]],
           segmented && styles.segment,
           s.isSelected && !segmented && styles[selectedKey[variant]],
-          s.isSelected && segmented && styles.segmentSelected,
+          s.isSelected && segmented && (group.slide ? styles.segmentSlide : styles.segmentSelected),
           s.isDisabled && controlStyles.disabled,
           xstyle,
         );

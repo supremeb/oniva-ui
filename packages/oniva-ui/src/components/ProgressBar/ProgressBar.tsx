@@ -6,16 +6,16 @@ import {
   ProgressBar as AriaProgressBar,
   type ProgressBarProps as AriaProgressBarProps,
 } from 'react-aria-components';
-import type { ReactNode, Ref } from 'react';
+import type { CSSProperties, ReactNode, Ref } from 'react';
 import { accent } from '../../tokens/accent.stylex';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 import { motion } from '../../tokens/motion.stylex';
 import { radius } from '../../tokens/radius.stylex';
 
-const stripes = stylex.keyframes({
-  from: { backgroundPosition: '0 0' },
-  to: { backgroundPosition: '24px 0' },
+const slide = stylex.keyframes({
+  from: { transform: 'translateX(-100%)' },
+  to: { transform: 'translateX(250%)' },
 });
 
 export const progressStyles = stylex.create({
@@ -41,12 +41,15 @@ export const progressStyles = stylex.create({
   sm: { height: 6 },
   md: { height: 8 },
   lg: { height: 12 },
+  /** Full-width fill scaled from the left (transform only, never width). Value arrives via `--oniva-p` (0-1). */
   fill: {
-    borderRadius: radius['--oniva-radius-full'],
     height: '100%',
-    transitionDuration: motion['--oniva-motion-dur-slow'],
-    transitionProperty: 'width',
-    transitionTimingFunction: motion['--oniva-motion-ease-standard'],
+    transform: 'scaleX(var(--oniva-p, 0))',
+    transformOrigin: 'left center',
+    transitionDuration: motion['--oniva-motion-dur-slower'],
+    transitionProperty: 'transform',
+    transitionTimingFunction: motion['--oniva-motion-ease-out'],
+    width: '100%',
   },
   accent: {
     backgroundImage: `linear-gradient(90deg, ${accent['--oniva-accent-400']}, ${accent['--oniva-accent-600']})`,
@@ -55,12 +58,14 @@ export const progressStyles = stylex.create({
   warning: { backgroundColor: colors['--oniva-color-warning-solid'] },
   danger: { backgroundColor: colors['--oniva-color-danger-solid'] },
   indeterminate: {
-    animationDuration: '1.2s',
+    animationDuration: '1.4s',
     animationIterationCount: 'infinite',
-    animationName: { default: stripes, [media.reducedMotion]: 'none' },
-    animationTimingFunction: 'linear',
-    backgroundImage: `repeating-linear-gradient(135deg, ${accent['--oniva-accent-500']} 0 6px, ${accent['--oniva-accent-400']} 6px 12px)`,
-    backgroundSize: '24px 100%',
+    animationName: { default: slide, [media.reducedMotion]: 'none' },
+    animationTimingFunction: 'cubic-bezier(0.65, 0, 0.35, 1)',
+    backgroundImage: `linear-gradient(90deg, ${accent['--oniva-accent-400']}, ${accent['--oniva-accent-600']})`,
+    borderRadius: radius['--oniva-radius-full'],
+    opacity: { default: 1, [media.reducedMotion]: 0.6 },
+    transform: 'none',
     width: '40%',
   },
 });
@@ -117,7 +122,7 @@ export function ProgressBar({
                 progressStyles[tone],
                 isIndeterminate && progressStyles.indeterminate,
               )}
-              style={isIndeterminate ? undefined : { width: `${percentage}%` }}
+              style={isIndeterminate ? undefined : ({ '--oniva-p': percentage / 100 } as CSSProperties)}
             />
           </div>
         </>

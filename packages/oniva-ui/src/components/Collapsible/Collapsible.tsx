@@ -9,6 +9,7 @@ import {
 } from 'react-aria-components';
 import { ChevronRight } from 'lucide-react';
 import type { ReactNode, Ref } from 'react';
+import { AnimatedHeight } from '../../motion/AnimatedHeight';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 import { motion } from '../../tokens/motion.stylex';
@@ -17,6 +18,8 @@ import { radius } from '../../tokens/radius.stylex';
 const styles = stylex.create({
   root: { boxSizing: 'border-box', fontFamily: font['--oniva-font-sans'] },
   heading: { margin: 0 },
+  // RAC hides the collapsed panel with [hidden]; keep it rendered so AnimatedHeight can animate.
+  panelHost: { contentVisibility: 'visible', display: 'block' },
   trigger: {
     alignItems: 'center',
     appearance: 'none',
@@ -45,9 +48,9 @@ const styles = stylex.create({
   },
   chevron: {
     color: colors['--oniva-color-icon-muted'],
-    transitionDuration: motion['--oniva-motion-dur-base'],
+    transitionDuration: motion['--oniva-motion-dur-enter'],
     transitionProperty: 'transform',
-    transitionTimingFunction: motion['--oniva-motion-ease-standard'],
+    transitionTimingFunction: motion['--oniva-motion-ease-out'],
   },
   chevronOpen: { transform: 'rotate(90deg)' },
   panel: {
@@ -98,8 +101,10 @@ export function Collapsible({
               {trigger}
             </AriaButton>
           </Heading>
-          <DisclosurePanel>
-            <div {...stylex.props(styles.panel)}>{children}</div>
+          <DisclosurePanel {...stylex.props(styles.panelHost)}>
+            <AnimatedHeight isOpen={isExpanded}>
+              <div {...stylex.props(styles.panel)}>{children}</div>
+            </AnimatedHeight>
           </DisclosurePanel>
         </>
       )}

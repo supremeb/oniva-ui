@@ -5,6 +5,7 @@ import {
   type ProgressBarProps as AriaProgressBarProps,
 } from 'react-aria-components';
 import type { ReactNode, Ref } from 'react';
+import { AnimatedNumber } from '../../motion/AnimatedNumber/AnimatedNumber';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 import { motion } from '../../tokens/motion.stylex';
@@ -21,9 +22,9 @@ const styles = stylex.create({
   track: { stroke: colors['--oniva-color-chart-track'] },
   bar: {
     stroke: accent['--oniva-accent-500'],
-    transitionDuration: motion['--oniva-motion-dur-slow'],
+    transitionDuration: motion['--oniva-motion-dur-slower'],
     transitionProperty: 'stroke-dashoffset',
-    transitionTimingFunction: motion['--oniva-motion-ease-standard'],
+    transitionTimingFunction: motion['--oniva-motion-ease-out'],
   },
   success: { stroke: colors['--oniva-color-success-solid'] },
   warning: { stroke: colors['--oniva-color-warning-solid'] },
@@ -77,7 +78,7 @@ export function RingProgress({
       ref={ref}
       {...mergeSx(sx, className, { height: diameter, width: diameter })}
     >
-      {({ percentage = 0, valueText }) => (
+      {({ percentage = 0 }) => (
         <>
           <svg
             width={diameter}
@@ -107,7 +108,7 @@ export function RingProgress({
             />
           </svg>
           <span {...stylex.props(styles.center)} aria-hidden="true">
-            {children ?? valueText}
+            {children ?? <AnimatedNumber value={percentage / 100} format={{ style: 'percent' }} />}
           </span>
         </>
       )}

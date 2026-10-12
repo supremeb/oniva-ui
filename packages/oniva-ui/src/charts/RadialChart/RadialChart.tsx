@@ -1,8 +1,10 @@
 import * as stylex from '@stylexjs/stylex';
 import { arc } from 'd3-shape';
-import type { ReactNode, Ref } from 'react';
+import { useMemo, type ReactNode, type Ref } from 'react';
+import { canObserve, useTween } from '../../internal/charts-motion';
+import { useInView } from '../../motion/InView/useInView';
 import { makeFormatter, type ValueFormat } from '../../internal/charts-math';
-import { chartMotion, svgText, toneStyle, tones } from '../../internal/charts-styles';
+import { svgText, toneStyle, tones } from '../../internal/charts-styles';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 import { ChartFrame } from '../_shared/ChartFrame';
@@ -75,10 +77,14 @@ export function RadialChart({
 }: RadialChartProps) {
   const fmt = makeFormatter(valueFormat);
   const gap = 6;
+  const { ref: viewRef, inView } = useInView<HTMLDivElement>({ threshold: 0.15 });
+  const targets = useMemo(() => items.map((it) => Math.min(1, Math.max(0, it.value / (it.max ?? 100)))), [items]);
+  /** Sweep from 0 on first in-view, then tween on value changes. */
+  const fr = useTween(targets, { fromZero: canObserve(), active: inView, duration: 700 });
   const start = (-sweep / 2) * (Math.PI / 180);
   const span = sweep * (Math.PI / 180);
   return (
-    <div {...stylex.props(styles.wrap, xstyle)} style={{ height: size, width: size }}>
+    <div ref={viewRef} {...stylex.props(styles.wrap, xstyle)} style={{ height: size, width: size }}>
       <ChartFrame
         label={
           label ?? `Radial chart: ${items.map((i) => `${i.label} ${fmt(i.value)}`).join(', ')}`
@@ -100,7 +106,8 @@ export function RadialChart({
                 .innerRadius(outer - thickness)
                 .outerRadius(outer)
                 .cornerRadius(thickness / 2);
-              const f = Math.min(1, Math.max(0, it.value / (it.max ?? 100)));
+              const target = targets[i]!;
+              const f = fr[i] ?? target;
               return (
                 <g key={it.label}>
                   <path
@@ -115,19 +122,18 @@ export function RadialChart({
                     fill="currentColor"
                     {...stylex.props(tones.track)}
                   />
-                  {f > 0 && (
+                  {target > 0 && (
                     <path
                       d={
                         gen({
                           startAngle: start,
-                          endAngle: start + span * f,
+                          endAngle: start + span * Math.max(f, 0.0001),
                           innerRadius: 0,
                           outerRadius: 0,
                         }) ?? ''
                       }
                       fill="currentColor"
-                      {...stylex.props(toneStyle(it.tone ?? i + 1), svgText.hit, chartMotion.fade)}
-                      style={{ animationDelay: `${i * 90}ms` }}
+                      {...stylex.props(toneStyle(it.tone ?? i + 1), svgText.hit)}
                       {...bind(
                         {
                           title: it.label,

@@ -47,10 +47,15 @@ export const fp = stylex.create({
     outline: 'none',
     paddingBlock: 6,
     paddingInline: 8,
-    transitionDuration: motion['--oniva-motion-dur-fast'],
+    // highlight is instant on enter (0ms via itemFocused), soft on leave
+    transitionDuration: motion['--oniva-motion-dur-press'],
     transitionProperty: 'background-color',
+    transitionTimingFunction: motion['--oniva-motion-ease-out'],
   },
-  itemFocused: { backgroundColor: colors['--oniva-color-surface-hover'] },
+  itemFocused: {
+    backgroundColor: colors['--oniva-color-surface-hover'],
+    transitionDuration: '0ms',
+  },
   itemSelected: { backgroundColor: colors['--oniva-color-accent-tint'] },
   itemDisabled: { color: colors['--oniva-color-text-disabled'], cursor: 'not-allowed' },
   itemLabel: {

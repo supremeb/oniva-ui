@@ -1,4 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
+import { AnimatedNumber } from '../../motion/AnimatedNumber/AnimatedNumber';
 import { useEffect, useRef, useState, type Ref } from 'react';
 import { Button as AriaButton } from 'react-aria-components';
 import { Card, CardHeader, CardHeaderText, CardTitle, Tile } from '../../components/Card';
@@ -70,6 +71,7 @@ const styles = stylex.create({
   },
   h3: {
     backgroundColor: `color-mix(in srgb, ${colors['--oniva-color-chart-1']} 70%, ${colors['--oniva-color-surface-inner']})`,
+    color: colors['--oniva-color-on-chart'],
   },
   h4: { backgroundColor: colors['--oniva-color-chart-1'], color: colors['--oniva-color-on-chart'] },
 });
@@ -140,7 +142,7 @@ export function MostActiveDays({
         <CardHeaderText>
           <CardTitle>Most active days</CardTitle>
           <div {...stylex.props(wstyles.valueRow)}>
-            <p {...stylex.props(wstyles.value)}>{fmtInt(monthTotal(month))}</p>
+            <p {...stylex.props(wstyles.value)}><AnimatedNumber value={monthTotal(month)} format={{ maximumFractionDigits: 0 }} /></p>
             <span {...stylex.props(wstyles.unit)}>total steps</span>
           </div>
         </CardHeaderText>

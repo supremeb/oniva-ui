@@ -43,3 +43,14 @@ docs/solutions/<group>-<topic>.md (frontmatter: title, date, area, tags). Skip i
 ## Report (<=20 lines)
 
 Components built (by folder), helper files added, verification results, screenshots taken (paths), known issues.
+
+## Loop 5 additions (motion + coverage)
+- Read AGENTS.md "Motion rules", docs/solutions/motion-system-stylex.md, and use src/motion/ primitives (Presence, AnimatedHeight,
+  SlidingIndicator, usePressScale/motionStyles.pressScale, AnimatedNumber, Stagger, useInView, TextReveal, Shimmer, CrossFade) and
+  internal/motion-styles.ts (originAware, enterExit presets) + internal/motion-hooks.ts (useReducedMotion). No new dependencies.
+- Bar = Emil Kowalski skills: /Users/balachander/.aside/runtime/home/code/emilkowalski-skills/skills/{emil-design-eng,animate,review-animations,animation-performance}/SKILL.md
+  (+references). Before reporting, run a review-animations self-review over everything you animated and fix violations; include a 3–6 line
+  summary of that review in your report.
+- Up to 8 agents edit concurrently. Make surgical edits (re-read a file right before editing it; never rewrite whole files you didn't create).
+- Real-browser a11y: on each page you touched, inject axe-core (fs read node_modules/axe-core/axe.min.js → page.evaluate) and run
+  axe.run(document, {runOnly:['wcag2a','wcag2aa']}); zero serious/critical in light AND dark.

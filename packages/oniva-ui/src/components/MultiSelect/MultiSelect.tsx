@@ -1,6 +1,6 @@
 import * as stylex from '@stylexjs/stylex';
 import { ChevronDown, X } from 'lucide-react';
-import { useRef, type ReactNode, type Ref } from 'react';
+import { useRef, useState, type Key as ReactKey, type ReactNode, type Ref } from 'react';
 import {
   Button,
   FieldError,
@@ -12,6 +12,8 @@ import {
   type SelectProps as AriaSelectProps,
   type ValidationResult,
 } from 'react-aria-components';
+import { media } from '../../tokens/media.stylex';
+import { motion } from '../../tokens/motion.stylex';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 import { radius } from '../../tokens/radius.stylex';
@@ -19,7 +21,27 @@ import { cx, ff } from '../../internal/forms-field';
 import { FormsItem, FormsListBox, FormsPopover } from '../../internal/forms-listbox';
 import { fp } from '../../internal/forms-popover';
 
+const chipIn = stylex.keyframes({
+  from: { opacity: 0, transform: 'scale(0.9)' },
+  to: { opacity: 1, transform: 'scale(1)' },
+});
+const chipOut = stylex.keyframes({
+  from: { opacity: 1, transform: 'scale(1)' },
+  to: { opacity: 0, transform: 'scale(0.9)' },
+});
+
 const styles = stylex.create({
+  chipMotion: {
+    animationDuration: motion['--oniva-motion-dur-base'],
+    animationFillMode: 'both',
+    animationName: { default: chipIn, [media.reducedMotion]: 'none' },
+    animationTimingFunction: motion['--oniva-motion-ease-out'],
+  },
+  chipLeaving: {
+    animationDuration: motion['--oniva-motion-dur-fast'],
+    animationName: { default: chipOut, [media.reducedMotion]: 'none' },
+    pointerEvents: 'none',
+  },
   root: { width: '100%' },
   control: { height: 'auto', minHeight: 38, paddingBlock: 4, position: 'relative' },
   hit: {
@@ -130,6 +152,7 @@ export function MultiSelect({
   ref,
   ...rest
 }: MultiSelectProps) {
+  const [leaving, setLeaving] = useState<ReadonlySet<ReactKey>>(new Set());
   const root = stylex.props(ff.root, styles.root, xstyle);
   const anchor = useRef<HTMLDivElement>(null);
   return (
@@ -174,7 +197,10 @@ export function MultiSelect({
                 ) : (
                   selectedItems.map((item) =>
                     item ? (
-                      <span key={item.id} {...stylex.props(styles.chip)}>
+                      <span
+                        key={item.id}
+                        {...stylex.props(styles.chip, styles.chipMotion, leaving.has(item.id) && styles.chipLeaving)}
+                      >
                         {item.label}
                         {!isDisabled && (
                           <button
@@ -183,7 +209,16 @@ export function MultiSelect({
                             aria-label={`Remove ${item.label}`}
                             onClick={() => {
                               const cur = (state.value ?? []) as readonly Key[];
-                              state.setValue(cur.filter((k) => k !== item.id));
+                              setLeaving((p) => new Set(p).add(item.id));
+                              // let the 100ms exit play, then commit
+                              window.setTimeout(() => {
+                                state.setValue(cur.filter((k) => k !== item.id));
+                                setLeaving((p) => {
+                                  const n = new Set(p);
+                                  n.delete(item.id);
+                                  return n;
+                                });
+                              }, 100);
                             }}
                             {...stylex.props(styles.chipX)}
                           >

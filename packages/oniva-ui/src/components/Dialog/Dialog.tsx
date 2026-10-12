@@ -21,46 +21,54 @@ import { shadow } from '../../tokens/shadow.stylex';
 
 const fadeIn = stylex.keyframes({ from: { opacity: 0 }, to: { opacity: 1 } });
 const fadeOut = stylex.keyframes({ from: { opacity: 1 }, to: { opacity: 0 } });
+// Centered modals scale from the middle (never from a trigger). Opacity + scale only.
 const scaleIn = stylex.keyframes({
-  from: { opacity: 0, transform: 'scale(0.96) translateY(4px)' },
-  to: { opacity: 1, transform: 'scale(1) translateY(0)' },
+  from: { opacity: 0, transform: 'scale(0.96)' },
+  to: { opacity: 1, transform: 'scale(1)' },
 });
 const scaleOut = stylex.keyframes({
-  from: { opacity: 1, transform: 'scale(1) translateY(0)' },
-  to: { opacity: 0, transform: 'scale(0.98) translateY(2px)' },
+  from: { opacity: 1, transform: 'scale(1)' },
+  to: { opacity: 0, transform: 'scale(0.96)' },
 });
+// Mobile: present as a bottom sheet on the drawer curve.
+const sheetIn = stylex.keyframes({ from: { transform: 'translate3d(0, 100%, 0)' } });
+const sheetOut = stylex.keyframes({ to: { transform: 'translate3d(0, 100%, 0)' } });
+const MOBILE = '@media (max-width: 640px)';
 
 const styles = stylex.create({
   overlay: {
-    alignItems: 'center',
+    alignItems: { default: 'center', [MOBILE]: 'flex-end' },
     backgroundColor: colors['--oniva-color-overlay'],
     boxSizing: 'border-box',
     display: 'flex',
     height: '100vh',
     justifyContent: 'center',
     left: 0,
-    padding: 16,
+    padding: { default: 16, [MOBILE]: 0 },
     position: 'fixed',
     top: 0,
     width: '100vw',
     zIndex: 100,
   },
   overlayEntering: {
-    animationDuration: motion['--oniva-motion-dur-base'],
+    animationDuration: motion['--oniva-motion-dur-enter'],
     animationFillMode: 'both',
     animationName: { default: fadeIn, [media.reducedMotion]: 'none' },
     animationTimingFunction: motion['--oniva-motion-ease-out'],
   },
   overlayExiting: {
-    animationDuration: motion['--oniva-motion-dur-base'],
+    animationDuration: { default: '140ms', [media.reducedMotion]: '0.01ms' },
     animationFillMode: 'both',
     animationName: { default: fadeOut, [media.reducedMotion]: 'none' },
-    animationTimingFunction: motion['--oniva-motion-ease-in'],
+    animationTimingFunction: motion['--oniva-motion-ease-out'],
   },
   modal: {
     backgroundColor: colors['--oniva-color-surface'],
     borderColor: colors['--oniva-color-border'],
-    borderRadius: radius['--oniva-radius-card'],
+    borderRadius: {
+      default: radius['--oniva-radius-card'],
+      [MOBILE]: `${radius['--oniva-radius-card']} ${radius['--oniva-radius-card']} 0 0`,
+    },
     borderStyle: 'solid',
     borderWidth: 1,
     boxShadow: shadow['--oniva-shadow-xl'],
@@ -71,22 +79,44 @@ const styles = stylex.create({
     maxWidth: '100%',
     outline: 'none',
     overflow: 'hidden',
+    overscrollBehavior: 'contain',
     width: 480,
   },
-  sm: { width: 400 },
-  md: { width: 480 },
-  lg: { width: 640 },
+  sm: { width: { default: 400, [MOBILE]: '100%' } },
+  md: { width: { default: 480, [MOBILE]: '100%' } },
+  lg: { width: { default: 640, [MOBILE]: '100%' } },
   modalEntering: {
-    animationDuration: motion['--oniva-motion-dur-slow'],
+    animationDuration: {
+      default: motion['--oniva-motion-dur-enter'],
+      [MOBILE]: motion['--oniva-motion-dur-sheet'],
+    },
     animationFillMode: 'both',
-    animationName: { default: scaleIn, [media.reducedMotion]: 'none' },
-    animationTimingFunction: motion['--oniva-motion-ease-out'],
+    animationName: {
+      default: scaleIn,
+      [MOBILE]: sheetIn,
+      [media.reducedMotion]: fadeIn,
+    },
+    animationTimingFunction: {
+      default: motion['--oniva-motion-ease-out'],
+      [MOBILE]: motion['--oniva-motion-ease-drawer'],
+    },
   },
   modalExiting: {
-    animationDuration: motion['--oniva-motion-dur-base'],
+    animationDuration: {
+      default: '140ms',
+      [MOBILE]: '300ms',
+      [media.reducedMotion]: '0.01ms',
+    },
     animationFillMode: 'both',
-    animationName: { default: scaleOut, [media.reducedMotion]: 'none' },
-    animationTimingFunction: motion['--oniva-motion-ease-in'],
+    animationName: {
+      default: scaleOut,
+      [MOBILE]: sheetOut,
+      [media.reducedMotion]: fadeOut,
+    },
+    animationTimingFunction: {
+      default: motion['--oniva-motion-ease-out'],
+      [MOBILE]: motion['--oniva-motion-ease-drawer'],
+    },
   },
   dialog: {
     boxSizing: 'border-box',

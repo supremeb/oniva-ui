@@ -15,9 +15,19 @@ import { menuStyles as m } from '../../internal/overlays-menu';
 import { Dialog, Modal } from '../Dialog';
 import { DropdownMenuItem, DropdownMenuSection } from '../DropdownMenu';
 
+// Keyboard-opened (hundreds of times a day): no scale/translate, a short fade only.
+const fadeIn = stylex.keyframes({ from: { opacity: 0 }, to: { opacity: 1 } });
+const fadeOut = stylex.keyframes({ from: { opacity: 1 }, to: { opacity: 0 } });
+
 const styles = stylex.create({
   overlay: { alignItems: 'flex-start', paddingTop: '12vh' },
-  panel: { maxWidth: 'calc(100vw - 32px)', width: 560 },
+  panel: {
+    animationDuration: { default: '0s', '[data-entering]': '80ms', '[data-exiting]': '80ms' },
+    animationName: { default: 'none', '[data-entering]': fadeIn, '[data-exiting]': fadeOut },
+    animationTimingFunction: 'ease-out',
+    maxWidth: 'calc(100vw - 32px)',
+    width: 560,
+  },
   searchRow: {
     alignItems: 'center',
     borderBottomColor: colors['--oniva-color-border'],
@@ -179,7 +189,7 @@ export function CommandPalette({
       isOpen={open}
       onOpenChange={setOpen}
       overlayXstyle={styles.overlay}
-      xstyle={[styles.panel, xstyle]}
+      xstyle={[styles.panel, xstyle] as unknown as stylex.StyleXStyles}
     >
       <Dialog ref={ref} className={className} aria-label={ariaLabel} showCloseButton={false}>
         <Autocomplete filter={(text, input) => fuzzyMatch(text, input)}>

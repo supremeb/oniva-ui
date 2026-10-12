@@ -12,13 +12,13 @@ const demo: DemoModule = {
   demos: [
     {
       name: 'Levels',
-      code: `<Heading level={1}>Billing</Heading>
+      code: `<Heading level={2} variant="display">Billing</Heading>
 <Heading level={2}>Invoices</Heading>
 <Heading level={3}>October 2026</Heading>
 <Heading level={4}>Paid</Heading>`,
       Component: () => (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          <Heading level={1}>Billing</Heading>
+          <Heading level={2} variant="display">Billing</Heading>
           <Heading level={2}>Invoices</Heading>
           <Heading level={3}>October 2026</Heading>
           <Heading level={4}>Paid</Heading>

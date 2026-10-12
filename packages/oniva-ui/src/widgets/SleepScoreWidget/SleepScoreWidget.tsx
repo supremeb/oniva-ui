@@ -1,4 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
+import { AnimatedNumber } from '../../motion/AnimatedNumber/AnimatedNumber';
 import { useState, type Ref } from 'react';
 import { Card, CardHeader, CardHeaderText, CardTitle, Tile } from '../../components/Card';
 import { SegmentRing } from '../../internal/widgets-ring';
@@ -108,7 +109,7 @@ export function SleepScoreWidget({
             tone: [5, 3, 6, 1, 2, 4][k % 6] ?? 5,
           }))}
         >
-          {night.score}
+          <AnimatedNumber value={night.score} />
         </SegmentRing>
       </div>
       <Tile padding="sm">

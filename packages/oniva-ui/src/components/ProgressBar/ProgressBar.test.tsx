@@ -44,9 +44,9 @@ describe('ProgressSegments', () => {
     expect(screen.getByRole('group', { name: 'Context window' })).toBeInTheDocument();
     expect(screen.getAllByRole('listitem')).toHaveLength(3);
     const widths = Array.from(container.querySelectorAll<HTMLElement>('[role=img] > div')).map(
-      (d) => d.style.width,
+      (d) => d.style.getPropertyValue('--oniva-p'),
     );
-    expect(widths).toEqual(['12%', '50%', '20%']);
+    expect(widths).toEqual(['0.12', '0.5', '0.2']);
   });
   it('hides legend on request', () => {
     render(<ProgressSegments segments={segments} showLegend={false} />);

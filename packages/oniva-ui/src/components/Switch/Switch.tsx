@@ -66,22 +66,23 @@ const styles = stylex.create({
     boxShadow: shadow['--oniva-shadow-sm'],
     position: 'absolute',
     transitionDuration: {
-      default: motion['--oniva-motion-dur-base'],
+      default: motion['--oniva-motion-dur-slow'],
       [media.reducedMotion]: '0.01ms',
     },
-    transitionProperty: 'inset-inline-start',
-    transitionTimingFunction: motion['--oniva-motion-ease-standard'],
+    // transform only (no layout props); small overshoot via ease-spring
+    transitionProperty: 'transform',
+    transitionTimingFunction: motion['--oniva-motion-ease-spring'],
   },
   // sizes (track w x h, knob d, inset 2px / border 1px)
   trackSm: { height: 20, width: 36 },
   trackMd: { height: 24, width: 44 },
   trackLg: { height: 32, width: 56 },
   knobSm: { height: 14, insetBlockStart: 2, insetInlineStart: 2, width: 14 },
-  knobSmOn: { insetInlineStart: 18 },
+  knobSmOn: { transform: { default: 'translateX(16px)', ':dir(rtl)': 'translateX(-16px)' } },
   knobMd: { height: 18, insetBlockStart: 2, insetInlineStart: 2, width: 18 },
-  knobMdOn: { insetInlineStart: 22 },
+  knobMdOn: { transform: { default: 'translateX(20px)', ':dir(rtl)': 'translateX(-20px)' } },
   knobLg: { height: 24, insetBlockStart: 3, insetInlineStart: 3, width: 24 },
-  knobLgOn: { insetInlineStart: 27 },
+  knobLgOn: { transform: { default: 'translateX(24px)', ':dir(rtl)': 'translateX(-24px)' } },
 });
 
 export interface SwitchProps extends Omit<AriaSwitchProps, 'className' | 'style' | 'children'> {

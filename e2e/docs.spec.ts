@@ -66,6 +66,36 @@ test('every component page: no errors, no serious/critical axe; screenshot per c
     }
     const bad = errors.filter((e) => !benign(e));
     if (bad.length) failures.push(`${slug}: console/page errors: ${bad.join(' | ')}`);
+    // Motion geometry guard: anything spinning via a rotate() keyframe must pivot on its true centre
+    // (square box, origin at 50% 50%). Catches the "spinner orbits / drifts out of place" class of bug.
+    const offCentre = await page.evaluate(() => {
+      const out: string[] = [];
+      for (const a of document.getAnimations()) {
+        const el = (a.effect as KeyframeEffect | null)?.target;
+        if (!(el instanceof Element)) continue;
+        const kf = (a.effect as KeyframeEffect).getKeyframes();
+        if (!kf.some((k) => /rotate\(/.test(String(k.transform ?? '')))) continue;
+        if (kf.some((k) => /translate/.test(String(k.transform ?? '')))) continue; // positioned orbit rings
+        const cs = getComputedStyle(el);
+        const w = parseFloat(cs.width);
+        const h = parseFloat(cs.height);
+        const [ox = NaN, oy = NaN] = cs.transformOrigin.split(' ').map(parseFloat);
+        if (!w || !h) continue;
+        if (Math.abs(w - h) > 1 || Math.abs(ox - w / 2) > 1 || Math.abs(oy - h / 2) > 1) {
+          out.push(`${el.tagName.toLowerCase()} ${w}x${h} origin ${cs.transformOrigin}`);
+        }
+      }
+      return out;
+    });
+    if (offCentre.length) failures.push(`${slug}: off-centre rotation: ${offCentre.join(' | ')}`);
+    // Audit settled UI: finish finite enter animations (e.g. a streaming word mid blur-in at partial opacity)
+    // so axe doesn't flag transient contrast. Infinite loops (spinners, shimmer) are left running.
+    await page.evaluate(() => {
+      for (const a of document.getAnimations()) {
+        const t = a.effect?.getComputedTiming();
+        if (t && Number.isFinite(t.endTime as number)) a.finish();
+      }
+    });
     const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze();
     for (const v of results.violations.filter((x) => x.impact === 'serious' || x.impact === 'critical')) {
       failures.push(`${slug}: axe ${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(' | ')}`);

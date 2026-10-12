@@ -1,24 +1,48 @@
 import * as stylex from '@stylexjs/stylex';
 import {
   ToggleButtonGroup as AriaToggleButtonGroup,
+  ToggleGroupStateContext,
   type ToggleButtonGroupProps as AriaToggleButtonGroupProps,
 } from 'react-aria-components';
-import type { CSSProperties, ReactNode, Ref } from 'react';
+import { use, type CSSProperties, type ReactNode, type Ref, type RefObject } from 'react';
+import { useObjectRef } from 'react-aria';
+import { SlidingIndicator } from '../../motion/SlidingIndicator';
 import { ToggleGroupStyleContext, type ButtonSize } from '../../internal/feedback-control';
 import { mergeSx } from '../../internal/sx';
 import { colors } from '../../tokens/colors.stylex';
+import { motion } from '../../tokens/motion.stylex';
 import { radius } from '../../tokens/radius.stylex';
+import { shadow } from '../../tokens/shadow.stylex';
 
 const styles = stylex.create({
   base: { alignItems: 'center', display: 'inline-flex', gap: 8 },
   segmented: {
+    position: 'relative',
     backgroundColor: colors['--oniva-color-surface-inset'],
     borderRadius: radius['--oniva-radius-xl'],
     gap: 2,
     padding: 2,
   },
+  indicator: {
+    backgroundColor: colors['--oniva-color-surface-inner'],
+    borderRadius: radius['--oniva-radius-lg'],
+    boxShadow: shadow['--oniva-shadow-sm'],
+    transitionTimingFunction: motion['--oniva-motion-ease-in-out'],
+  },
   vertical: { alignItems: 'stretch', flexDirection: 'column' },
 });
+
+function GroupIndicator({ containerRef }: { containerRef: RefObject<HTMLElement | null> }) {
+  const keys = use(ToggleGroupStateContext)?.selectedKeys;
+  return (
+    <SlidingIndicator
+      containerRef={containerRef}
+      activeKey={keys ? [...keys].join('|') : ''}
+      selector='[data-selected="true"]'
+      xstyle={styles.indicator}
+    />
+  );
+}
 
 export interface ToggleButtonGroupProps extends Omit<
   AriaToggleButtonGroupProps,
@@ -45,6 +69,8 @@ export function ToggleButtonGroup({
   children,
   ...rest
 }: ToggleButtonGroupProps) {
+  const objRef = useObjectRef(ref);
+  const slide = variant === 'segmented' && rest.selectionMode !== 'multiple' && rest.orientation !== 'vertical';
   const sx = stylex.props(
     styles.base,
     variant === 'segmented' && styles.segmented,
@@ -52,8 +78,9 @@ export function ToggleButtonGroup({
     xstyle,
   );
   return (
-    <ToggleGroupStyleContext value={{ size, variant }}>
-      <AriaToggleButtonGroup {...rest} ref={ref} {...mergeSx(sx, className, style)}>
+    <ToggleGroupStyleContext value={{ size, variant, slide }}>
+      <AriaToggleButtonGroup {...rest} ref={objRef} {...mergeSx(sx, className, style)}>
+        {slide && <GroupIndicator containerRef={objRef} />}
         {children}
       </AriaToggleButtonGroup>
     </ToggleGroupStyleContext>

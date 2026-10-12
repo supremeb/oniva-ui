@@ -1,8 +1,11 @@
 import * as stylex from '@stylexjs/stylex';
 import { arc, pie } from 'd3-shape';
-import type { ReactNode, Ref } from 'react';
+import { useMemo, type ReactNode, type Ref } from 'react';
+import { canObserve, intlOptionsFor, useTween } from '../../internal/charts-motion';
+import { AnimatedNumber } from '../../motion/AnimatedNumber/AnimatedNumber';
+import { useInView } from '../../motion/InView/useInView';
 import { makeFormatter, type ValueFormat } from '../../internal/charts-math';
-import { chartMotion, svgText, toneStyle } from '../../internal/charts-styles';
+import { svgText, toneStyle } from '../../internal/charts-styles';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 import { ChartFrame } from '../_shared/ChartFrame';
@@ -78,8 +81,21 @@ export function DonutChart({
 }: DonutChartProps) {
   const fmt = makeFormatter(valueFormat);
   const total = data.reduce((s, d) => s + d.value, 0);
+  const intl = intlOptionsFor(valueFormat);
+  const { ref: viewRef, inView } = useInView<HTMLDivElement>({ threshold: 0.15 });
+  /** Clockwise entrance sweep 0 -> 1 (once, on first in-view). */
+  const sweepP = useTween([1], { fromZero: canObserve(), active: inView, duration: 700 })[0] ?? 1;
+  /** Morph between periods: slice values tween, angles re-normalise every frame. */
+  const morphed = useTween(
+    useMemo(() => data.map((d) => d.value), [data]),
+    { duration: 500 },
+  );
+  const tweened = useMemo(
+    () => (morphed.length === data.length ? data.map((d, i) => ({ ...d, value: morphed[i]! })) : data),
+    [data, morphed],
+  );
   return (
-    <div {...stylex.props(styles.wrap, xstyle)} style={{ height: size, width: size }}>
+    <div ref={viewRef} {...stylex.props(styles.wrap, xstyle)} style={{ height: size, width: size }}>
       <ChartFrame
         label={
           label ??
@@ -104,20 +120,23 @@ export function DonutChart({
           const slices = pie<DonutSlice>()
             .value((d) => d.value)
             .sort(null)
-            .padAngle(gap / R)(data);
+            .padAngle(gap / R)(tweened);
+          const theta = sweepP * Math.PI * 2;
           const gen = arc<(typeof slices)[number]>()
             .innerRadius(inner)
             .outerRadius(R)
             .cornerRadius(variant === 'pie' ? 4 : Math.min(8, (R - inner) / 2));
           return (
             <g transform={`translate(${size / 2},${size / 2})`}>
-              {slices.map((s, i) => (
+              {slices.map((s0, i) => {
+                const s = { ...s0, data: data[i] ?? s0.data };
+                const clipped = { ...s0, startAngle: Math.min(s0.startAngle, theta), endAngle: Math.min(s0.endAngle, theta) };
+                return (
                 <path
                   key={i}
-                  d={gen(s) ?? ''}
+                  d={clipped.endAngle - clipped.startAngle > 0.0001 ? (gen(clipped) ?? '') : ''}
                   fill="currentColor"
-                  {...stylex.props(toneStyle(s.data.tone ?? i + 1), svgText.hit, chartMotion.pop)}
-                  style={{ animationDelay: `${i * 70}ms` }}
+                  {...stylex.props(toneStyle(s.data.tone ?? i + 1), svgText.hit)}
                   {...bind(
                     {
                       title: s.data.label,
@@ -132,14 +151,17 @@ export function DonutChart({
                     `${s.data.label}: ${fmt(s.data.value)} (${Math.round((s.data.value / (total || 1)) * 100)}%)`,
                   )}
                 />
-              ))}
+                );
+              })}
             </g>
           );
         }}
       </ChartFrame>
       {variant === 'donut' && (
         <div {...stylex.props(styles.center)}>
-          <span {...stylex.props(styles.value)}>{centerValue ?? fmt(total)}</span>
+          <span {...stylex.props(styles.value)}>
+            {centerValue ?? (intl ? <AnimatedNumber value={total} format={intl} /> : fmt(total))}
+          </span>
           {centerLabel != null && <span {...stylex.props(styles.caption)}>{centerLabel}</span>}
         </div>
       )}

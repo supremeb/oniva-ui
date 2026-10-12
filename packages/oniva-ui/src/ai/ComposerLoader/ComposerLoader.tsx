@@ -1,9 +1,10 @@
 import * as stylex from '@stylexjs/stylex';
 import { media } from '../../tokens/media.stylex';
-import type { HTMLAttributes, ReactNode, Ref } from 'react';
+import type { CSSProperties, HTMLAttributes, ReactNode, Ref } from 'react';
 import { colors } from '../../tokens/colors.stylex';
 import { radius } from '../../tokens/radius.stylex';
 import { mergeSx } from '../../internal/sx';
+import { useInView } from '../../motion/InView/useInView';
 
 const orbit = stylex.keyframes({
   from: { transform: 'translate(-50%, -50%) rotate(0deg)' },
@@ -34,6 +35,8 @@ const styles = stylex.create({
   glow: {
     animationDuration: '2400ms',
     animationIterationCount: 'infinite',
+    // eslint-disable-next-line @stylexjs/valid-styles -- var() lets an ancestor release/pause the loop
+    animationPlayState: 'var(--oniva-play, running)',
     animationName: { default: breathe, [media.reducedMotion]: 'none' },
     filter: 'blur(10px)',
     inset: -2,
@@ -44,6 +47,8 @@ const styles = stylex.create({
     // A square far larger than the box so the rotating wedge always sweeps the full perimeter.
     animationDuration: '3200ms',
     animationIterationCount: 'infinite',
+    // eslint-disable-next-line @stylexjs/valid-styles -- var() lets an ancestor release/pause the loop
+    animationPlayState: 'var(--oniva-play, running)',
     animationName: { default: orbit, [media.reducedMotion]: 'none' },
     animationTimingFunction: 'linear',
     aspectRatio: '1 / 1',
@@ -82,8 +87,19 @@ export function ComposerLoader({
   ...rest
 }: ComposerLoaderProps) {
   const sx = stylex.props(styles.root, xstyle);
+  // Pause the orbit/breathe loops while offscreen.
+  const { ref: viewRef, inView } = useInView<HTMLDivElement>({ once: false });
   return (
-    <div {...rest} ref={ref} data-active={active || undefined} {...mergeSx(sx, className)}>
+    <div
+      {...rest}
+      ref={(n) => {
+        viewRef(n);
+        if (typeof ref === 'function') ref(n);
+        else if (ref) ref.current = n;
+      }}
+      data-active={active || undefined}
+      {...mergeSx(sx, className, inView ? undefined : ({ '--oniva-play': 'paused' } as CSSProperties))}
+    >
       {active && (
         <span aria-hidden="true" {...stylex.props(styles.layer, styles.glow)}>
           <span {...stylex.props(styles.orbit)} />

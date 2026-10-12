@@ -145,13 +145,17 @@ Groups: Colors (`--oniva-color-*`), Accent ramp (`--oniva-accent-*`), Radius, Sh
 
 </details>
 
-<details><summary>Motion (6)</summary>
+<details><summary>Motion (23)</summary>
 
-`--oniva-motion-dur-fast`, `--oniva-motion-dur-base`, `--oniva-motion-dur-slow`, `--oniva-motion-ease-standard`, `--oniva-motion-ease-in`, `--oniva-motion-ease-out`
+`--oniva-motion-dur-instant`, `--oniva-motion-dur-micro`, `--oniva-motion-dur-fast`, `--oniva-motion-dur-press`, `--oniva-motion-dur-base`, `--oniva-motion-dur-enter`, `--oniva-motion-dur-slow`, `--oniva-motion-dur-height`, `--oniva-motion-dur-deliberate`, `--oniva-motion-dur-sheet`, `--oniva-motion-dur-slower`, `--oniva-motion-ease-out`, `--oniva-motion-ease-out-expo`, `--oniva-motion-ease-in-out`, `--oniva-motion-ease-drawer`, `--oniva-motion-ease-spring`, `--oniva-motion-ease-emphasized`, `--oniva-motion-ease-standard`, `--oniva-motion-ease-in`, `--oniva-motion-pop-scale`, `--oniva-motion-press-scale`, `--oniva-motion-travel`, `--oniva-motion-stagger`
 
 </details>
 
 The list is enforced by `packages/oniva-ui/src/tokens/stable-vars.test.ts` against `dist/oniva-ui.css`. Renaming a variable is a breaking change.
+
+## Motion
+
+Pure StyleX + CSS + WAAPI, no animation dependency. Tokens: `--oniva-motion-dur-*` (reduced-motion aware, collapse to ~0), `--oniva-motion-ease-*` (house curve `ease-out` = `cubic-bezier(0.23, 1, 0.32, 1)`), `pop-scale`, `press-scale`, `travel`, `stagger`. Primitives live in `src/motion/`: `Presence`, `AnimatedHeight`, `SlidingIndicator`, `PressScale`/`usePressScale`, `AnimatedNumber`, `Stagger`, `InView`/`useInView`, `TextReveal`, `Shimmer`, `CrossFade`. Live tokens and curve visualizer: docs site `/foundations/motion`. Rules: AGENTS.md "Motion rules".
 
 ## Development
 

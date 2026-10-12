@@ -45,4 +45,29 @@ describe('Toast', () => {
     expect(onPress).toHaveBeenCalledTimes(1);
     await waitFor(() => expect(screen.queryByText('Archived')).not.toBeInTheDocument());
   });
+
+  it('promise toast swaps loading -> success in place', async () => {
+    render(<ToastProvider />);
+    let resolve!: (v: number) => void;
+    const p = new Promise<number>((r) => (resolve = r));
+    act(() => {
+      toast.promise(p, { loading: 'Exporting…', success: (n) => `Exported ${n} rows`, error: 'Failed' });
+    });
+    expect(await screen.findByText('Exporting…')).toBeInTheDocument();
+    await act(async () => resolve(42));
+    expect(await screen.findByText('Exported 42 rows')).toBeInTheDocument();
+    expect(screen.queryByText('Exporting…')).not.toBeInTheDocument();
+  });
+
+  it('stacks newest in front: older toast is marked behind', async () => {
+    render(<ToastProvider />);
+    act(() => {
+      toast('First', { duration: Infinity });
+      toast('Second', { duration: Infinity });
+    });
+    await screen.findByText('Second');
+    const slots = document.querySelectorAll('[data-state]');
+    expect(slots.length).toBe(2);
+    expect(slots[0]!.getAttribute('data-front')).toBe('true');
+  });
 });

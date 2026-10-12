@@ -11,6 +11,7 @@ import { ChevronDown, ChevronsUpDown, PanelLeft, Search } from 'lucide-react';
 import {
   createContext,
   use,
+  useRef,
   useState,
   type CSSProperties,
   type HTMLAttributes,
@@ -18,6 +19,8 @@ import {
   type Ref,
 } from 'react';
 import { mergeSx, sxClass } from '../../internal/sx';
+import { HoverPill, useAttrKey } from '../../internal/controls-motion';
+import { SlidingIndicator } from '../../motion/SlidingIndicator';
 import { accent } from '../../tokens/accent.stylex';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
@@ -171,6 +174,7 @@ const styles = stylex.create({
     minHeight: 0,
     overflowY: 'auto',
   },
+  contentPos: { position: 'relative' },
   section: { display: 'flex', flexDirection: 'column', gap: 2 },
   sectionTitle: {
     ...focusRing,
@@ -222,21 +226,33 @@ const styles = stylex.create({
     height: 40,
     lineHeight: font['--oniva-font-lh-14'],
     paddingInline: 10,
+    position: 'relative',
     textDecoration: 'none',
+    touchAction: 'manipulation',
+    transform: {
+      default: 'none',
+      ':active:not([data-disabled])': `scale(${motion['--oniva-motion-press-scale']})`,
+    },
     transitionDuration: motion['--oniva-motion-dur-base'],
-    transitionProperty: 'background-color, color, box-shadow',
-    transitionTimingFunction: motion['--oniva-motion-ease-standard'],
+    transitionProperty: 'color, transform',
+    transitionTimingFunction: motion['--oniva-motion-ease-out'],
+    zIndex: 1,
     userSelect: 'none',
   },
   itemFocus: { outlineStyle: 'solid' },
+  pillActive: {
+    backgroundColor: 'transparent',
+    backgroundImage: `linear-gradient(180deg, ${accent['--oniva-accent-500']}, ${accent['--oniva-accent-600']})`,
+    borderRadius: radius['--oniva-radius-lg'],
+    boxShadow: shadow['--oniva-shadow-accent-inset'],
+    transitionTimingFunction: motion['--oniva-motion-ease-in-out'],
+  },
+  pillHover: { backgroundColor: colors['--oniva-color-surface-inset'], borderRadius: radius['--oniva-radius-lg'] },
   itemCollapsed: { justifyContent: 'center', paddingInline: 0 },
   itemIdle: {
-    backgroundColor: { default: 'transparent', ':hover': colors['--oniva-color-surface-inset'] },
     color: { default: colors['--oniva-color-text-muted'], ':hover': colors['--oniva-color-text'] },
   },
   itemActive: {
-    backgroundImage: `linear-gradient(180deg, ${accent['--oniva-accent-500']}, ${accent['--oniva-accent-600']})`,
-    boxShadow: shadow['--oniva-shadow-accent-inset'],
     color: colors['--oniva-color-accent-fg'],
   },
   itemDisabled: { color: colors['--oniva-color-text-disabled'] },
@@ -465,14 +481,32 @@ export function SidebarContent({
   className,
   xstyle,
   'aria-label': ariaLabel = 'Main',
+  children,
   ...rest
 }: SidebarContentProps) {
+  const ref = useRef<HTMLElement>(null);
+  const activeKey = useAttrKey(ref, 'aria-current');
   return (
     <nav
       aria-label={ariaLabel}
       {...rest}
-      className={sxClass(stylex.props(styles.content, xstyle), className)}
-    />
+      ref={ref}
+      className={sxClass(stylex.props(styles.content, styles.contentPos, xstyle), className)}
+    >
+      <HoverPill
+        containerRef={ref}
+        itemSelector='li > a, li > [role="link"]'
+        skipSelector='[aria-current="page"], [aria-disabled="true"], [data-disabled]'
+        xstyle={styles.pillHover}
+      />
+      <SlidingIndicator
+        containerRef={ref}
+        activeKey={activeKey}
+        selector='[aria-current="page"]'
+        xstyle={styles.pillActive}
+      />
+      {children}
+    </nav>
   );
 }
 

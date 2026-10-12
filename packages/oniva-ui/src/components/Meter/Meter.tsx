@@ -5,7 +5,7 @@ import {
   Meter as AriaMeter,
   type MeterProps as AriaMeterProps,
 } from 'react-aria-components';
-import type { ReactNode, Ref } from 'react';
+import type { CSSProperties, ReactNode, Ref } from 'react';
 import { progressStyles } from '../ProgressBar/ProgressBar';
 
 export interface MeterProps extends Omit<AriaMeterProps, 'className' | 'style' | 'children'> {
@@ -59,7 +59,7 @@ export function Meter({
             <div {...stylex.props(progressStyles.track, progressStyles[size])}>
               <div
                 {...stylex.props(progressStyles.fill, progressStyles[t])}
-                style={{ width: `${percentage}%` }}
+                style={{ '--oniva-p': percentage / 100 } as CSSProperties}
               />
             </div>
           </>

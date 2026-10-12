@@ -12,6 +12,7 @@ import {
   type PopoverProps,
 } from 'react-aria-components';
 import type { ReactNode, Ref } from 'react';
+import { enterExit, motionStyles } from './motion-styles';
 import { type DotTone, dotKey, fp } from './forms-popover';
 import { cx } from './forms-field';
 
@@ -31,7 +32,13 @@ export function FormsPopover({
       offset={6}
       {...rest}
       className={() => {
-        const sx = stylex.props(fp.popover, auto && fp.popoverAuto, xstyle);
+        const sx = stylex.props(
+          fp.popover,
+          auto && fp.popoverAuto,
+          motionStyles.originAware,
+          enterExit.scale,
+          xstyle,
+        );
         return cx(sx.className, className);
       }}
     />

@@ -83,6 +83,28 @@ const demo: DemoModule = {
         </div>
       ),
     },
+    {
+      name: 'Pattern fills + glow',
+      code: `<AreaChart data={revenueByMonth} index="month" fill="dots" glow valueFormat="currency" series={…} />
+// fill: 'solid' | 'gradient' | 'dots' | 'lines' | 'grid'`,
+      Component: () => (
+        <div style={{ ...box, display: 'grid', gap: 16 }}>
+          {(['dots', 'lines', 'grid'] as const).map((fill) => (
+            <ChartCard key={fill} title={`fill="${fill}"`} legend={legend(rev as never)}>
+              <AreaChart
+                data={revenueByMonth}
+                index="month"
+                series={rev}
+                fill={fill}
+                glow={fill === 'dots'}
+                valueFormat="currency"
+                height={180}
+              />
+            </ChartCard>
+          ))}
+        </div>
+      ),
+    },
   ],
 };
 export default demo;

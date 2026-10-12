@@ -79,6 +79,23 @@ const demo: DemoModule = {
         </div>
       ),
     },
+    {
+      name: 'Glow + scrub crosshair',
+      code: `<LineChart data={tokenUsage} index="day" series={…} glow />`,
+      Component: () => (
+        <div style={box}>
+          <ChartCard title="Tokens by day" legend={<ChartLegend items={tok as never} />}>
+            <LineChart
+              data={tokenUsage}
+              index="day"
+              series={tok}
+              glow
+              valueFormat={(n) => `${n.toFixed(1)}M`}
+            />
+          </ChartCard>
+        </div>
+      ),
+    },
   ],
 };
 export default demo;
