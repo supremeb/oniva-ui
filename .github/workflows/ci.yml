@@ -6,7 +6,7 @@ on:
 
 concurrency:
   group: ci-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   ci:
@@ -20,6 +20,8 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run gen:index
+      - name: Generated index is committed
+        run: git diff --exit-code packages/oniva-ui/src/index.ts
       - run: npm run typecheck
       - run: npm run lint
       - run: npm run test
@@ -27,6 +29,11 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
       - run: npm run e2e
+      - name: e2e at GitHub Pages base path
+        run: npm run e2e
+        env:
+          BASE_PATH: /oniva-ui/
+          E2E_REUSE_BUILD: '1'
       - uses: actions/upload-artifact@v4
         if: failure()
         with:

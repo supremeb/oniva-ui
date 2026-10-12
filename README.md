@@ -7,7 +7,7 @@ Inspired by the look of BoardUI (nested inset cards, gradient primary buttons, s
 - StyleX only: atomic CSS, design tokens as CSS variables, no runtime CSS-in-JS
 - Accessible by default (React Aria): keyboard, focus, ARIA
 - Light, dark and 8 accent themes (blue, violet, pink, red, amber, emerald, cyan, indigo)
-- Consumers need **no StyleX compiler**: ship `oniva-ui/styles.css` once
+- Consumers need **no StyleX compiler** to use the components: import `oniva-ui/styles.css` once (the `xstyle` prop does need one, see below)
 
 ## Install
 
@@ -15,7 +15,27 @@ Inspired by the look of BoardUI (nested inset cards, gradient primary buttons, s
 npm i oniva-ui
 ```
 
-Peer deps: `react` and `react-dom` (>= 18.3).
+Peer deps: `react` and `react-dom` (^19; components take `ref` as a prop), plus `react-aria` and `react-aria-components`
+(install them yourself so there is a single copy of the React Aria context):
+
+```bash
+npm i oniva-ui react-aria react-aria-components
+```
+
+### Styles and cascade layer
+
+```ts
+import 'oniva-ui/styles.css'; // required, once, at your app entry
+```
+
+The stylesheet wraps everything in `@layer oniva { ... }`, so unlayered app CSS always wins over it. To order it against
+other layers, declare the order first: `@layer reset, oniva, app;`.
+
+### With vs without the StyleX compiler
+
+- **Without** the compiler: use components and their props (`variant`, `size`, `className`, `style`). Done.
+- **With** the compiler in your app: you may also pass `xstyle={stylex.create(...).x}` to override styles. `xstyle` accepts
+  StyleX styles only and **requires** the compiler; without it the value is silently ignored or invalid. Use `className`/`style` otherwise.
 
 ## Usage
 

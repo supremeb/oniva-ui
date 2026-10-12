@@ -1,5 +1,5 @@
 // The StyleX unplugin emits all atomic CSS as dist/assets/stylex.css. Publish it as dist/oniva-ui.css.
-import { existsSync, renameSync, rmSync, readFileSync } from 'node:fs';
+import { existsSync, renameSync, rmSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -11,7 +11,14 @@ if (!existsSync(from)) {
 }
 renameSync(from, join(dist, 'oniva-ui.css'));
 rmSync(join(dist, 'assets'), { recursive: true, force: true });
-const css = readFileSync(join(dist, 'oniva-ui.css'), 'utf8');
+let css = readFileSync(join(dist, 'oniva-ui.css'), 'utf8');
+// StyleX priority layers are unnamed top-level layers; nest them under one named layer so consumers
+// can order it: `@layer reset, oniva, app;`. @import rules must stay first.
+if (!css.includes('@layer oniva{')) {
+  const imports = css.match(/^(@import[^;]+;)+/)?.[0] ?? '';
+  css = `${imports}@layer oniva{${css.slice(imports.length)}}`;
+  writeFileSync(join(dist, 'oniva-ui.css'), css);
+}
 if (!css.includes(':root') || css.length < 5000) {
   console.error('finalize-css: oniva-ui.css looks empty');
   process.exit(1);

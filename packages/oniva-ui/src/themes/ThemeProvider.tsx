@@ -7,6 +7,7 @@ import {
   useEffect,
   useMemo,
   useState,
+  useSyncExternalStore,
   type ReactNode,
   type Ref,
 } from 'react';
@@ -57,20 +58,27 @@ export function useTheme(): ThemeContextValue {
   );
 }
 
+const DARK_QUERY = '(prefers-color-scheme: dark)';
+
+/** Reads the OS color scheme synchronously on the first client render (no light-mode flash). */
 function useSystemDark(enabled: boolean): boolean {
-  const [dark, setDark] = useState(
-    () =>
-      typeof window !== 'undefined' && window.matchMedia?.('(prefers-color-scheme: dark)').matches,
+  const subscribe = useCallback(
+    (cb: () => void) => {
+      if (!enabled || typeof window === 'undefined' || !window.matchMedia) return () => {};
+      const mq = window.matchMedia(DARK_QUERY);
+      mq.addEventListener('change', cb);
+      return () => mq.removeEventListener('change', cb);
+    },
+    [enabled],
   );
-  useEffect(() => {
-    if (!enabled || typeof window === 'undefined' || !window.matchMedia) return;
-    const mq = window.matchMedia('(prefers-color-scheme: dark)');
-    const onChange = () => setDark(mq.matches);
-    onChange();
-    mq.addEventListener('change', onChange);
-    return () => mq.removeEventListener('change', onChange);
-  }, [enabled]);
-  return dark;
+  return useSyncExternalStore(
+    subscribe,
+    () =>
+      typeof window !== 'undefined' && typeof window.matchMedia === 'function'
+        ? window.matchMedia(DARK_QUERY).matches
+        : false,
+    () => false,
+  );
 }
 
 export interface ThemeProviderProps {

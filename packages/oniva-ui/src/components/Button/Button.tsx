@@ -37,7 +37,7 @@ const styles = stylex.create({
     outlineWidth: 2,
     position: 'relative',
     textDecoration: 'none',
-    transitionDuration: motion.durBase,
+    transitionDuration: { default: motion.durBase, '@media (prefers-reduced-motion: reduce)': '0.01ms' },
     transitionProperty: 'background-color, background-image, border-color, box-shadow, color',
     transitionTimingFunction: motion.easeStandard,
     userSelect: 'none',
@@ -45,6 +45,7 @@ const styles = stylex.create({
   },
   // ---- variants ----
   primary: {
+    borderColor: { default: 'transparent', '@media (forced-colors: active)': 'ButtonText' },
     backgroundImage: {
       default: `linear-gradient(180deg, ${accent.accent500}, ${accent.accent600})`,
       ':hover': `linear-gradient(180deg, ${accent.accent400}, ${accent.accent500})`,
@@ -55,6 +56,7 @@ const styles = stylex.create({
     color: { default: colors.accentFg, ':disabled': colors.disabledFg },
   },
   danger: {
+    borderColor: { default: 'transparent', '@media (forced-colors: active)': 'ButtonText' },
     backgroundImage: {
       default: `linear-gradient(180deg, ${colors.dangerFrom}, ${colors.dangerTo})`,
       ':hover': `linear-gradient(180deg, ${colors.dangerHoverFrom}, ${colors.dangerHoverTo})`,
@@ -89,6 +91,7 @@ const styles = stylex.create({
     color: { default: colors.textMuted, ':hover': colors.text, ':disabled': colors.textDisabled },
   },
   soft: {
+    borderColor: { default: 'transparent', '@media (forced-colors: active)': 'ButtonText' },
     backgroundColor: {
       default: colors.accentSoft,
       ':hover': colors.accentSoftHover,
@@ -126,7 +129,7 @@ const styles = stylex.create({
     position: 'absolute',
   },
   spinIcon: {
-    animationDuration: '800ms',
+    animationDuration: { default: '800ms', '@media (prefers-reduced-motion: reduce)': '2400ms' },
     animationIterationCount: 'infinite',
     animationName: spin,
     animationTimingFunction: 'linear',

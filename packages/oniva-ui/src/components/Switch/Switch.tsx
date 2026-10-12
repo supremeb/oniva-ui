@@ -1,6 +1,7 @@
 import * as stylex from '@stylexjs/stylex';
 import { Switch as AriaSwitch, type SwitchProps as AriaSwitchProps } from 'react-aria-components';
-import type { ReactNode, Ref } from 'react';
+import type { CSSProperties, ReactNode, Ref } from 'react';
+import { mergeSx } from '../../internal/sx';
 import { accent } from '../../tokens/accent.stylex';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
@@ -22,8 +23,8 @@ const styles = stylex.create({
   },
   rootDisabled: { cursor: 'not-allowed', opacity: 0.5 },
   track: {
-    backgroundImage: `linear-gradient(180deg, #ffffff, ${colors.surfaceHover})`,
-    borderColor: colors.border,
+    backgroundImage: `linear-gradient(180deg, ${colors.surface}, ${colors.surfaceHover})`,
+    borderColor: { default: colors.border, '@media (forced-colors: active)': 'ButtonText' },
     borderRadius: radius.full,
     borderStyle: 'solid',
     borderWidth: 1,
@@ -31,15 +32,16 @@ const styles = stylex.create({
     boxSizing: 'border-box',
     flexShrink: 0,
     position: 'relative',
-    transitionDuration: motion.durBase,
+    transitionDuration: { default: motion.durBase, '@media (prefers-reduced-motion: reduce)': '0.01ms' },
     transitionProperty: 'background-image, border-color, box-shadow',
     transitionTimingFunction: motion.easeStandard,
   },
   trackOn: {
     backgroundImage: `linear-gradient(180deg, ${accent.accent500}, ${accent.accent600})`,
-    borderColor: 'transparent',
+    borderColor: { default: 'transparent', '@media (forced-colors: active)': 'Highlight' },
     boxShadow: shadow.accentInset,
   },
+  knobOn: { backgroundImage: 'none', backgroundColor: colors.accentFg },
   focus: {
     outlineColor: colors.focusRing,
     outlineOffset: 2,
@@ -47,11 +49,15 @@ const styles = stylex.create({
     outlineWidth: 2,
   },
   knob: {
-    backgroundImage: 'linear-gradient(180deg, #ffffff, #f7f7f7)',
+    backgroundImage: `linear-gradient(180deg, ${colors.surface}, ${colors.surfaceHover})`,
+    borderColor: { default: 'transparent', '@media (forced-colors: active)': 'ButtonText' },
     borderRadius: radius.full,
+    borderStyle: 'solid',
+    borderWidth: 1,
+    boxSizing: 'border-box',
     boxShadow: shadow.sm,
     position: 'absolute',
-    transitionDuration: motion.durBase,
+    transitionDuration: { default: motion.durBase, '@media (prefers-reduced-motion: reduce)': '0.01ms' },
     transitionProperty: 'inset-inline-start',
     transitionTimingFunction: motion.easeStandard,
   },
@@ -68,6 +74,7 @@ const styles = stylex.create({
 });
 
 export interface SwitchProps extends Omit<AriaSwitchProps, 'className' | 'style' | 'children'> {
+  style?: CSSProperties;
   size?: 'sm' | 'md' | 'lg';
   children?: ReactNode;
   className?: string;
@@ -81,16 +88,18 @@ const sizeMap = {
   lg: ['trackLg', 'knobLg', 'knobLgOn'],
 } as const;
 
-export function Switch({ size = 'md', children, className, xstyle, ref, ...rest }: SwitchProps) {
+export function Switch({ size = 'md', children, className, style, xstyle, ref, ...rest }: SwitchProps) {
   const [trackKey, knobKey, knobOnKey] = sizeMap[size];
   return (
     <AriaSwitch
       {...rest}
       ref={ref}
-      className={({ isDisabled }) => {
-        const sx = stylex.props(styles.root, isDisabled && styles.rootDisabled, xstyle);
-        return [sx.className, className].filter(Boolean).join(' ');
-      }}
+      className={({ isDisabled }) =>
+        mergeSx(stylex.props(styles.root, isDisabled && styles.rootDisabled, xstyle), className).className
+      }
+      style={({ isDisabled }) =>
+        mergeSx(stylex.props(styles.root, isDisabled && styles.rootDisabled, xstyle), className, style).style
+      }
     >
       {({ isSelected, isFocusVisible }) => (
         <>
@@ -104,7 +113,7 @@ export function Switch({ size = 'md', children, className, xstyle, ref, ...rest 
             )}
           >
             <span
-              {...stylex.props(styles.knob, styles[knobKey], isSelected && styles[knobOnKey])}
+              {...stylex.props(styles.knob, styles[knobKey], isSelected && styles[knobOnKey], isSelected && styles.knobOn)}
             />
           </span>
           {children}
