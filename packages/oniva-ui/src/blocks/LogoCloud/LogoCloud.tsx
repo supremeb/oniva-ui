@@ -40,7 +40,6 @@ const styles = stylex.create({
     fontWeight: font['--oniva-font-weight-semibold'],
     gap: 8,
     justifyContent: 'center',
-    opacity: 0.9,
     whiteSpace: 'nowrap',
   },
   marqueeWrap: {

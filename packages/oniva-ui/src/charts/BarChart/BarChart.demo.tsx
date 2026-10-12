@@ -128,7 +128,7 @@ const demo: DemoModule = {
       code: `<BarChart data={revenueByMonth} index="month" variant="blocks" series={…} />
 <BarChart … fill="lines" glow />`,
       Component: () => (
-        <div style={{ ...box, display: 'grid', gap: 16 }}>
+        <div style={{ ...box, display: 'grid', gap: 16, gridTemplateColumns: 'minmax(0, 1fr)' }}>
           <ChartCard title='variant="blocks"' legend={<ChartLegend items={rev as never} />}>
             <BarChart
               data={revenueByMonth}

@@ -172,7 +172,8 @@ test.describe('interaction motion smoke', () => {
 
   test('Toast stacks, front is unscaled, hover expands without overlap', async ({ page }) => {
     await page.goto('./#/components/toast');
-    const add = firstDemo(page).getByRole('button', { name: 'Add toast' });
+    // 'Add toast' lives in the "Stack playground" demo, not the first (Variants) demo.
+    const add = page.getByRole('button', { name: 'Add toast' }).first();
     for (let n = 0; n < 3; n++) await add.click();
     const region = page.getByRole('region', { name: /notification/i });
     const slots = region.locator('[data-state="open"]');
@@ -198,9 +199,14 @@ test.describe('interaction motion smoke', () => {
   test('Tooltip opens after delay, adjacent to trigger', async ({ page }) => {
     await page.goto('./#/components/tooltip');
     const trigger = firstDemo(page).getByRole('button').first();
-    await trigger.hover();
     const tip = page.getByRole('tooltip');
-    await expect(tip).toBeVisible({ timeout: 3000 });
+    // Re-enter the trigger on retry: React Aria arms its hover delay on pointerenter, which a single hover can
+    // miss if it lands before the page's pointer handlers are attached (seen on CI; not reproducible locally).
+    await expect(async () => {
+      await page.mouse.move(1, 1);
+      await trigger.hover();
+      await expect(tip).toBeVisible({ timeout: 1500 });
+    }).toPass({ timeout: 8000 });
     await page.waitForTimeout(300);
     const a = (await trigger.boundingBox())!;
     const b = (await tip.boundingBox())!;

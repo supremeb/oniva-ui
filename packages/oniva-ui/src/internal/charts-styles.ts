@@ -21,12 +21,13 @@ const pop = stylex.keyframes({
 
 /** Entrances start paused and are released by ChartFrame (`--oniva-chart-play: running`) on first in-view, so they play once. */
 
+/** Reduced motion drops the animation entirely (animationName none): a 0ms duration still counts as a running animation during its (inline) stagger delay. */
 /** Entrance animations (ease-out, <=450ms; collapse to 0ms for reduced motion). Stagger with `staggerDelay()`. */
 export const chartMotion = stylex.create({
   grow: {
     animationDuration: { default: '450ms', [media.reducedMotion]: '0ms' },
     animationFillMode: 'backwards',
-    animationName: grow,
+    animationName: { default: grow, [media.reducedMotion]: 'none' },
     // eslint-disable-next-line @stylexjs/valid-styles -- var() lets ChartFrame release the entrance on first in-view
     animationPlayState: 'var(--oniva-chart-play, running)',
     animationTimingFunction: 'cubic-bezier(0.23, 1, 0.32, 1)',
@@ -36,7 +37,7 @@ export const chartMotion = stylex.create({
   growX: {
     animationDuration: { default: '450ms', [media.reducedMotion]: '0ms' },
     animationFillMode: 'backwards',
-    animationName: growX,
+    animationName: { default: growX, [media.reducedMotion]: 'none' },
     // eslint-disable-next-line @stylexjs/valid-styles -- var() lets ChartFrame release the entrance on first in-view
     animationPlayState: 'var(--oniva-chart-play, running)',
     animationTimingFunction: 'cubic-bezier(0.23, 1, 0.32, 1)',
@@ -46,7 +47,7 @@ export const chartMotion = stylex.create({
   fade: {
     animationDuration: { default: '400ms', [media.reducedMotion]: '0ms' },
     animationFillMode: 'backwards',
-    animationName: fade,
+    animationName: { default: fade, [media.reducedMotion]: 'none' },
     // eslint-disable-next-line @stylexjs/valid-styles -- var() lets ChartFrame release the entrance on first in-view
     animationPlayState: 'var(--oniva-chart-play, running)',
     animationTimingFunction: 'cubic-bezier(0.23, 1, 0.32, 1)',
@@ -54,7 +55,7 @@ export const chartMotion = stylex.create({
   draw: {
     animationDuration: { default: '800ms', [media.reducedMotion]: '0ms' },
     animationFillMode: 'backwards',
-    animationName: draw,
+    animationName: { default: draw, [media.reducedMotion]: 'none' },
     // eslint-disable-next-line @stylexjs/valid-styles -- var() lets ChartFrame release the entrance on first in-view
     animationPlayState: 'var(--oniva-chart-play, running)',
     animationTimingFunction: 'cubic-bezier(0.23, 1, 0.32, 1)',
@@ -64,7 +65,7 @@ export const chartMotion = stylex.create({
   wipe: {
     animationDuration: { default: '800ms', [media.reducedMotion]: '0ms' },
     animationFillMode: 'backwards',
-    animationName: wipe,
+    animationName: { default: wipe, [media.reducedMotion]: 'none' },
     // eslint-disable-next-line @stylexjs/valid-styles -- var() lets ChartFrame release the entrance on first in-view
     animationPlayState: 'var(--oniva-chart-play, running)',
     animationTimingFunction: 'cubic-bezier(0.23, 1, 0.32, 1)',
@@ -72,7 +73,7 @@ export const chartMotion = stylex.create({
   pop: {
     animationDuration: { default: '350ms', [media.reducedMotion]: '0ms' },
     animationFillMode: 'backwards',
-    animationName: pop,
+    animationName: { default: pop, [media.reducedMotion]: 'none' },
     // eslint-disable-next-line @stylexjs/valid-styles -- var() lets ChartFrame release the entrance on first in-view
     animationPlayState: 'var(--oniva-chart-play, running)',
     animationTimingFunction: 'cubic-bezier(0.23, 1, 0.32, 1)',

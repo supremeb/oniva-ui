@@ -33,12 +33,26 @@ export async function discover(page: Page): Promise<Entry[]> {
   return entries.filter((e) => e.slug);
 }
 
-/** Finish finite animations (e.g. a streaming word mid blur-in) so axe sees the settled UI. Infinite loops keep running. */
+/**
+ * Finish finite animations (e.g. a streaming word mid blur-in) so axe sees the settled UI. Infinite loops keep
+ * running. Streaming demos keep mounting new animated words, so repeat until two consecutive passes find nothing
+ * left to finish (bounded), otherwise axe can catch a fresh word at partial opacity.
+ */
 export async function finishFiniteAnimations(page: Page): Promise<void> {
-  await page.evaluate(() => {
-    for (const a of document.getAnimations()) {
-      const t = a.effect?.getComputedTiming();
-      if (t && Number.isFinite(t.endTime as number)) a.finish();
-    }
-  });
+  let quiet = 0;
+  for (let pass = 0; pass < 40 && quiet < 2; pass++) {
+    const finished = await page.evaluate(() => {
+      let n = 0;
+      for (const a of document.getAnimations()) {
+        const t = a.effect?.getComputedTiming();
+        if (t && Number.isFinite(t.endTime as number) && a.playState !== 'finished') {
+          a.finish();
+          n++;
+        }
+      }
+      return n;
+    });
+    quiet = finished === 0 ? quiet + 1 : 0;
+    await page.waitForTimeout(60);
+  }
 }

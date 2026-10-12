@@ -13,6 +13,9 @@ const spin = stylex.keyframes({
   to: { transform: 'rotate(360deg)' },
 });
 
+/** Reduced motion: no rotation, a slow opacity pulse instead (matches Spinner). */
+const pulse = stylex.keyframes({ '0%, 100%': { opacity: 0.4 }, '50%': { opacity: 1 } });
+
 const styles = stylex.create({
   pending: { cursor: 'progress' },
   content: { alignItems: 'center', display: 'inline-flex', gap: 6 },
@@ -26,10 +29,10 @@ const styles = stylex.create({
     position: 'absolute',
   },
   spinIcon: {
-    animationDuration: { default: '800ms', [media.reducedMotion]: '2400ms' },
+    animationDuration: { default: '800ms', [media.reducedMotion]: '1200ms' },
     animationIterationCount: 'infinite',
-    animationName: spin,
-    animationTimingFunction: 'linear',
+    animationName: { default: spin, [media.reducedMotion]: pulse },
+    animationTimingFunction: { default: 'linear', [media.reducedMotion]: 'ease-in-out' },
   },
 });
 

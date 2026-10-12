@@ -88,7 +88,7 @@ const demo: DemoModule = {
       code: `<AreaChart data={revenueByMonth} index="month" fill="dots" glow valueFormat="currency" series={…} />
 // fill: 'solid' | 'gradient' | 'dots' | 'lines' | 'grid'`,
       Component: () => (
-        <div style={{ ...box, display: 'grid', gap: 16 }}>
+        <div style={{ ...box, display: 'grid', gap: 16, gridTemplateColumns: 'minmax(0, 1fr)' }}>
           {(['dots', 'lines', 'grid'] as const).map((fill) => (
             <ChartCard key={fill} title={`fill="${fill}"`} legend={legend(rev as never)}>
               <AreaChart

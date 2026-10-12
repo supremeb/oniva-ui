@@ -42,3 +42,11 @@ and strict-mode locator collisions are invisible there.
 `node_modules/axe-core/axe.min.js`, run `axe.run(document, {runOnly: ['wcag2a','wcag2aa']})`, filter
 serious/critical; repeat after toggling `[data-testid=theme-toggle]` for dark. Wait ~250ms (transitions
 mid-flight give false contrast values).
+
+## CI run #2 (real Chromium) caught what jsdom/local could not
+
+- **Mobile 390px overflow (all pages):** docs `Header` nav (4 links + search + theme) summed to ~432px and the theme button shrank to 18px. Fix: `nav` gets `minWidth: 0; overflowX: auto`, links/logo/search/theme `flexShrink: 0`. Demos with intrinsic width (kanban, tables, calendars, steppers) widened the page too: the `ComponentPage` preview stage is now `overflowX: auto; position: relative`. `position: relative` matters: absolutely positioned visually-hidden spans otherwise escape the scroller and still inflate `documentElement.scrollWidth`. Demo wrappers using `display: grid` need `gridTemplateColumns: 'minmax(0, 1fr)'` (an auto track sized to a 480px fallback-width SVG chart).
+- **Reduced motion:** a `0ms` animation-duration is still a *running* animation during an inline `animation-delay` stagger, so `document.getAnimations()` reports its transform keyframes. Chart entrance presets now use `animationName: { default: x, [media.reducedMotion]: 'none' }`. Button's pending spinner now pulses opacity (like `Spinner`) instead of rotating slowly.
+- **Dark contrast:** `opacity: 0.9` on a text-subtle element dropped #858585-on-#202020 to 4.41:1 (LogoCloud). Never lower text contrast with `opacity`; pick a token.
+- **Streaming demos in axe:** `ResponseStream` keeps mounting blur-in words, so a single `finishFiniteAnimations` can leave a fresh word at partial opacity. The helper now repeats until two consecutive passes find nothing.
+- **Test assumptions that were wrong:** the Toast region is a zero-height fixed container, so Playwright calls it hidden: assert on `[data-state="open"]` inside it. 'Add toast' is in the Stack playground demo, not the first. Block demos (hero) render their own h1: use `.first()`. Tooltip hover is retried via `toPass` with a mouse re-entry (could not reproduce locally; CI-only).

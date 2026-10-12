@@ -26,7 +26,8 @@ test('every component page: no errors, no serious/critical axe; screenshot per c
     errors.length = 0;
     await page.goto(`./#/components/${slug}`);
     try {
-      await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+      // .first(): block demos (e.g. hero) render their own h1 next to the page title
+      await expect(page.getByRole('heading', { level: 1 }).first()).toBeVisible();
       await expect(page.getByTestId('demo').first()).toBeVisible();
     } catch {
       failures.push(`${slug}: page did not render`);
@@ -165,6 +166,10 @@ test.describe('keyboard smoke', () => {
     const trigger = firstDemoButton(page);
     await trigger.focus();
     await page.keyboard.press('Enter');
-    await expect(page.getByRole('region', { name: /notification/i })).toBeVisible();
+    // The region itself is a zero-height fixed container (toasts are absolutely positioned inside it), so
+    // Playwright reports it hidden; assert on the rendered toast within it instead.
+    const region = page.getByRole('region', { name: /notification/i });
+    await expect(region).toBeAttached();
+    await expect(region.locator('[data-state="open"]').first()).toBeVisible();
   });
 });

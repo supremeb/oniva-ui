@@ -55,7 +55,19 @@ const styles = stylex.create({
   },
   logoText: { display: { default: 'none', '@media (min-width: 700px)': 'inline' } },
   logoMuted: { color: colors['--oniva-color-text-muted'] },
-  nav: { alignItems: 'center', display: 'flex', gap: 2, marginInlineStart: { default: 0, '@media (min-width: 700px)': 8 } },
+  // minWidth 0 + overflow lets the nav scroll instead of pushing the header past 390px (CI mobile overflow).
+  nav: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: 2,
+    marginInlineStart: { default: 0, '@media (min-width: 700px)': 8 },
+    minWidth: 0,
+    overflowX: 'auto',
+    paddingBlock: 2,
+    scrollbarWidth: 'none',
+  },
+  noShrink: { flexShrink: 0 },
+  linkNoWrap: { flexShrink: 0, whiteSpace: 'nowrap' },
   link: {
     borderRadius: radius['--oniva-radius-lg'],
     backgroundColor: {
@@ -162,10 +174,10 @@ export function Header({ theme, onThemeChange, accent, onAccentChange }: HeaderP
       typeof window !== 'undefined' &&
       window.matchMedia?.('(prefers-color-scheme: dark)').matches);
   const navCls = ({ isActive }: { isActive: boolean }) =>
-    stylex.props(styles.link, isActive && styles.linkActive).className ?? '';
+    stylex.props(styles.link, styles.linkNoWrap, isActive && styles.linkActive).className ?? '';
   return (
     <header {...stylex.props(styles.header)}>
-      <Link to="/" {...stylex.props(styles.logo)} aria-label="oniva/ui home">
+      <Link to="/" {...stylex.props(styles.logo, styles.noShrink)} aria-label="oniva/ui home">
         <span {...stylex.props(styles.mark)} aria-hidden="true" />
         <span {...stylex.props(styles.logoText)}>
           oniva<span {...stylex.props(styles.logoMuted)}>/ui</span>
@@ -184,7 +196,7 @@ export function Header({ theme, onThemeChange, accent, onAccentChange }: HeaderP
         <NavLink to="/templates/dashboard" className={navCls}>
           Templates
         </NavLink>
-        <a href={SITE.github} {...stylex.props(styles.link, styles.hideSm)} rel="noreferrer">
+        <a href={SITE.github} {...stylex.props(styles.link, styles.linkNoWrap, styles.hideSm)} rel="noreferrer">
           GitHub
         </a>
       </nav>
@@ -193,7 +205,7 @@ export function Header({ theme, onThemeChange, accent, onAccentChange }: HeaderP
         type="button"
         aria-label="Quick search"
         onClick={() => setOpen(true)}
-        {...stylex.props(styles.search)}
+        {...stylex.props(styles.search, styles.noShrink)}
       >
         <Search size={16} />
         <span {...stylex.props(styles.searchLabel)}>Quick search</span>
@@ -241,6 +253,7 @@ export function Header({ theme, onThemeChange, accent, onAccentChange }: HeaderP
         aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
         onPress={() => onThemeChange(isDark ? 'light' : 'dark')}
         data-testid="theme-toggle"
+        xstyle={styles.noShrink}
       >
         {isDark ? <Sun size={16} /> : <Moon size={16} />}
       </Button>

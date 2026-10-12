@@ -26,7 +26,18 @@ const styles = stylex.create({
     maxWidth: 640,
   },
   stack: { display: 'flex', flexDirection: 'column', gap: 24 },
-  preview: { alignItems: 'flex-start', display: 'flex', minHeight: 96, padding: 24 },
+  // Demos have intrinsic widths (boards, tables, calendars); scroll inside the stage instead of widening the
+  // page on phones (CI mobile 390px overflow check).
+  preview: {
+    alignItems: 'flex-start',
+    display: 'flex',
+    minHeight: 96,
+    minWidth: 0,
+    overflowX: 'auto',
+    padding: 24,
+    // containing block for absolutely positioned visually-hidden spans, so they clip with the stage
+    position: 'relative',
+  },
 });
 
 export function ComponentPage() {
