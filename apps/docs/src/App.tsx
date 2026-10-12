@@ -6,10 +6,18 @@ import { Header } from './components/Header';
 import { Home } from './pages/Home';
 import { ComponentsIndex } from './pages/ComponentsIndex';
 import { ComponentPage } from './pages/ComponentPage';
+import { ChartsGallery } from './pages/ChartsGallery';
+import { TemplatePage } from './pages/TemplatePage';
 
 const styles = stylex.create({
   shell: { minHeight: '100vh' },
   main: { marginInline: 'auto', maxWidth: 1120, paddingBlock: 32, paddingInline: 24 },
+  wide: {
+    marginInline: 'auto',
+    maxWidth: 1280,
+    paddingBlock: 32,
+    paddingInline: { default: 16, '@media (min-width: 800px)': 24 },
+  },
 });
 
 function usePersisted<T extends string>(
@@ -55,14 +63,44 @@ export function App() {
   return (
     <ThemeProvider theme={theme} accent={accent} xstyle={styles.shell}>
       <Header theme={theme} onThemeChange={setTheme} accent={accent} onAccentChange={setAccent} />
-      <main id="main" {...stylex.props(styles.main)}>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/components" element={<ComponentsIndex />} />
-          <Route path="/components/:slug" element={<ComponentPage />} />
-          <Route path="*" element={<ComponentsIndex />} />
-        </Routes>
-      </main>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <main id="main">
+              <Home />
+            </main>
+          }
+        />
+        <Route
+          path="/templates/:slug"
+          element={
+            <main id="main">
+              <TemplatePage />
+            </main>
+          }
+        />
+        <Route
+          path="/charts"
+          element={
+            <main id="main" {...stylex.props(styles.wide)}>
+              <ChartsGallery />
+            </main>
+          }
+        />
+        <Route
+          path="*"
+          element={
+            <main id="main" {...stylex.props(styles.main)}>
+              <Routes>
+                <Route path="/components" element={<ComponentsIndex />} />
+                <Route path="/components/:slug" element={<ComponentPage />} />
+                <Route path="*" element={<ComponentsIndex />} />
+              </Routes>
+            </main>
+          }
+        />
+      </Routes>
     </ThemeProvider>
   );
 }

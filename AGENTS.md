@@ -71,3 +71,4 @@ Canonical example: `packages/oniva-ui/src/components/Button/` (read all four fil
 - `stylex-vite8-library-build.md`: unplugin + Vite 8 lib mode, CSS output, token import rules
 - `stylex-vitest-and-theming.md`: compiling StyleX in Vitest, themes/portals/accent composition
 - `locked-down-machine-native-binaries.md`: when native `.node`/browser binaries are blocked locally
+- `docs-landing-templates-gotchas.md`: docs landing/templates/charts gallery, Preview helper, sr-only table fix

@@ -156,33 +156,35 @@ export function ChartFrame({
         </ChartTooltip>
       )}
       {dataTable && (
-        <table {...stylex.props(styles.srOnly)}>
-          <caption>{label}</caption>
-          <thead>
-            <tr>
-              {dataTable.columns.map((c) => (
-                <th key={c} scope="col">
-                  {c}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {dataTable.rows.map((r, i) => (
-              <tr key={i}>
-                {r.map((c, j) =>
-                  j === 0 ? (
-                    <th key={j} scope="row">
-                      {c}
-                    </th>
-                  ) : (
-                    <td key={j}>{c}</td>
-                  ),
-                )}
+        <div {...stylex.props(styles.srOnly)}>
+          <table>
+            <caption>{label}</caption>
+            <thead>
+              <tr>
+                {dataTable.columns.map((c) => (
+                  <th key={c} scope="col">
+                    {c}
+                  </th>
+                ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {dataTable.rows.map((r, i) => (
+                <tr key={i}>
+                  {r.map((c, j) =>
+                    j === 0 ? (
+                      <th key={j} scope="row">
+                        {c}
+                      </th>
+                    ) : (
+                      <td key={j}>{c}</td>
+                    ),
+                  )}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

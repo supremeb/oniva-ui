@@ -1,50 +1,106 @@
 import * as stylex from '@stylexjs/stylex';
-import { Moon, Sun } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Moon, Search, Sun } from 'lucide-react';
+import { GithubIcon } from './GithubIcon';
+import { useMemo, useState } from 'react';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { Button as RacButton } from 'react-aria-components';
-import { Button, accentNames, accentSwatches, type AccentName, type ThemeMode } from 'oniva-ui';
+import {
+  Button,
+  CommandPalette,
+  Kbd,
+  accentNames,
+  accentSwatches,
+  type AccentName,
+  type CommandGroup,
+  type ThemeMode,
+} from 'oniva-ui';
+import { accent as accentTokens } from '@oniva-tokens/accent.stylex';
 import { colors } from '@oniva-tokens/colors.stylex';
 import { font } from '@oniva-tokens/font.stylex';
 import { radius } from '@oniva-tokens/radius.stylex';
-import { shadow } from '@oniva-tokens/shadow.stylex';
+import { demoModules, groupByCategory } from '../demos';
+import { SITE, templates } from '../lib/site';
 
 const styles = stylex.create({
   header: {
     alignItems: 'center',
     backgroundColor: colors['--oniva-color-bg'],
-    boxShadow: shadow['--oniva-shadow-float'],
+    borderBottomColor: colors['--oniva-color-border'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: 1,
     display: 'flex',
-    gap: 16,
+    gap: { default: 4, '@media (min-width: 700px)': 8 },
     insetBlockStart: 0,
     paddingBlock: 10,
-    paddingInline: 24,
+    paddingInline: { default: 12, '@media (min-width: 800px)': 24 },
     position: 'sticky',
-    zIndex: 10,
+    zIndex: 20,
   },
   logo: {
+    alignItems: 'center',
     color: colors['--oniva-color-text'],
+    display: 'inline-flex',
     fontSize: font['--oniva-font-size-16'],
     fontWeight: font['--oniva-font-weight-semibold'],
+    gap: 8,
     letterSpacing: '-0.01em',
     textDecoration: 'none',
   },
+  mark: {
+    backgroundColor: accentTokens['--oniva-accent-500'],
+    borderRadius: radius['--oniva-radius-md'],
+    display: 'inline-block',
+    height: 24,
+    width: 24,
+  },
+  logoText: { display: { default: 'none', '@media (min-width: 700px)': 'inline' } },
   logoMuted: { color: colors['--oniva-color-text-muted'] },
-  nav: { display: 'flex', gap: 4, marginInlineStart: 16 },
+  nav: { alignItems: 'center', display: 'flex', gap: 2, marginInlineStart: { default: 0, '@media (min-width: 700px)': 8 } },
   link: {
     borderRadius: radius['--oniva-radius-lg'],
-    color: { default: colors['--oniva-color-text'], ':hover': colors['--oniva-color-text'] },
     backgroundColor: {
       default: 'transparent',
       ':hover': colors['--oniva-color-surface-inset-hover'],
     },
+    color: colors['--oniva-color-text'],
     fontSize: font['--oniva-font-size-14'],
     fontWeight: font['--oniva-font-weight-medium'],
     paddingBlock: 6,
-    paddingInline: 10,
+    paddingInline: { default: 7, '@media (min-width: 700px)': 10 },
     textDecoration: 'none',
   },
+  linkActive: { backgroundColor: colors['--oniva-color-surface-inset'] },
+  hideSm: { display: { default: 'none', '@media (min-width: 900px)': 'flex' } },
+  hideMd: { display: { default: 'none', '@media (min-width: 1100px)': 'flex' } },
   spacer: { flexGrow: 1 },
-  dots: { alignItems: 'center', display: 'flex', gap: 6 },
+  search: {
+    alignItems: 'center',
+    appearance: 'none',
+    backgroundColor: colors['--oniva-color-surface-inset'],
+    borderColor: colors['--oniva-color-border'],
+    borderRadius: radius['--oniva-radius-lg'],
+    borderStyle: 'solid',
+    borderWidth: 1,
+    color: colors['--oniva-color-text-muted'],
+    cursor: 'pointer',
+    display: 'inline-flex',
+    fontFamily: 'inherit',
+    fontSize: font['--oniva-font-size-14'],
+    gap: 8,
+    height: 36,
+    outlineColor: colors['--oniva-color-focus-ring'],
+    outlineOffset: 2,
+    outlineStyle: { default: 'none', ':focus-visible': 'solid' },
+    outlineWidth: 2,
+    paddingInline: 10,
+    width: { default: 'auto', '@media (min-width: 900px)': 220 },
+  },
+  searchLabel: {
+    display: { default: 'none', '@media (min-width: 900px)': 'inline' },
+    flexGrow: 1,
+    textAlign: 'start',
+  },
+  dots: { alignItems: 'center', gap: 6 },
   dot: {
     borderColor: colors['--oniva-color-bg'],
     borderRadius: radius['--oniva-radius-full'],
@@ -71,23 +127,83 @@ export interface HeaderProps {
 }
 
 export function Header({ theme, onThemeChange, accent, onAccentChange }: HeaderProps) {
+  const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+  const groups = useMemo<CommandGroup[]>(
+    () => [
+      {
+        id: 'pages',
+        title: 'Pages',
+        items: [
+          { id: '/', label: 'Home' },
+          { id: '/components', label: 'All components' },
+          { id: '/charts', label: 'Charts gallery' },
+          ...templates.map((t) => ({ id: `/templates/${t.slug}`, label: `Template: ${t.title}` })),
+        ],
+      },
+      ...groupByCategory(demoModules).map(([cat, mods]) => ({
+        id: cat,
+        title: cat,
+        items: mods.map((m) => ({
+          id: `/components/${m.meta.slug}`,
+          label: m.meta.title,
+          keywords: [m.meta.slug],
+        })),
+      })),
+    ],
+    [],
+  );
   const isDark =
     theme === 'dark' ||
     (theme === 'system' &&
       typeof window !== 'undefined' &&
       window.matchMedia?.('(prefers-color-scheme: dark)').matches);
+  const navCls = ({ isActive }: { isActive: boolean }) =>
+    stylex.props(styles.link, isActive && styles.linkActive).className ?? '';
   return (
     <header {...stylex.props(styles.header)}>
       <Link to="/" {...stylex.props(styles.logo)} aria-label="oniva/ui home">
-        oniva<span {...stylex.props(styles.logoMuted)}>/ui</span>
+        <span {...stylex.props(styles.mark)} aria-hidden="true" />
+        <span {...stylex.props(styles.logoText)}>
+          oniva<span {...stylex.props(styles.logoMuted)}>/ui</span>
+        </span>
       </Link>
       <nav aria-label="Primary" {...stylex.props(styles.nav)}>
-        <Link to="/components" {...stylex.props(styles.link)}>
+        <NavLink to="/components" className={navCls}>
           Components
-        </Link>
+        </NavLink>
+        <NavLink to="/charts" className={navCls}>
+          Charts
+        </NavLink>
+        <NavLink to="/templates/dashboard" className={navCls}>
+          Templates
+        </NavLink>
+        <a href={SITE.github} {...stylex.props(styles.link, styles.hideSm)} rel="noreferrer">
+          GitHub
+        </a>
       </nav>
       <div {...stylex.props(styles.spacer)} />
-      <div role="group" aria-label="Accent color" {...stylex.props(styles.dots)}>
+      <button
+        type="button"
+        aria-label="Quick search"
+        onClick={() => setOpen(true)}
+        {...stylex.props(styles.search)}
+      >
+        <Search size={16} />
+        <span {...stylex.props(styles.searchLabel)}>Quick search</span>
+        <span {...stylex.props(styles.hideSm)}>
+          <Kbd>⌘K</Kbd>
+        </span>
+      </button>
+      <CommandPalette
+        groups={groups}
+        isOpen={open}
+        onOpenChange={setOpen}
+        hotkey
+        placeholder="Jump to a component, chart or template…"
+        onSelect={(item) => navigate(item.id)}
+      />
+      <div role="group" aria-label="Accent color" {...stylex.props(styles.dots, styles.hideMd)}>
         {accentNames.map((name) => (
           <RacButton
             key={name}
@@ -102,6 +218,16 @@ export function Header({ theme, onThemeChange, accent, onAccentChange }: HeaderP
           />
         ))}
       </div>
+      <Button
+        variant="secondary"
+        isIconOnly
+        size="sm"
+        aria-label="GitHub repository"
+        onPress={() => window.open(SITE.github, '_blank', 'noopener')}
+        xstyle={styles.hideMd}
+      >
+        <GithubIcon size={16} />
+      </Button>
       <Button
         variant="secondary"
         isIconOnly

@@ -1,5 +1,14 @@
 # oniva-ui
 
+**Live demo: https://supremeb.github.io/oniva-ui/** · Built by [Oniva](https://www.oniva.ai) · [GitHub](https://github.com/supremeb/oniva-ui)
+
+![Landing, light](apps/docs/public/screenshots/landing-light.png)
+![Landing, dark](apps/docs/public/screenshots/landing-dark.png)
+
+| Dashboard template | AI chat template |
+| --- | --- |
+| ![Dashboard template](apps/docs/public/screenshots/template-dashboard.png) | ![AI chat template](apps/docs/public/screenshots/template-ai-chat.png) |
+
 React design system for dashboards and agent interfaces. Original, MIT-licensed, styled with
 [StyleX](https://stylexjs.com) and built on [React Aria Components](https://react-spectrum.adobe.com/react-aria/components.html).
 Inspired by the look of BoardUI (nested inset cards, gradient primary buttons, soft shadows); no BoardUI code or assets are used.
