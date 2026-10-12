@@ -44,6 +44,7 @@ Quality bar: Emil Kowalski's animation review rules. No animation dependency; pu
 - **Interruptible:** prefer CSS transitions for state, keyframes only for one-shot enter/exit; re-triggering must not jump.
 - **Reduced motion:** use duration tokens (collapse to 0.01ms) and `media.reducedMotion`; transform presets fall back to opacity-only fades, loops freeze to static.
 - **Which primitive:** conditional mount/unmount -> `Presence` (RAC overlays already have `data-entering/exiting`; use `enterExit.*` presets); expand/collapse -> `AnimatedHeight`; active-item pill in Tabs/Segmented/Sidebar -> `SlidingIndicator`; pressable surface -> `motionStyles.pressScale` (native button) or `usePressScale`; changing numbers -> `AnimatedNumber`; lists appearing -> `Stagger` (cap 6); scroll reveal / pausing loops -> `useInView`/`InView`; streamed text -> `TextReveal`; pending label -> `Shimmer`; skeleton to content -> `CrossFade`.
+- **Live-geometry checks (loop 5 live review):** any overlay positioned from measured offsets (`offsetLeft`, `getBoundingClientRect`) anchors with physical `left/right`, never `inset-inline-*` (see docs/solutions/sliding-indicator-rtl-anchor.md); indicators use `ease-in-out`; after any motion change assert on real Chromium that indicator box == active item box in LTR and RTL.
 
 ## Commands
 

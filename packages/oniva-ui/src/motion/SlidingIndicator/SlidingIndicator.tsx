@@ -80,7 +80,7 @@ const styles = stylex.create({
     // Position uses transform; size transitions on an out-of-flow box (no sibling reflow).
     transitionDuration: { default: 0, '[data-ready]': motion['--oniva-motion-dur-slow'] },
     transitionProperty: 'transform, width, height, opacity',
-    transitionTimingFunction: motion['--oniva-motion-ease-out'],
+    transitionTimingFunction: motion['--oniva-motion-ease-in-out'],
     width: 'var(--oniva-indicator-w, 0px)',
     zIndex: 0,
   },
@@ -101,14 +101,17 @@ export interface SlidingIndicatorProps
 export function SlidingIndicator({ containerRef, activeKey, selector, className, xstyle, ...rest }: SlidingIndicatorProps) {
   const { rect, isReady } = useSlidingIndicator(containerRef, { activeKey, selector });
   const sx = stylex.props(styles.base, xstyle);
+  // Measured offsets are physical (offsetLeft), so anchor physically: `inset-inline-start` would flip to the right in RTL.
+  const anchor = { left: 0, right: 'auto' } as const;
   const vars = rect
     ? ({
+        ...anchor,
         '--oniva-indicator-x': `${rect.x}px`,
         '--oniva-indicator-y': `${rect.y}px`,
         '--oniva-indicator-w': `${rect.width}px`,
         '--oniva-indicator-h': `${rect.height}px`,
       } as CSSProperties)
-    : { opacity: 0 };
+    : { ...anchor, opacity: 0 };
   const m = mergeSx(sx, className, vars);
   return <span aria-hidden="true" {...rest} data-ready={isReady && rect ? '' : undefined} {...m} />;
 }
