@@ -11,6 +11,7 @@ import { font } from '@oniva-tokens/font.stylex';
 import { radius } from '@oniva-tokens/radius.stylex';
 import { buildNav, type NavGroup, type NavItem } from './nav';
 import { OnThisPage } from './OnThisPage';
+import { OnivaMark } from '../components/OnivaMark';
 
 const s = stylex.create({
   frame: { display: 'grid', gridTemplateColumns: { default: 'minmax(0, 1fr)', '@media (min-width: 1024px)': '296px minmax(0, 1fr)' }, alignItems: 'start' },
@@ -24,8 +25,8 @@ const s = stylex.create({
   scrim: { backgroundColor: colors['--oniva-color-overlay'], inset: 0, position: 'fixed', zIndex: 40 },
   drawerPanel: { backgroundColor: colors['--oniva-color-bg'], height: '100%', insetBlockStart: 0, insetInlineStart: 0, maxWidth: '86vw', position: 'fixed', width: 320, zIndex: 41 },
   brand: { alignItems: 'center', color: colors['--oniva-color-text'], display: 'flex', gap: 12, padding: '20px 20px 14px', textDecoration: 'none' },
-  mark: { alignItems: 'center', backgroundColor: accentTokens['--oniva-accent-500'], borderRadius: radius['--oniva-radius-lg'], color: colors['--oniva-color-accent-fg'], display: 'inline-flex', flexShrink: 0, fontSize: font['--oniva-font-size-14'], fontWeight: font['--oniva-font-weight-semibold'], height: 36, justifyContent: 'center', width: 36 },
-  brandName: { display: 'block', fontSize: font['--oniva-font-size-16'], fontWeight: font['--oniva-font-weight-semibold'], letterSpacing: '-0.01em', lineHeight: 1.2 },
+  mark: { alignItems: 'center', color: accentTokens['--oniva-accent-500'], display: 'inline-flex', flexShrink: 0, height: 36, justifyContent: 'center', width: 36 },
+  brandName: { display: 'block', fontFamily: '"Outfit", ui-sans-serif, system-ui, sans-serif', fontSize: 17, fontWeight: 800, letterSpacing: '-0.01em', lineHeight: 1.2 },
   brandSub: { color: colors['--oniva-color-text-muted'], display: 'block', fontSize: font['--oniva-font-size-13'], lineHeight: 1.3, marginBlockStart: 2 },
   searchWrap: { margin: '0 16px 8px', position: 'relative' },
   search: {
@@ -99,7 +100,7 @@ function Nav({ onNavigate, q, setQ, inputRef }: { onNavigate: () => void; q: str
   return (
     <>
       <Link to="/" {...stylex.props(s.brand)} aria-label="oniva/ui home">
-        <span {...stylex.props(s.mark)} aria-hidden="true">o</span>
+        <span {...stylex.props(s.mark)}><OnivaMark size={30} /></span>
         <span><span {...stylex.props(s.brandName)}>oniva/ui</span><span {...stylex.props(s.brandSub)}>Design system docs</span></span>
       </Link>
       <div {...stylex.props(s.searchWrap)}>

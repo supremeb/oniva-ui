@@ -34,6 +34,7 @@ import { demoModules, groupByCategory } from '../demos';
 import { SITE, counts } from '../lib/site';
 import { ui } from './ui';
 import { mq } from './mq.stylex';
+import { OnivaMark } from '../components/OnivaMark';
 
 const catCount = (cat: string) => demoModules.filter((m) => m.meta.category === cat).length;
 
@@ -607,7 +608,7 @@ export function Footer() {
   return (
     <footer {...stylex.props(ui.wrap)}>
       <div {...stylex.props(s.footer)}>
-        <span>oniva/ui · MIT · Built with StyleX and React Aria</span>
+        <span style={{ alignItems: 'center', display: 'inline-flex', gap: 8 }}><OnivaMark size={18} style={{ color: 'var(--oniva-accent-500)' }} /><span style={{ fontFamily: '"Outfit", ui-sans-serif, system-ui, sans-serif', fontWeight: 800 }}>oniva/ui</span> · MIT · Built with StyleX and React Aria</span>
         <div {...stylex.props(s.footLinks)}>
           <Link to="/components" {...stylex.props(s.footLink)}>
             Components

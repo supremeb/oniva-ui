@@ -20,6 +20,7 @@ import { font } from '@oniva-tokens/font.stylex';
 import { radius } from '@oniva-tokens/radius.stylex';
 import { demoModules, groupByCategory } from '../demos';
 import { SITE, templates } from '../lib/site';
+import { OnivaMark } from "./OnivaMark";
 
 const styles = stylex.create({
   header: {
@@ -46,15 +47,10 @@ const styles = stylex.create({
     letterSpacing: '-0.01em',
     textDecoration: 'none',
   },
-  mark: {
-    backgroundColor: accentTokens['--oniva-accent-500'],
-    borderRadius: radius['--oniva-radius-md'],
-    display: 'inline-block',
-    height: 24,
-    width: 24,
-  },
+  mark: { alignItems: 'center', color: accentTokens['--oniva-accent-500'], display: 'inline-flex', flexShrink: 0 },
   logoText: { display: { default: 'none', '@media (min-width: 700px)': 'inline' } },
   logoMuted: { color: colors['--oniva-color-text-muted'] },
+  logoFont: { fontFamily: '"Outfit", ui-sans-serif, system-ui, sans-serif', fontWeight: 800, letterSpacing: '-0.01em' },
   // minWidth 0 + overflow lets the nav scroll instead of pushing the header past 390px (CI mobile overflow).
   nav: {
     alignItems: 'center',
@@ -241,8 +237,8 @@ export function Header({ theme, onThemeChange, accent, onAccentChange }: HeaderP
   return (
     <header {...stylex.props(styles.header)}>
       <Link to="/" {...stylex.props(styles.logo, styles.noShrink)} aria-label="oniva/ui home">
-        <span {...stylex.props(styles.mark)} aria-hidden="true" />
-        <span {...stylex.props(styles.logoText)}>
+        <span {...stylex.props(styles.mark)}><OnivaMark size={22} /></span>
+        <span {...stylex.props(styles.logoText, styles.logoFont)}>
           oniva<span {...stylex.props(styles.logoMuted)}>/ui</span>
         </span>
       </Link>
