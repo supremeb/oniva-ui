@@ -20,7 +20,7 @@ export function buildNav(): NavGroup[] {
   return [
     { id: 'getting-started', label: 'Getting started', items: stat('getting-started') },
     { id: 'foundations', label: 'Foundations', items: [...stat('foundations'), { label: 'Motion', to: '/foundations/motion' }] },
-    { id: 'components', label: 'Components', items: [{ label: 'All components', to: '/components' }], sub: compCats.map(([c, ms]) => ({ label: c, items: ms.map((m) => item(m.meta.slug, m.meta.title, c)) })) },
+    { id: 'components', label: 'Components', items: [{ label: 'All components', to: '/components' }, { label: 'Canvas', to: '/canvas', badge: 'New' }], sub: compCats.map(([c, ms]) => ({ label: c, items: ms.map((m) => item(m.meta.slug, m.meta.title, c)) })) },
     { id: 'ai', label: 'AI', items: pick('AI & Agent') },
     { id: 'charts', label: 'Charts', items: pick('Charts') },
     { id: 'widgets', label: 'Widgets', items: pick('Widgets') },

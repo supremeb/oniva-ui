@@ -11,6 +11,7 @@ import { TemplatePage } from './pages/TemplatePage';
 import { MotionFoundations } from './pages/MotionFoundations';
 import { StaticPageView } from './pages/StaticPageView';
 import { DocsShell } from './shell/DocsShell';
+import { CanvasPage } from './canvas/CanvasPage';
 
 const styles = stylex.create({
   shell: { minHeight: '100vh' },
@@ -57,7 +58,8 @@ export function App() {
     theme === 'dark' ||
     (theme === 'system' && typeof window !== 'undefined' && !!window.matchMedia?.('(prefers-color-scheme: dark)').matches);
 
-  const isDocsRoute = !(pathname === '/' || pathname === '/charts' || pathname.startsWith('/templates/'));
+  const isCanvas = pathname === '/canvas';
+  const isDocsRoute = isCanvas || !(pathname === '/' || pathname === '/charts' || pathname.startsWith('/templates/'));
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
@@ -84,6 +86,7 @@ export function App() {
             </main>
           }
         />
+        <Route path="/canvas" element={<CanvasPage theme={theme} onThemeChange={setTheme} />} />
         <Route
           path="/templates/:slug"
           element={

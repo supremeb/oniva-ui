@@ -149,6 +149,7 @@ export function HeaderUtilities({ theme, onThemeChange, accent, onAccentChange }
           { id: '/', label: 'Home' },
           { id: '/components', label: 'All components' },
           { id: '/charts', label: 'Charts gallery' },
+          { id: '/canvas', label: 'Component canvas' },
           ...templates.map((t) => ({ id: `/templates/${t.slug}`, label: `Template: ${t.title}` })),
         ],
       },
@@ -248,6 +249,9 @@ export function Header({ theme, onThemeChange, accent, onAccentChange }: HeaderP
         </NavLink>
         <NavLink to="/charts" className={navCls}>
           Charts
+        </NavLink>
+        <NavLink to="/canvas" className={navCls}>
+          Canvas
         </NavLink>
         <NavLink to="/foundations/motion" className={navCls}>
           Motion
