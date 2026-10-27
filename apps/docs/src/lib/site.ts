@@ -1,4 +1,8 @@
 import { demoModules } from '../demos';
+import libPkg from '../../../../packages/oniva-ui/package.json';
+
+/** Current library version, read from packages/oniva-ui/package.json (never hard-code it). */
+export const VERSION: string = libPkg.version;
 
 export const SITE = {
   name: 'oniva/ui',
@@ -19,6 +23,8 @@ export const counts = {
   ).length,
   widgets: countBy('Widgets'),
   ai: countBy('AI & Agent'),
+  screens: countBy('Screens'),
+  blocks: countBy('Blocks'),
 };
 
 export const templates = [

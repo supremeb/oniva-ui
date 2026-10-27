@@ -7,7 +7,7 @@ import { accent } from '@oniva-tokens/accent.stylex';
 import { colors } from '@oniva-tokens/colors.stylex';
 import { font } from '@oniva-tokens/font.stylex';
 import { radius } from '@oniva-tokens/radius.stylex';
-import { SITE, counts } from '../lib/site';
+import { SITE, VERSION, counts } from '../lib/site';
 import { ShaderLayer } from './ShaderLayer';
 import { ui } from './ui';
 import { mq } from './mq.stylex';
@@ -194,7 +194,7 @@ export function Hero({ accent: current, onAccentChange, hex }: HeroProps) {
         <Link to="/components/agent-thinking" {...stylex.props(s.pill)}>
           <span {...stylex.props(s.dot)} aria-hidden="true" />
           <span>
-            v0.1 · {counts.total} components · MIT
+            v{VERSION} · {counts.total} components · MIT
           </span>
           <ArrowRight size={12} aria-hidden="true" />
         </Link>

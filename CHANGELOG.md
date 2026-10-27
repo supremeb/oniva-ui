@@ -3,6 +3,12 @@
 All notable changes to oniva-ui. Versions follow [Semantic Versioning](https://semver.org): while the major version is 0,
 a minor bump (0.x.0) adds components or opt-in props, and a patch bump (0.x.y) fixes bugs without API changes.
 
+## 0.2.1 — 2026-10-27
+
+### Fixed
+- Docs site showed stale numbers. The landing pill now reads the version from `packages/oniva-ui/package.json`, every component page shows the current version ("available since" moved to the tooltip), and the intro, conventions and meta/social tags use live counts computed from the source (297 components, 21 charts, 81 AI and agent, 12 app screens).
+- README gets a generated stats line (`npm run stats`).
+
 ## 0.2.0 — 2026-10-27
 
 ### Added

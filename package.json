@@ -1,7 +1,7 @@
 {
   "name": "oniva-ui-monorepo",
   "private": true,
-  "version": "0.2.0",
+  "version": "0.2.1",
   "type": "module",
   "workspaces": [
     "packages/*",
@@ -16,7 +16,8 @@
     "test": "vitest run",
     "e2e": "playwright test",
     "gen:index": "npm run gen:index -w oniva-ui",
-    "ci": "npm run typecheck && npm run lint && npm run test && npm run build && npm run e2e"
+    "ci": "npm run typecheck && npm run lint && npm run test && npm run build && npm run e2e",
+    "stats": "node scripts/stats.mjs"
   },
   "engines": {
     "node": ">=22"

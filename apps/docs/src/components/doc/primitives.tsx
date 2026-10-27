@@ -9,6 +9,7 @@ import { font } from '@oniva-tokens/font.stylex';
 import { radius } from '@oniva-tokens/radius.stylex';
 import { CodeBlock } from '../CodeBlock';
 import { getDemo } from '../../demos';
+import { VERSION } from '../../lib/site';
 import type { AnatomyPart, ControlDef, DocPage, DoDontItem, PlayProps, PropDef, RuleItem } from '../../content/types';
 
 const s = stylex.create({
@@ -131,7 +132,7 @@ export function MetaStrip({ page }: { page: DocPage }) {
   return (
     <div {...stylex.props(s.meta)} data-testid="meta-strip">
       <span {...stylex.props(s.pill)}><span {...stylex.props(s.dot, dot)} aria-hidden="true" />{page.status}</span>
-      <span {...stylex.props(s.pill)}>v{page.version}</span>
+      <span {...stylex.props(s.pill)} title={`Available since v${page.version}`}>v{VERSION}</span>
       <button type="button" {...stylex.props(s.pill, s.pillBtn, s.monoPill)} aria-label={`Copy import: import { ${page.importName} } from 'oniva-ui'`} onClick={() => copy(`import { ${page.importName} } from 'oniva-ui';`)}>
         {`<${page.importName}>`} {done ? <Check size={14} aria-hidden="true" /> : null}
       </button>

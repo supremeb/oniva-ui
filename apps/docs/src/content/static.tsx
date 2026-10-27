@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Alert, Input, Select, SelectItem, EmptyState, Badge } from 'oniva-ui';
 import { Check, Search, Settings, Plus, Inbox, Sparkles, X, ArrowRight } from 'lucide-react';
 import { CodeBlock } from '../components/CodeBlock';
+import { counts } from '../lib/site';
 import { DoDont, RuleCards } from '../components/doc/primitives';
 import { ColorRules, ContrastRatios, HueRamps, SemanticTokens, TypeRules, TypeScale, TypeTokens, Weights } from './foundations';
 
@@ -141,7 +142,7 @@ const principles: [string, string][] = [
   ['Behavior from React Aria', 'Focus, keyboard and ARIA come from react-aria-components. We style it, we do not rebuild it.'],
   ['Under 300ms', 'UI motion stays under 300ms with ease-out. Keyboard-driven actions do not animate.'],
   ['Contrast is a token problem', 'Fix a failing ratio at the token, then every component inherits the fix.'],
-  ['One name per idea', 'size, tone, variant and is* booleans mean the same on all 227 components.'],
+  ['One name per idea', `size, tone, variant and is* booleans mean the same on all ${counts.total} components.`],
   ['Docs are part of the component', 'A component ships with anatomy, usage, states, keyboard and props, or it is not done.'],
 ];
 const Principles = () => <RuleCards numbered items={principles.map(([title, body]) => ({ title, body }))} />;
@@ -210,7 +211,7 @@ const HandoffReview = R([['Review in the browser', 'Compare the built page again
 
 const sec = (id: string, title: string, Render: ComponentType) => ({ id, title, Render });
 export const staticPages: StaticPage[] = [
-  { path: '/getting-started/introduction', group: 'getting-started', title: 'Introduction', lede: 'oniva-ui is 227 React components on React Aria and StyleX. Install it, wrap your app in ThemeProvider, ship.', sections: [sec('install', 'Install', Install), sec('css-variables', 'CSS variables', Vars)] },
+  { path: '/getting-started/introduction', group: 'getting-started', title: 'Introduction', lede: `oniva-ui is ${counts.total} React components on React Aria and StyleX. Install it, wrap your app in ThemeProvider, ship.`, sections: [sec('install', 'Install', Install), sec('css-variables', 'CSS variables', Vars)] },
   { path: '/getting-started/principles', group: 'getting-started', title: 'Principles', lede: 'Six rules we argue from when a decision is unclear.', sections: [sec('principles', 'The six', Principles)] },
   { path: '/getting-started/contributing', group: 'getting-started', title: 'Contributing', lede: 'Plan, work, review, compound. Each loop leaves the next one easier.', sections: [sec('the-loop', 'The compound loop', Loop), sec('docs-contract', 'Docs contract', DocsContract)] },
   { path: '/foundations/color', group: 'foundations', title: 'Color', lede: 'Eleven accent steps and semantic tokens that swap per theme. Ratios update when you switch light, dark or accent.', sections: [sec('hue-ramps', 'Hue ramps', HueRamps), sec('active-accent', 'Active accent', Color), sec('semantic-tokens', 'Semantic tokens', SemanticTokens), sec('contrast', 'Contrast ratios', ContrastRatios), sec('principles', 'Rules', ColorRules)] },
