@@ -24,16 +24,18 @@ const styles = stylex.create({
     lineHeight: font['--oniva-font-lh-14'],
   },
   rootDisabled: { cursor: 'not-allowed', opacity: 0.5 },
+  // Off: recessed channel (neutral fill, inner top shadow, control border for >=3:1).
+  // On: flat accent fill. Both animate background-color + border-color, never a gradient (it can't ease).
   track: {
-    backgroundImage: `linear-gradient(180deg, ${colors['--oniva-color-surface']}, ${colors['--oniva-color-surface-hover']})`,
+    backgroundColor: colors['--oniva-color-surface-tertiary'],
     borderColor: {
-      default: colors['--oniva-color-border'],
+      default: colors['--oniva-color-border-control'],
       '@media (forced-colors: active)': 'ButtonText',
     },
     borderRadius: radius['--oniva-radius-full'],
     borderStyle: 'solid',
     borderWidth: 1,
-    boxShadow: shadow['--oniva-shadow-xs'],
+    boxShadow: shadow['--oniva-elevation-recessed'],
     boxSizing: 'border-box',
     flexShrink: 0,
     position: 'relative',
@@ -41,38 +43,41 @@ const styles = stylex.create({
       default: motion['--oniva-motion-dur-base'],
       [media.reducedMotion]: '0.01ms',
     },
-    transitionProperty: 'background-image, border-color, box-shadow',
-    transitionTimingFunction: motion['--oniva-motion-ease-standard'],
+    transitionProperty: 'background-color, border-color, box-shadow',
+    transitionTimingFunction: motion['--oniva-motion-ease-out'],
   },
   trackOn: {
-    backgroundImage: `linear-gradient(180deg, ${accent['--oniva-accent-solid']}, ${accent['--oniva-accent-solid-end']})`,
-    borderColor: { default: 'transparent', '@media (forced-colors: active)': 'Highlight' },
-    boxShadow: shadow['--oniva-shadow-accent-inset'],
+    backgroundColor: accent['--oniva-accent-solid'],
+    borderColor: { default: accent['--oniva-accent-solid'], '@media (forced-colors: active)': 'Highlight' },
+    boxShadow: 'none',
   },
-  knobOn: { backgroundImage: 'none', backgroundColor: colors['--oniva-color-accent-fg'] },
   focus: {
     outlineColor: colors['--oniva-color-focus-ring'],
     outlineOffset: 2,
     outlineStyle: 'solid',
     outlineWidth: 2,
   },
+  // Raised: the thing you grab. White, hairline + contact + ambient (hairline rim in dark via the token).
+  // Concentric with the track: knob radius = track inner radius - gap (full radius, so it holds at any size).
   knob: {
-    backgroundImage: `linear-gradient(180deg, ${colors['--oniva-color-surface']}, ${colors['--oniva-color-surface-hover']})`,
+    backgroundColor: colors['--oniva-color-on-solid'],
     borderColor: { default: 'transparent', '@media (forced-colors: active)': 'ButtonText' },
     borderRadius: radius['--oniva-radius-full'],
     borderStyle: 'solid',
-    borderWidth: 1,
+    borderWidth: { default: 0, '@media (forced-colors: active)': 1 },
+    boxShadow: shadow['--oniva-elevation-raised'],
     boxSizing: 'border-box',
-    boxShadow: shadow['--oniva-shadow-sm'],
     position: 'absolute',
     transitionDuration: {
       default: motion['--oniva-motion-dur-slow'],
       [media.reducedMotion]: '0.01ms',
     },
-    // transform only (no layout props); small overshoot via ease-spring
-    transitionProperty: 'transform',
+    // transform drives the spring slide; shadow eases hover lift / press flatten
+    transitionProperty: 'transform, box-shadow',
     transitionTimingFunction: motion['--oniva-motion-ease-spring'],
   },
+  knobHover: { boxShadow: shadow['--oniva-elevation-raised-hover'] },
+  knobPressed: { boxShadow: shadow['--oniva-elevation-pressed'] },
   // sizes (track w x h, knob d, inset 2px / border 1px)
   trackSm: { height: 20, width: 36 },
   trackMd: { height: 24, width: 44 },
@@ -126,7 +131,7 @@ export function Switch({
         ).style
       }
     >
-      {({ isSelected, isFocusVisible }) => (
+      {({ isSelected, isFocusVisible, isHovered, isPressed }) => (
         <>
           <span
             aria-hidden="true"
@@ -142,7 +147,8 @@ export function Switch({
                 styles.knob,
                 styles[knobKey],
                 isSelected && styles[knobOnKey],
-                isSelected && styles.knobOn,
+                isHovered && !isPressed && styles.knobHover,
+                isPressed && styles.knobPressed,
               )}
             />
           </span>

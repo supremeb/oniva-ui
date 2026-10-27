@@ -15,7 +15,6 @@ import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 import { motion } from '../../tokens/motion.stylex';
 import { radius } from '../../tokens/radius.stylex';
-import { shadow } from '../../tokens/shadow.stylex';
 import { cx, ff } from '../../internal/forms-field';
 
 const styles = stylex.create({
@@ -40,7 +39,6 @@ const styles = stylex.create({
     borderRadius: radius['--oniva-radius-full'],
     borderStyle: 'solid',
     borderWidth: 1,
-    boxShadow: shadow['--oniva-shadow-xs'],
     boxSizing: 'border-box',
     flexShrink: 0,
     height: 16,
@@ -48,15 +46,14 @@ const styles = stylex.create({
     position: 'relative',
     transform: { default: 'none', '[data-pressed]': `scale(${motion['--oniva-motion-press-scale']})` },
     transitionDuration: motion['--oniva-motion-dur-press'],
-    transitionProperty: 'border-color, background-color, box-shadow, transform',
+    transitionProperty: 'border-color, background-color, transform',
     transitionTimingFunction: motion['--oniva-motion-ease-out'],
     width: 16,
   },
   dotHover: { borderColor: colors['--oniva-color-border-active'] },
   dotOn: {
-    backgroundImage: `linear-gradient(180deg, ${accent['--oniva-accent-solid']}, ${accent['--oniva-accent-solid-end']})`,
-    borderColor: 'transparent',
-    boxShadow: shadow['--oniva-shadow-accent-inset'],
+    backgroundColor: accent['--oniva-accent-solid'],
+    borderColor: accent['--oniva-accent-solid'],
   },
   pip: {
     backgroundColor: colors['--oniva-color-accent-fg'],
@@ -81,7 +78,6 @@ const styles = stylex.create({
     borderRadius: radius['--oniva-radius-lg'],
     borderStyle: 'solid',
     borderWidth: 1,
-    boxShadow: shadow['--oniva-shadow-xs'],
     boxSizing: 'border-box',
     padding: 12,
     transitionDuration: motion['--oniva-motion-dur-base'],

@@ -42,8 +42,9 @@ export const ff = stylex.create({
     borderRadius: radius['--oniva-radius-lg'],
     borderStyle: 'solid',
     borderWidth: 1,
+    // inputs hold text, so they are recessed wells (inner top shadow only); focus swaps it for the halo
     boxShadow: {
-      default: shadow['--oniva-shadow-xs'],
+      default: shadow['--oniva-elevation-recessed'],
       ':focus-within': `0 0 0 3px color-mix(in srgb, ${colors['--oniva-color-focus-ring']} 25%, transparent)`,
     },
     boxSizing: 'border-box',
@@ -63,7 +64,7 @@ export const ff = stylex.create({
       ':focus-within': colors['--oniva-color-error-border'],
     },
     boxShadow: {
-      default: shadow['--oniva-shadow-xs'],
+      default: shadow['--oniva-elevation-recessed'],
       ':focus-within': `0 0 0 3px color-mix(in srgb, ${colors['--oniva-color-error-border']} 25%, transparent)`,
     },
   },

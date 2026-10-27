@@ -93,7 +93,7 @@ function MeterInner({
         )}
         <div {...stylex.props(progressStyles.track, progressStyles[size])}>
           <div
-            {...stylex.props(progressStyles.fill, progressStyles.fillGradient, progressStyles[t])}
+            {...stylex.props(progressStyles.fill, progressStyles[t])}
             style={fillStyle}
           />
         </div>

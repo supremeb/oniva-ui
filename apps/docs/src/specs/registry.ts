@@ -6,6 +6,9 @@ import { CopyButtonSpec } from './_example/CopyButtonSpec';
 import { SegmentedControlSpec } from './segmented-control/SegmentedControlSpec';
 import { ButtonSpec } from './button/ButtonSpec';
 import { SwitchSpec } from './switch/SwitchSpec';
+import { TooltipSpec } from './tooltip/TooltipSpec';
+import { PopoverSpec } from './popover/PopoverSpec';
+import { TabsSpec } from './tabs/TabsSpec';
 
 export interface Poster {
   /** URL slug: `#/specs/<slug>`. Matches the component's docs slug where there is one. */
@@ -42,6 +45,9 @@ export const posters: Poster[] = [
   { slug: 'button', name: 'Button', accent: 'blue', Component: ButtonSpec },
   { slug: 'switch', name: 'Switch', accent: 'green', Component: SwitchSpec },
   { slug: 'segmented-control', name: 'Segmented control', accent: 'indigo', Component: SegmentedControlSpec },
+  { slug: 'tooltip', name: 'Tooltip', accent: 'orange', Component: TooltipSpec },
+  { slug: 'popover', name: 'Dropdown menu', accent: 'purple', Component: PopoverSpec },
+  { slug: 'tabs', name: 'Tabs', accent: 'teal', Component: TabsSpec },
 ];
 
 // Route-only posters (not in the strip): reachable at `#/specs/<slug>`.

@@ -3,7 +3,6 @@ import { accent } from '../tokens/accent.stylex';
 import { colors } from '../tokens/colors.stylex';
 import { motion } from '../tokens/motion.stylex';
 import { radius } from '../tokens/radius.stylex';
-import { shadow } from '../tokens/shadow.stylex';
 import { ff } from './forms-field';
 
 const styles = stylex.create({
@@ -14,7 +13,6 @@ const styles = stylex.create({
     borderRadius: radius['--oniva-radius-xs'],
     borderStyle: 'solid',
     borderWidth: 1,
-    boxShadow: shadow['--oniva-shadow-xs'],
     boxSizing: 'border-box',
     color: colors['--oniva-color-accent-fg'],
     display: 'inline-flex',
@@ -23,9 +21,12 @@ const styles = stylex.create({
     justifyContent: 'center',
     marginTop: 2,
     position: 'relative',
-    transform: { default: 'none', '[data-pressed]': `scale(${motion['--oniva-motion-press-scale']})` },
+    transform: {
+      default: 'none',
+      '[data-pressed]': `scale(${motion['--oniva-motion-press-scale']})`,
+    },
     transitionDuration: motion['--oniva-motion-dur-press'],
-    transitionProperty: 'background-color, border-color, box-shadow, transform',
+    transitionProperty: 'background-color, border-color, transform',
     transitionTimingFunction: motion['--oniva-motion-ease-out'],
     width: 16,
   },
@@ -50,9 +51,8 @@ const styles = stylex.create({
   compact: { marginTop: 0 },
   hover: { borderColor: colors['--oniva-color-border-active'] },
   on: {
-    backgroundImage: `linear-gradient(180deg, ${accent['--oniva-accent-solid']}, ${accent['--oniva-accent-solid-end']})`,
-    borderColor: 'transparent',
-    boxShadow: shadow['--oniva-shadow-accent-inset'],
+    backgroundColor: accent['--oniva-accent-solid'],
+    borderColor: accent['--oniva-accent-solid'],
   },
   invalid: { borderColor: colors['--oniva-color-error-border'] },
 });

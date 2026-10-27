@@ -101,14 +101,30 @@ export const darkTheme = stylex.createTheme(colors, {
 });
 
 export const darkShadowTheme = stylex.createTheme(shadow, {
+  // Dark: shadows barely read, so elevation = lighter surface + 1px top rim + hairline ring.
+  '--oniva-elevation-raised': '0 0 0 1px #ffffff1a, inset 0 1px 0 #ffffff14, 0 1px 2px #00000099',
+  '--oniva-elevation-raised-hover':
+    '0 0 0 1px #ffffff26, inset 0 1px 0 #ffffff1a, 0 2px 6px #000000b3',
+  '--oniva-elevation-pressed': '0 0 0 1px #ffffff14, 0 0 1px #00000080',
+  '--oniva-elevation-recessed': 'inset 0 1px 2px #00000080',
+  '--oniva-elevation-floating':
+    '0 0 0 1px #ffffff1a, inset 0 1px 0 #ffffff14, 0 4px 8px -2px #00000066, 0 12px 28px -6px #000000a6',
+  '--oniva-elevation-overlay':
+    '0 0 0 1px #ffffff1f, inset 0 1px 0 #ffffff1a, 0 12px 24px -4px #00000080, 0 32px 64px -16px #000000b3',
   '--oniva-shadow-card': '0 1px 1px #00000024',
   '--oniva-shadow-xs': '0 1px 2px #00000040',
-  '--oniva-shadow-sm': '0 1px 2px #0000004d, 0 1px 3px #00000066',
+  '--oniva-shadow-sm': '0 0 0 1px #ffffff1a, inset 0 1px 0 #ffffff14, 0 1px 2px #00000099',
   '--oniva-shadow-md': '0 2px 4px -1px #0000004d, 0 4px 6px -1px #00000066',
   '--oniva-shadow-lg': '0 4px 6px -2px #00000040, 0 10px 15px -3px #00000066',
-  '--oniva-shadow-xl': '0 10px 10px -5px #00000040, 0 20px 25px -5px #00000066',
-  '--oniva-shadow-dropdown': '0 1px 1px #00000040, 0 4px 4px #00000026, 0 8px 24px #00000080',
+  '--oniva-shadow-xl':
+    '0 0 0 1px #ffffff1f, inset 0 1px 0 #ffffff1a, 0 12px 24px -4px #00000080, 0 32px 64px -16px #000000b3',
+  '--oniva-shadow-dropdown':
+    '0 0 0 1px #ffffff1a, inset 0 1px 0 #ffffff14, 0 4px 8px -2px #00000066, 0 12px 28px -6px #000000a6',
   '--oniva-shadow-float': '0 1px 0 #ffffff0a, 0 1px 12px #00000066, 0 0 1px #ffffff40',
+  '--oniva-shadow-accent-inset':
+    'inset 0 1.75px 0 0 rgb(255 255 255 / 0.25), inset 0 0 0 0.875px rgb(0 0 0 / 0.14)',
+  '--oniva-shadow-danger-inset':
+    'inset 0 1.75px 0 0 rgb(255 255 255 / 0.25), inset 0 0 0 0.875px rgb(0 0 0 / 0.14)',
 });
 
 // Literal values on purpose: createTheme() only accepts statically evaluable arguments.

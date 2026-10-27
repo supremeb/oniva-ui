@@ -13,6 +13,7 @@ import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 import { motion } from '../../tokens/motion.stylex';
 import { radius } from '../../tokens/radius.stylex';
+import { shadow } from '../../tokens/shadow.stylex';
 
 const slide = stylex.keyframes({
   from: { transform: 'translateX(-100%)' },
@@ -38,6 +39,15 @@ export const progressStyles = stylex.create({
     overflow: 'hidden',
     position: 'relative',
     width: '100%',
+    // recessed well: the shadow sits ABOVE the fill so the channel keeps its inner top edge
+    '::after': {
+      borderRadius: 'inherit',
+      boxShadow: shadow['--oniva-elevation-recessed'],
+      content: '""',
+      inset: 0,
+      pointerEvents: 'none',
+      position: 'absolute',
+    },
   },
   sm: { height: 6 },
   md: { height: 8 },
@@ -53,23 +63,8 @@ export const progressStyles = stylex.create({
     transitionTimingFunction: motion['--oniva-motion-ease-out'],
     width: '100%',
   },
-  accent: {
-    backgroundColor: accent['--oniva-accent-500'],
-    '::after': { opacity: 1 },
-  },
-  /** Accent gradient lives on a pseudo layer so tone changes can crossfade. */
-  fillGradient: {
-    '::after': {
-      backgroundImage: `linear-gradient(90deg, ${accent['--oniva-accent-400']}, ${accent['--oniva-accent-600']})`,
-      content: '""',
-      inset: 0,
-      opacity: 0,
-      position: 'absolute',
-      transitionDuration: motion['--oniva-motion-dur-slower'],
-      transitionProperty: 'opacity',
-      transitionTimingFunction: motion['--oniva-motion-ease-out'],
-    },
-  },
+  // flat fills (no gradient): tone changes crossfade via background-color
+  accent: { backgroundColor: accent['--oniva-accent-solid'] },
   success: { backgroundColor: colors['--oniva-color-success-solid'] },
   warning: { backgroundColor: colors['--oniva-color-warning-solid'] },
   danger: { backgroundColor: colors['--oniva-color-danger-solid'] },
@@ -78,7 +73,7 @@ export const progressStyles = stylex.create({
     animationIterationCount: 'infinite',
     animationName: { default: slide, [media.reducedMotion]: 'none' },
     animationTimingFunction: 'cubic-bezier(0.65, 0, 0.35, 1)',
-    backgroundImage: `linear-gradient(90deg, ${accent['--oniva-accent-400']}, ${accent['--oniva-accent-600']})`,
+    backgroundColor: accent['--oniva-accent-solid'],
     borderRadius: radius['--oniva-radius-full'],
     opacity: { default: 1, [media.reducedMotion]: 0.6 },
     transform: 'none',
@@ -188,7 +183,6 @@ function ProgressInner({
         <div
           {...stylex.props(
             progressStyles.fill,
-            progressStyles.fillGradient,
             progressStyles[tone],
             isIndeterminate && progressStyles.indeterminate,
           )}
