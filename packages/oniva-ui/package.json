@@ -1,6 +1,6 @@
 {
   "name": "oniva-ui",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "React design system for dashboards & agent interfaces, styled with StyleX.",
   "license": "MIT",
   "type": "module",

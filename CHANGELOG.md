@@ -3,6 +3,34 @@
 All notable changes to oniva-ui. Versions follow [Semantic Versioning](https://semver.org): while the major version is 0,
 a minor bump (0.x.0) adds components or opt-in props, and a patch bump (0.x.y) fixes bugs without API changes.
 
+## 0.3.0 — 2026-10-27
+
+### Added
+- **Depth system:** five semantic elevation levels with tokens: flat (hairline only), recessed (`--oniva-elevation-recessed`),
+  raised (`-raised`, `-raised-hover`, `-pressed`), floating (`-floating`) and overlay (`-overlay`), plus
+  `-solid`, `-control` and `-knob` variants and dark-theme values. New colour tokens `--oniva-color-control-off` and
+  `--oniva-color-segment-selected`. Study in `docs/research/depth-system.md`; new Depth foundations page.
+- **Blueprints:** `/#/specs` shows spec posters for Button, Switch, Checkbox, Segmented control, Tabs, Tooltip, Dropdown
+  menu, Dialog, Accordion and Toast, each driving the real component and reading every value live. The `interface-bts`
+  skill is included in `.claude/skills`.
+- **Landing:** principles, foundations and level-of-detail sections after the hero; every figure read live or counted at
+  build time.
+
+### Changed
+- Visual defaults follow the depth system: flat accent fills (no gradients or inner highlights) on buttons, switches,
+  checkboxes, radios, pagination, stepper, sidebar and calendar selection; cards and tiles flat; inputs and tracks
+  recessed; knobs, thumbs and selected pills raised; menus, popovers, tooltips and toasts floating; dialogs and sheets
+  overlay.
+- Switch: solid neutral off track (no ring), track colour eases between off and on, clean raised knob in both themes.
+- Button press scale runs on the press duration token (120ms). Tabs, SegmentedControl and ToggleButtonGroup snap on
+  keyboard moves and glide on pointer moves.
+
+### Fixed
+- Button loading label was invisible (shimmer drawn in a transparent colour).
+- Light mode: derived accent tokens (`accent-fg`, `accent-soft*`, `accent-text`, `accent-tint`, `focus-ring`) now
+  follow the active accent instead of staying blue.
+- Switch and Checkbox fills snapped on instead of easing.
+
 ## 0.2.1 — 2026-10-27
 
 ### Fixed

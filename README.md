@@ -11,7 +11,7 @@
 | ![Dashboard template](apps/docs/public/screenshots/template-dashboard.png) | ![AI chat template](apps/docs/public/screenshots/template-ai-chat.png) |
 
 <!-- stats -->
-**v0.2.1** · 297 components: 107 core, 21 charts, 81 AI and agent, 18 widgets, 33 motion, 22 blocks, 12 app screens · [Changelog](CHANGELOG.md)
+**v0.3.0** · 297 components: 107 core, 21 charts, 81 AI and agent, 18 widgets, 33 motion, 22 blocks, 12 app screens · [Changelog](CHANGELOG.md)
 <!-- /stats -->
 
 React design system for dashboards and agent interfaces. Original, MIT-licensed, styled with

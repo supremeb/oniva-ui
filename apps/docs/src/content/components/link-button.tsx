@@ -79,7 +79,7 @@ const page: DocPage = {
   content: {
     rules: [
       { title: 'Verb + object', body: 'View statement, Open dashboard. Two to three words.' },
-      { title: 'Say where it goes', body: 'If leaving the product, add the arrow icon and name the place: Open Stripe dashboard.' },
+      { title: 'Say where it goes', body: 'If leaving the product, add the arrow icon and name the place: Open billing dashboard.' },
       { title: 'Downloads', body: 'Include the format: Download PDF, Download CSV.' },
     ],
   },

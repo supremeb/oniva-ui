@@ -263,7 +263,7 @@ export interface Integration {
   description: string;
   features: string[];
   connected?: boolean;
-  /** Shown under the title next to the Connected chip, e.g. `linear.app`. */
+  /** Shown under the title next to the Connected chip, e.g. `acme.example`. */
   domain?: string;
 }
 
