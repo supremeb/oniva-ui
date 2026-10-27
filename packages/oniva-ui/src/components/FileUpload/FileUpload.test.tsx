@@ -44,4 +44,41 @@ describe('FileUpload', () => {
     expect(screen.getByText('File exceeds 50 MB')).toBeInTheDocument();
     expect(formatBytes(2048)).toBe('2.0 KB');
   });
+
+  it('rejects oversize and wrong-type files with error rows and a callback', async () => {
+    const onFilesAdded = vi.fn();
+    const onFilesRejected = vi.fn();
+    const { container } = render(
+      <FileUpload
+        accept={['.pdf', '.csv']}
+        maxSize={1000}
+        onFilesAdded={onFilesAdded}
+        onFilesRejected={onFilesRejected}
+      />,
+    );
+    const input = container.querySelector('input[type="file"]') as HTMLInputElement;
+    const big = new File([new Uint8Array(2048)], 'big.pdf', { type: 'application/pdf' });
+    await userEvent.upload(input, [big]);
+    expect(await screen.findByText(/Too large/)).toBeInTheDocument();
+    expect(onFilesRejected).toHaveBeenCalledWith([{ file: big, reason: 'size' }]);
+    expect(onFilesAdded).not.toHaveBeenCalled();
+    expect(screen.getByRole('status')).toHaveTextContent('1 file could not be added');
+  });
+
+  it('shows Retry on failed rows when onRetry is given', async () => {
+    const onRetry = vi.fn();
+    render(
+      <FileUpload
+        onRetry={onRetry}
+        files={[{ id: 'a', name: 'bad.csv', size: 10, progress: 0, error: 'Network error' }]}
+      />,
+    );
+    await userEvent.click(screen.getByRole('button', { name: 'Retry bad.csv' }));
+    expect(onRetry).toHaveBeenCalledWith('a');
+  });
+
+  it('forwards className to the root', () => {
+    const { container } = render(<FileUpload className="extra" />);
+    expect(container.querySelector('.extra')).not.toBeNull();
+  });
 });

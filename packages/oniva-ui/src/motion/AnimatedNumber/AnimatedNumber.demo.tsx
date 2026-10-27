@@ -43,6 +43,28 @@ const demo: DemoModule = {
         );
       },
     },
+    {
+      name: 'Odometer count-in',
+      code: `<AnimatedNumber value={segment} countIn duration={900} digitStagger={60}
+  format={{ style: 'currency', currency: 'USD', maximumFractionDigits: 0 }} />`,
+      Component: () => {
+        const [v, setV] = useState(184_920);
+        return (
+          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+            <span style={{ fontSize: 44, fontWeight: 600 }}>
+              <AnimatedNumber
+                value={v}
+                countIn
+                duration={900}
+                digitStagger={60}
+                format={{ style: 'currency', currency: 'USD', maximumFractionDigits: 0 }}
+              />
+            </span>
+            <Button onPress={() => setV(Math.round(Math.random() * 900_000))}>Roll</Button>
+          </div>
+        );
+      },
+    },
   ],
 };
 export default demo;

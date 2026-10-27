@@ -1,6 +1,12 @@
 import { Button } from '../Button';
 import type { DemoModule } from '../../internal/demo';
 import { useRef, useState } from 'react';
+import * as stylex from '@stylexjs/stylex';
+import { FileText, RefreshCw, Save, Trash2, Upload } from 'lucide-react';
+import { colors } from '../../tokens/colors.stylex';
+import { font } from '../../tokens/font.stylex';
+import { radius } from '../../tokens/radius.stylex';
+import { Kbd } from '../Kbd';
 import { toast, ToastProvider, type ToastPlacement } from './Toast';
 
 const row = { display: 'flex', flexWrap: 'wrap', gap: 12, alignItems: 'center' } as const;
@@ -89,6 +95,90 @@ function PromiseDemo() {
   );
 }
 
+const doc = stylex.create({
+  wrap: { display: 'flex', flexDirection: 'column', fontFamily: font['--oniva-font-sans'], gap: 12, maxWidth: 420, width: '100%' },
+  card: {
+    backgroundColor: colors['--oniva-color-surface'],
+    borderColor: colors['--oniva-color-border'],
+    borderRadius: radius['--oniva-radius-card'],
+    borderStyle: 'solid',
+    borderWidth: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 12,
+    padding: 12,
+  },
+  head: { alignItems: 'center', display: 'flex', gap: 12 },
+  tile: {
+    alignItems: 'center',
+    borderColor: colors['--oniva-color-border'],
+    borderRadius: radius['--oniva-radius-md'],
+    borderStyle: 'solid',
+    borderWidth: 1,
+    color: colors['--oniva-color-icon-muted'],
+    display: 'flex',
+    height: 40,
+    justifyContent: 'center',
+    width: 40,
+  },
+  title: { color: colors['--oniva-color-text'], fontSize: font['--oniva-font-size-14'], fontWeight: font['--oniva-font-weight-medium'] },
+  sub: { color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-13'] },
+  grid: { display: 'grid', gap: 8, gridTemplateColumns: '1fr 1fr' },
+  hint: {
+    alignItems: 'center',
+    color: colors['--oniva-color-text-muted'],
+    display: 'flex',
+    fontSize: font['--oniva-font-size-13'],
+    gap: 6,
+    justifyContent: 'center',
+  },
+});
+
+function DocumentActions() {
+  return (
+    <div {...stylex.props(doc.wrap)}>
+      <div {...stylex.props(doc.card)}>
+        <div {...stylex.props(doc.head)}>
+          <span aria-hidden="true" {...stylex.props(doc.tile)}>
+            <FileText size={18} />
+          </span>
+          <div>
+            <div {...stylex.props(doc.title)}>Quarterly report</div>
+            <div {...stylex.props(doc.sub)}>Finance · edited 2 min ago</div>
+          </div>
+        </div>
+        <div {...stylex.props(doc.grid)}>
+          <Button variant="secondary" startIcon={<Save size={16} />} onPress={() => toast.success('Draft saved', { description: 'Quarterly report · just now' })}>
+            Save draft
+          </Button>
+          <Button variant="secondary" startIcon={<Trash2 size={16} />} onPress={() => toast.danger('File deleted', { description: 'Quarterly report moved to trash.', action: { label: 'Undo', onPress: () => toast.success('Restored') } })}>
+            Delete file
+          </Button>
+          <Button
+            variant="secondary"
+            startIcon={<Upload size={16} />}
+            onPress={() =>
+              toast.promise(new Promise<void>((res) => setTimeout(res, 2200)), {
+                loading: { title: 'Uploading report…', description: 'Quarterly-Report.pdf · 4.2 MB' },
+                success: { title: 'Report uploaded', description: 'Quarterly-Report.pdf · 4.2 MB' },
+                error: 'Upload failed',
+              })
+            }
+          >
+            Upload report
+          </Button>
+          <Button variant="secondary" startIcon={<RefreshCw size={16} />} onPress={() => toast.info('Sync running', { description: '1,204 items so far.' })}>
+            Sync
+          </Button>
+        </div>
+      </div>
+      <div {...stylex.props(doc.hint)}>
+        Press <Kbd>F8</Kbd> to jump to notifications
+      </div>
+    </div>
+  );
+}
+
 const demo: DemoModule = {
   meta: {
     title: 'Toast',
@@ -98,6 +188,16 @@ const demo: DemoModule = {
       'Sonner-style stacked notifications from an imperative toast() queue: newest in front, older toasts peek behind and fan out on hover or focus, timers pause on hover, focus and window blur, swipe to dismiss, promise toasts, and a labelled live region. Mount ToastProvider once inside ThemeProvider.',
   },
   demos: [
+    {
+      name: 'Document actions',
+      code: `// Buttons fire toasts; the stack sits in the corner. Press F8 to jump to it.
+toast.promise(upload(), {
+  loading: { title: 'Uploading report…', description: 'Quarterly-Report.pdf · 4.2 MB' },
+  success: { title: 'Report uploaded', description: 'Quarterly-Report.pdf · 4.2 MB' },
+  error: 'Upload failed',
+});`,
+      Component: DocumentActions,
+    },
     {
       name: 'Variants',
       code: `// once, near the root (inside ThemeProvider)

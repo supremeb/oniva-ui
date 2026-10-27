@@ -8,9 +8,12 @@ import {
   Label,
   Text,
   type ComboBoxProps as AriaComboBoxProps,
+  type Key,
   type ValidationResult,
 } from 'react-aria-components';
-import type { ReactNode, Ref } from 'react';
+import { useState, type ReactNode, type Ref } from 'react';
+import { colors } from '../../tokens/colors.stylex';
+import { font } from '../../tokens/font.stylex';
 import { cx, ff, type FieldSize } from '../../internal/forms-field';
 import {
   FormsItem,
@@ -20,8 +23,20 @@ import {
   type FormsItemProps,
 } from '../../internal/forms-listbox';
 import { fp } from '../../internal/forms-popover';
+import { GlideSurface } from '../../internal/m5-glide';
 
-const styles = stylex.create({ root: { width: '100%' } });
+const styles = stylex.create({
+  root: { width: '100%' },
+  empty: {
+    color: colors['--oniva-color-text-muted'],
+    fontSize: font['--oniva-font-size-14'],
+    paddingBlock: 12,
+    paddingInline: 12,
+    textAlign: 'center',
+  },
+});
+
+const CREATE_ID = '__oniva-create__';
 
 export type ComboboxItemProps = FormsItemProps;
 export const ComboboxItem = FormsItem;
@@ -37,6 +52,15 @@ export interface ComboboxProps<T extends object> extends Omit<
   placeholder?: string;
   size?: FieldSize;
   children: ReactNode | ((item: T) => ReactNode);
+  /** Shown when nothing matches the typed text. Default `No results`. */
+  emptyMessage?: ReactNode;
+  /**
+   * Adds a trailing create row for the typed text. Called with the text when it is chosen; add the new
+   * item to your collection (and set `selectedKey` if you want it selected). Needs static (non-function) `children`.
+   */
+  onCreate?: (text: string) => void;
+  /** Label of the create row. Default `Create “text”`. */
+  createLabel?: (text: string) => string;
   className?: string;
   xstyle?: stylex.StyleXStyles;
   ref?: Ref<HTMLInputElement>;
@@ -50,14 +74,43 @@ export function Combobox<T extends object>({
   size = 'md',
   children,
   items,
+  emptyMessage = 'No results',
+  onCreate,
+  createLabel = (t) => `Create “${t}”`,
   className,
   xstyle,
   ref,
   ...rest
 }: ComboboxProps<T>) {
   const root = stylex.props(ff.root, styles.root, xstyle);
+  const [text, setText] = useState('');
+  const [innerKey, setInnerKey] = useState<Key | null>(rest.defaultSelectedKey ?? null);
+  const creatable = onCreate != null && typeof children !== 'function';
+  const showCreate = creatable && text.trim() !== '';
+  const creatableProps = creatable
+    ? {
+        selectedKey: rest.selectedKey !== undefined ? rest.selectedKey : innerKey,
+        defaultSelectedKey: undefined,
+        onSelectionChange: (k: Key | null) => {
+          if (k === CREATE_ID) {
+            onCreate(text.trim());
+            return;
+          }
+          setInnerKey(k);
+          rest.onSelectionChange?.(k);
+        },
+      }
+    : {};
   return (
-    <AriaComboBox {...rest} className={cx(root.className, className)}>
+    <AriaComboBox
+      {...rest}
+      allowsEmptyCollection
+      {...creatableProps}
+      onInputChange={(v) => {
+        setText(v);
+        rest.onInputChange?.(v);
+      }}
+      className={cx(root.className, className)}>
       {({ isInvalid, isDisabled }) => (
         <>
           {label != null && <Label {...stylex.props(ff.label)}>{label}</Label>}
@@ -81,7 +134,19 @@ export function Combobox<T extends object>({
           )}
           <FieldError {...stylex.props(ff.error)}>{errorMessage}</FieldError>
           <FormsPopover>
-            <FormsListBox items={items}>{children}</FormsListBox>
+            <GlideSurface>
+            <FormsListBox
+              items={items}
+              renderEmptyState={() => <div {...stylex.props(styles.empty)}>{emptyMessage}</div>}
+            >
+              {children as ReactNode}
+              {showCreate && (
+                <FormsItem id={CREATE_ID} textValue={`${createLabel(text.trim())} ${text}`} hideCheck>
+                  {createLabel(text.trim())}
+                </FormsItem>
+              )}
+            </FormsListBox>
+            </GlideSurface>
           </FormsPopover>
         </>
       )}

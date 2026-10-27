@@ -130,9 +130,7 @@ export function ProgressSegments({
   const sum = segments.reduce((a, s) => a + s.value, 0);
   const total = max ?? sum;
   const pct = total > 0 ? Math.round((sum / total) * 100) : 0;
-  const auto = max
-    ? `${f.number(sum)} / ${f.number(max)} (${f.percent(pct / 100)})`
-    : undefined;
+  const auto = max ? `${f.number(sum)} / ${f.number(max)} (${f.percent(pct / 100)})` : undefined;
   const sx = stylex.props(progressStyles.root, xstyle);
   return (
     <div
@@ -151,9 +149,7 @@ export function ProgressSegments({
       )}
       <div
         role="img"
-        aria-label={segments
-          .map((s) => `${s.label} ${s.display ?? f.number(s.value)}`)
-          .join(', ')}
+        aria-label={segments.map((s) => `${s.label} ${s.display ?? f.number(s.value)}`).join(', ')}
         {...stylex.props(styles.bar, progressStyles[size])}
       >
         {segments.map((s, i) => {
@@ -181,9 +177,7 @@ export function ProgressSegments({
                 {...stylex.props(styles.dot, styles[s.color ?? cycle[i % cycle.length]!])}
               />
               {s.label}
-              <span {...stylex.props(styles.num)}>
-                {s.display ?? f.number(s.value)}
-              </span>
+              <span {...stylex.props(styles.num)}>{s.display ?? f.number(s.value)}</span>
             </li>
           ))}
         </ul>

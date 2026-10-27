@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { Pricing } from './Pricing';
 
@@ -34,5 +34,22 @@ describe('Pricing', () => {
     expect(src).not.toMatch(/repeat\(3, 1fr\)/);
     expect(src).toMatch(/auto-fit/);
     expect(src).toMatch(/overflowWrap: 'anywhere'/);
+  });
+  it('details fold open with aria-expanded and call onSelect', async () => {
+    const onSelect = vi.fn();
+    render(<Pricing plans={[{ name: 'Solo', monthly: 9, yearly: 7, description: 'd', features: ['One'], excluded: ['Two'], details: ['Deep feature'], limits: [{ label: 'Seats', value: '1' }], cta: 'Buy', onSelect }]} />);
+    const toggle = screen.getByRole('button', { name: /show details/i });
+    expect(toggle).toHaveAttribute('aria-expanded', 'false');
+    await userEvent.click(toggle);
+    expect(toggle).toHaveAttribute('aria-expanded', 'true');
+    expect(screen.getByText('Not included:')).toBeInTheDocument();
+    expect(screen.getByText('Seats')).toBeInTheDocument();
+    await userEvent.click(screen.getByRole('button', { name: 'Buy' }));
+    expect(onSelect).toHaveBeenCalledWith(expect.objectContaining({ name: 'Solo' }), 'monthly');
+  });
+  it('accepts a custom title and subtitle', () => {
+    render(<Pricing title="Choose your plan" subtitle="Cancel any time." />);
+    expect(screen.getByRole('heading', { level: 2, name: 'Choose your plan' })).toBeInTheDocument();
+    expect(screen.getByText('Cancel any time.')).toBeInTheDocument();
   });
 });

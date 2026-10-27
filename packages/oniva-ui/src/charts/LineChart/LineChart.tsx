@@ -38,6 +38,8 @@ export interface LineChartProps {
   /** Fix the y-axis range instead of 0..max. */
   domain?: [number, number];
   label?: string;
+  /** Change to replay the line draw-in (defaults to the category labels + series keys). */
+  drawKey?: string | number;
   className?: string;
   xstyle?: stylex.StyleXStyles;
   ref?: Ref<HTMLDivElement>;
@@ -57,6 +59,7 @@ export function LineChart({
   showYAxis = true,
   domain,
   label,
+  drawKey,
   className,
   xstyle,
   ref,
@@ -68,6 +71,8 @@ export function LineChart({
   const seriesKeys = useMemo(() => series.map((s) => s.key), [series]);
   const shown = useTweenedData(data, seriesKeys);
   const { hi, wrap } = useScrub();
+  const replay =
+    drawKey ?? `${seriesKeys.join('|')}:${data.map((d) => String(d[index])).join('|')}`;
   return (
     <ChartFrame
       label={label ?? `Line chart of ${series.map((s) => s.label ?? s.key).join(', ')} by ${index}`}
@@ -114,6 +119,7 @@ export function LineChart({
               return (
                 <g key={s.key} {...stylex.props(toneStyle(seriesTone(s, i)))}>
                   <path
+                    key={`${replay}`}
                     d={d}
                     fill="none"
                     stroke="currentColor"
@@ -127,7 +133,7 @@ export function LineChart({
                   {dots &&
                     L.layers[i]!.points.map((p, k) => (
                       <circle
-                        key={k}
+                        key={`${replay}-${k}`}
                         cx={L.x(k)}
                         cy={L.y(p[1])}
                         r={3.5}
@@ -163,7 +169,13 @@ export function LineChart({
                     {
                       title: L.categories[i],
                       rows: tipRows(series, d, fmt, intl),
-                      anchor: { x: L.x(i), y: Math.max(64, Math.min(...L.layers.map((l) => L.y(l.points[i]?.[1] ?? 0)))) },
+                      anchor: {
+                        x: L.x(i),
+                        y: Math.max(
+                          64,
+                          Math.min(...L.layers.map((l) => L.y(l.points[i]?.[1] ?? 0))),
+                        ),
+                      },
                     },
                     `${L.categories[i]}: ${series.map((s) => `${s.label ?? s.key} ${fmt(Number(d[s.key]) || 0)}`).join(', ')}`,
                   ),

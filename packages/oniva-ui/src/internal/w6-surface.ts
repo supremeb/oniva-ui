@@ -1,0 +1,107 @@
+import * as stylex from '@stylexjs/stylex';
+import { colors } from '../tokens/colors.stylex';
+import { font } from '../tokens/font.stylex';
+import { radius } from '../tokens/radius.stylex';
+
+/** Gray tray + white inner card shared by the loop-7 data-display widgets (UsageMeter, ChangeSummary, KpiChart, CompactBreakdown). */
+export const surface = stylex.create({
+  tray: {
+    backgroundColor: colors['--oniva-color-surface'],
+    borderColor: colors['--oniva-color-border'],
+    borderRadius: radius['--oniva-radius-card'],
+    borderStyle: 'solid',
+    borderWidth: 1,
+    boxSizing: 'border-box',
+    color: colors['--oniva-color-text'],
+    containerType: 'inline-size',
+    display: 'flex',
+    flexDirection: 'column',
+    fontFamily: font['--oniva-font-sans'],
+    gap: 6,
+    maxWidth: '100%',
+    padding: 6,
+    width: '100%',
+  },
+  head: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: 8,
+    justifyContent: 'space-between',
+    minHeight: 32,
+    paddingInline: 10,
+  },
+  title: {
+    alignItems: 'center',
+    display: 'inline-flex',
+    fontSize: font['--oniva-font-size-14'],
+    fontWeight: font['--oniva-font-weight-semibold'],
+    gap: 8,
+    margin: 0,
+    minWidth: 0,
+  },
+  muted: { color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-12'] },
+  card: {
+    backgroundColor: colors['--oniva-color-surface-inner'],
+    borderColor: colors['--oniva-color-border'],
+    borderRadius: radius['--oniva-radius-xl'],
+    borderStyle: 'solid',
+    borderWidth: 1,
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 12,
+    padding: 16,
+  },
+  footer: {
+    color: colors['--oniva-color-text-muted'],
+    fontSize: font['--oniva-font-size-12'],
+    paddingBlock: 4,
+    paddingInline: 10,
+  },
+  num: { fontVariantNumeric: 'tabular-nums' },
+  sr: {
+    borderWidth: 0,
+    clip: 'rect(0 0 0 0)',
+    height: 1,
+    margin: -1,
+    overflow: 'hidden',
+    padding: 0,
+    position: 'absolute',
+    whiteSpace: 'nowrap',
+    width: 1,
+  },
+  ellipsis: { minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
+});
+
+/** Single flat card (no tray) with a hairline-separated footer; used for metric cards. */
+export const flat = stylex.create({
+  box: {
+    backgroundColor: colors['--oniva-color-surface-inner'],
+    borderColor: colors['--oniva-color-border'],
+    borderRadius: radius['--oniva-radius-card'],
+    borderStyle: 'solid',
+    borderWidth: 1,
+    boxSizing: 'border-box',
+    color: colors['--oniva-color-text'],
+    containerType: 'inline-size',
+    display: 'flex',
+    flexDirection: 'column',
+    fontFamily: font['--oniva-font-sans'],
+    maxWidth: '100%',
+    overflow: 'hidden',
+    width: '100%',
+  },
+  body: { display: 'flex', flexDirection: 'column', gap: 16, padding: 20, paddingBottom: 12 },
+  head: { alignItems: 'center', display: 'flex', gap: 8, justifyContent: 'space-between', minHeight: 28 },
+  title: { fontSize: font['--oniva-font-size-16'], fontWeight: font['--oniva-font-weight-regular'], margin: 0, minWidth: 0 },
+  foot: {
+    borderTopColor: colors['--oniva-color-border'],
+    borderTopStyle: 'solid',
+    borderTopWidth: 1,
+    color: colors['--oniva-color-text-muted'],
+    fontSize: font['--oniva-font-size-13'],
+    paddingBlock: 12,
+    paddingInline: 20,
+  },
+  strong: { color: colors['--oniva-color-text'], fontWeight: font['--oniva-font-weight-medium'] },
+});

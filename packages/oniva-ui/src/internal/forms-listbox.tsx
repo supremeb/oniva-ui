@@ -13,6 +13,19 @@ import {
 } from 'react-aria-components';
 import type { ReactNode, Ref } from 'react';
 import { enterExit, motionStyles } from './motion-styles';
+import { media } from '../tokens/media.stylex';
+
+const checkPop = stylex.keyframes({
+  from: { opacity: 0, transform: 'scale(0.8)', filter: 'blur(2px)' },
+  to: { opacity: 1, transform: 'scale(1)', filter: 'blur(0px)' },
+});
+const popStyles = stylex.create({
+  pop: {
+    animationDuration: '200ms',
+    animationName: { default: checkPop, [media.reducedMotion]: 'none' },
+    animationTimingFunction: 'cubic-bezier(0.23, 1, 0.32, 1)',
+  },
+});
 import { type DotTone, dotKey, fp } from './forms-popover';
 import { cx } from './forms-field';
 
@@ -111,7 +124,7 @@ export function FormsItem({
             )}
           </span>
           {isSelected && !hideCheck && (
-            <Check size={16} aria-hidden="true" {...stylex.props(fp.check)} />
+            <Check size={16} aria-hidden="true" {...stylex.props(fp.check, popStyles.pop)} />
           )}
         </>
       )}

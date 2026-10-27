@@ -33,6 +33,15 @@ import { shadow } from '../../tokens/shadow.stylex';
 import { Button } from '../Button';
 
 const spin = stylex.keyframes({ to: { transform: 'rotate(360deg)' } });
+const swapIn = stylex.keyframes({
+  from: { filter: 'blur(2px)', opacity: 0, transform: 'scale(0.8)' },
+  to: { filter: 'blur(0)', opacity: 1, transform: 'scale(1)' },
+});
+const swapFade = stylex.keyframes({ from: { opacity: 0 }, to: { opacity: 1 } });
+const textIn = stylex.keyframes({
+  from: { filter: 'blur(2px)', opacity: 0, transform: 'translateY(3px)' },
+  to: { filter: 'blur(0)', opacity: 1, transform: 'translateY(0)' },
+});
 
 /** Layout constants (px). Sonner-style stacking. */
 const GAP = 12;
@@ -125,6 +134,16 @@ const styles = stylex.create({
     transitionTimingFunction: motion['--oniva-motion-ease-out'],
   },
   fadedOut: { opacity: 0 },
+  iconSwap: {
+    animationDuration: motion['--oniva-motion-dur-enter'],
+    animationName: { default: swapIn, [media.reducedMotion]: swapFade },
+    animationTimingFunction: motion['--oniva-motion-ease-spring'],
+  },
+  textSwap: {
+    animationDuration: motion['--oniva-motion-dur-enter'],
+    animationName: { default: textIn, [media.reducedMotion]: swapFade },
+    animationTimingFunction: motion['--oniva-motion-ease-out'],
+  },
   content: { display: 'flex', flexDirection: 'column', flexGrow: 1, gap: 2, minWidth: 0 },
   title: {
     fontSize: font['--oniva-font-size-14'],
@@ -443,8 +462,11 @@ function ToastItem({
       >
         {iconNode && (
           <span
+            key={variant}
+            data-swap=""
             {...stylex.props(
               styles.icon,
+              mounted && styles.iconSwap,
               tone && styles[tone],
               styles.fadeable,
               layout.peek && styles.fadedOut,
@@ -457,11 +479,11 @@ function ToastItem({
         <AriaToastContent
           {...stylex.props(styles.content, styles.fadeable, layout.peek && styles.fadedOut)}
         >
-          <AriaText slot="title" {...stylex.props(styles.title)}>
+          <AriaText slot="title" key={typeof title === 'string' ? title : undefined} {...stylex.props(styles.title, mounted && styles.textSwap)}>
             {title}
           </AriaText>
           {description != null && (
-            <AriaText slot="description" {...stylex.props(styles.description)}>
+            <AriaText slot="description" key={typeof description === 'string' ? description : undefined} {...stylex.props(styles.description, mounted && styles.textSwap)}>
               {description}
             </AriaText>
           )}
@@ -503,6 +525,8 @@ export interface ToastProviderProps {
   queue?: OnivaToastQueue<ToastData>;
   /** Accessible landmark label. */
   'aria-label'?: string;
+  /** `KeyboardEvent.key` or `.code` that moves focus to the newest toast (and fans the stack out). `null` disables. Default `F8`. */
+  hotkey?: string | null;
   className?: string;
   xstyle?: stylex.StyleXStyles;
   ref?: Ref<HTMLDivElement>;
@@ -521,6 +545,7 @@ export function ToastProvider({
   position,
   maxVisible = 3,
   queue = toastQueue,
+  hotkey = 'F8',
   'aria-label': ariaLabel = 'Notifications',
   className,
   xstyle,
@@ -569,6 +594,20 @@ export function ToastProvider({
       el.removeEventListener('focusout', fout);
     };
   }, [regionNode]);
+
+  // Hotkey: jump to the newest toast so keyboard users can reach actions before the timer ends.
+  useEffect(() => {
+    if (!hotkey) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== hotkey && e.code !== hotkey) return;
+      const target = regionEl.current?.querySelector<HTMLElement>('[role="alertdialog"], [role="alert"], [tabindex="0"]');
+      if (!target) return;
+      e.preventDefault();
+      target.focus();
+    };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [hotkey]);
 
   const onHeight = useCallback((key: string, h: number) => {
     setHeights((prev) => (prev[key] === h ? prev : { ...prev, [key]: h }));

@@ -5,8 +5,8 @@ import {
   Meter as AriaMeter,
   type MeterProps as AriaMeterProps,
 } from 'react-aria-components';
-import type { CSSProperties, ReactNode, Ref } from 'react';
-import { progressStyles } from '../ProgressBar/ProgressBar';
+import type { ReactNode, Ref } from 'react';
+import { progressStyles, useFillStyle } from '../ProgressBar/ProgressBar';
 
 export interface MeterProps extends Omit<AriaMeterProps, 'className' | 'style' | 'children'> {
   label?: ReactNode;
@@ -44,27 +44,60 @@ export function Meter({
       className={[sx.className, className].filter(Boolean).join(' ')}
       style={sx.style as never}
     >
-      {({ percentage, valueText }) => {
-        const t =
-          tone ??
-          (percentage >= dangerAt ? 'danger' : percentage >= warnAt ? 'warning' : 'success');
-        return (
-          <>
-            {(label || showValue) && (
-              <div {...stylex.props(progressStyles.header)}>
-                {label ? <AriaLabel>{label}</AriaLabel> : <span />}
-                {showValue && <span {...stylex.props(progressStyles.value)}>{valueText}</span>}
-              </div>
-            )}
-            <div {...stylex.props(progressStyles.track, progressStyles[size])}>
-              <div
-                {...stylex.props(progressStyles.fill, progressStyles[t])}
-                style={{ '--oniva-p': percentage / 100 } as CSSProperties}
-              />
-            </div>
-          </>
-        );
-      }}
+      {({ percentage, valueText }) => (
+        <MeterInner
+          percentage={percentage}
+          valueText={valueText}
+          label={label}
+          showValue={showValue}
+          size={size}
+          warnAt={warnAt}
+          dangerAt={dangerAt}
+          tone={tone}
+        />
+      )}
     </AriaMeter>
   );
+}
+
+function MeterInner({
+  percentage,
+  valueText,
+  label,
+  showValue,
+  size,
+  warnAt,
+  dangerAt,
+  tone,
+}: {
+  percentage: number;
+  valueText?: string;
+  label?: ReactNode;
+  showValue: boolean;
+  size: ControlSize;
+  warnAt: number;
+  dangerAt: number;
+  tone?: MeterProps['tone'];
+}) {
+  const fillStyle = useFillStyle(percentage);
+  {
+    const t =
+      tone ?? (percentage >= dangerAt ? 'danger' : percentage >= warnAt ? 'warning' : 'success');
+    return (
+      <>
+        {(label || showValue) && (
+          <div {...stylex.props(progressStyles.header)}>
+            {label ? <AriaLabel>{label}</AriaLabel> : <span />}
+            {showValue && <span {...stylex.props(progressStyles.value)}>{valueText}</span>}
+          </div>
+        )}
+        <div {...stylex.props(progressStyles.track, progressStyles[size])}>
+          <div
+            {...stylex.props(progressStyles.fill, progressStyles.fillGradient, progressStyles[t])}
+            style={fillStyle}
+          />
+        </div>
+      </>
+    );
+  }
 }

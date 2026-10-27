@@ -53,4 +53,15 @@ describe('CommandPalette', () => {
     await user.keyboard('{Escape}');
     await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
   });
+
+  it('quickRun: Cmd+2 runs the second item of the first group and announces it', async () => {
+    const onSelect = vi.fn();
+    render(<CommandPalette groups={groups} defaultOpen quickRun onSelect={onSelect} />);
+    await screen.findByRole('dialog');
+    expect(screen.getByRole('menuitem', { name: /Invoices/ })).toHaveTextContent('⌘2');
+    fireEvent.keyDown(document, { key: '2', metaKey: true });
+    expect(onSelect.mock.calls[0]?.[0].id).toBe('invoices');
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+    expect(screen.getByRole('status')).toHaveTextContent('Ran Invoices');
+  });
 });

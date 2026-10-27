@@ -1,10 +1,11 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { createRef } from 'react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { Composer } from './Composer';
 
 const models = [
-  { id: 'sonnet-5', name: 'Sonnet 5' },
-  { id: 'opus-5', name: 'Opus 5' },
+  { id: 'nova-pro', name: 'Nova Pro' },
+  { id: 'atlas-2', name: 'Atlas 2' },
 ];
 
 describe('Composer', () => {
@@ -31,10 +32,27 @@ describe('Composer', () => {
 
   it('shows the selected model and passes attached files', () => {
     const onAttach = vi.fn();
-    render(<Composer models={models} model="sonnet-5" onAttach={onAttach} />);
-    expect(screen.getByRole('button', { name: 'Model: Sonnet 5' })).toBeInTheDocument();
+    render(<Composer models={models} model="nova-pro" onAttach={onAttach} />);
+    expect(screen.getByRole('button', { name: 'Model: Nova Pro' })).toBeInTheDocument();
     const f = new File(['a'], 'q3.csv', { type: 'text/csv' });
     fireEvent.change(screen.getByTestId('composer-file-input'), { target: { files: [f] } });
     expect(onAttach).toHaveBeenCalledWith([f]);
+  });
+
+  it('simulated dictation types into the field and toggles the mic', async () => {
+    vi.useFakeTimers();
+    render(<Composer showMic dictation="Two words" />);
+    fireEvent.click(screen.getByRole('button', { name: 'Start dictation' }));
+    expect(screen.getByRole('button', { name: 'Stop dictation' })).toHaveAttribute('aria-pressed', 'true');
+    await act(async () => void vi.advanceTimersByTime(400));
+    expect(screen.getByRole('textbox', { name: 'Message' })).toHaveValue('Two words');
+    expect(screen.getByRole('button', { name: 'Start dictation' })).toBeInTheDocument();
+    vi.useRealTimers();
+  });
+
+  it('forwards ref and className', () => {
+    const ref = createRef<HTMLDivElement>();
+    render(<Composer ref={ref} className="extra" />);
+    expect(ref.current).toHaveClass('extra');
   });
 });

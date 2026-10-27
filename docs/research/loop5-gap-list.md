@@ -2,7 +2,7 @@
 
 Diffed against folders in `packages/oniva-ui/src/{components,charts,ai,widgets}` as of this loop. Rows tagged "(upgrade)" exist but need the named capability. Priority: P0 next loop, P1, P2. Motion column references recipe # in `loop5-motion-recipes.md`.
 
-Source keys: AE = AI Elements (elements.ai-sdk.dev), PK = prompt-kit, KB = Kibo UI, AU = assistant-ui, CU = Cult UI, MU = Magic UI, AN = Animate UI, MP = Motion-Primitives, RB = React Bits, BD = BoardUI, AF = Affect UI, KO = Kobra, AR = Arc (uiarc), BE = beUI, TD = transitions.dev, EC = EvilCharts.
+Source keys: AE = AI Elements (elements.ai-sdk.dev), PK = prompt-kit, KB = Kibo UI, AU = assistant-ui, CU = Cult UI, MU = Magic UI, AN = Animate UI, MP = Motion-Primitives, RB = React Bits, BD = BoardUI, KO = Kobra, AR = Arc (uiarc), BE = beUI, TD = transitions.dev, EC = EvilCharts.
 
 ## A. AI & Agent
 | Name | Source | Pri | Motion / notes |
@@ -19,8 +19,8 @@ Source keys: AE = AI Elements (elements.ai-sdk.dev), PK = prompt-kit, KB = Kibo 
 | Suggestions (prompt suggestion chips row, scrollable) | AE | P0 | stagger in 40ms |
 | PromptInput full (tools menu, model, speech, submit/stop morph; Composer upgrade) | AE, PK, AR | P1 | icon swap #9 |
 | SpeechInput (mic button w/ recording state) | AE | P0 | pulse ring |
-| AudioWaveform / live visualizer | AE, AF | P0 | bars scaleY by amplitude |
-| VoiceOrb (state orb: idle/listening/thinking/speaking) | AF, CU, AE Persona | P0 | #50 |
+| AudioWaveform / live visualizer | AE | P0 | bars scaleY by amplitude |
+| VoiceOrb (state orb: idle/listening/thinking/speaking) | CU, AE Persona | P0 | #50 |
 | Persona / agent avatar with state animation | AE | P1 | #50 |
 | AudioPlayer (scrub, speed, waveform) | AE | P1 | - |
 | Transcription (word-synced highlight) | AE | P1 | colour wipe per word |
@@ -47,7 +47,7 @@ Source keys: AE = AI Elements (elements.ai-sdk.dev), PK = prompt-kit, KB = Kibo 
 | Sandbox (code run panel w/ tabs) | AE | P2 | - |
 | WebPreview (browser chrome + iframe + console) | AE | P1 | - |
 | JSXPreview / generative UI renderer | AE, PK, AU | P2 | - |
-| ImageGenGrid (progressive reveal, dot noise to image) | TD, KO, AF | P0 | #51 |
+| ImageGenGrid (progressive reveal, dot noise to image) | TD, KO | P0 | #51 |
 | AgentRun timeline (steps, tool calls, durations) | AR | P1 | rail draw |
 | WorkflowCanvas (nodes, animated edges, controls) | AE | P2 | animated edge dash |
 | AgentSuggestCardStack (suggestions w/ progress, commit) | CU | P1 | stack #32 |
@@ -78,7 +78,7 @@ Source keys: AE = AI Elements (elements.ai-sdk.dev), PK = prompt-kit, KB = Kibo 
 | RollingText / TextRoll | MP, BE | P1 | char y roll 250ms stagger 30ms |
 | TextScramble / HyperText | MU, MP, BE | P1 | #44 |
 | TextMorph | MP, AR | P1 | char shared layout |
-| TextReveal (blur/word/line/wipe) | AF, TD | P0 | #18, #56 |
+| TextReveal (blur/word/line/wipe) | TD | P0 | #18, #56 |
 | WordRotate | MU | P2 | vertical swap #4 |
 | Typewriter | MU, CU | P2 | - |
 | MagneticButton | BE, MP | P1 | #41 |
@@ -136,16 +136,16 @@ Source keys: AE = AI Elements (elements.ai-sdk.dev), PK = prompt-kit, KB = Kibo 
 | FlipCard | AN | P2 | rotateY 600ms |
 | RadialMenu | AN | P2 | polar stagger |
 | ElasticSlider | AR | P2 | - |
-| NumberField limit pushback | AF | P2 | rubber-band |
+| NumberField limit pushback | - | P2 | rubber-band |
 | OTP digit roll + gliding ring + success sweep (InputOTP upgrade) | BE, KO, BD | P0 | #34, #35 |
 
 ## C. Charts
 | Name | Source | Pri | Notes |
 |---|---|---|---|
-| Entrance reveal system (clip wipe / bar grow / draw-on) for all charts | EC, AF | P0 | #59 |
+| Entrance reveal system (clip wipe / bar grow / draw-on) for all charts | EC | P0 | #59 |
 | Gradient + glow + SVG pattern fills (dots, lines, grid) | EC | P0 | defs library |
 | Chart brush / zoom range | EC, AR | P1 | draggable window |
-| Scrub crosshair tooltip with rolling values | AF | P0 | #60 |
+| Scrub crosshair tooltip with rolling values | - | P0 | #60 |
 | PieChart (full, gradient, glow) | EC | P1 | - |
 | Semi-circle radial | EC | P1 | - |
 | Stacked / grouped / blocks bar variants | EC | P0 | - |
@@ -172,7 +172,7 @@ Source keys: AE = AI Elements (elements.ai-sdk.dev), PK = prompt-kit, KB = Kibo 
 | Marimekko | custom | P2 | - |
 | Network graph | custom | P2 | - |
 | Chart annotations / reference lines | EC | P1 | - |
-| Donut morph between periods | AF, TD | P0 | #33 |
+| Donut morph between periods | TD | P0 | #33 |
 | Analytics gradient-stroke line w/ floating cards | CU | P2 | - |
 | Dots / point markers primitive | EC | P2 | - |
 | Chart background patterns primitive | EC | P1 | - |
@@ -180,7 +180,7 @@ Source keys: AE = AI Elements (elements.ai-sdk.dev), PK = prompt-kit, KB = Kibo 
 ## D. Blocks / marketing
 | Name | Source | Pri | Notes |
 |---|---|---|---|
-| Pricing table + billing toggle | AR, AF | P0 | - |
+| Pricing table + billing toggle | AR | P0 | - |
 | Pricing calculator / usage pricing | AR | P1 | slider + rolling total |
 | Plan comparison / comparison table | AR | P1 | - |
 | Testimonials wall (marquee) | MU, KB | P1 | #46 |
@@ -216,15 +216,15 @@ Source keys: AE = AI Elements (elements.ai-sdk.dev), PK = prompt-kit, KB = Kibo 
 | Kanban board (drag, WIP) | KB, CU, AR | P0 | #48 |
 | Timeline / activity timeline | AR, KB | P0 | - |
 | Gantt / Roadmap | KB | P1 | - |
-| DataGrid (sort, filter, resize, edit, virtual) | AF, BE, BD | P0 | DataTable upgrade |
-| Spreadsheet cell grid | AF | P2 | - |
+| DataGrid (sort, filter, resize, edit, virtual) | BE, BD | P0 | DataTable upgrade |
+| Spreadsheet cell grid | - | P2 | - |
 | FilterBar / FilterToolbar (chips w/ operators) | AR, KO | P0 | - |
-| DateRange presets (DateRangePicker upgrade) | AF, BE | P0 | - |
+| DateRange presets (DateRangePicker upgrade) | BE | P0 | - |
 | KPI strip / MetricCard drilldown | AR | P0 | counters |
 | Leaderboard | custom | P1 | rank layout anim |
 | World map / geo | MU, AR | P1 | - |
 | Invoice studio / invoice view | AR | P2 | - |
-| Chat inbox / support conversation / inbox triage | AF, AR | P1 | row removal closes gap |
+| Chat inbox / support conversation / inbox triage | AR | P1 | row removal closes gap |
 | Comment thread | AR | P1 | - |
 | JSON viewer | AR | P1 | - |
 | TimePicker | AR | P1 | - |
@@ -232,7 +232,7 @@ Source keys: AE = AI Elements (elements.ai-sdk.dev), PK = prompt-kit, KB = Kibo 
 | Rating / stars | custom | P1 | - |
 | AvatarGroup | KB, MU | P0 | #11 |
 | Carousel | KO, BD | P0 | - |
-| Lightbox / ImageViewer | AF, AR, KO | P1 | - |
+| Lightbox / ImageViewer | AR, KO | P1 | - |
 | QRCode | KB, KO | P2 | - |
 | Countdown | AR | P2 | - |
 | TagInput / MentionInput / MoneyInput / PhoneInput | AR | P1 | - |
@@ -248,5 +248,5 @@ Source keys: AE = AI Elements (elements.ai-sdk.dev), PK = prompt-kit, KB = Kibo 
 | NowPlaying / MediaPlayer | AR | P2 | - |
 | Floating toolbar / expandable toolbar | CU, BE | P2 | - |
 | Announcement / ActivityFeed | AR | P1 | - |
-| Metrics dashboard block | AR, AF | P1 | - |
+| Metrics dashboard block | AR | P1 | - |
 | Project board | AR | P2 | - |

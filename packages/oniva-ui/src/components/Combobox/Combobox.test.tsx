@@ -33,4 +33,26 @@ describe('Combobox', () => {
     expect(screen.getByRole('combobox')).toBeDisabled();
     expect(screen.getByText('Pick a vendor')).toBeInTheDocument();
   });
+
+  it('shows a custom empty message', async () => {
+    render(ui({ emptyMessage: 'No vendors match' }));
+    await userEvent.type(screen.getByRole('combobox'), 'zzzz');
+    expect(await screen.findByText('No vendors match')).toBeInTheDocument();
+  });
+
+  it('offers a create row and calls onCreate', async () => {
+    const onCreate = vi.fn();
+    render(ui({ onCreate }));
+    await userEvent.type(screen.getByRole('combobox'), 'Northwind');
+    const create = await screen.findByRole('option', { name: 'Create “Northwind”' });
+    await userEvent.click(create);
+    expect(onCreate).toHaveBeenCalledWith('Northwind');
+  });
+
+  it('forwards ref to the input and className to the root', () => {
+    const ref = { current: null as HTMLInputElement | null };
+    const { container } = render(ui({ ref, className: 'extra' }));
+    expect(ref.current).toBeInstanceOf(HTMLInputElement);
+    expect(container.querySelector('.extra')).not.toBeNull();
+  });
 });

@@ -88,4 +88,25 @@ describe('Toast', () => {
       vi.useRealTimers();
     }
   });
+
+  it('F8 moves focus to the newest toast; hotkey={null} disables it', async () => {
+    const user = userEvent.setup();
+    const { unmount } = render(<ToastProvider />);
+    act(() => {
+      toast('Report ready', { duration: Infinity });
+    });
+    await screen.findByText('Report ready');
+    await user.keyboard('{F8}');
+    expect(screen.getByRole('region', { name: 'Notifications' }).contains(document.activeElement)).toBe(true);
+    (document.activeElement as HTMLElement).blur();
+    unmount();
+    act(() => toast.clear());
+    render(<ToastProvider hotkey={null} />);
+    act(() => {
+      toast('Another', { duration: Infinity });
+    });
+    await screen.findByText('Another');
+    await user.keyboard('{F8}');
+    expect(screen.getByRole('region').contains(document.activeElement)).toBe(false);
+  });
 });

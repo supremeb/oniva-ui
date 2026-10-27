@@ -82,11 +82,11 @@ Columns: purpose | properties | duration | easing / spring | stagger | interrupt
 | 53 | Wheel picker [U] | Time/date wheel | 3D drum on native scroll with snap; rotateX by distance from centre | momentum | native | - | Yes | flat list |
 | 54 | Pull-to-refresh [U] | Mobile refresh | drag resistance, threshold feedback, async hold | [I] spring | spring | - | Yes | button |
 | 55 | Gooey popover [U] | Liquid popover | SVG goo filter neck between trigger and panel; crisp content fades on top | [I] 400ms | spring | - | Yes | plain scale/fade |
-| 56 | Pixel-mask text reveal (title reveal) [affectui] | Titles | reveal by blur, word, line, or wipe | [I] 500ms | (0.22,1,0.36,1) | 40ms | n/a | opacity |
+| 56 | Pixel-mask text reveal (title reveal) | Titles | reveal by blur, word, line, or wipe | [I] 500ms | (0.22,1,0.36,1) | 40ms | n/a | opacity |
 | 57 | Newton/ASCII loaders [U] | 17 loader variants | spinner, dots, bars, dot-matrix, dither, morph, comet, scramble, metaballs, newton, helix, percent, 5 terminal spinners | loop | linear/ease-in-out | - | n/a | calm opacity pulse (all variants) |
 | 58 | Lenis smooth scroll + reading progress [U] | Long-form | scroll-linked progress bar via CSS scroll-timeline or motion value | scroll-linked | linear | - | n/a | native scroll |
 | 59 | Chart entrance (evilcharts) [I] | Area/bar/line reveal | clipPath wipe L->R for area/line, bars grow from baseline with stagger, glow filter drop-shadow, gradient + SVG pattern fills | 600-900ms | (0.22,1,0.36,1) | 30-50ms bars | Yes (data change tweens) | no entrance |
-| 60 | Chart scrub crosshair [affectui] | "Scrub to read any day" | vertical rule + dot follow pointer, tooltip value rolls | pointer-linked | none (direct) + 120ms value ease | - | live | static tooltip |
+| 60 | Chart scrub crosshair | "Scrub to read any day" | vertical rule + dot follow pointer, tooltip value rolls | pointer-linked | none (direct) + 120ms value ease | - | live | static tooltip |
 
 ## 10 best to implement first
 1 token set above (duration/ease/distance/blur) as StyleX vars; 2 Thinking states + Shimmer; 3 Streaming text word blur; 4 Toast stacking (#32); 5 Number pop-in + reel counter; 6 Tabs sliding pill (shared layout); 7 Morphing OTP slot + gliding ring; 8 Accordion grid-rows; 9 Success check + spinner->check; 10 Dynamic-island size presets / morphing modal.

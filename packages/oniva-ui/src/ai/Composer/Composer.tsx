@@ -1,6 +1,6 @@
 import * as stylex from '@stylexjs/stylex';
-import { ArrowUp, ChevronDown, Gauge, Paperclip, ShieldCheck, Square } from 'lucide-react';
-import { useLayoutEffect, useRef, useState, type ReactNode, type Ref } from 'react';
+import { ArrowUp, ChevronDown, Gauge, Hand, Mic, Paperclip, Plus, ShieldCheck, Square } from 'lucide-react';
+import { useEffect, useLayoutEffect, useRef, useState, type ReactNode, type Ref } from 'react';
 import { TextArea as AriaTextArea } from 'react-aria-components';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
@@ -13,11 +13,19 @@ import { Popover, PopoverTrigger } from '../../components/Popover';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem } from '../../components/DropdownMenu';
 import { ComposerLoader } from '../ComposerLoader';
 import { ComposerAttachments, type AttachmentFile } from '../ComposerAttachments';
-import { ModelSelector, type ModelOption } from '../ModelSelector';
+import { ModelSelector, type ModelEffort, type ModelOption } from '../ModelSelector';
 import { mergeSx } from '../../internal/sx';
+import { m3 } from '../../internal/m3-motion';
+import { AnimatedHeight } from '../../motion/AnimatedHeight';
+import { CrossFade } from '../../motion/CrossFade';
+import { Presence } from '../../motion/Presence';
 
 const styles = stylex.create({
-  root: { fontFamily: font['--oniva-font-sans'], width: '100%' },
+  root: { containerType: 'inline-size', fontFamily: font['--oniva-font-sans'], width: '100%' },
+  micWrap: { display: 'inline-flex', position: 'relative' },
+  traceWrap: { alignItems: 'center', color: colors['--oniva-color-text-muted'], display: 'inline-flex', marginInlineEnd: 4 },
+  micOn: { backgroundColor: colors['--oniva-color-text'], color: colors['--oniva-color-bg'] },
+  sr: { borderWidth: 0, clip: 'rect(0 0 0 0)', height: 1, margin: -1, overflow: 'hidden', padding: 0, position: 'absolute', whiteSpace: 'nowrap', width: 1 },
   body: { boxSizing: 'border-box', display: 'flex', flexDirection: 'column', gap: 8, padding: 12 },
   area: {
     appearance: 'none',
@@ -38,11 +46,27 @@ const styles = stylex.create({
     '::placeholder': { color: colors['--oniva-color-text-placeholder'] },
   },
   bar: { alignItems: 'center', display: 'flex', gap: 2 },
+  barTray: { gap: 6 },
+  bodyTray: { gap: 6, paddingBlock: 14, paddingInline: 16 },
+  areaTray: { fontSize: font['--oniva-font-size-16'], minHeight: 36, paddingInline: 0 },
+  footer: {
+    alignItems: 'center',
+    borderTopColor: colors['--oniva-color-border'],
+    borderTopStyle: 'solid',
+    borderTopWidth: 1,
+    color: colors['--oniva-color-text-muted'],
+    display: 'flex',
+    fontSize: font['--oniva-font-size-14'],
+    gap: 8,
+    paddingBlock: 10,
+    paddingInline: 16,
+  },
   spacer: { flexGrow: 1 },
+  hintWrap: { display: 'inline-flex' },
   hint: {
     alignItems: 'center',
     color: colors['--oniva-color-text-muted'],
-    display: 'inline-flex',
+    display: { default: 'inline-flex', '@container (max-width: 340px)': 'none' },
     fontSize: font['--oniva-font-size-12'],
     gap: 4,
     marginInlineEnd: 6,
@@ -60,6 +84,16 @@ const styles = stylex.create({
     fontWeight: font['--oniva-font-weight-medium'],
   },
 });
+
+type SpeechRec = {
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  onresult: ((e: { results: ArrayLike<ArrayLike<{ transcript: string }>> }) => void) | null;
+  onend: (() => void) | null;
+  start: () => void;
+  stop: () => void;
+};
 
 export type ComposerEffort = 'faster' | 'balanced' | 'smarter';
 const efforts: ComposerEffort[] = ['faster', 'balanced', 'smarter'];
@@ -94,6 +128,18 @@ export interface ComposerProps {
   models?: ModelOption[];
   model?: string;
   onModelChange?: (id: string) => void;
+  /** Extended thinking / web search / effort switches inside the model menu (see ModelSelector). */
+  thinking?: boolean;
+  onThinkingChange?: (on: boolean) => void;
+  webSearch?: boolean;
+  onWebSearchChange?: (on: boolean) => void;
+  modelEffort?: ModelEffort;
+  onModelEffortChange?: (effort: ModelEffort) => void;
+
+  /** Shows a mic button. Uses browser speech recognition when available, otherwise types the sample take word by word. */
+  showMic?: boolean;
+  /** Sample sentence for simulated dictation. */
+  dictation?: string;
 
   effort?: ComposerEffort;
   onEffortChange?: (e: ComposerEffort) => void;
@@ -110,6 +156,13 @@ export interface ComposerProps {
   /** Files picked with the attach button. Omit to hide the button. */
   onAttach?: (files: File[]) => void;
 
+  /**
+   * `default`: controls in one toolbar row. `tray`: roomy single-line prompt, plus-button attach, outlined permission pill,
+   * effort picker pushed to the right, and an optional `footer` strip below a hairline.
+   */
+  variant?: 'default' | 'tray';
+  /** Strip under the toolbar, inside the card (e.g. a "Connect apps" row). Best with `variant="tray"`. */
+  footer?: ReactNode;
   /** Extra controls rendered after the built-in ones. */
   actions?: ReactNode;
   className?: string;
@@ -130,6 +183,14 @@ export function Composer({
   models,
   model,
   onModelChange,
+  thinking,
+  onThinkingChange,
+  webSearch,
+  onWebSearchChange,
+  modelEffort,
+  onModelEffortChange,
+  showMic,
+  dictation = 'Summarize the open invoices for October and flag anything overdue.',
   effort: effortProp,
   onEffortChange,
   hideEffort,
@@ -141,6 +202,8 @@ export function Composer({
   onRemoveAttachment,
   onAttach,
   actions,
+  variant = 'default',
+  footer,
   className,
   xstyle,
   ref,
@@ -156,7 +219,50 @@ export function Composer({
   const [modeInner, setModeInner] = useState(permissionModes[0]?.id ?? '');
   const mode = modeProp ?? modeInner;
   const area = useRef<HTMLTextAreaElement>(null);
+  const [listening, setListening] = useState(false);
+  const [sendCount, setSendCount] = useState(0);
+  const stopMic = useRef<(() => void) | null>(null);
+  useEffect(() => () => stopMic.current?.(), []);
+  const toggleMic = () => {
+    if (listening) {
+      stopMic.current?.();
+      stopMic.current = null;
+      setListening(false);
+      return;
+    }
+    const base = value ? value.trimEnd() + ' ' : '';
+    setListening(true);
+    const w = window as unknown as { SpeechRecognition?: new () => SpeechRec; webkitSpeechRecognition?: new () => SpeechRec };
+    const Rec = w.SpeechRecognition ?? w.webkitSpeechRecognition;
+    if (Rec) {
+      const r = new Rec();
+      r.continuous = true;
+      r.interimResults = true;
+      r.lang = document.documentElement.lang || navigator.language;
+      r.onresult = (e) => setValue(base + Array.from(e.results).map((x) => x[0]?.transcript ?? '').join(' '));
+      r.onend = () => setListening(false);
+      stopMic.current = () => { r.onend = null; r.stop(); };
+      r.start();
+    } else {
+      const words = dictation.split(' ');
+      let i = 0;
+      const id = setInterval(() => {
+        i += 1;
+        setValue(base + words.slice(0, i).join(' '));
+        if (i >= words.length) {
+          clearInterval(id);
+          stopMic.current = null;
+          setListening(false);
+        }
+      }, 130);
+      stopMic.current = () => clearInterval(id);
+    }
+  };
   const file = useRef<HTMLInputElement>(null);
+  // Keep the last attachments mounted while the tray folds closed.
+  const lastFiles = useRef(attachments);
+  if (attachments.length > 0) lastFiles.current = attachments;
+  const shownFiles = attachments.length > 0 ? attachments : lastFiles.current;
 
   useLayoutEffect(() => {
     const el = area.current;
@@ -169,18 +275,60 @@ export function Composer({
   const submit = () => {
     if (!canSend || isStreaming) return;
     onSubmit?.(value);
+    setSendCount((n) => n + 1);
     setValue('');
   };
   const currentMode = permissionModes.find((m) => m.id === mode) ?? permissionModes[0];
   const sx = stylex.props(styles.root, xstyle);
+  const tray = variant === 'tray';
+  const effortEl = (
+      <PopoverTrigger>
+        <Button
+          variant="ghost"
+          size="sm"
+          isDisabled={isDisabled}
+          aria-label={`Effort: ${effortLabel[effort]}`}
+          startIcon={<Gauge size={14} aria-hidden="true" />}
+        >
+          {effortLabel[effort]}
+        </Button>
+        <Popover aria-label="Effort" placement="top start">
+          <div {...stylex.props(styles.effort)}>
+            <span {...stylex.props(styles.effortTitle)}>Effort</span>
+            <Slider
+              aria-label="Effort"
+              hideOutput
+              minValue={0}
+              maxValue={2}
+              step={1}
+              value={efforts.indexOf(effort)}
+              onChange={(v) => {
+                const e = efforts[v as number] ?? 'balanced';
+                setEffortInner(e);
+                onEffortChange?.(e);
+              }}
+            />
+            <div {...stylex.props(styles.effortLabels)} aria-hidden="true">
+              <span>Faster</span>
+              <span>Smarter</span>
+            </div>
+          </div>
+        </Popover>
+      </PopoverTrigger>
+    );
 
   return (
     <div ref={ref} {...mergeSx(sx, className)}>
       <ComposerLoader active={isStreaming}>
-        <div {...stylex.props(styles.body)}>
-          {attachments.length > 0 && (
-            <ComposerAttachments files={attachments} onRemove={onRemoveAttachment} />
-          )}
+        <div
+          {...stylex.props(styles.body, tray && styles.bodyTray)}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) area.current?.focus();
+          }}
+        >
+          <AnimatedHeight isOpen={attachments.length > 0}>
+            {shownFiles.length > 0 && <ComposerAttachments files={shownFiles} onRemove={onRemoveAttachment} />}
+          </AnimatedHeight>
           <AriaTextArea
             ref={area}
             aria-label="Message"
@@ -195,9 +343,9 @@ export function Composer({
                 submit();
               }
             }}
-            {...stylex.props(styles.area)}
+            {...stylex.props(styles.area, tray && styles.areaTray)}
           />
-          <div {...stylex.props(styles.bar)}>
+          <div {...stylex.props(styles.bar, tray && styles.barTray)}>
             {onAttach && (
               <>
                 <input
@@ -222,7 +370,7 @@ export function Composer({
                     isDisabled={isDisabled}
                     onPress={() => file.current?.click()}
                   >
-                    <Paperclip size={16} aria-hidden="true" />
+                    {tray ? <Plus size={18} aria-hidden="true" /> : <Paperclip size={16} aria-hidden="true" />}
                   </IconButton>
                 </Tooltip>
               </>
@@ -232,18 +380,24 @@ export function Composer({
                 models={models}
                 value={model ?? models[0]!.id}
                 onChange={onModelChange}
+                thinking={thinking}
+                onThinkingChange={onThinkingChange}
+                webSearch={webSearch}
+                onWebSearchChange={onWebSearchChange}
+                effort={modelEffort}
+                onEffortChange={onModelEffortChange}
                 isDisabled={isDisabled}
               />
             )}
             {!hidePermissions && currentMode && (
               <DropdownMenu>
                 <Button
-                  variant="ghost"
+                  variant={tray ? 'secondary' : 'ghost'}
                   size="sm"
                   isDisabled={isDisabled}
                   aria-label={`Permission mode: ${currentMode.label}`}
-                  startIcon={<ShieldCheck size={14} aria-hidden="true" />}
-                  endIcon={<ChevronDown size={14} aria-hidden="true" />}
+                  startIcon={tray ? <Hand size={14} aria-hidden="true" /> : <ShieldCheck size={14} aria-hidden="true" />}
+                  endIcon={tray ? undefined : <ChevronDown size={14} aria-hidden="true" />}
                 >
                   {currentMode.label}
                 </Button>
@@ -267,48 +421,34 @@ export function Composer({
                 </DropdownMenuContent>
               </DropdownMenu>
             )}
-            {!hideEffort && (
-              <PopoverTrigger>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  isDisabled={isDisabled}
-                  aria-label={`Effort: ${effortLabel[effort]}`}
-                  startIcon={<Gauge size={14} aria-hidden="true" />}
-                >
-                  {effortLabel[effort]}
-                </Button>
-                <Popover aria-label="Effort" placement="top start">
-                  <div {...stylex.props(styles.effort)}>
-                    <span {...stylex.props(styles.effortTitle)}>Effort</span>
-                    <Slider
-                      aria-label="Effort"
-                      hideOutput
-                      minValue={0}
-                      maxValue={2}
-                      step={1}
-                      value={efforts.indexOf(effort)}
-                      onChange={(v) => {
-                        const e = efforts[v as number] ?? 'balanced';
-                        setEffortInner(e);
-                        onEffortChange?.(e);
-                      }}
-                    />
-                    <div {...stylex.props(styles.effortLabels)} aria-hidden="true">
-                      <span>Faster</span>
-                      <span>Smarter</span>
-                    </div>
-                  </div>
-                </Popover>
-              </PopoverTrigger>
-            )}
+            {!hideEffort && !tray && effortEl}
             {actions}
             <span {...stylex.props(styles.spacer)} />
-            {!isStreaming && value.length > 0 && (
+            {!hideEffort && tray && effortEl}
+            {showMic && !isStreaming && (
+              <>
+                {listening && <span aria-hidden="true" {...stylex.props(styles.traceWrap)}><span {...stylex.props(m3.trace)} /></span>}
+                <span {...stylex.props(styles.micWrap)}>
+                  {listening && <span aria-hidden="true" {...stylex.props(m3.ring)} />}
+                  <IconButton
+                    size="sm"
+                    variant="ghost"
+                    aria-label={listening ? 'Stop dictation' : 'Start dictation'}
+                    aria-pressed={listening}
+                    isDisabled={isDisabled}
+                    onPress={toggleMic}
+                    xstyle={listening ? styles.micOn : undefined}
+                  >
+                    <Mic size={16} aria-hidden="true" />
+                  </IconButton>
+                </span>
+              </>
+            )}
+            <Presence isPresent={!isStreaming && value.length > 0} preset="fade" initial={false} xstyle={styles.hintWrap}>
               <span {...stylex.props(styles.hint)}>
                 <Kbd size="sm">↵</Kbd> send
               </span>
-            )}
+            </Presence>
             {isStreaming ? (
               <IconButton
                 size="sm"
@@ -316,7 +456,9 @@ export function Composer({
                 aria-label="Stop generating"
                 onPress={onStop}
               >
-                <Square size={14} fill="currentColor" aria-hidden="true" />
+                <CrossFade as="span" contentKey="stop" duration={200}>
+                  <Square size={14} fill="currentColor" aria-hidden="true" />
+                </CrossFade>
               </IconButton>
             ) : (
               <IconButton
@@ -326,12 +468,18 @@ export function Composer({
                 isDisabled={!canSend}
                 onPress={submit}
               >
-                <ArrowUp size={16} aria-hidden="true" />
+                <CrossFade as="span" contentKey="send" duration={200}>
+                  <ArrowUp key={sendCount} size={16} aria-hidden="true" {...stylex.props(sendCount > 0 && m3.launch)} />
+                </CrossFade>
               </IconButton>
             )}
           </div>
         </div>
+        {footer && <div {...stylex.props(styles.footer)}>{footer}</div>}
       </ComposerLoader>
+      <span role="status" aria-live="polite" {...stylex.props(styles.sr)}>
+        {isStreaming ? 'Generating response' : listening ? 'Listening' : ''}
+      </span>
     </div>
   );
 }

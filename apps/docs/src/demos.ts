@@ -1,7 +1,8 @@
 import type { DemoModule } from '../../../packages/oniva-ui/src/internal/demo';
 
 // Auto-discovery: any `*.demo.tsx` under the library is picked up. No registry edits needed.
-const modules = import.meta.glob('../../../packages/oniva-ui/src/**/*.demo.tsx', {
+// Illustrations are disabled for now: excluded here and from the package index (scripts/gen-index.mjs).
+const modules = import.meta.glob(['../../../packages/oniva-ui/src/**/*.demo.tsx', '!../../../packages/oniva-ui/src/illustrations/**'], {
   eager: true,
   import: 'default',
 }) as Record<string, DemoModule>;

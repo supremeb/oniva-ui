@@ -1,2 +1,2 @@
 export { PlanCard } from './PlanCard';
-export type { PlanCardProps, PlanStep } from './PlanCard';
+export type { PlanCardProps, PlanStep, PlanStepStatus } from './PlanCard';

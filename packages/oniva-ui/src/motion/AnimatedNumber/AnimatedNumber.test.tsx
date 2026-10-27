@@ -1,5 +1,5 @@
-import { render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { act, render, screen } from '@testing-library/react';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { AnimatedNumber } from './AnimatedNumber';
 
 describe('AnimatedNumber', () => {
@@ -20,4 +20,34 @@ describe('AnimatedNumber', () => {
     render(<AnimatedNumber value={5} className="n" data-testid="n" />);
     expect(screen.getByTestId('n')).toHaveClass('n');
   });
+  it('counts in from zero when it scrolls into view', () => {
+    let cb: IntersectionObserverCallback = () => {};
+    class IO {
+      constructor(c: IntersectionObserverCallback) {
+        cb = c;
+      }
+      observe() {}
+      disconnect() {}
+      unobserve() {}
+    }
+    vi.stubGlobal('IntersectionObserver', IO);
+    vi.stubGlobal('requestAnimationFrame', (f: FrameRequestCallback) => {
+      f(0);
+      return 1;
+    });
+    const { container } = render(<AnimatedNumber value={347} countIn locale="en-US" />);
+    const digits = () => [...container.querySelectorAll<HTMLElement>('[aria-hidden] span[style]')].map((c) => c.style.getPropertyValue('--oniva-digit'));
+    expect(digits()).toEqual(['0', '0', '0']);
+    act(() => cb([{ isIntersecting: true } as IntersectionObserverEntry], {} as IntersectionObserver));
+    expect(digits()).toEqual(['3', '4', '7']);
+    // screen readers always get the final value
+    expect(screen.getByText('347')).toBeInTheDocument();
+  });
+  it('applies duration, delay and per-digit stagger as custom properties', () => {
+    const { container } = render(<AnimatedNumber value={12} duration={900} delay={100} digitStagger={50} locale="en-US" data-testid="n" />);
+    expect(screen.getByTestId('n').style.getPropertyValue('--oniva-roll-dur')).toBe('900ms');
+    const cols = [...container.querySelectorAll<HTMLElement>('[aria-hidden] span[style]')];
+    expect(cols.map((c) => c.style.getPropertyValue('--oniva-roll-delay'))).toEqual(['150ms', '100ms']);
+  });
+  afterEach(() => vi.unstubAllGlobals());
 });

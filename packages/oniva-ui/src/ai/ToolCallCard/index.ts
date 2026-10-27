@@ -1,2 +1,2 @@
-export { ToolCallCard } from './ToolCallCard';
-export type { ToolCallCardProps, ToolCallStatus } from './ToolCallCard';
+export { ToolCallCard, ToolCallGroup } from './ToolCallCard';
+export type { ToolCallCardProps, ToolCallGroupProps, ToolCallStatus } from './ToolCallCard';

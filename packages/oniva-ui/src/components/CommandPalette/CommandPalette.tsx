@@ -10,8 +10,12 @@ import {
 import { Search } from 'lucide-react';
 import { useCallback, useEffect, useState, type ReactNode, type Ref } from 'react';
 import { colors } from '../../tokens/colors.stylex';
+import { radius } from '../../tokens/radius.stylex';
 import { font } from '../../tokens/font.stylex';
+import { mergeSx } from "../../internal/sx";
 import { menuStyles as m } from '../../internal/overlays-menu';
+import { GlideSurface } from '../../internal/m5-glide';
+import { VisuallyHidden } from '../VisuallyHidden';
 import { Dialog, Modal } from '../Dialog';
 import { DropdownMenuItem, DropdownMenuSection } from '../DropdownMenu';
 
@@ -20,6 +24,37 @@ const fadeIn = stylex.keyframes({ from: { opacity: 0 }, to: { opacity: 1 } });
 const fadeOut = stylex.keyframes({ from: { opacity: 1 }, to: { opacity: 0 } });
 
 const styles = stylex.create({
+  inlineRoot: {
+    backgroundColor: colors['--oniva-color-surface'],
+    borderColor: colors['--oniva-color-border'],
+    borderRadius: radius['--oniva-radius-xl'],
+    borderStyle: 'solid',
+    borderWidth: 1,
+    boxSizing: 'border-box',
+    maxWidth: 560,
+    overflow: 'hidden',
+    width: '100%',
+  },
+  sectionLabel: {
+    fontSize: font['--oniva-font-size-11'],
+    fontWeight: font['--oniva-font-weight-medium'],
+    letterSpacing: '0.06em',
+    textTransform: 'uppercase',
+  },
+  tile: {
+    alignItems: 'center',
+    backgroundColor: colors['--oniva-color-surface-inset'],
+    borderColor: colors['--oniva-color-border'],
+    borderRadius: radius['--oniva-radius-md'],
+    borderStyle: 'solid',
+    borderWidth: 1,
+    boxSizing: 'border-box',
+    display: 'inline-flex',
+    height: 24,
+    justifyContent: 'center',
+    width: 24,
+  },
+  detail: { color: colors['--oniva-color-text-muted'], fontWeight: font['--oniva-font-weight-regular'], marginInlineStart: 8 },
   overlay: { alignItems: 'flex-start', paddingTop: '12vh' },
   panel: {
     animationDuration: { default: '0s', '[data-entering]': '80ms', '[data-exiting]': '80ms' },
@@ -100,6 +135,8 @@ export interface CommandItem {
   keywords?: string[];
   isDisabled?: boolean;
   variant?: 'default' | 'danger';
+  /** Muted text after the label (a tool name, a channel). */
+  detail?: ReactNode;
 }
 export interface CommandGroup {
   id: string;
@@ -137,6 +174,18 @@ export interface CommandPaletteProps {
   /** Registers a global ⌘K / Ctrl+K toggle. Default true. */
   hotkey?: boolean;
   emptyMessage?: ReactNode;
+  /**
+   * While open, ⌘/Ctrl + 1–9 runs the Nth enabled item of the first group straight away, and those items
+   * show the combo as their shortcut hint (unless they define their own).
+   */
+  quickRun?: boolean;
+  /** Politely announces what ran after the palette closes. Default `Ran {label}`. */
+  announceRun?: (item: CommandItem) => string;
+  /**
+   * Render the palette as an always-open inline panel (no modal, no ⌘K toggle), e.g. in docs or a settings page.
+   * `onSelect` still fires; the panel stays put.
+   */
+  inline?: boolean;
   'aria-label'?: string;
   xstyle?: stylex.StyleXStyles;
   className?: string;
@@ -152,13 +201,16 @@ export function CommandPalette({
   placeholder = 'Search commands…',
   hotkey = true,
   emptyMessage = 'No commands found. Try a different search.',
+  quickRun = false,
+  announceRun = (it) => `Ran ${it.label}`,
+  inline = false,
   'aria-label': ariaLabel = 'Command palette',
   xstyle,
   className,
   ref,
 }: CommandPaletteProps) {
   const [inner, setInner] = useState(defaultOpen);
-  const open = isOpenProp ?? inner;
+  const open = inline || (isOpenProp ?? inner);
   const setOpen = useCallback(
     (next: boolean) => {
       if (isOpenProp === undefined) setInner(next);
@@ -168,7 +220,7 @@ export function CommandPalette({
   );
 
   useEffect(() => {
-    if (!hotkey) return;
+    if (!hotkey || inline) return;
     const onKey = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault();
@@ -179,12 +231,122 @@ export function CommandPalette({
     return () => {
       document.removeEventListener('keydown', onKey);
     };
-  }, [hotkey, open, setOpen]);
+  }, [hotkey, inline, open, setOpen]);
+
+  const [ran, setRan] = useState('');
+  const run = useCallback(
+    (item: CommandItem) => {
+      if (!inline) setOpen(false);
+      setRan(announceRun(item));
+      onSelect?.(item);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [setOpen, onSelect, inline],
+  );
+  const quick = quickRun ? groups[0]?.items.filter((i) => !i.isDisabled).slice(0, 9) ?? [] : [];
+
+  useEffect(() => {
+    if (!quickRun || !open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (!(e.metaKey || e.ctrlKey) || e.altKey || !/^[1-9]$/.test(e.key)) return;
+      const item = quick[Number(e.key) - 1];
+      if (!item) return;
+      e.preventDefault();
+      run(item);
+    };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  });
 
   const all = new Map<Key, CommandItem>();
   for (const g of groups) for (const it of g.items) all.set(it.id, it);
 
+  const panel = (
+    <>
+      <Autocomplete filter={(text, input) => fuzzyMatch(text, input)}>
+        <div {...stylex.props(styles.searchRow)}>
+          <Search size={18} aria-hidden="true" />
+          <AriaSearchField
+            aria-label="Search commands"
+            autoFocus={!inline}
+            {...stylex.props(styles.search)}
+          >
+            <AriaInput placeholder={placeholder} {...stylex.props(styles.input)} />
+          </AriaSearchField>
+        </div>
+        <GlideSurface>
+        <AriaMenu
+          aria-label="Commands"
+          {...stylex.props(m.menu, styles.list)}
+          renderEmptyState={() => <div {...stylex.props(styles.empty)}>{emptyMessage}</div>}
+          onAction={(key) => {
+            const item = all.get(key);
+            if (!item) return;
+            run(item);
+          }}
+        >
+          {groups.map((g) => (
+            <DropdownMenuSection
+              key={g.id}
+              id={g.id}
+              title={inline ? <span {...stylex.props(styles.sectionLabel)}>{g.title}</span> : g.title}
+            >
+              {g.items.map((it) => (
+                <DropdownMenuItem
+                  key={it.id}
+                  id={it.id}
+                  icon={
+                    inline && it.icon != null ? (
+                      <span {...stylex.props(styles.tile)}>{it.icon}</span>
+                    ) : (
+                      it.icon
+                    )
+                  }
+                  shortcut={
+                    it.shortcut ??
+                    (g === groups[0] && quickRun && quick.indexOf(it) >= 0
+                      ? `⌘${quick.indexOf(it) + 1}`
+                      : undefined)
+                  }
+                  isDisabled={it.isDisabled}
+                  variant={it.variant}
+                  textValue={[it.label, ...(it.keywords ?? [])].join(' ')}
+                >
+                  {it.label}
+                  {it.detail != null && <span {...stylex.props(styles.detail)}>{it.detail}</span>}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuSection>
+          ))}
+        </AriaMenu>
+        </GlideSurface>
+      </Autocomplete>
+      <div {...stylex.props(styles.footer)} aria-hidden="true">
+        <span {...stylex.props(styles.hint)}>
+          <AriaKeyboard {...stylex.props(styles.kbd)}>↑↓</AriaKeyboard> navigate
+        </span>
+        <span {...stylex.props(styles.hint)}>
+          <AriaKeyboard {...stylex.props(styles.kbd)}>↵</AriaKeyboard> select
+        </span>
+        <span {...stylex.props(styles.hint)}>
+          <AriaKeyboard {...stylex.props(styles.kbd)}>esc</AriaKeyboard> close
+        </span>
+      </div>
+    </>
+  );
+
   return (
+    <>
+    <VisuallyHidden>
+      <span role="status" aria-live="polite">
+        {ran}
+      </span>
+    </VisuallyHidden>
+    {inline ? (
+      <div ref={ref as Ref<HTMLDivElement>} role="group" aria-label={ariaLabel} {...mergeSx(stylex.props(styles.inlineRoot, xstyle), className)}>
+        {panel}
+      </div>
+    ) : (
     <Modal
       isOpen={open}
       onOpenChange={setOpen}
@@ -192,59 +354,10 @@ export function CommandPalette({
       xstyle={[styles.panel, xstyle] as unknown as stylex.StyleXStyles}
     >
       <Dialog ref={ref} className={className} aria-label={ariaLabel} showCloseButton={false}>
-        <Autocomplete filter={(text, input) => fuzzyMatch(text, input)}>
-          <div {...stylex.props(styles.searchRow)}>
-            <Search size={18} aria-hidden="true" />
-            <AriaSearchField
-              aria-label="Search commands"
-              autoFocus
-              {...stylex.props(styles.search)}
-            >
-              <AriaInput placeholder={placeholder} {...stylex.props(styles.input)} />
-            </AriaSearchField>
-          </div>
-          <AriaMenu
-            aria-label="Commands"
-            {...stylex.props(m.menu, styles.list)}
-            renderEmptyState={() => <div {...stylex.props(styles.empty)}>{emptyMessage}</div>}
-            onAction={(key) => {
-              const item = all.get(key);
-              if (!item) return;
-              setOpen(false);
-              onSelect?.(item);
-            }}
-          >
-            {groups.map((g) => (
-              <DropdownMenuSection key={g.id} id={g.id} title={g.title}>
-                {g.items.map((it) => (
-                  <DropdownMenuItem
-                    key={it.id}
-                    id={it.id}
-                    icon={it.icon}
-                    shortcut={it.shortcut}
-                    isDisabled={it.isDisabled}
-                    variant={it.variant}
-                    textValue={[it.label, ...(it.keywords ?? [])].join(' ')}
-                  >
-                    {it.label}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuSection>
-            ))}
-          </AriaMenu>
-        </Autocomplete>
-        <div {...stylex.props(styles.footer)} aria-hidden="true">
-          <span {...stylex.props(styles.hint)}>
-            <AriaKeyboard {...stylex.props(styles.kbd)}>↑↓</AriaKeyboard> navigate
-          </span>
-          <span {...stylex.props(styles.hint)}>
-            <AriaKeyboard {...stylex.props(styles.kbd)}>↵</AriaKeyboard> select
-          </span>
-          <span {...stylex.props(styles.hint)}>
-            <AriaKeyboard {...stylex.props(styles.kbd)}>esc</AriaKeyboard> close
-          </span>
-        </div>
+        {panel}
       </Dialog>
     </Modal>
+    )}
+    </>
   );
 }

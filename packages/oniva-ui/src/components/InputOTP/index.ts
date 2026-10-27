@@ -1,2 +1,2 @@
 export { InputOTP } from './InputOTP';
-export type { InputOTPProps } from './InputOTP';
+export type { InputOTPProps, InputOTPStatus } from './InputOTP';

@@ -1,6 +1,6 @@
 import { CalendarDate } from '@internationalized/date';
 import type { DemoModule } from '../../internal/demo';
-import { DateRangePicker } from './DateRangePicker';
+import { DateRangePicker, defaultDateRangePresets } from './DateRangePicker';
 
 const col = {
   display: 'flex',
@@ -18,6 +18,20 @@ const demo: DemoModule = {
     description: 'Start and end date fields with a two-month range calendar popover.',
   },
   demos: [
+    {
+      name: 'Presets, two months and footer',
+      code: `<DateRangePicker layout="panel" compare aria-label="Date range" today={new CalendarDate(2026, 10, 26)}
+  defaultValue={{ start: new CalendarDate(2026, 9, 27), end: new CalendarDate(2026, 10, 26) }} />`,
+      Component: () => (
+        <DateRangePicker
+          layout="panel"
+          compare
+          aria-label="Date range"
+          today={new CalendarDate(2026, 10, 26)}
+          defaultValue={{ start: new CalendarDate(2026, 9, 27), end: new CalendarDate(2026, 10, 26) }}
+        />
+      ),
+    },
     {
       name: 'Reporting period',
       code: `<DateRangePicker label="Reporting period"
@@ -44,6 +58,15 @@ const demo: DemoModule = {
             isInvalid
             errorMessage="Choose a range up to 90 days."
           />
+        </div>
+      ),
+    },
+    {
+      name: 'With quick ranges',
+      code: `<DateRangePicker label="Compare window" presets={defaultDateRangePresets} />`,
+      Component: () => (
+        <div style={col}>
+          <DateRangePicker label="Compare window" presets={defaultDateRangePresets} />
         </div>
       ),
     },

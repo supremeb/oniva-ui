@@ -1,4 +1,5 @@
-import { LayoutGrid, List } from 'lucide-react';
+import { CalendarDays, Columns3, Inbox, LayoutGrid, List, Star } from 'lucide-react';
+import { Badge } from '../Badge';
 import type { DemoModule } from '../../internal/demo';
 import { SegmentedControl, SegmentedControlItem } from './SegmentedControl';
 
@@ -11,6 +12,10 @@ const col = {
   alignItems: 'flex-start',
 } as const;
 
+const lbl = { color: 'var(--oniva-color-text-muted)', fontSize: 13 } as const;
+const section = { display: 'flex', flexDirection: 'column', gap: 12, alignItems: 'flex-start' } as const;
+const rule = { borderTop: '1px solid var(--oniva-color-border)', width: '100%' } as const;
+
 const demo: DemoModule = {
   meta: {
     title: 'Segmented control',
@@ -19,6 +24,67 @@ const demo: DemoModule = {
     description: 'Inset track with a white selected pill. Single choice, arrow-key navigation.',
   },
   demos: [
+    {
+      name: 'Dashboard sections',
+      code: `<SegmentedControl aria-label="Dashboard" defaultValue="reports">
+  <SegmentedControlItem value="overview">Overview</SegmentedControlItem>
+  <SegmentedControlItem value="notifications" count={3}>Notifications</SegmentedControlItem>
+</SegmentedControl>
+<SegmentedControl size="sm" aria-label="Layout" defaultValue="board">...</SegmentedControl>
+<SegmentedControl variant="underline" aria-label="Billing" defaultValue="yearly">
+  <SegmentedControlItem value="yearly" badge={<Badge variant="info">Save 20%</Badge>}>Yearly</SegmentedControlItem>
+</SegmentedControl>`,
+      Component: () => (
+        <div
+          style={{
+            ...col,
+            maxWidth: 480,
+            gap: 20,
+            padding: 20,
+            border: '1px solid var(--oniva-color-border)',
+            borderRadius: 16,
+            background: 'var(--oniva-color-surface)',
+          }}
+        >
+          <div style={section}>
+            <span style={lbl}>Dashboard</span>
+            <SegmentedControl aria-label="Dashboard" defaultValue="reports">
+              <SegmentedControlItem value="overview">Overview</SegmentedControlItem>
+              <SegmentedControlItem value="analytics">Analytics</SegmentedControlItem>
+              <SegmentedControlItem value="reports">Reports</SegmentedControlItem>
+              <SegmentedControlItem value="notifications" count={3}>
+                Notifications
+              </SegmentedControlItem>
+            </SegmentedControl>
+          </div>
+          <div style={rule} />
+          <div style={section}>
+            <span style={lbl}>Layout</span>
+            <SegmentedControl size="sm" aria-label="Layout" defaultValue="board">
+              <SegmentedControlItem value="list" icon={<List size={14} />}>
+                List
+              </SegmentedControlItem>
+              <SegmentedControlItem value="board" icon={<Columns3 size={14} />}>
+                Board
+              </SegmentedControlItem>
+              <SegmentedControlItem value="calendar" icon={<CalendarDays size={14} />}>
+                Calendar
+              </SegmentedControlItem>
+            </SegmentedControl>
+          </div>
+          <div style={rule} />
+          <div style={section}>
+            <span style={lbl}>Billing</span>
+            <SegmentedControl variant="underline" aria-label="Billing" defaultValue="yearly">
+              <SegmentedControlItem value="monthly">Monthly</SegmentedControlItem>
+              <SegmentedControlItem value="yearly" badge={<Badge variant="info">Save 20%</Badge>}>
+                Yearly
+              </SegmentedControlItem>
+            </SegmentedControl>
+          </div>
+        </div>
+      ),
+    },
     {
       name: 'Time range',
       code: `<SegmentedControl aria-label="Time range" defaultValue="30d">
@@ -53,6 +119,27 @@ const demo: DemoModule = {
           <SegmentedControl fullWidth aria-label="Billing" defaultValue="monthly">
             <SegmentedControlItem value="monthly">Monthly</SegmentedControlItem>
             <SegmentedControlItem value="yearly">Yearly (save 20%)</SegmentedControlItem>
+          </SegmentedControl>
+        </div>
+      ),
+    },
+    {
+      name: 'Underline with counts',
+      code: `<SegmentedControl variant="underline" aria-label="Inbox view" defaultValue="all">
+  <SegmentedControlItem value="all" icon={<Inbox size={14} />} count={128}>All</SegmentedControlItem>
+  <SegmentedControlItem value="starred" icon={<Star size={14} />} count={9}>Starred</SegmentedControlItem>
+  <SegmentedControlItem value="archived">Archived</SegmentedControlItem>
+</SegmentedControl>`,
+      Component: () => (
+        <div style={{ ...col, alignItems: 'stretch' }}>
+          <SegmentedControl variant="underline" aria-label="Inbox view" defaultValue="all">
+            <SegmentedControlItem value="all" icon={<Inbox size={14} />} count={128}>
+              All
+            </SegmentedControlItem>
+            <SegmentedControlItem value="starred" icon={<Star size={14} />} count={9}>
+              Starred
+            </SegmentedControlItem>
+            <SegmentedControlItem value="archived">Archived</SegmentedControlItem>
           </SegmentedControl>
         </div>
       ),

@@ -8,12 +8,13 @@ import {
   getSortedRowModel,
   useReactTable,
   type ColumnDef,
+  type RowData,
   type ColumnFiltersState,
   type RowSelectionState,
   type SortingState,
 } from '@tanstack/react-table';
-import { ArrowLeft, ArrowRight, Search } from 'lucide-react';
-import { useMemo, useState, type ReactNode, type Ref } from 'react';
+import { ArrowLeft, ArrowRight, Copy, Plus, Search, X } from 'lucide-react';
+import { useCallback, useLayoutEffect, useMemo, useRef, useState, type ClipboardEvent, type KeyboardEvent, type ReactNode, type Ref } from 'react';
 import { createFormatters, useFormatters } from '../../internal/format';
 import {
   Input as AriaInput,
@@ -28,6 +29,11 @@ import { font } from '../../tokens/font.stylex';
 import { motion } from '../../tokens/motion.stylex';
 import { radius } from '../../tokens/radius.stylex';
 import { Button } from '../Button';
+import { useObjectRef } from 'react-aria';
+import { Presence } from '../../motion/Presence';
+import { prefersReducedMotion } from '../../internal/motion-hooks';
+import { DataSheet } from '../DataSheet';
+import type { SheetColumn, SheetRow, TagTone } from '../DataSheet';
 import { Cell, Column, Row, Table, TableBody, TableHeader, type TableDensity } from '../Table';
 
 const styles = stylex.create({
@@ -104,6 +110,28 @@ const styles = stylex.create({
     transitionDuration: motion['--oniva-motion-dur-base'],
   },
   ellipsis: { color: colors['--oniva-color-text-muted'], paddingInline: 6 },
+  selectionBar: {
+    alignItems: 'center',
+    color: colors['--oniva-color-text-muted'],
+    display: 'flex',
+    fontSize: font['--oniva-font-size-13'],
+    fontVariantNumeric: 'tabular-nums',
+    gap: 8,
+    minHeight: 32,
+    paddingInline: 4,
+  },
+  selectionCount: { color: colors['--oniva-color-text'], fontWeight: font['--oniva-font-weight-medium'] },
+  sr: {
+    borderWidth: 0,
+    clip: 'rect(0 0 0 0)',
+    height: 1,
+    margin: -1,
+    overflow: 'hidden',
+    padding: 0,
+    position: 'absolute',
+    whiteSpace: 'nowrap',
+    width: 1,
+  },
   empty: {
     color: colors['--oniva-color-text-muted'],
     paddingBlock: 32,
@@ -145,9 +173,44 @@ export interface DataTableProps<TData extends object> {
   /** Called when a cell edits data (e.g. the status select). */
   onDataChange?: (data: TData[]) => void;
   onSelectionChange?: (ids: string[]) => void;
+  /**
+   * Copy the selected rows as tab-separated text (pastes into Excel and Google Sheets) with Cmd/Ctrl+C or the Copy
+   * button in the selection bar. Default true.
+   */
+  copyable?: boolean;
+  /** Cmd/Ctrl+Z undoes the last cell edit made through `meta.updateRow`, Shift+Cmd/Ctrl+Z (or Ctrl+Y) redoes. Default true. */
+  isUndoable?: boolean;
+  /**
+   * Shows an "Add row" button in the footer. Return the new row and the table appends it (undoable, reported through
+   * `onDataChange`); return nothing to manage it yourself.
+   */
+  onAddRow?: () => TData | void;
+  /** Label of the add button. Default `Add row`. */
+  addRowLabel?: string;
+  /**
+   * `sheet` renders an editable spreadsheet (`DataSheet`): cell selection, in-place editing, tag picker, copy/paste with
+   * spreadsheets, undo/redo and an add-row footer. Columns are described by `column.meta.sheet`
+   * (`type`, `options`, `icon`, `editable`, `width`). Total, filters, search, pagination and `onAddRow` do not apply.
+   * Default `block`.
+   */
+  layout?: 'block' | 'sheet';
+  /** Icon in the title row (sheet layout). */
+  icon?: ReactNode;
+  /** Sheet layout: allow editing cells and adding rows. Default true. */
+  editable?: boolean;
+  /** Sheet layout: pill colour per tag value; unlisted values get a stable colour. */
+  tagTones?: Record<string, TagTone>;
   xstyle?: stylex.StyleXStyles;
   className?: string;
   ref?: Ref<HTMLDivElement>;
+}
+
+declare module '@tanstack/react-table' {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  interface ColumnMeta<TData extends RowData, TValue> {
+    /** Sheet layout column options: `type` (default `text`), `options` for tag columns, `icon`, `editable`, `width`, `format`. */
+    sheet?: Partial<SheetColumn>;
+  }
 }
 
 export interface DataTableMeta<TData> {
@@ -162,7 +225,7 @@ function pageList(current: number, total: number): (number | 'gap-start' | 'gap-
   return [1, 'gap-start', current - 1, current, current + 1, 'gap-end', total];
 }
 
-export function DataTable<TData extends object>({
+function BlockTable<TData extends object>({
   data: initialData,
   columns,
   title = 'Total results',
@@ -177,6 +240,10 @@ export function DataTable<TData extends object>({
   getRowId,
   onDataChange,
   onSelectionChange,
+  copyable = true,
+  isUndoable = true,
+  onAddRow,
+  addRowLabel = 'Add row',
   xstyle,
   className,
   ref,
@@ -191,19 +258,38 @@ export function DataTable<TData extends object>({
   const [globalFilter, setGlobalFilter] = useState('');
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize });
 
+  const [status, setStatus] = useState('');
+  const undoStack = useRef<TData[][]>([]);
+  const redoStack = useRef<TData[][]>([]);
+  const dataRef = useRef(data);
+  dataRef.current = data;
+
   const meta = useMemo<DataTableMeta<TData>>(
     () => ({
       updateRow: (rowId, patch) => {
-        setData((prev) => {
-          const next = prev.map((r, i) =>
-            (getRowId ? getRowId(r, i) : String(i)) === rowId ? { ...r, ...patch } : r,
-          );
-          onDataChange?.(next);
-          return next;
-        });
+        const prev = dataRef.current;
+        const next = prev.map((r, i) =>
+          (getRowId ? getRowId(r, i) : String(i)) === rowId ? { ...r, ...patch } : r,
+        );
+        undoStack.current = [...undoStack.current.slice(-49), prev];
+        redoStack.current = [];
+        setData(next);
+        onDataChange?.(next);
       },
     }),
     [getRowId, onDataChange],
+  );
+
+  const travel = useCallback(
+    (from: TData[][], to: TData[][], label: string) => {
+      const target = from.pop();
+      if (!target) return;
+      to.push(dataRef.current);
+      setData(target);
+      onDataChange?.(target);
+      setStatus(label);
+    },
+    [onDataChange],
   );
 
   const table = useReactTable<TData>({
@@ -237,6 +323,26 @@ export function DataTable<TData extends object>({
   });
 
   const rows = table.getRowModel().rows;
+  const rootRef = useObjectRef(ref);
+  const canAnimate = typeof Element !== 'undefined' && typeof Element.prototype.getAnimations === 'function';
+  const seenRows = useRef<Set<string> | null>(null);
+  const lastCount = useRef(0);
+  // New rows (add / undo) lift in; rows already on screen never replay.
+  useLayoutEffect(() => {
+    const root = rootRef.current;
+    const ids = new Set(rows.map((r) => r.id));
+    const prev = seenRows.current;
+    seenRows.current = ids;
+    if (!root || !prev || prefersReducedMotion()) return;
+    for (const id of ids) {
+      if (prev.has(id)) continue;
+      const el = root.querySelector<HTMLElement>(`[data-key="${CSS.escape(id)}"]`);
+      el?.animate?.(
+        [{ opacity: 0, transform: 'translateY(-6px)' }, { opacity: 1, transform: 'translateY(0)' }],
+        { duration: 240, easing: 'cubic-bezier(0.23, 1, 0.32, 1)' },
+      );
+    }
+  });
   const total = table.getFilteredRowModel().rows.length;
   const pageCount = Math.max(table.getPageCount(), 1);
   const page = pagination.pageIndex + 1;
@@ -252,8 +358,60 @@ export function DataTable<TData extends object>({
     Object.keys(rowSelection).filter((k) => rowSelection[k]),
   );
 
+  const selectedIds = Object.keys(rowSelection).filter((k) => rowSelection[k]);
+
+  /** Selected rows as TSV: a header line, then one line per row, quoting cells that contain tabs, quotes or line breaks. */
+  const selectionToTsv = () => {
+    const cols = table.getAllLeafColumns().filter((c) => c.accessorFn);
+    const cell = (v: unknown) => {
+      const t = v == null ? '' : v instanceof Date ? v.toISOString() : String(v);
+      return /[\t\n\r"]/.test(t) ? `"${t.replace(/"/g, '""')}"` : t;
+    };
+    const head = cols.map((c) => cell(typeof c.columnDef.header === 'string' ? c.columnDef.header : c.id));
+    const lines = table.getSelectedRowModel().rows.map((r) => cols.map((c) => cell(r.getValue(c.id))).join('\t'));
+    return [head.join('\t'), ...lines].join('\n');
+  };
+
+  const addRow = () => {
+    const row = onAddRow?.();
+    if (!row) return;
+    const prev = dataRef.current;
+    const next = [...prev, row];
+    undoStack.current = [...undoStack.current.slice(-49), prev];
+    redoStack.current = [];
+    setData(next);
+    onDataChange?.(next);
+    setStatus('Added a row');
+    setPagination((p) => ({ ...p, pageIndex: Math.floor((next.length - 1) / p.pageSize) }));
+  };
+
+  const onCopy = (e: ClipboardEvent) => {
+    if (!copyable || selectedIds.length === 0) return;
+    if (!(window.getSelection()?.isCollapsed ?? true)) return; // let real text selections copy normally
+    const target = e.target as HTMLElement;
+    if (target.closest('input, textarea, [contenteditable="true"]')) return;
+    e.preventDefault();
+    e.clipboardData.setData('text/plain', selectionToTsv());
+    setStatus(`Copied ${fmts.plural(selectedIds.length, { one: '# row', other: '# rows' })}`);
+  };
+
+  const onUndoKeys = (e: KeyboardEvent) => {
+    if (!isUndoable || !(e.metaKey || e.ctrlKey) || e.altKey) return;
+    if ((e.target as HTMLElement).closest('input, textarea, [contenteditable="true"]')) return;
+    const k = e.key.toLowerCase();
+    if (k === 'z' && !e.shiftKey) {
+      if (!undoStack.current.length) return;
+      e.preventDefault();
+      travel(undoStack.current, redoStack.current, 'Undid last edit');
+    } else if ((k === 'z' && e.shiftKey) || k === 'y') {
+      if (!redoStack.current.length) return;
+      e.preventDefault();
+      travel(redoStack.current, undoStack.current, 'Redid edit');
+    }
+  };
+
   return (
-    <div ref={ref} {...mergeSx(stylex.props(styles.root, xstyle), className)}>
+    <div ref={rootRef} onCopy={onCopy} onKeyDown={onUndoKeys} {...mergeSx(stylex.props(styles.root, xstyle), className)}>
       <div {...stylex.props(styles.toolbar)}>
         <div {...stylex.props(styles.total)}>
           <span {...stylex.props(styles.totalLabel)}>{title}</span>
@@ -289,6 +447,36 @@ export function DataTable<TData extends object>({
         )}
       </div>
 
+      {(canAnimate || selectedIds.length > 0) && (
+      <Presence isPresent={selectable && selectedIds.length > 0} preset="slide" initial={false} exitTimeoutMs={200}>
+        <div {...stylex.props(styles.selectionBar)}>
+          <span {...stylex.props(styles.selectionCount)}>{fmts.number((lastCount.current = selectedIds.length || lastCount.current))} selected</span>
+          {copyable && (
+            <Button
+              variant="ghost"
+              size="sm"
+              startIcon={<Copy size={14} />}
+              onPress={() => {
+                const text = selectionToTsv();
+                const done = () => setStatus(`Copied ${fmts.plural(selectedIds.length, { one: '# row', other: '# rows' })}`);
+                if (navigator.clipboard?.writeText) navigator.clipboard.writeText(text).then(done, () => setStatus('Copy failed'));
+                else done();
+              }}
+            >
+              Copy
+            </Button>
+          )}
+          <Button variant="ghost" size="sm" startIcon={<X size={14} />} onPress={() => table.resetRowSelection()}>
+            Clear
+          </Button>
+        </div>
+      </Presence>
+      )}
+      <span role="status" aria-live="polite" {...stylex.props(styles.sr)}>
+        {status}
+      </span>
+
+      <div>
       <Table
         aria-label={rest['aria-label']}
         density={density}
@@ -345,11 +533,17 @@ export function DataTable<TData extends object>({
           )}
         </TableBody>
       </Table>
+      </div>
 
       <div {...stylex.props(styles.footer)}>
         <span {...stylex.props(styles.range)}>
           {first}–{last} of {total}
         </span>
+        {onAddRow && (
+          <Button variant="ghost" size="sm" startIcon={<Plus size={14} />} onPress={addRow}>
+            {addRowLabel}
+          </Button>
+        )}
         <nav aria-label="Pagination" {...stylex.props(styles.pages)}>
           <Button
             variant="ghost"
@@ -392,4 +586,55 @@ export function DataTable<TData extends object>({
       </div>
     </div>
   );
+}
+
+function SheetTable<TData extends object>({
+  data,
+  columns,
+  title = 'Sheet',
+  icon,
+  getRowId,
+  onDataChange,
+  onSelectionChange,
+  editable = true,
+  tagTones,
+  addRowLabel,
+  xstyle,
+  className,
+  ref,
+}: DataTableProps<TData>) {
+  const rows = useMemo<SheetRow[]>(
+    () => data.map((r, i) => ({ ...(r as Record<string, unknown>), id: getRowId ? getRowId(r, i) : String((r as { id?: unknown }).id ?? i) })),
+    [data, getRowId],
+  );
+  const sheetColumns = useMemo<SheetColumn[]>(
+    () =>
+      columns.map((c) => {
+        const def = c as { accessorKey?: string; id?: string; header?: unknown; meta?: { sheet?: Partial<SheetColumn> } };
+        const key = def.accessorKey ?? def.id ?? '';
+        return { key, label: typeof def.header === 'string' ? def.header : key, type: 'text', ...def.meta?.sheet } as SheetColumn;
+      }),
+    [columns],
+  );
+  return (
+    <DataSheet
+      title={title}
+      icon={icon}
+      columns={sheetColumns}
+      rows={rows}
+      editable={editable}
+      tagTones={tagTones}
+      addRowLabel={addRowLabel}
+      onRowsChange={onDataChange ? (next) => onDataChange(next as unknown as TData[]) : undefined}
+      onSelectionChange={onSelectionChange}
+      xstyle={xstyle}
+      className={className}
+      ref={ref}
+    />
+  );
+}
+
+export function DataTable<TData extends object>(props: DataTableProps<TData>) {
+  if (props.layout === 'sheet') return <SheetTable {...props} />;
+  return <BlockTable {...props} />;
 }

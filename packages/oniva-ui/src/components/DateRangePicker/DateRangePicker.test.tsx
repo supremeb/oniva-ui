@@ -2,7 +2,7 @@ import { CalendarDate } from '@internationalized/date';
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
-import { DateRangePicker } from './DateRangePicker';
+import { DateRangePicker, defaultDateRangePresets } from './DateRangePicker';
 
 describe('DateRangePicker', () => {
   it('renders start and end segments and opens the calendar', async () => {
@@ -37,5 +37,35 @@ describe('DateRangePicker', () => {
     render(<DateRangePicker label="Period" isInvalid errorMessage="Range too long" isDisabled />);
     expect(screen.getByText('Range too long')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /calendar/i })).toBeDisabled();
+  });
+
+  it('preset chips set the range and report the change', async () => {
+    const onChange = vi.fn();
+    render(
+      <DateRangePicker
+        label="Period"
+        presets={defaultDateRangePresets}
+        today={new CalendarDate(2026, 10, 26)}
+        defaultValue={{ start: new CalendarDate(2026, 10, 1), end: new CalendarDate(2026, 10, 2) }}
+        onChange={onChange}
+      />,
+    );
+    await userEvent.click(screen.getByRole('button', { name: /calendar/i }));
+    const dialog = await screen.findByRole('dialog');
+    const chip = within(dialog).getByRole('button', { name: 'Last 7 days' });
+    expect(chip).toHaveAttribute('aria-pressed', 'false');
+    await userEvent.click(chip);
+    expect(onChange).toHaveBeenCalled();
+    const v = onChange.mock.calls.at(-1)?.[0];
+    expect(v.start.toString()).toBe('2026-10-20');
+    expect(v.end.toString()).toBe('2026-10-26');
+    expect(within(dialog).getByRole('button', { name: 'Last 7 days' })).toHaveAttribute('aria-pressed', 'true');
+  });
+
+  it('forwards ref and className', () => {
+    const ref = { current: null as HTMLDivElement | null };
+    const { container } = render(<DateRangePicker label="Period" ref={ref} className="extra" />);
+    expect(ref.current).toBeInstanceOf(HTMLDivElement);
+    expect(container.querySelector('.extra')).not.toBeNull();
   });
 });

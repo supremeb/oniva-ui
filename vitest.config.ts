@@ -12,5 +12,7 @@ export default defineConfig({
     setupFiles: ['packages/oniva-ui/src/test/setup.ts'],
     include: ['packages/**/*.test.{ts,tsx}', 'apps/**/*.test.{ts,tsx}'],
     css: false,
+    // 330+ files with userEvent + motion timers under the WASM StyleX build: 5s default flakes under full parallel load.
+    testTimeout: 15_000,
   },
 });

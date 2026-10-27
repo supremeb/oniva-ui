@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import type { DemoModule } from '../../internal/demo';
+import { Mail, MessageSquare, CalendarDays } from 'lucide-react';
 import { Composer, type ComposerEffort } from './Composer';
 import type { AttachmentFile } from '../ComposerAttachments';
 
 const models = [
-  { id: 'sonnet-5', name: 'Sonnet 5', description: 'Fast and capable for everyday work' },
-  { id: 'opus-5', name: 'Opus 5', description: 'Most intelligent, slower' },
-  { id: 'haiku-5', name: 'Haiku 5', description: 'Lightweight and instant' },
+  { id: 'nova-pro', name: 'Nova Pro', description: 'Fast and capable for everyday work' },
+  { id: 'atlas-2', name: 'Atlas 2', description: 'Most intelligent, slower' },
+  { id: 'lumen-fast', name: 'Lumen Fast', description: 'Lightweight and instant' },
 ];
 
 const demo: DemoModule = {
@@ -18,6 +19,37 @@ const demo: DemoModule = {
       'Chat input with auto-grow, attachments, model selector, permission mode, a Faster ↔ Smarter effort slider, send/stop and the orbiting loader border.',
   },
   demos: [
+    {
+      name: 'Tray with footer',
+      code: `<Composer
+  variant="tray"
+  placeholder="Start by typing…"
+  onAttach={add}
+  showMic
+  hideEffort={false}
+  permissionModes={[{ id: 'approval', label: 'Request approval' }, { id: 'auto', label: 'Run freely' }]}
+  footer={<><Mail /> <MessageSquare /> <CalendarDays /> Connect apps</>}
+/>`,
+      Component: () => (
+        <div style={{ maxWidth: 640, width: '100%' }}>
+          <Composer
+            variant="tray"
+            placeholder="Start by typing…"
+            showMic
+            onAttach={() => {}}
+            permissionModes={[{ id: 'approval', label: 'Request approval' }, { id: 'auto', label: 'Run freely' }]}
+            footer={
+              <>
+                <Mail size={16} aria-hidden="true" />
+                <MessageSquare size={16} aria-hidden="true" />
+                <CalendarDays size={16} aria-hidden="true" />
+                <span>Connect apps</span>
+              </>
+            }
+          />
+        </div>
+      ),
+    },
     {
       name: 'Full composer',
       code: `<Composer
@@ -34,7 +66,7 @@ const demo: DemoModule = {
   onSubmit={() => setBusy(true)}
 />`,
       Component: function Full() {
-        const [model, setModel] = useState('sonnet-5');
+        const [model, setModel] = useState('nova-pro');
         const [effort, setEffort] = useState<ComposerEffort>('smarter');
         const [busy, setBusy] = useState(false);
         const [files, setFiles] = useState<AttachmentFile[]>([
@@ -63,7 +95,7 @@ const demo: DemoModule = {
           return () => clearInterval(id);
         }, [files]);
         return (
-          <div style={{ maxWidth: 640 }}>
+          <div style={{ maxWidth: 640, width: '100%' }}>
             <Composer
               placeholder="Analyze Q3 revenue by segment…"
               models={models}
@@ -98,7 +130,7 @@ const demo: DemoModule = {
       name: 'Working (orbiting light)',
       code: `<Composer isStreaming defaultValue="Summarize churn drivers" onStop={…} />`,
       Component: () => (
-        <div style={{ maxWidth: 640 }}>
+        <div style={{ maxWidth: 640, width: '100%' }}>
           <Composer
             isStreaming
             defaultValue="Summarize churn drivers for self-serve"
@@ -112,8 +144,17 @@ const demo: DemoModule = {
       name: 'Minimal',
       code: `<Composer hideEffort hidePermissions />`,
       Component: () => (
-        <div style={{ maxWidth: 480 }}>
+        <div style={{ maxWidth: 480, width: '100%' }}>
           <Composer hideEffort hidePermissions placeholder="Message the assistant" />
+        </div>
+      ),
+    },
+    {
+      name: 'Voice and model settings',
+      code: `<Composer showMic hideEffort hidePermissions models={models} onThinkingChange={…} onWebSearchChange={…} />`,
+      Component: () => (
+        <div style={{ maxWidth: 560, width: '100%' }}>
+          <Composer showMic hideEffort hidePermissions models={models} onThinkingChange={() => {}} onWebSearchChange={() => {}} />
         </div>
       ),
     },

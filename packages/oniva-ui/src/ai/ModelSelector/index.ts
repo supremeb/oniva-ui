@@ -1,2 +1,2 @@
 export { ModelSelector } from './ModelSelector';
-export type { ModelSelectorProps, ModelOption } from './ModelSelector';
+export type { ModelSelectorProps, ModelOption, ModelEffort } from './ModelSelector';

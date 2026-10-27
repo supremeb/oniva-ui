@@ -63,4 +63,18 @@ describe('Button', () => {
     );
     expect(screen.getByRole('button').className).not.toBe(a);
   });
+
+  it('shimmer loading keeps the label readable and the button inert', async () => {
+    const onPress = vi.fn();
+    render(
+      <Button isLoading loadingStyle="shimmer" onPress={onPress}>
+        Saving
+      </Button>,
+    );
+    const btn = screen.getByRole('button', { name: /Saving/ });
+    expect(btn).toHaveTextContent('Saving');
+    expect(btn).toHaveAttribute('aria-disabled', 'true');
+    await userEvent.click(btn);
+    expect(onPress).not.toHaveBeenCalled();
+  });
 });

@@ -39,6 +39,34 @@ const demo: DemoModule = {
         );
       },
     },
+    {
+      name: 'Keyed swap',
+      code: `<CrossFade contentKey={status} morph="both" as="span">{label[status]}</CrossFade>
+<CrossFade contentKey={step} morph="height"><p>{steps[step]}</p></CrossFade>`,
+      Component: () => {
+        const labels = ['Save changes', 'Saving…', 'Saved'];
+        const tips = [
+          'Shortcuts are listed in the command palette.',
+          'Invite teammates from Settings, then pick a role for each of them. Roles can change at any time without losing history.',
+          'Pin the views you open daily.',
+        ];
+        const [i, setI] = useState(0);
+        return (
+          <div style={{ display: 'grid', gap: 16, width: 320 }}>
+            <div style={{ display: 'flex', gap: 8 }}>
+              <Button onPress={() => setI((n) => (n + 1) % 3)}>
+                <CrossFade contentKey={labels[i]!} morph="both" as="span">
+                  {labels[i]}
+                </CrossFade>
+              </Button>
+            </div>
+            <CrossFade contentKey={i} morph="height" duration={300}>
+              <p style={{ margin: 0 }}>{tips[i]}</p>
+            </CrossFade>
+          </div>
+        );
+      },
+    },
   ],
 };
 export default demo;
