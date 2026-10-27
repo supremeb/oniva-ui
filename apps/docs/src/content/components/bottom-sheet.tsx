@@ -30,7 +30,7 @@ const page: DocPage = {
     Render: () => <Sheet />,
     parts: [
       { name: 'Backdrop', description: 'Overlay color at 40% black. Opacity follows the drag progress.', selector: '[data-part="backdrop"]' },
-      { name: 'Panel', description: 'Full width, 16px top radius, 1px border, xl shadow. Height is a fraction of the viewport, default snaps 40% and 90%.', selector: '[role="dialog"]' },
+      { name: 'Panel', description: 'Full width, 16px top radius, 1px border, overlay shadow over a scrim. Height is a fraction of the viewport, default snaps 40% and 90%.', selector: '[role="dialog"]' },
       { name: 'Handle', description: '36 by 4px pill centered in a 28px drag zone with 8px top padding. Drag, flick, or press arrows on it to change snap.', selector: '[data-part="handle"]' },
       { name: 'Content', description: 'Scrolls only when the sheet is at its top snap, so drags and scrolls never fight.', selector: '[data-part="title"]' },
     ],

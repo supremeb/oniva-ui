@@ -21,7 +21,7 @@ const page: DocPage = {
       { name: 'Anchor', description: 'Native a with href. 36px tall at md, 10px radius, 12px horizontal padding, 1px border, inline-flex.', selector: 'a' },
       { name: 'Leading icon', description: 'startIcon slot, 16px lucide icon, aria-hidden by convention. 6px gap to the label.', selector: 'a svg' },
       { name: 'Label', description: '14px, medium weight, nowrap. Sentence case, verb first.', selector: 'a', fallback: { x: 65, y: 50 } },
-      { name: 'Variant surface', description: 'Primary: accent gradient with inset shadow. Secondary: surface fill, 1px border. Soft: accent tint. Ghost: transparent until hover.', selector: 'a', fallback: { x: 10, y: 50 } },
+      { name: 'Variant surface', description: 'Primary: flat accent fill with a contact shadow. Secondary: surface fill, 1px border, raised. Soft: accent tint. Ghost: transparent until hover.', selector: 'a', fallback: { x: 10, y: 50 } },
     ],
   },
   usage: {

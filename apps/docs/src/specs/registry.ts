@@ -11,6 +11,7 @@ import { PopoverSpec } from './popover/PopoverSpec';
 import { TabsSpec } from './tabs/TabsSpec';
 import { AccordionSpec } from './accordion/AccordionSpec';
 import { DialogSpec } from './dialog/DialogSpec';
+import { ToastSpec } from './toast/ToastSpec';
 
 export interface Poster {
   /** URL slug: `#/specs/<slug>`. Matches the component's docs slug where there is one. */
@@ -52,6 +53,7 @@ export const posters: Poster[] = [
   { slug: 'tabs', name: 'Tabs', accent: 'teal', Component: TabsSpec },
   { slug: 'accordion', name: 'Accordion', accent: 'cyan', Component: AccordionSpec },
   { slug: 'dialog', name: 'Dialog', accent: 'pink', Component: DialogSpec },
+  { slug: 'toast', name: 'Toast', accent: 'yellow', Component: ToastSpec },
 ];
 
 // Route-only posters (not in the strip): reachable at `#/specs/<slug>`.

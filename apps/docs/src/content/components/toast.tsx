@@ -43,7 +43,7 @@ const page: DocPage = {
     intro: 'Five parts. The container and title are always present; icon, description and action depend on the message.',
     Render: () => <T action="View invoice" />,
     parts: [
-      { name: 'Toast', description: '12px radius, 1px border, dropdown shadow, 12px padding, 10px gap, role status in an aria-live region.', selector: '[role="status"]' },
+      { name: 'Toast', description: '12px radius, 1px border, floating shadow, 12px padding, 10px gap, role status in an aria-live region.', selector: '[role="status"]' },
       { name: 'Icon', description: '20px, by variant: success, warning, danger, info, spinner. Default has none; icon={null} hides it.', selector: '[data-part="icon"]' },
       { name: 'Title', description: '14px medium. A complete short sentence about the outcome.', selector: '[data-part="title"]' },
       { name: 'Action', description: 'Optional small secondary Button 8px below the text. Presence makes the toast persistent.', selector: '[data-part="action"]' },

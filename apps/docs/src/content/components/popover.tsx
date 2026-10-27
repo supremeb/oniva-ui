@@ -2,7 +2,7 @@ import { Button, Checkbox } from 'oniva-ui';
 import type { DocPage } from '../types';
 
 // The real Popover needs an open trigger. The stage draws the same surface (xl radius, dropdown
-// shadow, 16px padded dialog) with an arrow, next to a real trigger Button.
+// floating shadow, 16px padded dialog) with an arrow, next to a real trigger Button.
 const Surface = ({ width = 260, pad = 16, children, arrow = true }: { width?: number; pad?: number; children: React.ReactNode; arrow?: boolean }) => (
   <div style={{ alignItems: 'flex-start', display: 'flex', flexDirection: 'column', gap: 8 }}>
     <Button variant="secondary">Filters</Button>
@@ -34,7 +34,7 @@ const page: DocPage = {
     Render: () => <Surface><Filters /></Surface>,
     parts: [
       { name: 'Trigger', description: 'Any pressable control. It keeps focus context and receives focus back on close.', selector: 'button' },
-      { name: 'Surface', description: '200px min, 360px max width, 12px radius, 1px border, dropdown shadow, 8px offset from the trigger.', selector: '[role="dialog"]' },
+      { name: 'Surface', description: '200px min, 360px max width, 12px radius, 1px border, floating shadow, 8px offset from the trigger.', selector: '[role="dialog"]' },
       { name: 'Content', description: '16px padding (noPadding removes it). Wrapped in a labelled dialog for focus management.', selector: '[role="dialog"] strong' },
       { name: 'Arrow', description: 'Optional 12px pointer (showArrow); adds 4px to the offset.', selector: '[data-part="arrow"]' },
     ],

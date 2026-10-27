@@ -62,8 +62,7 @@ export const controlStyles = stylex.create({
       ':disabled': 'none',
     },
     color: {
-      // accent ramp directly: `color-accent-fg` is resolved at :root in light mode, so non-blue accents kept white text
-      default: accent['--oniva-accent-on-solid'],
+      default: colors['--oniva-color-accent-fg'],
       ':disabled': colors['--oniva-color-disabled-fg'],
     },
   },

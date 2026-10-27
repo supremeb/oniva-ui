@@ -30,7 +30,7 @@ const page: DocPage = {
     intro: 'Five parts. Label and value are always present; delta, sparkline and drilldown are optional.',
     Render: () => <Demo count={3} drill />,
     parts: [
-      { name: 'Tile', description: '10px radius, 1px border, xs shadow, 14px padding, 6px gap. Tiles fill the row with a 190px minimum and 8px gaps. With onDrilldown a tile is a button that presses to 0.98.', selector: 'ul > li:first-child > *' },
+      { name: 'Tile', description: '10px radius, 1px border, no shadow, 14px padding, 6px gap. Tiles fill the row with a 190px minimum and 8px gaps. With onDrilldown a tile is a button that presses to 0.98.', selector: 'ul > li:first-child > *' },
       { name: 'Label', description: 'Metric name in the shared label style (muted, small).', selector: 'ul > li:first-child > * > span:first-child' },
       { name: 'Value', description: '24px semibold with tabular numerals. Animates between values; format uses Intl.NumberFormat options.', selector: 'ul > li:first-child > * > span:nth-child(2)' },
       { name: 'Delta', description: '12px medium with a 14px arrow. Green for good, red for bad; invertDelta flips it for churn and latency. Reads "Up 12.4%" to screen readers.', selector: 'ul > li:first-child > * > span:last-child > span:first-child' },

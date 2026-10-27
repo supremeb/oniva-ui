@@ -51,7 +51,7 @@ const page: DocPage = {
     intro: 'Six parts. Header, rows and cells are always present; the summary row appears when any column sets summary.',
     Render: () => <Demo count={500} />,
     parts: [
-      { name: 'Grid', description: 'role="grid", fixed height (default 420px), 10px radius, 1px border, xs shadow. Only visible rows plus 6 overscan rows are in the DOM.', selector: '[role="grid"]' },
+      { name: 'Grid', description: 'role="grid", fixed height (default 420px), 10px radius, 1px border, no shadow. Only visible rows plus 6 overscan rows are in the DOM.', selector: '[role="grid"]' },
       { name: 'Header row', description: 'Sticky, 36px, inset surface, 12px muted medium text. Numeric columns right-align.', selector: '[role="columnheader"]:nth-child(2)' },
       { name: 'Resize handle', description: '4px separator on the column edge. Drag, or focus and press ← → (10px, 40px with Shift). Double-click resets.', selector: '[role="columnheader"]:nth-child(2) [role="separator"]' },
       { name: 'Sticky first column', description: 'The first column stays pinned with a 1px end border while scrolling horizontally.', selector: '[role="gridcell"][data-r="0"][data-c="0"]' },

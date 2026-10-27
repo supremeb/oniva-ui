@@ -29,8 +29,8 @@ const page: DocPage = {
     intro: 'Three parts. The track and knob are always present; the label is strongly recommended and only omitted with aria-label.',
     Render: () => <Basic isSelected />,
     parts: [
-      { name: 'Track', description: '44×24px at md (36×20 sm, 56×32 lg), fully rounded. Off is a neutral fill; on uses the accent gradient.', selector: 'label > span:nth-child(2)' },
-      { name: 'Knob', description: '18px circle at md, 2px inset, slides 20px. Mirrors in RTL. White on the accent track.', selector: 'label > span:nth-child(2) > span' },
+      { name: 'Track', description: '44×24px at md (36×20 sm, 56×32 lg), fully rounded. Off is a solid neutral fill; on is a flat accent fill. Both ease the colour change.', selector: 'label > span:nth-child(2)' },
+      { name: 'Knob', description: '18px circle at md, 2px inset, slides 20px. Mirrors in RTL. White, with a raised shadow that lifts on hover and flattens on press.', selector: 'label > span:nth-child(2) > span' },
       { name: 'Label', description: '14px, text color, 10px from the track. Click the label to toggle.', selector: 'label > span:nth-child(3)', fallback: { x: 70, y: 50 } },
     ],
   },

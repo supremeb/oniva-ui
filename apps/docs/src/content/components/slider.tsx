@@ -59,7 +59,7 @@ const page: DocPage = {
       { name: 'Output', description: 'Current value, 14px, tabular, formatted with formatOptions. Right aligned on the label row. Hidden with hideOutput.', selector: 'output' },
       { name: 'Track', description: '6px tall, fully rounded, 20px hit height. The unfilled part uses the border token.', selector: '[role="group"] > div:nth-child(2)', fallback: { x: 50, y: 70 } },
       { name: 'Fill', description: '6px accent bar between the start and the thumb, or between the two thumbs in a range.', selector: '[role="group"] > div:nth-child(2) > div:nth-child(2)', fallback: { x: 40, y: 70 } },
-      { name: 'Thumb', description: '20px circle with a 2px border and shadow. Draggable; focus shows a 2px ring.', selector: '[role="group"] > div:nth-child(2) > div:nth-child(3)' },
+      { name: 'Thumb', description: '20px white circle, no border, raised shadow that lifts on hover and flattens while dragged. Focus shows a 2px ring.', selector: '[role="group"] > div:nth-child(2) > div:nth-child(3)' },
     ],
   },
   usage: {

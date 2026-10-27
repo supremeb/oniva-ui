@@ -38,7 +38,7 @@ const page: DocPage = {
     intro: 'Three parts. The box and label are always present; the description is optional and stacks under the label.',
     Render: () => <Basic isSelected description="Sent to billing@acme.co after each payment." />,
     parts: [
-      { name: 'Box', description: '16px square, 4px radius, 1px control border. Checked fills with the accent gradient and draws a 2.25px check stroke. Presses scale it down.', selector: 'label > span:nth-child(2)' },
+      { name: 'Box', description: '16px square, 4px radius, 1px control border. Checked fills with a flat accent colour (no shadow) and draws a 2.25px check stroke. Presses scale it down.', selector: 'label > span:nth-child(2)' },
       { name: 'Label', description: '14px medium, 20px line height, text color. The whole row is the hit area, including the gap.', selector: 'label > span:nth-child(3)' },
       { name: 'Description', description: '13px regular muted help text under the label, 2px gap. Use it for consequence, not repetition.', selector: 'label > span:nth-child(3) > span', fallback: { x: 50, y: 75 } },
     ],
@@ -78,7 +78,7 @@ const page: DocPage = {
   },
   states: [
     { name: 'Unchecked', description: 'Empty surface box, control border.', Render: () => <Basic /> },
-    { name: 'Checked', description: 'Accent gradient fill, white check.', Render: () => <Basic isSelected /> },
+    { name: 'Checked', description: 'Flat accent fill, white check.', Render: () => <Basic isSelected /> },
     { name: 'Indeterminate', description: 'Dash replaces the check. Click resolves to checked.', Render: () => <Basic isIndeterminate text="Select all invoices" /> },
     { name: 'Invalid', description: 'Red border on the box. Pair with a message in the group.', Render: () => <Basic isInvalid text="I agree to the terms" /> },
     { name: 'Disabled', description: '50% opacity, not-allowed cursor, not focusable.', Render: () => <Basic isDisabled isSelected /> },

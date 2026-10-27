@@ -23,7 +23,7 @@ const page: DocPage = {
     intro: 'Four parts. The bar and links are always present; the brand and end actions are optional.',
     Render: () => <Bar />,
     parts: [
-      { name: 'Bar', description: '56px tall, 16px side padding, full width. Flat has a bottom border; floating has a 20px radius and shadow.', selector: 'nav' },
+      { name: 'Bar', description: '56px tall, 16px side padding, full width. Flat has a bottom border; floating has a 20px radius and a full 1px border, still no shadow.', selector: 'nav' },
       { name: 'Brand', description: '16px semibold text or logo at the start.', selector: 'header > div:first-child' },
       { name: 'Active link', description: '36px tall, 10px radius, 14px text, 12px side padding. Active uses the selected fill and aria-current="page".', selector: 'nav a[aria-current="page"]' },
       { name: 'End actions', description: 'Buttons and avatar pushed to the far end. Keep to two or three.', selector: 'header button:last-of-type' },
@@ -50,7 +50,7 @@ const page: DocPage = {
   },
   states: [
     { name: 'Flat', description: 'Bottom border, edge to edge.', Render: () => <S><Bar /></S> },
-    { name: 'Floating', description: 'Rounded card with shadow over an inset canvas.', Render: () => <S><Bar floating /></S> },
+    { name: 'Floating', description: 'Rounded bar with a full 1px border over an inset canvas.', Render: () => <S><Bar floating /></S> },
     { name: 'Second link active', description: 'Only one link carries aria-current.', Render: () => <S><Bar active="Reports" /></S> },
     { name: 'Without actions', description: 'Brand and links only.', Render: () => <S><Bar end={false} /></S> },
     { name: 'Narrow', description: 'At 360px, links crowd; keep 3 or fewer or switch to a Drawer menu.', Render: () => <Bar links={['Home', 'Reports']} active="Home" end={false} width={320} /> },
@@ -75,7 +75,7 @@ const page: DocPage = {
     { name: 'brand', type: 'ReactNode', description: 'Start block.' },
     { name: 'end', type: 'ReactNode', description: 'End actions.' },
     { name: 'children', type: 'NavbarLink elements', description: 'Primary links.' },
-    { name: 'floating', type: 'boolean', default: 'false', description: 'Rounded floating bar with shadow.' },
+    { name: 'floating', type: 'boolean', default: 'false', description: 'Rounded bar with a full border instead of a bottom rule.' },
     { name: 'sticky', type: 'boolean', default: 'false', description: 'position: sticky at the top.' },
     { name: 'aria-label', type: 'string', default: "'Primary'", description: 'Landmark name.' },
     { name: 'NavbarLink.isActive', type: 'boolean', default: 'false', description: 'Current page styling and aria-current.' },

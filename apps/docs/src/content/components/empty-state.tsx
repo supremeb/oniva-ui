@@ -35,7 +35,7 @@ const page: DocPage = {
     Render: () => <Demo bordered />,
     parts: [
       { name: 'Frame', description: 'Optional dashed 1px outline with a 16px radius, for empty table and list areas. 32px padding, 4px gap.', selector: 'h3' },
-      { name: 'Icon tile', description: '48px raised tile, 12px radius, 1px border, sm shadow, muted icon. Decorative.', selector: 'span[aria-hidden="true"]' },
+      { name: 'Icon tile', description: '48px flat tile, 12px radius, 1px border, no shadow, muted icon. Decorative.', selector: 'span[aria-hidden="true"]' },
       { name: 'Title', description: 'An h3, 16px semibold. Says what happened.', selector: 'h3' },
       { name: 'Description', description: '14px muted, 360px max width. Says why and what next.', selector: 'p' },
       { name: 'Actions', description: 'Row of buttons 16px below the text. One primary action, one optional secondary.', selector: 'button:first-of-type' },

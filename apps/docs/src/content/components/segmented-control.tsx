@@ -27,7 +27,7 @@ const page: DocPage = {
     parts: [
       { name: 'Track', description: '10px radius container with 4px padding and 2px gap between segments. A radiogroup.', selector: '[role="radiogroup"]' },
       { name: 'Segment', description: '28px tall at md (24 sm), 6px radius, 10px horizontal padding, 14px text (13 sm).', selector: '[role="radiogroup"] label:first-of-type' },
-      { name: 'Selected segment', description: 'Raised surface with a shadow and full-strength text. Unselected text is muted.', selector: '[role="radiogroup"] label[data-selected]' },
+      { name: 'Selected segment', description: 'Raised pill on a recessed track, full-strength text. Unselected text is muted.', selector: '[role="radiogroup"] label[data-selected]' },
     ],
   },
   usage: {

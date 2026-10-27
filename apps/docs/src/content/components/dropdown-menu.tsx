@@ -34,7 +34,7 @@ const page: DocPage = {
     Render: () => <Menu />,
     parts: [
       { name: 'Trigger', description: 'Any pressable. aria-haspopup="menu", aria-expanded follows state.', selector: 'button' },
-      { name: 'Surface', description: '200px minimum width, 12px radius, 4px padding, 2px gap, dropdown shadow.', selector: '[role="menu"]' },
+      { name: 'Surface', description: '200px minimum width, 12px radius, 4px padding, 2px gap, floating shadow.', selector: '[role="menu"]' },
       { name: 'Active item', description: '8px radius, 6px by 8px padding, 14px text, 16px icon, 8px gap. Highlight follows keyboard and hover.', selector: '[data-part="active"]' },
       { name: 'Separator', description: '1px line that splits unrelated groups. Use DropdownMenuSection with a title for labelled groups.', selector: '[role="separator"]' },
       { name: 'Danger item', description: 'variant="danger" colors the row with the error text token. Keep it last, below a separator.', selector: '[data-part="danger"]' },

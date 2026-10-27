@@ -27,7 +27,7 @@ const page: DocPage = {
     intro: 'Six parts. The container and icon are always present; title, description, actions and dismiss are optional but a title or description is required.',
     Render: () => <Demo variant="danger" actions dismiss />,
     parts: [
-      { name: 'Container', description: 'Callout: inset surface, 10px radius, 1px border, card shadow, 12px padding and gap. Banner: solid tinted fill, no border or shadow. role="alert" for warning and danger, role="status" otherwise.', selector: '[role="alert"], [role="status"]' },
+      { name: 'Container', description: 'Callout: inset surface, 10px radius, 1px border, no shadow, 12px padding and gap. Banner: solid tinted fill, no border or shadow. role="alert" for warning and danger, role="status" otherwise.', selector: '[role="alert"], [role="status"]' },
       { name: 'Icon', description: 'Status glyph in a 24px circle with a halo (callout, 14px glyph) or bare (banner, 18px). Pass icon={null} to hide.', selector: 'span[aria-hidden="true"]' },
       { name: 'Title', description: '14px semibold. Say what happened in under 8 words.', selector: '[role="alert"] > div > div:first-child, [role="status"] > div > div:first-child' },
       { name: 'Description', description: '13px muted (inherits color in banners). Say why and what to do next.', selector: '[role="alert"] > div > div:nth-child(2), [role="status"] > div > div:nth-child(2)' },

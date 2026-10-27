@@ -65,7 +65,7 @@ const page: DocPage = {
     intro: 'Six parts. The panel, title and footer are always present; the description and close button are optional. The stage renders the dialog inline without a backdrop because the real one lives in a portal.',
     Render: () => <Panel />,
     parts: [
-      { name: 'Panel', description: '400px (sm), 480px (md, default) or 640px (lg) wide, 16px radius, 1px border, xl shadow. Full width and square bottom corners below 640px.', selector: '[role="dialog"]' },
+      { name: 'Panel', description: '400px (sm), 480px (md, default) or 640px (lg) wide, 16px radius, 1px border, overlay shadow over a scrim. Full width and square bottom corners below 640px.', selector: '[role="dialog"]' },
       { name: 'Title', description: 'Level 2 heading, 18px semibold. Names the dialog for screen readers.', selector: '[role="dialog"] h2' },
       { name: 'Description', description: '14px regular in muted text. Header padding is 20px block, 24px inline, 56px at the end to clear the close button.', selector: '[role="dialog"] p' },
       { name: 'Body', description: '14px text, 24px inline padding, scrolls on its own when the panel hits the viewport height.', selector: '[role="dialog"] > div:nth-of-type(2)' },

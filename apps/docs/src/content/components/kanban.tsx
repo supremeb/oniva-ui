@@ -46,7 +46,7 @@ const page: DocPage = {
     parts: [
       { name: 'Column', description: '288px wide, 12px radius, 8px padding. A section labelled by its heading, side by side in a horizontally scrolling board.', selector: 'section:nth-child(2)' },
       { name: 'Column header', description: 'Title in 13px semibold with a count badge. With wipLimit the badge reads "3/2" and turns warning when over.', selector: 'section:nth-child(2) > header h3' },
-      { name: 'Card', description: '10px radius, 12px padding, xs shadow. Lifts with a lg shadow and scale 1.02 while dragged, then settles.', selector: 'section:nth-child(2) [role="row"]:first-child' },
+      { name: 'Card', description: '10px radius, 12px padding, 1px border and no shadow at rest. While dragged it scales to 1.02 and takes the floating shadow, then settles.', selector: 'section:nth-child(2) [role="row"]:first-child' },
       { name: 'Drag grip', description: '24px button with a 14px grip icon. The keyboard entry point for moving a card.', selector: 'section:nth-child(2) [role="row"]:first-child button[slot="drag"]' },
       { name: 'Card meta', description: 'Tags (accent sm badges), priority (sm dot badge), due date (12px, danger when before today) and up to 3 assignee avatars.', selector: 'section:nth-child(2) [role="row"]:first-child [aria-label="Assignees"]' },
       { name: 'Add card', description: 'Ghost sm button at the foot of each column; opens an inline 36px title field. Enter adds, Esc cancels.', selector: 'section:nth-child(2) button[aria-label^="Add card"]' },

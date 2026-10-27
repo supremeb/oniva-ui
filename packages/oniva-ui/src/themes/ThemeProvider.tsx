@@ -13,7 +13,7 @@ import {
 } from 'react';
 import { colors } from '../tokens/colors.stylex';
 import { font } from '../tokens/font.stylex';
-import { accentThemes, darkShadowTheme, darkTheme, type AccentName } from './themes';
+import { accentThemes, darkShadowTheme, darkTheme, lightAccentTheme, type AccentName } from './themes';
 
 export type ThemeMode = 'light' | 'dark' | 'system';
 export type ResolvedTheme = 'light' | 'dark';
@@ -138,7 +138,7 @@ export function ThemeProvider({
 
   const props = stylex.props(
     styles.root,
-    resolvedTheme === 'dark' ? [styles.dark, darkTheme, darkShadowTheme] : styles.light,
+    resolvedTheme === 'dark' ? [styles.dark, darkTheme, darkShadowTheme] : [styles.light, lightAccentTheme],
     accentThemes[accent],
     xstyle,
   );

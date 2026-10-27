@@ -2,7 +2,7 @@ import { Avatar, Button } from 'oniva-ui';
 import type { DocPage } from '../types';
 
 // The real HoverCardContent mounts only while the trigger is hovered. The stage draws the same card
-// (280px, 12px radius, 16px padding, dropdown shadow) under a real link-style trigger.
+// (280px, 12px radius, 16px padding, floating shadow) under a real link-style trigger.
 const Card = ({ name = 'Maya Chen', role = 'Finance lead, Northwind', body = 'Owns 12 workspaces. Last active 2 hours ago.', action = true }: { name?: string; role?: string; body?: string; action?: boolean }) => (
   <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
     <a href="#/components/hover-card" data-part="trigger" style={{ color: 'var(--oniva-color-accent-text)', fontSize: 14, fontWeight: 500 }}>@maya</a>
@@ -30,7 +30,7 @@ const page: DocPage = {
     Render: () => <Card />,
     parts: [
       { name: 'Trigger', description: 'A focusable Link or Button. Opens after 500ms, closes after 150ms.', selector: '[data-part="trigger"]' },
-      { name: 'Card', description: '280px wide, 12px radius, 1px border, dropdown shadow, 16px padding, bottom start, 8px offset.', selector: '[role="dialog"]' },
+      { name: 'Card', description: '280px wide, 12px radius, 1px border, floating shadow, 16px padding, bottom start, 8px offset.', selector: '[role="dialog"]' },
       { name: 'Summary', description: 'Avatar plus 14px semibold name and muted role. The reason the card exists.', selector: '[data-part="title"]' },
       { name: 'Actions', description: 'Optional small buttons. Keep to one; a second action belongs on the page behind.', selector: '[data-part="action"]' },
     ],

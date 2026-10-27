@@ -26,7 +26,7 @@ const page: DocPage = {
     Render: () => <Basic description="Shown on the invoice." isInvalid error="Pick a status." />,
     parts: [
       { name: 'Label', description: '14px medium, text color. Always visible. Never use the placeholder as the label.', selector: 'label' },
-      { name: 'Trigger', description: 'Full-width button. 38px tall at md, 10px padding, 1px border, xs shadow. Border darkens on hover.', selector: 'button' },
+      { name: 'Trigger', description: 'Full-width button. 38px tall at md, 10px padding, 1px border and a recessed inner top shadow. Border darkens on hover.', selector: 'button' },
       { name: 'Selected value', description: 'The chosen option text, truncated with an ellipsis. Placeholder uses text-placeholder.', selector: 'button [slot="label"]', fallback: { x: 22, y: 50 } },
       { name: 'Chevron', description: '16px lucide ChevronDown in icon-muted. Decorative, aria-hidden.', selector: 'button svg:last-of-type' },
       { name: 'Description', description: 'Help text under the field, 12px muted, linked through aria-describedby.', selector: '[slot="description"]', fallback: { x: 50, y: 78 } },

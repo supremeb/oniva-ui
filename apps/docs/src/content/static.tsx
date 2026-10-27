@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef, useState, type ComponentType, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
-import { Alert, Input, Select, SelectItem, EmptyState, Badge } from 'oniva-ui';
+import { Alert, Badge, Button, Card, CardDescription, CardHeader, CardHeaderText, CardTitle, EmptyState, Input, Select, SelectItem, Slider, Switch } from 'oniva-ui';
 import { Check, Search, Settings, Plus, Inbox, Sparkles, X, ArrowRight } from 'lucide-react';
 import { CodeBlock } from '../components/CodeBlock';
 import { counts } from '../lib/site';
@@ -96,15 +96,81 @@ const Radius = () => (
     ))}
   </div>
 );
-const SHADOWS = ['card', 'xs', 'sm', 'md', 'lg', 'xl', 'dropdown', 'float'];
-const Elevation = () => (
-  <div style={{ ...grid, background: 'var(--oniva-color-surface-inset)', borderRadius: 12, padding: 24 }}>
-    {SHADOWS.map((n) => (
-      <div key={n}>
-        <div style={{ background: 'var(--oniva-color-surface)', borderRadius: 12, boxShadow: `var(--oniva-shadow-${n})`, height: 72 }} />
-        <div style={{ ...mono, marginTop: 8 }}>shadow-{n}</div>
+const LEVELS: { id: string; name: string; token: string; meaning: string; use: string }[] = [
+  { id: 'flat', name: 'Flat', token: 'none', meaning: 'A surface. It differs from its neighbour by fill and a 1px border, never by shadow.', use: 'Card, KpiStrip tile, Alert, DataGrid, EmptyState tile' },
+  { id: 'recessed', name: 'Recessed', token: '--oniva-elevation-recessed', meaning: 'A channel that holds something. A 2px inner shadow at the top edge, no outer shadow.', use: 'Input, Select trigger, Switch and Slider track, ProgressBar, Tabs pill and Segmented track' },
+  { id: 'raised', name: 'Raised', token: '--oniva-elevation-raised', meaning: 'An object you grab or press, sitting on a surface. Hairline, contact and soft ambient. Hover lifts a touch; press flattens and never adds shadow.', use: 'Switch knob, Slider thumb, selected Tabs pill, secondary Button' },
+  { id: 'floating', name: 'Floating', token: '--oniva-elevation-floating', meaning: 'A separate layer above the page. Hairline, a key shadow and a wide ambient one.', use: 'Menu, Popover, Select list, Tooltip, Toast' },
+  { id: 'overlay', name: 'Overlay', token: '--oniva-elevation-overlay', meaning: 'The modal layer. The largest shadow, always paired with a scrim.', use: 'Dialog, AlertDialog, Drawer, BottomSheet' },
+];
+const LevelCell = ({ id, children }: { id: string; children: ReactNode }) => {
+  const l = LEVELS.find((x) => x.id === id)!;
+  return (
+    <div style={{ ...box, display: 'flex', flexDirection: 'column', gap: 12 }}>
+      <div style={{ alignItems: 'center', display: 'flex', justifyContent: 'center', minHeight: 96 }}>{children}</div>
+      <div>
+        <div style={{ fontSize: 14, fontWeight: 600 }}>{l.name}</div>
+        <div style={{ ...mono, color: 'var(--oniva-color-text-muted)', marginTop: 2 }}>{l.token}</div>
+        <p style={{ color: 'var(--oniva-color-text-muted)', fontSize: 13, lineHeight: 1.5, margin: '8px 0 4px' }}>{l.meaning}</p>
+        <p style={{ color: 'var(--oniva-color-text-subtle)', fontSize: 12, lineHeight: 1.5, margin: 0 }}>{l.use}</p>
       </div>
-    ))}
+    </div>
+  );
+};
+const floatSurface = { background: 'var(--oniva-color-surface)', borderRadius: 12, fontSize: 13, padding: '8px 12px', width: 150 } as const;
+const Depth = () => (
+  <div>
+    <P>Depth means one thing per level. One light source sits above the page, so every shadow falls down and every inner shadow sits at the top edge. In dark mode shadows barely read, so a level becomes a lighter surface with a 1px top rim and a hairline ring.</P>
+    <div style={{ display: 'grid', gap: 12, gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))' }}>
+      <LevelCell id="flat">
+        <div style={{ width: 200 }}><Card variant="outline">
+          <CardHeader>
+            <CardHeaderText>
+              <CardTitle>Monthly revenue</CardTitle>
+              <CardDescription>$48,210</CardDescription>
+            </CardHeaderText>
+          </CardHeader>
+        </Card></div>
+      </LevelCell>
+      <LevelCell id="recessed">
+        <div style={{ width: 200 }}><Input aria-label="Email" defaultValue="priya@northwind.example" /></div>
+      </LevelCell>
+      <LevelCell id="raised">
+        <div style={{ alignItems: 'center', display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <Switch defaultSelected>Notifications</Switch>
+          <div style={{ width: 200 }}><Slider aria-label="Budget" defaultValue={60} /></div>
+          <Button variant="secondary" size="sm">Cancel</Button>
+        </div>
+      </LevelCell>
+      <LevelCell id="floating">
+        <div style={{ ...floatSurface, boxShadow: 'var(--oniva-elevation-floating)' }}>Rename<br />Duplicate<br />Archive</div>
+      </LevelCell>
+      <LevelCell id="overlay">
+        <div style={{ ...floatSurface, boxShadow: 'var(--oniva-elevation-overlay)', padding: 16 }}>
+          <div style={{ fontWeight: 600 }}>Delete invoice?</div>
+          <div style={{ color: 'var(--oniva-color-text-muted)', marginTop: 4 }}>This cannot be undone.</div>
+        </div>
+      </LevelCell>
+    </div>
+  </div>
+);
+const DepthRules = () => R([
+  ['Never stack levels', 'No raised plus recessed on one element, and no ring plus bevel. A control is one level.'],
+  ['Small colour is flat', 'Solid fills under 32px (switch track on, checkbox and radio checked, badges) are a flat colour. No gradient, no inner highlight.'],
+  ['Press never adds shadow', 'Raised goes to pressed on press: the ambient shadow drops out. Hover may lift, only where hover exists.'],
+  ['Cards are flat', 'A card in a tray differs by fill and a hairline border. Only things you can pick up are raised.'],
+])();
+const Elevation = () => (
+  <div>
+    <P>Legacy shadow names still resolve. shadow-sm is an alias of raised, shadow-dropdown of floating and shadow-xl of overlay. New code uses the elevation tokens.</P>
+    <div style={{ ...grid, background: 'var(--oniva-color-surface-inset)', borderRadius: 12, padding: 24 }}>
+      {['raised', 'raised-hover', 'pressed', 'recessed', 'floating', 'overlay'].map((n) => (
+        <div key={n}>
+          <div style={{ background: 'var(--oniva-color-surface)', borderRadius: 12, boxShadow: `var(--oniva-elevation-${n})`, height: 72 }} />
+          <div style={{ ...mono, marginTop: 8 }}>elevation-{n}</div>
+        </div>
+      ))}
+    </div>
   </div>
 );
 const ICONS = [Search, Settings, Plus, Inbox, Sparkles, Check, X, ArrowRight];
@@ -218,7 +284,7 @@ export const staticPages: StaticPage[] = [
   { path: '/foundations/typography', group: 'foundations', title: 'Typography', lede: 'Fourteen sizes from 11px to 72px, three weights, one mono face.', sections: [sec('scale', 'Type scale', TypeScale), sec('tokens', 'Size tokens', TypeTokens), sec('weights', 'Weights and mono', Weights), sec('rules', 'Rules', TypeRules)] },
   { path: '/foundations/spacing', group: 'foundations', title: 'Spacing', lede: 'Fifteen steps from 1px to 96px. Pick the token, never the number.', sections: [sec('scale', 'Scale', Space)] },
   { path: '/foundations/radius', group: 'foundations', title: 'Radius', lede: 'Nine radii. Controls use md (10px), cards xl, pills full.', sections: [sec('scale', 'Scale', Radius)] },
-  { path: '/foundations/elevation', group: 'foundations', title: 'Elevation', lede: 'Eight shadows. Most surfaces use a border and no shadow; reserve lg and up for things that float.', sections: [sec('shadows', 'Shadows', Elevation)] },
+  { path: '/foundations/elevation', group: 'foundations', title: 'Depth', lede: 'Five levels: flat, recessed, raised, floating and overlay. Each means one thing, and most surfaces are flat.', sections: [sec('levels', 'The five levels', Depth), sec('rules', 'Rules', DepthRules), sec('tokens', 'Elevation tokens', Elevation)] },
   { path: '/foundations/iconography', group: 'foundations', title: 'Iconography', lede: 'lucide-react only. 16px at stroke 2 is the default.', sections: [sec('sizes', 'Sizes and usage', Icons)] },
   { path: '/patterns/ai-assistance', group: 'patterns', title: 'AI assistance', lede: 'Show what the model did, how sure it is, and how to undo it.', sections: [sec('disclose', 'Disclose and allow undo', AiPattern), sec('sources', 'Sources and confidence', AiSources), sec('streaming', 'Streaming and waiting', AiStream), sec('apply', 'Preview, apply, undo', AiApply), sec('failure', 'When it fails', AiFail)] },
   { path: '/patterns/empty-states', group: 'patterns', title: 'Empty states', lede: 'An empty state is the first thing a new user sees. Make it a next step.', sections: [sec('first-use', 'First use', EmptyPattern), sec('no-results', 'No results', EmptyNoResults), sec('all-done', 'All done', EmptyDone), sec('empty-vs-error', 'Empty is not an error', EmptyVsError), sec('writing', 'Writing an empty state', EmptyWriting)] },

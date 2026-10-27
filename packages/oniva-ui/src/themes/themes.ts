@@ -102,6 +102,25 @@ export const darkTheme = stylex.createTheme(colors, {
   '--oniva-color-chart-10': '#9b979f',
 });
 
+/**
+ * Light mode. `colors` derives the accent tokens from the accent ramp, but a custom property
+ * holding `var(--ramp)` is resolved where it is declared (:root), so a wrapper that only swaps the
+ * ramp leaves them on blue. Re-declaring the derived tokens on the wrapper (like `darkTheme` does)
+ * makes them follow the active accent. Applied by ThemeProvider in light mode only.
+ */
+export const lightAccentTheme = stylex.createTheme(colors, {
+  '--oniva-color-focus-ring': accent['--oniva-accent-focus'],
+  '--oniva-color-accent-fg': accent['--oniva-accent-on-solid'],
+  '--oniva-color-accent-text': accent['--oniva-accent-700'],
+  '--oniva-color-accent-soft': accent['--oniva-accent-100'],
+  '--oniva-color-accent-soft-hover': accent['--oniva-accent-200'],
+  '--oniva-color-accent-soft-active': accent['--oniva-accent-300'],
+  '--oniva-color-accent-soft-fg': accent['--oniva-accent-900'],
+  '--oniva-color-accent-soft-disabled': accent['--oniva-accent-50'],
+  '--oniva-color-accent-soft-disabled-fg': accent['--oniva-accent-300'],
+  '--oniva-color-accent-tint': `color-mix(in srgb, ${accent['--oniva-accent-500']} 12%, transparent)`,
+} as never);
+
 export const darkShadowTheme = stylex.createTheme(shadow, {
   // Dark: shadows barely read, so elevation = lighter surface + 1px top rim + hairline ring.
   '--oniva-elevation-raised': '0 0 0 1px #ffffff1a, inset 0 1px 0 #ffffff14, 0 1px 2px #00000099',

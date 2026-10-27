@@ -27,7 +27,7 @@ const page: DocPage = {
     parts: [
       { name: 'Card', description: 'Inset surface, 16px radius, 1px border, 8px padding and 8px gap.', selector: 'div[style] > div' },
       { name: 'Title', description: 'Optional h3. 14px medium, muted, 8px side padding.', selector: 'h3' },
-      { name: 'Tile', description: 'White inner surface, 10px radius, 1px border, xs shadow. Minimum 56px tall, 12px side padding and 10px block padding.', selector: 'dl > div:first-child' },
+      { name: 'Tile', description: 'White inner surface, 10px radius, 1px border, no shadow. Minimum 56px tall, 12px side padding and 10px block padding.', selector: 'dl > div:first-child' },
       { name: 'Icon', description: 'Optional 32px square with 8px radius on the inset surface; spans both lines. Decorative.', selector: 'dl > div:first-child > span[aria-hidden="true"]', fallback: { x: 8, y: 30 } },
       { name: 'Term', description: '12px medium muted label (dt), 2px above the value.', selector: 'dl > div:first-child dt' },
       { name: 'Value', description: '14px medium (dd) with tabular numerals. Wraps instead of truncating.', selector: 'dl > div:first-child dd' },

@@ -16,7 +16,7 @@ const page: DocPage = {
       { name: 'Container', description: 'A nav landmark, 14px text, 4px gap between controls.', selector: 'nav' },
       { name: 'Previous', description: '32px tall button with chevron. Disabled on page 1.', selector: 'nav li:first-child > *' },
       { name: 'Page button', description: '32px tall, 8px side padding, 10px radius. Always first, last and siblingCount neighbors of the current page.', selector: 'nav li:nth-child(2) > *' },
-      { name: 'Current page', description: 'Filled selected style, aria-current="page". accentCurrent switches to the accent gradient.', selector: 'nav [aria-current="page"]' },
+      { name: 'Current page', description: 'Filled selected style, aria-current="page". accentCurrent switches to a flat accent fill.', selector: 'nav [aria-current="page"]' },
       { name: 'Next', description: 'Mirror of Previous. Disabled on the last page.', selector: 'nav li:last-child > *' },
     ],
   },
@@ -45,7 +45,7 @@ const page: DocPage = {
     { name: 'Last page', description: 'Next disabled.', Render: () => <Pagination pageCount={24} defaultPage={24} /> },
     { name: 'Few pages', description: 'Up to 7 pages show without ellipses.', Render: () => <Pagination pageCount={5} defaultPage={2} /> },
     { name: 'Simple footer', description: 'Summary at the start, Previous and Next at the end.', Render: () => <div style={{ width: 420 }}><Pagination variant="simple" pageCount={25} defaultPage={8} summary="Showing 71-80 of 248" /></div> },
-    { name: 'Accent current', description: 'accentCurrent highlights the page with the accent gradient.', Render: () => <Pagination pageCount={9} defaultPage={3} accentCurrent /> },
+    { name: 'Accent current', description: 'accentCurrent highlights the page with a flat accent fill.', Render: () => <Pagination pageCount={9} defaultPage={3} accentCurrent /> },
   ],
   sections: [
     {
@@ -74,7 +74,7 @@ const page: DocPage = {
     { name: 'siblingCount', type: 'number', default: '1', description: 'Pages beside the current one.' },
     { name: 'variant', type: "'numbers' | 'simple'", default: "'numbers'", description: 'Page buttons, or footer with summary.' },
     { name: 'summary', type: 'string', default: "'Page X of Y'", description: 'Text for the simple variant.' },
-    { name: 'accentCurrent', type: 'boolean', default: 'false', description: 'Accent gradient on the current page.' },
+    { name: 'accentCurrent', type: 'boolean', default: 'false', description: 'Flat accent fill on the current page.' },
     { name: 'labels', type: '{ previous, next, previousPage, nextPage, page(n), summary(page, count) }', description: 'Localisation strings.' },
     { name: 'aria-label', type: 'string', description: 'Landmark name.' },
     { name: 'className / style / xstyle', type: 'string / CSSProperties / StyleXStyles', description: 'Overrides.' },

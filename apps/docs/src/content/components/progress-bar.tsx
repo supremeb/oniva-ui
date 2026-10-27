@@ -22,7 +22,7 @@ const page: DocPage = {
       { name: 'Label', description: '13px medium above the track. Falls back to aria-label if omitted.', selector: '[role="progressbar"] label, [role="progressbar"] > div:first-child > span:first-child' },
       { name: 'Value', description: '13px muted, tabular numerals, right-aligned. Hidden while indeterminate.', selector: '[role="progressbar"] > div:first-child > span:last-child' },
       { name: 'Track', description: 'Full radius, chart-track color; 6px (sm), 8px (md), 12px (lg).', selector: '[role="progressbar"] > div:last-child' },
-      { name: 'Fill', description: 'Accent gradient by default, or success, warning, danger. Scales from the left with a slow ease-out. Indeterminate is a 40% bar sliding every 1.4s.', selector: '[role="progressbar"] > div:last-child > div' },
+      { name: 'Fill', description: 'Flat accent fill by default, or success, warning, danger. Scales from the left with a slow ease-out. Indeterminate is a 40% bar sliding every 1.4s.', selector: '[role="progressbar"] > div:last-child > div' },
     ],
   },
   usage: {

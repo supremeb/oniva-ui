@@ -65,7 +65,7 @@ const page: DocPage = {
     { name: 'Expanded', description: 'One panel open, chevron rotated.', Render: () => <Demo open={['shipping']} /> },
     { name: 'Multiple open', description: 'With allowsMultipleExpanded, panels open independently.', Render: () => <Demo multiple open={['shipping', 'warranty']} /> },
     { name: 'Disabled item', description: 'Muted title, not focusable, no hover.', Render: () => <Demo disabled open={[]} /> },
-    { name: 'Cards variant', description: 'White tiles on an inset tray with an xs shadow.', Render: () => <Demo variant="cards" icons open={['shipping']} /> },
+    { name: 'Cards variant', description: 'White tiles on an inset tray, separated by a hairline border and no shadow.', Render: () => <Demo variant="cards" icons open={['shipping']} /> },
   ],
   sections: [
     { type: 'rules', id: 'rules', title: 'Rules', items: [

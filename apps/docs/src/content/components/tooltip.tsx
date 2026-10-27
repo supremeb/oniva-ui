@@ -6,7 +6,7 @@ import type { DocPage } from '../types';
 // (text color as background, bg color as text) next to a real IconButton.
 const Tip = ({ text = 'New invoice', arrow = true, width }: { text?: string; arrow?: boolean; width?: number }) => (
   <div style={{ alignItems: 'center', display: 'flex', flexDirection: 'column', gap: 4 }}>
-    <div role="tooltip" style={{ background: 'var(--oniva-color-text)', borderRadius: 8, boxShadow: 'var(--oniva-shadow-md)', color: 'var(--oniva-color-bg)', fontSize: 12, fontWeight: 500, lineHeight: '16px', maxWidth: 260, padding: '6px 10px', width }}>{text}</div>
+    <div role="tooltip" style={{ background: 'var(--oniva-color-text)', borderRadius: 8, boxShadow: 'var(--oniva-elevation-floating)', color: 'var(--oniva-color-bg)', fontSize: 12, fontWeight: 500, lineHeight: '16px', maxWidth: 260, padding: '6px 10px', width }}>{text}</div>
     {arrow && <svg data-part="arrow" aria-hidden="true" width="8" height="8" viewBox="0 0 8 8" style={{ fill: 'var(--oniva-color-text)', transform: 'rotate(180deg)' }}><path d="M0 0 L4 4 L8 0" /></svg>}
     <IconButton aria-label={text}><Plus size={16} /></IconButton>
   </div>

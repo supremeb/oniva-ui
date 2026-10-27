@@ -93,7 +93,7 @@ const page: DocPage = {
     intro: 'Seven parts. The field, section labels and rows are always present. Shortcut hints and the footer are optional.',
     Render: () => <Panel query="inv" footer width={440} />,
     parts: [
-      { name: 'Panel', description: '560px wide (max 100% minus 32px), surface fill, 1px border, xl shadow. Fades in over 80ms with no scale.', selector: '[role="dialog"]' },
+      { name: 'Panel', description: '560px wide (max 100% minus 32px), surface fill, 1px border, overlay shadow. Fades in over 80ms with no scale.', selector: '[role="dialog"]' },
       { name: 'Search icon', description: '18px lucide icon in icon-muted, 10px gap to the input. Decorative, aria-hidden.', selector: '[data-part="icon"]' },
       { name: 'Search input', description: '52px tall, 16/22 text. Placeholder uses text-placeholder. Focus lands here on open.', selector: '[data-part="input"]' },
       { name: 'Section label', description: '12px medium, text-muted, 6px by 8px padding. Names the group: Go to, Actions.', selector: '[data-part="section"]' },

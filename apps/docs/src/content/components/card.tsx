@@ -30,7 +30,7 @@ const page: DocPage = {
     intro: 'Six parts. The card and content are always present; header, tile and footer are optional.',
     Render: () => <Demo />,
     parts: [
-      { name: 'Card', description: '16px radius. Inset: gray inset surface with 8px padding and 4px gap. Outline: surface fill, 1px border, xs shadow.', selector: '[data-part="card"]' },
+      { name: 'Card', description: '16px radius. Inset: gray inset surface with 8px padding and 4px gap. Outline: surface fill, 1px border, no shadow.', selector: '[data-part="card"]' },
       { name: 'Header', description: '6px by 8px padding, 8px gap. Holds title text and optional actions.', selector: '[data-part="card"] > :first-child' },
       { name: 'Title', description: '14px medium. Names the card.', selector: 'h3' },
       { name: 'Description', description: '12px muted line under the title.', selector: 'h3 + p' },
@@ -59,7 +59,7 @@ const page: DocPage = {
   },
   states: [
     { name: 'Inset', description: 'Gray frame with a white tile.', Render: () => <Demo /> },
-    { name: 'Outline', description: 'Bordered surface with a subtle shadow.', Render: () => <Demo variant="outline" /> },
+    { name: 'Outline', description: 'Bordered flat surface, no shadow.', Render: () => <Demo variant="outline" /> },
     { name: 'Tile padding lg', description: '16px inner padding for hero numbers.', Render: () => <Demo padding="lg" /> },
     { name: 'No footer', description: 'Read-only cards need no actions.', Render: () => <Demo footer={false} /> },
     { name: 'Long title', description: 'Wraps; keep titles under 40 characters.', Render: () => <Demo title="Monthly recurring revenue across all regions and plans" /> },

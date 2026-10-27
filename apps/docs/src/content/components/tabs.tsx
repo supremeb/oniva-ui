@@ -28,7 +28,7 @@ const page: DocPage = {
     intro: 'Five parts. The list, tabs and panel are always present; counts and icons are optional.',
     Render: () => <Demo />,
     parts: [
-      { name: 'Tab list', description: 'role="tablist", 4px gap. Line variant has a bottom rule; pill sits on an inset track with 12px radius.', selector: '[role="tablist"]' },
+      { name: 'Tab list', description: 'role="tablist", 4px gap. Line variant has a bottom rule; pill sits on a recessed track (inner top shadow) with 12px radius, and the selected pill is raised.', selector: '[role="tablist"]' },
       { name: 'Tab', description: 'Min height 36px (md) or 32px (sm), 14px text, 6px gap to icon. Selected is full color.', selector: '[role="tab"]:first-of-type' },
       { name: 'Selected tab', description: 'aria-selected="true". Line shows a 2px indicator that slides; pill uses a raised 8px radius thumb.', selector: '[role="tab"][aria-selected="true"]' },
       { name: 'Count', description: 'Optional pill, 11px text, 6px side padding, full radius.', selector: '[role="tab"][aria-selected="true"] span:last-child' },
@@ -69,7 +69,7 @@ const page: DocPage = {
   },
   states: [
     { name: 'Line', description: 'Underline indicator, default.', Render: () => <Demo /> },
-    { name: 'Pill', description: 'Segmented thumb on an inset track.', Render: () => <Demo variant="pill" /> },
+    { name: 'Pill', description: 'Raised pill on a recessed track.', Render: () => <Demo variant="pill" /> },
     { name: 'Small', description: '32px tabs for dense toolbars.', Render: () => <Demo size="sm" variant="pill" /> },
     { name: 'Disabled tab', description: 'Skipped by arrow keys.', Render: () => <Demo disabled /> },
     { name: 'No counts', description: 'Plain labels only.', Render: () => <Demo counts={false} /> },
