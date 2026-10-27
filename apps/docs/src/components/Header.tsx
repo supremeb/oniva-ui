@@ -253,6 +253,9 @@ export function Header({ theme, onThemeChange, accent, onAccentChange }: HeaderP
         <NavLink to="/canvas" className={navCls}>
           Canvas
         </NavLink>
+        <NavLink to="/specs" className={navCls}>
+          Specs
+        </NavLink>
         <NavLink to="/foundations/motion" className={navCls}>
           Motion
         </NavLink>

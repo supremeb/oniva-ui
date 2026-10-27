@@ -6,12 +6,14 @@ import stylex from '@stylexjs/eslint-plugin';
 
 export default tseslint.config(
   {
-    ignores: [
+    ignores: ['.claude/**', 
       '**/dist/**',
       '**/node_modules/**',
       'playwright-report/**',
       'test-results/**',
       'docs/research/**',
+      // vendored interface-bts kit (MIT); see apps/docs/src/specs/kit/LICENSE
+      'apps/docs/src/specs/kit/**',
     ],
   },
   js.configs.recommended,
