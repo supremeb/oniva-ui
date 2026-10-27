@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import stylex from '@stylexjs/unplugin';
@@ -27,6 +27,102 @@ function libCounts() {
   };
 }
 
+
+// Build-time facts for the landing's Craft section, counted from the repo source (never hard-code them).
+function craftStats() {
+  const root = path.resolve(here, '../..');
+  const read = (f: string) => fs.readFileSync(f, 'utf8');
+  const walk = (dir: string, out: string[] = []) => {
+    if (!fs.existsSync(dir)) return out;
+    for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+      if (e.name === 'node_modules' || e.name === 'dist' || e.name.startsWith('.')) continue;
+      const p = path.join(dir, e.name);
+      if (e.isDirectory()) walk(p, out);
+      else out.push(p);
+    }
+    return out;
+  };
+  const tokenDir = path.join(lib, 'tokens');
+  const tokenFiles = fs.readdirSync(tokenDir).filter((f) => f.endsWith('.stylex.ts'));
+  const names = new Set<string>();
+  const byFile: Record<string, string[]> = {};
+  for (const f of tokenFiles) {
+    const found = [...read(path.join(tokenDir, f)).matchAll(/'(--oniva-[a-z0-9-]+)'\s*:/g)].map((m) => m[1]!);
+    byFile[f] = found;
+    found.forEach((n) => names.add(n));
+  }
+  const all = [...names];
+  const pick = (re: RegExp) => all.filter((n) => re.test(n));
+  const px = (n: string) => parseFloat(n.replace(/\D+/g, '') || '0');
+  const durSource: Record<string, number> = {};
+  for (const m of read(path.join(tokenDir, 'motion.stylex.ts')).matchAll(/'(--oniva-motion-dur-[a-z-]+)':\s*dur\('(\d+)ms'\)/g)) durSource[m[1]!] = Number(m[2]);
+
+  // components: group dirs with an index.ts (same rule as libCounts), and which of them use react-aria-components
+  const groups = ['components', 'charts', 'ai', 'widgets', 'motion', 'blocks', 'screens'];
+  const dirs = groups.flatMap((g) =>
+    fs.existsSync(path.join(lib, g))
+      ? fs.readdirSync(path.join(lib, g), { withFileTypes: true })
+          .filter((d) => d.isDirectory() && fs.existsSync(path.join(lib, g, d.name, 'index.ts')))
+          .map((d) => path.join(lib, g, d.name))
+      : [],
+  );
+  const usesAria = (d: string) =>
+    walk(d).some((f) => /\.tsx?$/.test(f) && !/\.(test|demo)\./.test(f) && /from 'react-aria-components'/.test(read(f)));
+  const hasDemo = (d: string) => walk(d).some((f) => /\.demo\.tsx$/.test(f));
+
+  const docPages = fs.readdirSync(path.join(here, 'src/content/components')).filter((f) => /\.tsx$/.test(f)).length;
+
+  const registry = read(path.join(here, 'src/specs/registry.ts'));
+  const postersBlock = registry.slice(registry.indexOf('export const posters'), registry.indexOf('// Route-only'));
+  const blueprints = [...postersBlock.matchAll(/Component:\s*\w+/g)].length;
+  const sw = read(path.join(here, 'src/specs/switch/SwitchSpec.tsx'));
+  const frac = /const fractions = useRef<number\[\]>\(\[([^\]]*)\]\)/.exec(sw);
+  const moments = frac ? frac[1]!.split(',').filter((x) => x.trim()).length : 0;
+
+  const tests = [...walk(path.join(root, 'packages')), ...walk(path.join(root, 'apps')), ...walk(path.join(root, 'e2e'))].filter((f) => /\.(test|spec)\.tsx?$/.test(f)).length;
+  const axeThemes = ['light', 'dark'].filter((t) =>
+    walk(path.join(root, 'e2e')).some((f) => /\.ts$/.test(f) && /axe/i.test(read(f)) && new RegExp(t).test(read(f))),
+  );
+  return { names: all, byFile, pick, px, durSource, dirs, usesAria, hasDemo, docPages, blueprints, moments, tests, axeThemes, lib, root };
+}
+
+async function craftModule() {
+  const c = craftStats();
+  const { runContrastChecks } = (await import(pathToFileURL(path.resolve(here, '../../packages/oniva-ui/scripts/check-contrast.mjs')).href)) as {
+    runContrastChecks: () => { name: string; theme: string; accent: string; ok: boolean }[];
+  };
+  const res = runContrastChecks();
+  const bySize = (re: RegExp) => c.pick(re).sort((a, b) => c.px(a) - c.px(b));
+  const data = {
+    tokens: {
+      total: c.names.length,
+      files: Object.values(c.byFile).filter((v) => v.length).length,
+      fontSize: bySize(/^--oniva-font-size-\d+$/),
+      lineHeight: bySize(/^--oniva-font-lh-\d+$/),
+      space: bySize(/^--oniva-space-\d+$/),
+      radius: c.pick(/^--oniva-radius-[a-z]+$/),
+      dur: c.pick(/^--oniva-motion-dur-[a-z]+$/),
+      ease: c.pick(/^--oniva-motion-ease-[a-z-]+$/),
+      ramp: bySize(/^--oniva-accent-\d+$/),
+      weight: c.pick(/^--oniva-font-weight-[a-z]+$/),
+    },
+    durSource: c.durSource,
+    aria: { components: c.dirs.filter(c.usesAria).length, of: c.dirs.length },
+    docs: { pages: c.docPages, withDemos: c.dirs.filter(c.hasDemo).length },
+    contrast: {
+      checks: res.length,
+      failing: res.filter((r) => !r.ok).length,
+      pairs: new Set(res.map((r) => r.name)).size,
+      themes: new Set(res.map((r) => r.theme)).size,
+      accents: new Set(res.map((r) => r.accent)).size,
+    },
+    blueprints: { count: c.blueprints, moments: c.moments },
+    tests: { files: c.tests },
+    axe: { themes: c.axeThemes },
+  };
+  return `export default ${JSON.stringify(data)};`;
+}
+
 // The docs consume the library FROM SOURCE so StyleX compiles lib + docs together.
 export default defineConfig({
   // GitHub Pages serves under /oniva-ui/. The router is hash-based, so only assets care about base.
@@ -39,6 +135,15 @@ export default defineConfig({
       aliases: { '@oniva-tokens/*': [path.join(lib, 'tokens/*')] },
     }),
     react(),
+    {
+      name: 'oniva-craft',
+      resolveId(id: string) {
+        return id === 'virtual:oniva-craft' ? '\0virtual:oniva-craft' : undefined;
+      },
+      async load(id: string) {
+        return id === '\0virtual:oniva-craft' ? craftModule() : undefined;
+      },
+    },
     {
       name: 'oniva-meta-counts',
       transformIndexHtml(html: string) {

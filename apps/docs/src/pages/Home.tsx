@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import type { AccentName, ThemeMode } from 'oniva-ui';
 import { Hero } from '../landing/Hero';
+import { Craft } from '../landing/Craft';
 import { Showcase } from '../landing/Showcase';
 import { Agents, Bento, Cta, Footer, Index, MotionStrip, Theming } from '../landing/Sections';
 import { usePalette } from '../landing/gate';
@@ -19,6 +20,7 @@ export function Home({ accent, onAccentChange, theme, onThemeChange, isDark }: H
   return (
     <div ref={ref}>
       <Hero accent={accent} onAccentChange={onAccentChange} hex={palette.a500} />
+      <Craft accent={accent} isDark={isDark} />
       <Showcase />
       <Bento />
       <MotionStrip />

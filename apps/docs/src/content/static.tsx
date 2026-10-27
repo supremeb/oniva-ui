@@ -4,6 +4,7 @@ import { Alert, Badge, Button, Card, CardDescription, CardHeader, CardHeaderText
 import { Check, Search, Settings, Plus, Inbox, Sparkles, X, ArrowRight } from 'lucide-react';
 import { CodeBlock } from '../components/CodeBlock';
 import { counts } from '../lib/site';
+import { principles } from './principles';
 import { DoDont, RuleCards } from '../components/doc/primitives';
 import { ColorRules, ContrastRatios, HueRamps, SemanticTokens, TypeRules, TypeScale, TypeTokens, Weights } from './foundations';
 
@@ -203,15 +204,7 @@ const Vars = () => (
     <CodeBlock code={`.card {\n  background: var(--oniva-color-surface);\n  border: 1px solid var(--oniva-color-border);\n  border-radius: var(--oniva-radius-xl);\n  padding: var(--oniva-space-16);\n}`} />
   </>
 );
-const principles: [string, string][] = [
-  ['Tokens, not values', 'No hex, no pixel radius in a component. If a token is missing, add the token.'],
-  ['Behavior from React Aria', 'Focus, keyboard and ARIA come from react-aria-components. We style it, we do not rebuild it.'],
-  ['Under 300ms', 'UI motion stays under 300ms with ease-out. Keyboard-driven actions do not animate.'],
-  ['Contrast is a token problem', 'Fix a failing ratio at the token, then every component inherits the fix.'],
-  ['One name per idea', `size, tone, variant and is* booleans mean the same on all ${counts.total} components.`],
-  ['Docs are part of the component', 'A component ships with anatomy, usage, states, keyboard and props, or it is not done.'],
-];
-const Principles = () => <RuleCards numbered items={principles.map(([title, body]) => ({ title, body }))} />;
+const Principles = () => <RuleCards numbered items={principles.map(({ title, body }) => ({ title, body }))} />;
 const Loop = () => (
   <RuleCards numbered items={[
     { title: 'Plan', body: 'Write docs/plans/<date>-<loop>.md. Read docs/solutions first.' },
