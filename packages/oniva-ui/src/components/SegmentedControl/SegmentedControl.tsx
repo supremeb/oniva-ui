@@ -19,6 +19,7 @@ import { radius } from '../../tokens/radius.stylex';
 import { shadow } from '../../tokens/shadow.stylex';
 import { cx, ff } from '../../internal/forms-field';
 import { useFormatters } from '../../internal/format';
+import { useKeyboardInstant } from '../../internal/depth-b1-modality';
 
 const countIn = stylex.keyframes({
   from: { filter: 'blur(2px)', opacity: 0, transform: 'scale(0.9)' },
@@ -68,8 +69,10 @@ const styles = stylex.create({
   },
   track: {
     alignItems: 'center',
-    backgroundColor: colors['--oniva-color-surface-inset'],
+    // Recessed channel: tertiary fill + inner top shadow, no outer shadow.
+    backgroundColor: colors['--oniva-color-surface-tertiary'],
     borderRadius: radius['--oniva-radius-lg'],
+    boxShadow: shadow['--oniva-elevation-recessed'],
     boxSizing: 'border-box',
     display: 'inline-flex',
     fontFamily: font['--oniva-font-sans'],
@@ -78,9 +81,10 @@ const styles = stylex.create({
     position: 'relative',
   },
   indicator: {
-    backgroundColor: colors['--oniva-color-surface'],
+    // Raised pill on the recessed track (lighter surface + rim in dark via the tokens).
+    backgroundColor: colors['--oniva-color-segment-selected'],
     borderRadius: radius['--oniva-radius-sm'],
-    boxShadow: shadow['--oniva-shadow-xs'],
+    boxShadow: shadow['--oniva-elevation-raised'],
     transitionTimingFunction: motion['--oniva-motion-ease-in-out'],
   },
   full: { display: 'flex', width: '100%' },
@@ -135,7 +139,7 @@ const styles = stylex.create({
       default: 'none',
       ':active:not([data-disabled])': `scale(${motion['--oniva-motion-press-scale']})`,
     },
-    transitionDuration: motion['--oniva-motion-dur-base'],
+    transitionDuration: `${motion['--oniva-motion-dur-base']}, ${motion['--oniva-motion-dur-press']}`,
     transitionProperty: 'color, transform',
     transitionTimingFunction: motion['--oniva-motion-ease-out'],
     zIndex: 1,
@@ -240,6 +244,7 @@ function SegIndicator({
   });
   const el = useRef<HTMLSpanElement>(null);
   const prev = useRef(rect);
+  useKeyboardInstant(containerRef, () => el.current);
   useEffect(() => {
     const root = containerRef.current;
     const node = el.current;
@@ -262,6 +267,7 @@ function SegIndicator({
     prev.current = rect;
     const node = el.current;
     if (!node || !from || !rect || !isReady || prefersReducedMotion()) return;
+    if (node.hasAttribute('data-instant')) return; // keyboard move: snap
     if (from.x === rect.x && from.y === rect.y && from.width === rect.width && from.height === rect.height) return;
     if (typeof node.animate !== 'function') return;
     const left = Math.min(from.x, rect.x);

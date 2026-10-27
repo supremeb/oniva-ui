@@ -27,7 +27,6 @@ import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 import { motion } from '../../tokens/motion.stylex';
 import { radius } from '../../tokens/radius.stylex';
-import { shadow } from '../../tokens/shadow.stylex';
 import { Avatar } from '../Avatar';
 
 const Ctx = createContext<{ collapsed: boolean; toggle: () => void }>({
@@ -54,7 +53,7 @@ const styles = stylex.create({
     borderRadius: radius['--oniva-radius-xxxl'],
     borderStyle: 'solid',
     borderWidth: 1,
-    boxShadow: shadow['--oniva-shadow-float'],
+    boxShadow: 'none',
     boxSizing: 'border-box',
     color: colors['--oniva-color-text'],
     display: 'flex',
@@ -242,10 +241,9 @@ const styles = stylex.create({
   },
   itemFocus: { outlineStyle: 'solid' },
   pillActive: {
-    backgroundColor: 'transparent',
-    backgroundImage: `linear-gradient(180deg, ${accent['--oniva-accent-solid']}, ${accent['--oniva-accent-solid-end']})`,
+    backgroundColor: accent['--oniva-accent-solid'],
     borderRadius: radius['--oniva-radius-lg'],
-    boxShadow: shadow['--oniva-shadow-accent-inset'],
+    boxShadow: 'none',
     transitionTimingFunction: motion['--oniva-motion-ease-in-out'],
   },
   pillHover: { backgroundColor: colors['--oniva-color-surface-inset'], borderRadius: radius['--oniva-radius-lg'] },

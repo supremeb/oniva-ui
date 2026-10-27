@@ -20,9 +20,15 @@ const spin = stylex.keyframes({
 const pulse = stylex.keyframes({ '0%, 100%': { opacity: 0.4 }, '50%': { opacity: 1 } });
 
 const sweep = stylex.keyframes({
-  from: { backgroundPosition: '150% 0' },
-  to: { backgroundPosition: '-50% 0' },
+  from: { maskPosition: '150% 0' },
+  to: { maskPosition: '-50% 0' },
 });
+
+// The sweep is an alpha mask over the label, so the label keeps its own colour (readable at rest, AA on every
+// variant). The old version painted the label with a currentColor gradient under `color: transparent`, which made
+// every stop compute to rgba(0,0,0,0) and hid the text.
+const SWEEP_MASK =
+  'linear-gradient(100deg, #000 0%, #000 38%, rgb(0 0 0 / 0.5) 50%, #000 62%, #000 100%)';
 
 const blurIn = stylex.keyframes({
   from: { filter: 'blur(3px)', opacity: 0, transform: 'translateY(2px)' },
@@ -50,24 +56,15 @@ const styles = stylex.create({
     animationTimingFunction: motion['--oniva-motion-ease-out'],
     display: 'inline-flex',
   },
-  /** Shimmer loading: label stays readable, a light band sweeps across it. */
+  /** Shimmer loading: label stays readable (own colour), a dimmer band sweeps across it via an alpha mask. */
   shimmerLabel: {
     animationDuration: '1600ms',
     animationIterationCount: 'infinite',
     animationName: { default: sweep, [media.reducedMotion]: 'none' },
     animationTimingFunction: 'linear',
-    backgroundClip: 'text',
-    backgroundImage: {
-      default:
-        'linear-gradient(100deg, currentColor 0%, currentColor 38%, transparent 50%, currentColor 62%, currentColor 100%)',
-      [media.reducedMotion]: 'none',
-    },
-    backgroundSize: '250% 100%',
-    color: { default: 'transparent', [media.reducedMotion]: 'inherit' },
-    WebkitBackgroundClip: 'text',
-    WebkitTextFillColor: { default: 'transparent', [media.reducedMotion]: 'currentColor' },
+    maskImage: { default: SWEEP_MASK, [media.reducedMotion]: 'none' },
+    maskSize: '250% 100%',
   },
-  shimmerDim: { opacity: 0.85 },
   pending: { cursor: 'progress' },
   content: { alignItems: 'center', display: 'inline-flex', gap: 6 },
   // opacity (not visibility) keeps the accessible name while the spinner shows
@@ -153,7 +150,6 @@ export function Button({
     controlStyles[size],
     isIconOnly && controlStyles[controlIconSize[size]],
     isLoading && styles.pending,
-    shimmer && styles.shimmerDim,
     xstyle,
   );
   return (

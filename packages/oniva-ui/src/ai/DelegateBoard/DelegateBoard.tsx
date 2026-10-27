@@ -9,6 +9,7 @@ import { font } from '../../tokens/font.stylex';
 import { media } from '../../tokens/media.stylex';
 import { motion } from '../../tokens/motion.stylex';
 import { radius } from '../../tokens/radius.stylex';
+import { shadow } from '../../tokens/shadow.stylex';
 import { focus } from '../../internal/focus';
 import { useFormatters } from '../../internal/format';
 import { mergeSx, sxClass } from '../../internal/sx';
@@ -122,7 +123,7 @@ const styles = stylex.create({
     borderRadius: radius['--oniva-radius-md'],
     borderStyle: 'solid',
     borderWidth: 1,
-    boxShadow: { default: 'none', ':active': '0 8px 20px rgba(0,0,0,0.18)' },
+    boxShadow: { default: 'none', ':active': shadow['--oniva-elevation-floating'] },
     cursor: 'grab',
     display: 'flex',
     gap: 6,

@@ -100,11 +100,11 @@ const styles = stylex.create({
     borderColor: colors['--oniva-color-border'],
     borderInlineEndStyle: 'solid',
     borderInlineEndWidth: 1,
-    boxShadow: { default: 'none', [NARROW]: shadow['--oniva-shadow-xl'] },
+    boxShadow: { default: 'none', [NARROW]: shadow['--oniva-elevation-overlay'] },
   },
   sideInset: {
     backgroundColor: { default: 'transparent', [NARROW]: colors['--oniva-color-surface-inset'] },
-    boxShadow: { default: 'none', [NARROW]: shadow['--oniva-shadow-xl'] },
+    boxShadow: { default: 'none', [NARROW]: shadow['--oniva-elevation-overlay'] },
     paddingInlineEnd: { default: 4, [NARROW]: 12 },
   },
   sideStart: {
@@ -120,7 +120,7 @@ const styles = stylex.create({
     borderColor: colors['--oniva-color-border'],
     borderInlineStartStyle: 'solid',
     borderInlineStartWidth: 1,
-    boxShadow: { default: 'none', [NARROW]: shadow['--oniva-shadow-xl'] },
+    boxShadow: { default: 'none', [NARROW]: shadow['--oniva-elevation-overlay'] },
   },
   sideEndInset: {
     backgroundColor: { default: 'transparent', [NARROW]: colors['--oniva-color-surface'] },
@@ -348,7 +348,7 @@ const styles = stylex.create({
     borderRadius: radius['--oniva-radius-lg'],
     borderStyle: 'solid',
     borderWidth: 1,
-    boxShadow: shadow['--oniva-shadow-xs'],
+    boxShadow: 'none',
     display: 'flex',
     flexDirection: 'column',
     flexShrink: 0,
@@ -418,7 +418,7 @@ const styles = stylex.create({
     borderRadius: { default: radius['--oniva-radius-xl'], [NARROW]: 0 },
     borderStyle: { default: 'solid', [NARROW]: 'none' },
     borderWidth: 1,
-    boxShadow: { default: shadow['--oniva-shadow-xs'], [NARROW]: 'none' },
+    boxShadow: { default: 'none', [NARROW]: 'none' },
     overflow: 'hidden',
   },
   header: {

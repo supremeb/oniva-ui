@@ -15,7 +15,6 @@ import { font } from '../../tokens/font.stylex';
 import { media } from '../../tokens/media.stylex';
 import { motion } from '../../tokens/motion.stylex';
 import { radius } from '../../tokens/radius.stylex';
-import { shadow } from '../../tokens/shadow.stylex';
 
 const NARROW = '@container (max-width: 560px)';
 
@@ -47,7 +46,7 @@ const styles = stylex.create({
     borderRadius: radius['--oniva-radius-xl'],
     borderStyle: 'solid',
     borderWidth: 1,
-    boxShadow: shadow['--oniva-shadow-card'],
+    boxShadow: 'none',
     boxSizing: 'border-box',
     display: 'flex',
     flexDirection: 'column',

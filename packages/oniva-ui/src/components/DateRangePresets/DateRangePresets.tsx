@@ -13,7 +13,6 @@ import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 import { motion } from '../../tokens/motion.stylex';
 import { radius } from '../../tokens/radius.stylex';
-import { shadow } from '../../tokens/shadow.stylex';
 
 export type PresetId = 'today' | 'last7' | 'mtd' | 'qtd' | 'ytd' | 'custom';
 export type DateRange = RangeValue<DateValue>;
@@ -85,7 +84,7 @@ const styles = stylex.create({
   },
   selected: {
     backgroundColor: colors['--oniva-color-surface'],
-    boxShadow: shadow['--oniva-shadow-xs'],
+    boxShadow: 'none',
   },
   main: { display: 'flex', flexDirection: 'column', gap: 12 },
 });

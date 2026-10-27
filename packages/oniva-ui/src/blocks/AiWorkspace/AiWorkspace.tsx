@@ -19,7 +19,6 @@ import { font } from '../../tokens/font.stylex';
 import { media } from '../../tokens/media.stylex';
 import { motion } from '../../tokens/motion.stylex';
 import { radius } from '../../tokens/radius.stylex';
-import { shadow } from '../../tokens/shadow.stylex';
 
 const NARROW = '@container (max-width: 720px)';
 const scrimIn = stylex.keyframes({ from: { opacity: 0 }, to: { opacity: 1 } });
@@ -32,7 +31,7 @@ const styles = stylex.create({
     borderRadius: radius['--oniva-radius-card'],
     borderStyle: 'solid',
     borderWidth: 1,
-    boxShadow: shadow['--oniva-shadow-card'],
+    boxShadow: 'none',
     boxSizing: 'border-box',
     display: 'flex',
     height: 'var(--ws-height, 540px)',

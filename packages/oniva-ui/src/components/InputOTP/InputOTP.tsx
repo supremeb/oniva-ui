@@ -137,7 +137,7 @@ const styles = stylex.create({
     borderRadius: radius['--oniva-radius-lg'],
     borderStyle: 'solid',
     borderWidth: 1,
-    boxShadow: shadow['--oniva-shadow-xs'],
+    boxShadow: shadow['--oniva-elevation-recessed'],
     boxSizing: 'border-box',
     color: colors['--oniva-color-text'],
     display: 'flex',

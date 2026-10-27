@@ -33,7 +33,7 @@ const styles = stylex.create({
       ':focus-visible': colors['--oniva-color-focus-ring'],
     },
     boxShadow: {
-      default: shadow['--oniva-shadow-xs'],
+      default: shadow['--oniva-elevation-recessed'],
       ':focus-visible': `0 0 0 3px color-mix(in srgb, ${colors['--oniva-color-focus-ring']} 25%, transparent)`,
     },
   },

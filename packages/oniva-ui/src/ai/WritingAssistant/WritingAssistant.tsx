@@ -7,7 +7,6 @@ import { font } from '../../tokens/font.stylex';
 import { media } from '../../tokens/media.stylex';
 import { motion } from '../../tokens/motion.stylex';
 import { radius } from '../../tokens/radius.stylex';
-import { shadow } from '../../tokens/shadow.stylex';
 import { IconButton } from '../../components/IconButton';
 import { mergeSx } from '../../internal/sx';
 import { useResponseStream } from '../ResponseStream';
@@ -39,7 +38,7 @@ const styles = stylex.create({
     borderRadius: radius['--oniva-radius-xxl'],
     borderStyle: 'solid',
     borderWidth: 1,
-    boxShadow: shadow['--oniva-shadow-card'],
+    boxShadow: 'none',
     boxSizing: 'border-box',
     display: 'flex',
     flexDirection: 'column',

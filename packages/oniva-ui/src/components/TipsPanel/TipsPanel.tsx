@@ -10,7 +10,6 @@ import { focus } from '../../internal/focus';
 import { mergeSx } from '../../internal/sx';
 import { w4Motion } from '../../internal/w4-styles';
 import { radius } from '../../tokens/radius.stylex';
-import { shadow } from '../../tokens/shadow.stylex';
 import { Button } from '../Button';
 
 const popIn = stylex.keyframes({
@@ -26,7 +25,7 @@ const styles = stylex.create({
     borderRadius: radius['--oniva-radius-xl'],
     borderStyle: 'solid',
     borderWidth: 1,
-    boxShadow: shadow['--oniva-shadow-card'],
+    boxShadow: 'none',
     boxSizing: 'border-box',
     color: colors['--oniva-color-text'],
     containerType: 'inline-size',

@@ -24,32 +24,24 @@ const styles = stylex.create({
     lineHeight: font['--oniva-font-lh-14'],
   },
   rootDisabled: { cursor: 'not-allowed', opacity: 0.5 },
-  // Off: recessed channel (neutral fill, inner top shadow, control border for >=3:1).
-  // On: flat accent fill. Both animate background-color + border-color, never a gradient (it can't ease).
+  // Off: solid neutral fill that reaches 3:1 on its own (control-off), no ring, no inner shadow.
+  // On: flat accent fill. Both ease background-color, never a gradient (it can't ease).
   track: {
-    backgroundColor: colors['--oniva-color-surface-tertiary'],
-    borderColor: {
-      default: colors['--oniva-color-border-control'],
-      '@media (forced-colors: active)': 'ButtonText',
-    },
+    backgroundColor: { default: colors['--oniva-color-control-off'], '@media (forced-colors: active)': 'ButtonText' },
     borderRadius: radius['--oniva-radius-full'],
-    borderStyle: 'solid',
-    borderWidth: 1,
-    boxShadow: shadow['--oniva-elevation-recessed'],
     boxSizing: 'border-box',
     flexShrink: 0,
+    forcedColorAdjust: 'none',
     position: 'relative',
     transitionDuration: {
       default: motion['--oniva-motion-dur-base'],
       [media.reducedMotion]: '0.01ms',
     },
-    transitionProperty: 'background-color, border-color, box-shadow',
+    transitionProperty: 'background-color',
     transitionTimingFunction: motion['--oniva-motion-ease-out'],
   },
   trackOn: {
-    backgroundColor: accent['--oniva-accent-solid'],
-    borderColor: { default: accent['--oniva-accent-solid'], '@media (forced-colors: active)': 'Highlight' },
-    boxShadow: 'none',
+    backgroundColor: { default: accent['--oniva-accent-solid'], '@media (forced-colors: active)': 'Highlight' },
   },
   focus: {
     outlineColor: colors['--oniva-color-focus-ring'],
@@ -57,7 +49,7 @@ const styles = stylex.create({
     outlineStyle: 'solid',
     outlineWidth: 2,
   },
-  // Raised: the thing you grab. White, hairline + contact + ambient (hairline rim in dark via the token).
+  // Raised: the thing you grab. White, hairline + contact + ambient (no halo ring in dark, see knob tokens).
   // Concentric with the track: knob radius = track inner radius - gap (full radius, so it holds at any size).
   knob: {
     backgroundColor: colors['--oniva-color-on-solid'],
@@ -65,7 +57,7 @@ const styles = stylex.create({
     borderRadius: radius['--oniva-radius-full'],
     borderStyle: 'solid',
     borderWidth: { default: 0, '@media (forced-colors: active)': 1 },
-    boxShadow: shadow['--oniva-elevation-raised'],
+    boxShadow: shadow['--oniva-elevation-knob'],
     boxSizing: 'border-box',
     position: 'absolute',
     transitionDuration: {
@@ -76,17 +68,17 @@ const styles = stylex.create({
     transitionProperty: 'transform, box-shadow',
     transitionTimingFunction: motion['--oniva-motion-ease-spring'],
   },
-  knobHover: { boxShadow: shadow['--oniva-elevation-raised-hover'] },
-  knobPressed: { boxShadow: shadow['--oniva-elevation-pressed'] },
-  // sizes (track w x h, knob d, inset 2px / border 1px)
+  knobHover: { boxShadow: shadow['--oniva-elevation-knob-hover'] },
+  knobPressed: { boxShadow: shadow['--oniva-elevation-knob-pressed'] },
+  // sizes (track w x h, knob d, uniform gap 3px, lg 4px)
   trackSm: { height: 20, width: 36 },
   trackMd: { height: 24, width: 44 },
   trackLg: { height: 32, width: 56 },
-  knobSm: { height: 14, insetBlockStart: 2, insetInlineStart: 2, width: 14 },
+  knobSm: { height: 14, insetBlockStart: 3, insetInlineStart: 3, width: 14 },
   knobSmOn: { transform: { default: 'translateX(16px)', ':dir(rtl)': 'translateX(-16px)' } },
-  knobMd: { height: 18, insetBlockStart: 2, insetInlineStart: 2, width: 18 },
+  knobMd: { height: 18, insetBlockStart: 3, insetInlineStart: 3, width: 18 },
   knobMdOn: { transform: { default: 'translateX(20px)', ':dir(rtl)': 'translateX(-20px)' } },
-  knobLg: { height: 24, insetBlockStart: 3, insetInlineStart: 3, width: 24 },
+  knobLg: { height: 24, insetBlockStart: 4, insetInlineStart: 4, width: 24 },
   knobLgOn: { transform: { default: 'translateX(24px)', ':dir(rtl)': 'translateX(-24px)' } },
 });
 

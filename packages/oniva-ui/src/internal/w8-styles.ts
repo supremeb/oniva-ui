@@ -2,7 +2,6 @@ import * as stylex from '@stylexjs/stylex';
 import { colors } from '../tokens/colors.stylex';
 import { font } from '../tokens/font.stylex';
 import { radius } from '../tokens/radius.stylex';
-import { shadow } from '../tokens/shadow.stylex';
 
 /** Shared styles for the loop-7 application blocks (TaskBoard, KpiBoard, ...). Container-query friendly, no overflow at 360px. */
 export const w8 = stylex.create({
@@ -22,7 +21,7 @@ export const w8 = stylex.create({
     borderRadius: radius['--oniva-radius-card'],
     borderStyle: 'solid',
     borderWidth: 1,
-    boxShadow: shadow['--oniva-shadow-card'],
+    boxShadow: 'none',
     boxSizing: 'border-box',
     minWidth: 0,
     padding: 16,
@@ -33,7 +32,7 @@ export const w8 = stylex.create({
     borderRadius: radius['--oniva-radius-xl'],
     borderStyle: 'solid',
     borderWidth: 1,
-    boxShadow: shadow['--oniva-shadow-card'],
+    boxShadow: 'none',
     boxSizing: 'border-box',
     minWidth: 0,
     padding: 16,

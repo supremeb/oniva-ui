@@ -3,7 +3,6 @@ import type { HTMLAttributes, ReactNode, Ref } from 'react';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 import { radius } from '../../tokens/radius.stylex';
-import { shadow } from '../../tokens/shadow.stylex';
 
 const styles = stylex.create({
   base: {
@@ -30,7 +29,7 @@ const styles = stylex.create({
     borderRadius: radius['--oniva-radius-xl'],
     borderStyle: 'solid',
     borderWidth: 1,
-    boxShadow: shadow['--oniva-shadow-sm'],
+    boxShadow: 'none',
     color: colors['--oniva-color-icon-muted'],
     display: 'inline-flex',
     height: 48,

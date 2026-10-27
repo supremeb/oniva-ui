@@ -23,7 +23,6 @@ import { font } from '../../tokens/font.stylex';
 import { media } from '../../tokens/media.stylex';
 import { motion } from '../../tokens/motion.stylex';
 import { radius } from '../../tokens/radius.stylex';
-import { shadow } from '../../tokens/shadow.stylex';
 import { Button } from '../Button';
 import { Input, type InputProps } from '../Input';
 import { VisuallyHidden } from '../VisuallyHidden';
@@ -112,7 +111,7 @@ const styles = stylex.create({
     borderRadius: radius['--oniva-radius-xl'],
     borderStyle: 'solid',
     borderWidth: 1,
-    boxShadow: shadow['--oniva-shadow-xs'],
+    boxShadow: 'none',
     boxSizing: 'border-box',
     color: colors['--oniva-color-text'],
     display: 'flex',

@@ -10,7 +10,6 @@ import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 import { motion } from '../../tokens/motion.stylex';
 import { radius } from '../../tokens/radius.stylex';
-import { shadow } from '../../tokens/shadow.stylex';
 
 const styles = stylex.create({
   root: {
@@ -63,7 +62,7 @@ const styles = stylex.create({
       ':disabled': colors['--oniva-color-surface'],
     },
     borderColor: colors['--oniva-color-border'],
-    boxShadow: shadow['--oniva-shadow-xs'],
+    boxShadow: 'none',
     color: {
       default: colors['--oniva-color-text'],
       ':disabled': colors['--oniva-color-text-disabled'],
@@ -76,14 +75,13 @@ const styles = stylex.create({
       ':hover': { default: null, [media.hover]: colors['--oniva-color-surface'] },
     },
     borderColor: colors['--oniva-color-border'],
-    boxShadow: shadow['--oniva-shadow-sm'],
+    boxShadow: 'none',
     color: colors['--oniva-color-text'],
   },
   currentAccent: {
-    backgroundColor: { default: 'transparent', ':hover': { default: null, [media.hover]: 'transparent' } },
-    backgroundImage: `linear-gradient(180deg, ${accent['--oniva-accent-solid']}, ${accent['--oniva-accent-solid-end']})`,
+    backgroundColor: { default: accent['--oniva-accent-solid'], ':hover': { default: null, [media.hover]: accent['--oniva-accent-solid'] } },
     borderColor: 'transparent',
-    boxShadow: shadow['--oniva-shadow-accent-inset'],
+    boxShadow: 'none',
     color: {
       default: colors['--oniva-color-accent-fg'],
       ':hover': { default: null, [media.hover]: colors['--oniva-color-accent-fg'] },
@@ -145,7 +143,7 @@ export interface PaginationProps {
   variant?: 'numbers' | 'simple';
   /** Summary text for the `simple` variant, e.g. "Showing 1-10 of 248". Defaults to "Page X of Y". */
   summary?: string;
-  /** Highlight current page with the accent gradient. */
+  /** Highlight current page with a flat accent fill. */
   accentCurrent?: boolean;
   'aria-label'?: string;
   /** Override built-in strings (localisation). */

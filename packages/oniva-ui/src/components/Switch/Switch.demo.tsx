@@ -9,7 +9,7 @@ const demo: DemoModule = {
     title: 'Switch',
     slug: 'switch',
     category: 'Forms',
-    description: 'Binary toggle built on React Aria Switch with gradient accent track.',
+    description: 'Binary toggle built on React Aria Switch: flat accent track when on, solid neutral track when off, raised white knob.',
   },
   demos: [
     {

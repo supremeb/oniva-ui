@@ -5,7 +5,6 @@ import { font } from '../../tokens/font.stylex';
 import { media } from '../../tokens/media.stylex';
 import { motion } from '../../tokens/motion.stylex';
 import { radius } from '../../tokens/radius.stylex';
-import { shadow } from '../../tokens/shadow.stylex';
 import { mergeSx } from '../../internal/sx';
 
 const ray = stylex.keyframes({ '0%': { opacity: 1 }, '100%': { opacity: 0.18 } });
@@ -44,7 +43,7 @@ const styles = stylex.create({
     borderRadius: radius['--oniva-radius-lg'],
     borderStyle: 'solid',
     borderWidth: 1,
-    boxShadow: shadow['--oniva-shadow-card'],
+    boxShadow: 'none',
   },
   plain: { height: 'auto', paddingInline: 0 },
   icon: { display: 'inline-grid', flexShrink: 0, height: 16, width: 16 },

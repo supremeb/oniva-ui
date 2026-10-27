@@ -17,7 +17,6 @@ import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 import { motion } from '../../tokens/motion.stylex';
 import { radius } from '../../tokens/radius.stylex';
-import { shadow } from '../../tokens/shadow.stylex';
 
 const styles = stylex.create({
   root: {
@@ -56,7 +55,7 @@ const styles = stylex.create({
     borderRadius: radius['--oniva-radius-lg'],
     borderStyle: 'solid',
     borderWidth: 1,
-    boxShadow: shadow['--oniva-shadow-xs'],
+    boxShadow: 'none',
   },
   heading: { margin: 0 },
   // RAC hides the collapsed panel with [hidden]; keep it rendered so AnimatedHeight can animate.

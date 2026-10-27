@@ -4,7 +4,6 @@ import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 import { motion } from '../../tokens/motion.stylex';
 import { radius } from '../../tokens/radius.stylex';
-import { shadow } from '../../tokens/shadow.stylex';
 import { motionStyles } from '../../internal/motion-styles';
 import { mergeSx } from '../../internal/sx';
 import { Stagger } from '../../motion/Stagger';
@@ -27,7 +26,7 @@ const styles = stylex.create({
     borderRadius: radius['--oniva-radius-full'],
     borderStyle: 'solid',
     borderWidth: 1,
-    boxShadow: shadow['--oniva-shadow-xs'],
+    boxShadow: 'none',
     color: colors['--oniva-color-text'],
     cursor: 'pointer',
     display: 'inline-flex',

@@ -9,7 +9,6 @@ import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 import { motion } from '../../tokens/motion.stylex';
 import { radius } from '../../tokens/radius.stylex';
-import { shadow } from '../../tokens/shadow.stylex';
 
 const styles = stylex.create({
   root: {
@@ -60,9 +59,9 @@ const styles = stylex.create({
     width: 32,
   },
   complete: {
-    backgroundImage: `linear-gradient(180deg, ${accent['--oniva-accent-solid']}, ${accent['--oniva-accent-solid-end']})`,
+    backgroundColor: accent['--oniva-accent-solid'],
     borderColor: 'transparent',
-    boxShadow: shadow['--oniva-shadow-accent-inset'],
+    boxShadow: 'none',
     color: colors['--oniva-color-accent-fg'],
   },
   current: {

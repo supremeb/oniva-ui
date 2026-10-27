@@ -210,7 +210,7 @@ const styles = stylex.create({
     borderRadius: radius['--oniva-radius-xl'],
     borderStyle: 'solid',
     borderWidth: 1,
-    boxShadow: { default: shadow['--oniva-shadow-xl'], [WIDE]: shadow['--oniva-shadow-card'] },
+    boxShadow: { default: shadow['--oniva-elevation-overlay'], [WIDE]: 'none' },
     boxSizing: 'border-box',
     display: 'flex',
     flexDirection: 'column',

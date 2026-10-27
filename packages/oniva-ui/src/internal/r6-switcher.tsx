@@ -30,7 +30,7 @@ const styles = stylex.create({
     borderRadius: radius['--oniva-radius-full'],
     borderStyle: 'solid',
     borderWidth: 1,
-    boxShadow: shadow['--oniva-shadow-sm'],
+    boxShadow: shadow['--oniva-elevation-raised'],
     color: colors['--oniva-color-text'],
     cursor: 'pointer',
     display: 'flex',

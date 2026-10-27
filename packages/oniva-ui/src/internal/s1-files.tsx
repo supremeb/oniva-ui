@@ -8,7 +8,6 @@ import { colors } from '../tokens/colors.stylex';
 import { font } from '../tokens/font.stylex';
 import { motion } from '../tokens/motion.stylex';
 import { radius } from '../tokens/radius.stylex';
-import { shadow } from '../tokens/shadow.stylex';
 import { media } from '../tokens/media.stylex';
 
 export type FileKind = 'pdf' | 'sheet' | 'doc';
@@ -141,7 +140,7 @@ const styles = stylex.create({
     borderRadius: radius['--oniva-radius-md'],
     borderStyle: 'solid',
     borderWidth: 1,
-    boxShadow: shadow['--oniva-shadow-sm'],
+    boxShadow: 'none',
     display: 'flex',
     flexDirection: 'column',
     gap: 4,

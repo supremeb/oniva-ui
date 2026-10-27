@@ -28,11 +28,12 @@ export const controlStyles = stylex.create({
     lineHeight: font['--oniva-font-lh-14'],
     position: 'relative',
     textDecoration: 'none',
+    // Colour / shadow ease on dur-base; the press scale rides the shorter dur-press (last entry = transform).
     transitionDuration: {
-      default: motion['--oniva-motion-dur-base'],
+      default: `${motion['--oniva-motion-dur-base']}, ${motion['--oniva-motion-dur-base']}, ${motion['--oniva-motion-dur-base']}, ${motion['--oniva-motion-dur-base']}, ${motion['--oniva-motion-dur-press']}`,
       [media.reducedMotion]: '0.01ms',
     },
-    transitionProperty: 'background-color, background-image, border-color, box-shadow, color, transform',
+    transitionProperty: 'background-color, border-color, box-shadow, color, transform',
     transitionTimingFunction: motion['--oniva-motion-ease-out'],
     // Pointer-only press feedback (:active); 0.97 per Emil. Disabled / pending buttons don't scale.
     transform: {
@@ -44,29 +45,42 @@ export const controlStyles = stylex.create({
     userSelect: 'none',
     whiteSpace: 'nowrap',
   },
+  // Raised, flat fill: accent colour carries identity (no gradient, no inner highlight). Hover lifts a touch,
+  // press flattens (never more shadow). Disabled is flat.
   primary: {
-    borderColor: { default: 'transparent', '@media (forced-colors: active)': 'ButtonText' },
-    backgroundImage: {
-      default: `linear-gradient(180deg, ${accent['--oniva-accent-solid']}, ${accent['--oniva-accent-solid-end']})`,
-      ':hover': { default: null, [media.hover]: `linear-gradient(180deg, ${accent['--oniva-accent-solid-hover']}, ${accent['--oniva-accent-solid-hover-end']})` },
-      ':active': `linear-gradient(180deg, ${accent['--oniva-accent-solid-active']}, ${accent['--oniva-accent-solid-active-end']})`,
-      ':disabled': `linear-gradient(180deg, ${colors['--oniva-color-disabled-from']}, ${colors['--oniva-color-disabled-to']})`,
+    backgroundColor: {
+      default: accent['--oniva-accent-solid'],
+      ':hover': { default: null, [media.hover]: accent['--oniva-accent-solid-hover'] },
+      ':active': accent['--oniva-accent-solid-active'],
+      ':disabled': colors['--oniva-color-disabled-from'],
     },
-    boxShadow: { default: shadow['--oniva-shadow-accent-inset'], ':disabled': 'none' },
+    borderColor: { default: 'transparent', '@media (forced-colors: active)': 'ButtonText' },
+    boxShadow: {
+      default: shadow['--oniva-elevation-solid'],
+      ':hover': { default: null, [media.hover]: shadow['--oniva-elevation-solid-hover'] },
+      ':active': shadow['--oniva-elevation-solid-pressed'],
+      ':disabled': 'none',
+    },
     color: {
-      default: colors['--oniva-color-accent-fg'],
+      // accent ramp directly: `color-accent-fg` is resolved at :root in light mode, so non-blue accents kept white text
+      default: accent['--oniva-accent-on-solid'],
       ':disabled': colors['--oniva-color-disabled-fg'],
     },
   },
   danger: {
-    borderColor: { default: 'transparent', '@media (forced-colors: active)': 'ButtonText' },
-    backgroundImage: {
-      default: `linear-gradient(180deg, ${colors['--oniva-color-danger-from']}, ${colors['--oniva-color-danger-to']})`,
-      ':hover': { default: null, [media.hover]: `linear-gradient(180deg, ${colors['--oniva-color-danger-hover-from']}, ${colors['--oniva-color-danger-hover-to']})` },
-      ':active': `linear-gradient(180deg, ${colors['--oniva-color-danger-active-from']}, ${colors['--oniva-color-danger-active-to']})`,
-      ':disabled': `linear-gradient(180deg, ${colors['--oniva-color-disabled-from']}, ${colors['--oniva-color-disabled-to']})`,
+    backgroundColor: {
+      default: colors['--oniva-color-danger-from'],
+      ':hover': { default: null, [media.hover]: colors['--oniva-color-danger-hover-from'] },
+      ':active': colors['--oniva-color-danger-active-from'],
+      ':disabled': colors['--oniva-color-disabled-from'],
     },
-    boxShadow: { default: shadow['--oniva-shadow-danger-inset'], ':disabled': 'none' },
+    borderColor: { default: 'transparent', '@media (forced-colors: active)': 'ButtonText' },
+    boxShadow: {
+      default: shadow['--oniva-elevation-solid'],
+      ':hover': { default: null, [media.hover]: shadow['--oniva-elevation-solid-hover'] },
+      ':active': shadow['--oniva-elevation-solid-pressed'],
+      ':disabled': 'none',
+    },
     color: {
       default: colors['--oniva-color-on-solid'],
       ':disabled': colors['--oniva-color-disabled-fg'],
@@ -85,13 +99,19 @@ export const controlStyles = stylex.create({
       ':active': colors['--oniva-color-border-active'],
       ':disabled': colors['--oniva-color-border'],
     },
-    boxShadow: { default: shadow['--oniva-shadow-xs'], ':disabled': 'none' },
+    boxShadow: {
+      default: shadow['--oniva-elevation-control'],
+      ':hover': { default: null, [media.hover]: shadow['--oniva-elevation-control-hover'] },
+      ':active': shadow['--oniva-elevation-control-pressed'],
+      ':disabled': 'none',
+    },
     color: {
       default: colors['--oniva-color-text'],
       ':disabled': colors['--oniva-color-text-disabled'],
     },
   },
   ghost: {
+    boxShadow: 'none',
     backgroundColor: {
       default: 'transparent',
       ':hover': { default: null, [media.hover]: colors['--oniva-color-surface-inset-hover'] },

@@ -15,7 +15,6 @@ import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 import { media } from '../../tokens/media.stylex';
 import { motion } from '../../tokens/motion.stylex';
-import { shadow } from '../../tokens/shadow.stylex';
 import { ChartFrame } from '../../charts/_shared/ChartFrame';
 
 const nudge = stylex.keyframes({
@@ -82,7 +81,7 @@ const styles = stylex.create({
     borderStyle: 'solid',
     borderWidth: 1,
     bottom: 'calc(100% + 6px)',
-    boxShadow: shadow['--oniva-shadow-card'],
+    boxShadow: 'none',
     fontSize: font['--oniva-font-size-12'],
     fontVariantNumeric: 'tabular-nums',
     left: 0,

@@ -9,7 +9,6 @@ import { createFormatters, useFormatters } from '../../internal/format';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 import { radius } from '../../tokens/radius.stylex';
-import { shadow } from '../../tokens/shadow.stylex';
 
 export type InvoiceStatus = 'paid' | 'due' | 'overdue' | 'draft';
 export interface InvoiceLine {
@@ -50,7 +49,7 @@ const styles = stylex.create({
   tile: {
     backgroundColor: colors['--oniva-color-surface'],
     borderRadius: radius['--oniva-radius-xl'],
-    boxShadow: shadow['--oniva-shadow-xs'],
+    boxShadow: 'none',
     padding: 16,
   },
   meta: { display: 'grid', gap: 12, gridTemplateColumns: '1fr 1fr', margin: 0 },

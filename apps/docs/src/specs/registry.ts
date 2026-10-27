@@ -9,6 +9,8 @@ import { SwitchSpec } from './switch/SwitchSpec';
 import { TooltipSpec } from './tooltip/TooltipSpec';
 import { PopoverSpec } from './popover/PopoverSpec';
 import { TabsSpec } from './tabs/TabsSpec';
+import { AccordionSpec } from './accordion/AccordionSpec';
+import { DialogSpec } from './dialog/DialogSpec';
 
 export interface Poster {
   /** URL slug: `#/specs/<slug>`. Matches the component's docs slug where there is one. */
@@ -48,6 +50,8 @@ export const posters: Poster[] = [
   { slug: 'tooltip', name: 'Tooltip', accent: 'orange', Component: TooltipSpec },
   { slug: 'popover', name: 'Dropdown menu', accent: 'purple', Component: PopoverSpec },
   { slug: 'tabs', name: 'Tabs', accent: 'teal', Component: TabsSpec },
+  { slug: 'accordion', name: 'Accordion', accent: 'cyan', Component: AccordionSpec },
+  { slug: 'dialog', name: 'Dialog', accent: 'pink', Component: DialogSpec },
 ];
 
 // Route-only posters (not in the strip): reachable at `#/specs/<slug>`.

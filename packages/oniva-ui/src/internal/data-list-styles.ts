@@ -4,7 +4,6 @@ import { colors } from '../tokens/colors.stylex';
 import { font } from '../tokens/font.stylex';
 import { motion } from '../tokens/motion.stylex';
 import { radius } from '../tokens/radius.stylex';
-import { shadow } from '../tokens/shadow.stylex';
 
 /** Shared by ListBox, List (GridList) and TreeView. */
 export const listStyles = stylex.create({
@@ -91,6 +90,6 @@ export const listStyles = stylex.create({
     borderColor: colors['--oniva-color-border'],
     borderStyle: 'solid',
     borderWidth: 1,
-    boxShadow: shadow['--oniva-shadow-xs'],
+    boxShadow: 'none',
   },
 });

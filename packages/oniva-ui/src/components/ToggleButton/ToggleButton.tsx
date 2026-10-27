@@ -21,6 +21,8 @@ const styles = stylex.create({
   selectedSecondary: {
     backgroundColor: colors['--oniva-color-accent-soft'],
     borderColor: colors['--oniva-color-accent-soft-fg'],
+    // pressed-in: contact only, no ambient
+    boxShadow: shadow['--oniva-elevation-control-pressed'],
     color: colors['--oniva-color-accent-soft-fg'],
   },
   selectedGhost: {
@@ -35,7 +37,7 @@ const styles = stylex.create({
   segment: {
     backgroundColor: {
       default: 'transparent',
-      ':hover': { default: null, [media.hover]: colors['--oniva-color-surface-inset-hover'] },
+      ':hover': { default: null, [media.hover]: colors['--oniva-color-overlay-hover'] },
     },
     borderColor: 'transparent',
     boxShadow: 'none',
@@ -44,8 +46,8 @@ const styles = stylex.create({
   },
   segmentSlide: { color: colors['--oniva-color-text'] },
   segmentSelected: {
-    backgroundColor: colors['--oniva-color-surface-inner'],
-    boxShadow: shadow['--oniva-shadow-sm'],
+    backgroundColor: colors['--oniva-color-segment-selected'],
+    boxShadow: shadow['--oniva-elevation-raised'],
     color: colors['--oniva-color-text'],
   },
 });

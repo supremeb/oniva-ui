@@ -2,7 +2,6 @@ import * as stylex from '@stylexjs/stylex';
 import { colors } from '../tokens/colors.stylex';
 import { font } from '../tokens/font.stylex';
 import { radius } from '../tokens/radius.stylex';
-import { shadow } from '../tokens/shadow.stylex';
 
 const NARROW = '@media (max-width: 720px)';
 
@@ -72,7 +71,7 @@ export const bs = stylex.create({
     borderRadius: radius['--oniva-radius-card'],
     borderStyle: 'solid',
     borderWidth: 1,
-    boxShadow: shadow['--oniva-shadow-card'],
+    boxShadow: 'none',
     boxSizing: 'border-box',
     padding: 24,
   },
@@ -82,7 +81,7 @@ export const bs = stylex.create({
     borderRadius: radius['--oniva-radius-xl'],
     borderStyle: 'solid',
     borderWidth: 1,
-    boxShadow: shadow['--oniva-shadow-card'],
+    boxShadow: 'none',
     boxSizing: 'border-box',
     padding: 20,
   },

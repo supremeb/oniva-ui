@@ -6,7 +6,6 @@ import { font } from '../tokens/font.stylex';
 import { media } from '../tokens/media.stylex';
 import { motion } from '../tokens/motion.stylex';
 import { radius } from '../tokens/radius.stylex';
-import { shadow } from '../tokens/shadow.stylex';
 import { loop } from './w7-scene';
 
 /** Building blocks shared by the Illustrations group: neutral tiles, beams, cursor, palette. */
@@ -34,7 +33,7 @@ const tileStyles = stylex.create({
   tile: {
     alignItems: 'center',
     borderRadius: radius['--oniva-radius-xl'],
-    boxShadow: `${shadow['--oniva-shadow-md']}, 0 0 0 1px ${colors['--oniva-color-border']}`,
+    boxShadow: `0 0 0 1px ${colors['--oniva-color-border']}`,
     boxSizing: 'border-box',
     display: 'inline-flex',
     flexShrink: 0,
@@ -212,7 +211,7 @@ export const surface = stylex.create({
   card: {
     backgroundColor: colors['--oniva-color-surface'],
     borderRadius: radius['--oniva-radius-xl'],
-    boxShadow: `${shadow['--oniva-shadow-md']}, 0 0 0 1px ${colors['--oniva-color-border']}`,
+    boxShadow: `0 0 0 1px ${colors['--oniva-color-border']}`,
     boxSizing: 'border-box',
     color: colors['--oniva-color-text'],
     fontFamily: font['--oniva-font-sans'],
@@ -221,7 +220,7 @@ export const surface = stylex.create({
     alignItems: 'center',
     backgroundColor: colors['--oniva-color-surface'],
     borderRadius: radius['--oniva-radius-full'],
-    boxShadow: `${shadow['--oniva-shadow-sm']}, 0 0 0 1px ${colors['--oniva-color-border']}`,
+    boxShadow: `0 0 0 1px ${colors['--oniva-color-border']}`,
     boxSizing: 'border-box',
     color: colors['--oniva-color-text'],
     display: 'inline-flex',

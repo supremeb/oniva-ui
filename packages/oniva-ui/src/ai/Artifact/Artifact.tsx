@@ -6,7 +6,6 @@ import { font } from '../../tokens/font.stylex';
 import { media } from '../../tokens/media.stylex';
 import { motion } from '../../tokens/motion.stylex';
 import { radius } from '../../tokens/radius.stylex';
-import { shadow } from '../../tokens/shadow.stylex';
 import { Badge } from '../../components/Badge';
 import { IconButton } from '../../components/IconButton';
 import { IconSwap, useCopy } from '../../internal/n1-ai';
@@ -44,7 +43,7 @@ const styles = stylex.create({
     borderRadius: radius['--oniva-radius-xl'],
     borderStyle: 'solid',
     borderWidth: 1,
-    boxShadow: shadow['--oniva-shadow-md'],
+    boxShadow: 'none',
     boxSizing: 'border-box',
     display: 'flex',
     flexDirection: 'column',

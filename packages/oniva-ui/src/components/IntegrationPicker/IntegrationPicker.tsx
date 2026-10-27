@@ -20,7 +20,6 @@ import { media } from '../../tokens/media.stylex';
 import { motion } from '../../tokens/motion.stylex';
 import { GlideSurface } from '../../internal/m5-glide';
 import { radius } from '../../tokens/radius.stylex';
-import { shadow } from '../../tokens/shadow.stylex';
 import { Button } from '../Button';
 import { Switch } from '../Switch';
 
@@ -42,7 +41,7 @@ const styles = stylex.create({
     borderRadius: radius['--oniva-radius-xl'],
     borderStyle: 'solid',
     borderWidth: 1,
-    boxShadow: shadow['--oniva-shadow-xs'],
+    boxShadow: 'none',
     boxSizing: 'border-box',
     color: colors['--oniva-color-text'],
     containerType: 'inline-size',

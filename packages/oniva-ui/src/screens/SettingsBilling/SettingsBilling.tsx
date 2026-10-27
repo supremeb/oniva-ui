@@ -141,7 +141,7 @@ const styles = stylex.create({
     borderStyle: 'solid',
     borderWidth: 1,
     bottom: 12,
-    boxShadow: shadow['--oniva-shadow-lg'],
+    boxShadow: shadow['--oniva-elevation-floating'],
     boxSizing: 'border-box',
     display: 'flex',
     gap: 12,

@@ -2,7 +2,6 @@ import * as stylex from '@stylexjs/stylex';
 import { colors } from '../tokens/colors.stylex';
 import { font } from '../tokens/font.stylex';
 import { radius } from '../tokens/radius.stylex';
-import { shadow } from '../tokens/shadow.stylex';
 
 /** Shared pieces for the dashboard-extras group (Kanban, Timeline, DataGrid, FilterBar, …). */
 export const dash = stylex.create({
@@ -25,7 +24,7 @@ export const dash = stylex.create({
     borderRadius: radius['--oniva-radius-lg'],
     borderStyle: 'solid',
     borderWidth: 1,
-    boxShadow: shadow['--oniva-shadow-xs'],
+    boxShadow: 'none',
   },
   label: {
     color: colors['--oniva-color-text-muted'],

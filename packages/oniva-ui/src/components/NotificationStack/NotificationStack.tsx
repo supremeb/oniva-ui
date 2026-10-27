@@ -31,7 +31,7 @@ const styles = stylex.create({
     borderRadius: radius['--oniva-radius-xl'],
     borderStyle: 'solid',
     borderWidth: 1,
-    boxShadow: shadow['--oniva-shadow-md'],
+    boxShadow: shadow['--oniva-elevation-floating'],
     boxSizing: 'border-box',
     color: colors['--oniva-color-text'],
     gridArea: '1 / 1',

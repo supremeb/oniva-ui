@@ -6,7 +6,6 @@ import { AnimatedNumber } from '../../motion/AnimatedNumber/AnimatedNumber';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 import { radius } from '../../tokens/radius.stylex';
-import { shadow } from '../../tokens/shadow.stylex';
 import { Badge } from '../../components/Badge';
 import { Card, CardHeader, CardHeaderText, CardTitle, Tile } from '../../components/Card';
 
@@ -35,7 +34,7 @@ const styles = stylex.create({
     alignItems: 'center',
     backgroundColor: colors['--oniva-color-surface'],
     borderRadius: radius['--oniva-radius-lg'],
-    boxShadow: shadow['--oniva-shadow-xs'],
+    boxShadow: 'none',
     display: 'inline-flex',
     fontFamily: font['--oniva-font-sans'],
     height: 36,
@@ -85,7 +84,7 @@ const styles = stylex.create({
     borderWidth: 0,
     boxShadow: {
       default: 'none',
-      ':is([data-selected])': shadow['--oniva-shadow-xs'],
+      ':is([data-selected])': 'none',
       ':focus-visible': `0 0 0 2px ${colors['--oniva-color-focus-ring']}`,
     },
     color: {

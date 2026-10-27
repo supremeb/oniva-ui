@@ -63,7 +63,7 @@ const styles = stylex.create({
     borderWidth: 0,
     borderTopWidth: 1,
     bottom: 0,
-    boxShadow: shadow['--oniva-shadow-xl'],
+    boxShadow: shadow['--oniva-elevation-overlay'],
     boxSizing: 'border-box',
     color: colors['--oniva-color-text'],
     display: 'flex',

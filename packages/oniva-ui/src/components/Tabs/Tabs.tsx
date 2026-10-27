@@ -14,6 +14,7 @@ import {
 import { createContext, use, useRef, type CSSProperties, type ReactNode, type Ref } from 'react';
 import { SlidingIndicator } from '../../motion/SlidingIndicator';
 import { sxClass } from '../../internal/sx';
+import { useKeyboardInstant } from '../../internal/depth-b1-modality';
 import { accent } from '../../tokens/accent.stylex';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
@@ -52,10 +53,11 @@ const styles = stylex.create({
     transitionTimingFunction: motion['--oniva-motion-ease-in-out'],
     width: 2,
   },
+  // Selected pill: raised on a recessed track (lighter surface + rim in dark via the tokens).
   indPill: {
-    backgroundColor: colors['--oniva-color-surface'],
+    backgroundColor: colors['--oniva-color-segment-selected'],
     borderRadius: radius['--oniva-radius-md'],
-    boxShadow: shadow['--oniva-shadow-sm'],
+    boxShadow: shadow['--oniva-elevation-raised'],
     transitionTimingFunction: motion['--oniva-motion-ease-in-out'],
   },
   listV: { alignItems: 'stretch', flexDirection: 'column' },
@@ -76,13 +78,11 @@ const styles = stylex.create({
   },
   listPill: {
     alignSelf: 'flex-start',
-    backgroundColor: colors['--oniva-color-surface-inset'],
-    borderColor: colors['--oniva-color-border'],
+    backgroundColor: colors['--oniva-color-surface-tertiary'],
     borderRadius: radius['--oniva-radius-xl'],
-    borderStyle: 'solid',
-    borderWidth: 1,
+    boxShadow: shadow['--oniva-elevation-recessed'],
     boxSizing: 'border-box',
-    padding: 3,
+    padding: 4,
   },
   tab: {
     alignItems: 'center',
@@ -109,7 +109,8 @@ const styles = stylex.create({
       default: 'none',
       ':active:not([data-disabled])': `scale(${motion['--oniva-motion-press-scale']})`,
     },
-    transitionDuration: motion['--oniva-motion-dur-base'],
+    // colour on dur-base, press scale on dur-press (last entry = transform)
+    transitionDuration: `${motion['--oniva-motion-dur-base']}, ${motion['--oniva-motion-dur-base']}, ${motion['--oniva-motion-dur-base']}, ${motion['--oniva-motion-dur-base']}, ${motion['--oniva-motion-dur-press']}`,
     transitionProperty: 'background-color, color, box-shadow, border-color, transform',
     transitionTimingFunction: motion['--oniva-motion-ease-out'],
     zIndex: 1,
@@ -220,6 +221,8 @@ export function TabList<T extends object>({
   const { variant, vertical: v } = use(Ctx);
   const wrapRef = useRef<HTMLDivElement>(null);
   const selectedKey = use(TabListStateContext)?.selectedKey;
+  // Keyboard arrow moves snap (high-frequency); pointer moves glide.
+  useKeyboardInstant(wrapRef, () => wrapRef.current?.querySelector<HTMLElement>('[data-oniva-ind]'));
   return (
     <div
       ref={wrapRef}
@@ -250,6 +253,7 @@ export function TabList<T extends object>({
       containerRef={wrapRef}
       activeKey={selectedKey}
       selector='[role="tab"][aria-selected="true"]'
+      data-oniva-ind=""
       xstyle={variant === 'pill' ? styles.indPill : v ? styles.indLineV : styles.indLine}
     />
     </div>

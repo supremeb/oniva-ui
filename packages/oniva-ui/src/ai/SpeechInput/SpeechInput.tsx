@@ -8,7 +8,6 @@ import { font } from '../../tokens/font.stylex';
 import { media } from '../../tokens/media.stylex';
 import { motion } from '../../tokens/motion.stylex';
 import { radius } from '../../tokens/radius.stylex';
-import { shadow } from '../../tokens/shadow.stylex';
 import { aiStyles } from '../../internal/ai-styles';
 import { mergeSx } from '../../internal/sx';
 import { AudioWaveform } from '../AudioWaveform';
@@ -29,7 +28,7 @@ const styles = stylex.create({
     borderRadius: radius['--oniva-radius-full'],
     borderStyle: 'solid',
     borderWidth: 1,
-    boxShadow: shadow['--oniva-shadow-card'],
+    boxShadow: 'none',
     color: colors['--oniva-color-text'],
     cursor: 'pointer',
     display: 'inline-flex',

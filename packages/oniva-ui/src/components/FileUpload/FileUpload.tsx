@@ -8,7 +8,6 @@ import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 import { motion } from '../../tokens/motion.stylex';
 import { radius } from '../../tokens/radius.stylex';
-import { shadow } from '../../tokens/shadow.stylex';
 import { cx, ff } from '../../internal/forms-field';
 import { fp } from '../../internal/forms-popover';
 import { shakeStyles } from '../../internal/controls-motion';
@@ -123,7 +122,7 @@ const styles = stylex.create({
     borderRadius: radius['--oniva-radius-lg'],
     borderStyle: 'solid',
     borderWidth: 1,
-    boxShadow: shadow['--oniva-shadow-xs'],
+    boxShadow: 'none',
     color: colors['--oniva-color-icon-muted'],
     display: 'flex',
     height: 40,
@@ -161,7 +160,7 @@ const styles = stylex.create({
     borderRadius: radius['--oniva-radius-lg'],
     borderStyle: 'solid',
     borderWidth: 1,
-    boxShadow: shadow['--oniva-shadow-xs'],
+    boxShadow: 'none',
     boxSizing: 'border-box',
     display: 'flex',
     gap: 12,

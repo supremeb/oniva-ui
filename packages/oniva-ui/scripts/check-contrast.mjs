@@ -130,6 +130,8 @@ export function runContrastChecks() {
       for (const [sn, s] of [['bg', bg], ['surface', surface], ['inset', inset]]) {
         for (const t of ['text', 'text-muted', 'text-subtle', 'text-placeholder', 'text-error']) text(`${t} on ${sn}`, T(`--oniva-color-${t}`), s);
       }
+      ui('knob (on-solid) on control-off', T('--oniva-color-on-solid'), T('--oniva-color-control-off'));
+      text('text on segment-selected', T('--oniva-color-text'), T('--oniva-color-segment-selected'));
       text('text-muted on tertiary', T('--oniva-color-text-muted'), tertiary);
       text('text-subtle on tertiary', T('--oniva-color-text-subtle'), tertiary);
       text('text-subtle on surface-hover', T('--oniva-color-text-subtle'), hoverRow);
@@ -167,6 +169,7 @@ export function runContrastChecks() {
       for (const [sn, s] of [['bg', bg], ['surface', surface], ['inset', inset]]) {
         ui(`focus-ring on ${sn}`, T('--oniva-color-focus-ring'), s);
         ui(`border-control on ${sn}`, T('--oniva-color-border-control'), s);
+        ui(`control-off (switch track) on ${sn}`, T('--oniva-color-control-off'), s);
         ui(`icon-subtle on ${sn}`, T('--oniva-color-icon-subtle'), s);
         ui(`icon-muted on ${sn}`, T('--oniva-color-icon-muted'), s);
         ui(`border-active on ${sn}`, T('--oniva-color-border-active'), s);

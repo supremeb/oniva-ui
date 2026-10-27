@@ -34,7 +34,7 @@ const styles = stylex.create({
     // inverted surface: dark in light mode, light in dark mode
     backgroundColor: colors['--oniva-color-text'],
     borderRadius: radius['--oniva-radius-md'],
-    boxShadow: shadow['--oniva-shadow-md'],
+    boxShadow: shadow['--oniva-elevation-floating'],
     boxSizing: 'border-box',
     color: colors['--oniva-color-bg'],
     fontFamily: font['--oniva-font-sans'],

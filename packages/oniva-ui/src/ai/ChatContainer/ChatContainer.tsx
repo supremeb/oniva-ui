@@ -32,7 +32,7 @@ const styles = stylex.create({
     transform: 'translateX(-50%)',
     transitionDuration: motion['--oniva-motion-dur-base'],
   },
-  btn: { backgroundColor: colors['--oniva-color-surface'], boxShadow: shadow['--oniva-shadow-md'] },
+  btn: { backgroundColor: colors['--oniva-color-surface'], boxShadow: shadow['--oniva-elevation-floating'] },
 });
 
 export interface ScrollToBottomButtonProps {

@@ -76,10 +76,43 @@ Not edited by DEPTH-A. Apply the system:
 5. **Sidebar active, Pagination current, Stepper active, Calendar selected**: flat accent, no gradient or inset.
 6. Never put `raised` and `recessed` on the same element, and never grow the shadow on press.
 
+## Buttons, segmented, tabs, switch: as built (DEPTH-B1)
+
+Decisions
+- **Primary top-light: none.** A/B at 4x (`_ref/depth/b1-primary-toplight-AB.png`): `inset 0 1px 0 rgb(255 255 255 / .14)` follows the corner radius and reads as a bevel stripe on a 36px button, the thing the owner rejected on the switch. Primary and danger are a flat accent / danger fill + contact shadow. No gradient, no inset.
+- **Dark solids carry no rim and no ring** (`elevation-solid`: a soft contact drop only). The generic dark `raised` ring + rim doubled up as two lines on a coloured fill and on a bordered button (a transparent 1px border leaves a gap between ring and rim).
+- **Bordered controls (secondary, icon, toggle) use `elevation-control`**: the 1px border IS the hairline, so the token has no ring. Light = contact + ambient, dark = a soft drop (lighter surface already reads as raised).
+- **Press timing:** transform rides `--oniva-motion-dur-press` (120ms); colour and shadow stay on `dur-base`. Press scale is unchanged (`--oniva-motion-press-scale`). Ghost and soft never carry a shadow; disabled solids and secondary are flat.
+- **Loading shimmer fix:** the label used `color: transparent` + a `currentColor` gradient clipped to text, so every stop computed to rgba(0,0,0,0). The sweep is now an alpha `mask-image` on the label (band at 50% alpha), the label keeps its own colour, so contrast at rest is the variant's normal AA pair.
+- **Segmented / Tabs pill / ToggleButtonGroup:** track = `surface-tertiary` + `elevation-recessed` (no border), selected pill = `--oniva-color-segment-selected` (white in light, #4a4a4a in dark so it is lighter than the #303030 track) + `elevation-raised`. SlidingIndicator geometry contract and the stretch glide are untouched.
+- **Keyboard moves snap, pointer moves glide** (`internal/depth-b1-modality.ts`, same input-modality idea as `GlideSurface`): a keydown inside the control sets `data-instant` and an inline `transition-duration: 0s` on the indicator (Tabs, ToggleButtonGroup via SlidingIndicator) or skips the WAAPI stretch (SegmentedControl); pointerdown/move restores gliding. Measured: ArrowRight lands on the final x in the first 40ms sample, a click takes ~250ms.
+- **Switch off state:** solid `--oniva-color-control-off` track, no ring, no inner shadow. Light `#8c8c8c` (3.1:1 vs inset #f7f7f7, 3.4:1 vs white), dark `#757575` (3.3:1 vs surface #262626). The 3:1 floor is why the off track is a mid grey: any lighter neutral fails non-text contrast without an edge. Knob insets grew by the old 1px border so the gaps stay 3px (lg 4px). Dark knob uses `elevation-knob*` (no halo ring). Off to on eases `background-color` only.
+
+New tokens: `--oniva-color-control-off`, `--oniva-color-segment-selected`, `--oniva-elevation-solid[-hover|-pressed]`, `--oniva-elevation-control[-hover|-pressed]`, `--oniva-elevation-knob[-hover|-pressed]` (light + dark in `themes.ts`). Contrast pairs added in `scripts/check-contrast.mjs` (control-off on bg/surface/inset, knob on control-off, text on segment-selected).
+
+Known pre-existing issue (not fixed here): in light mode the `colors` group derives tokens from the accent ramp at `:root`, so `--oniva-color-accent-fg`, `accent-soft*`, `accent-text` and `focus-ring` stay blue/white under non-blue accents (dark re-declares them on the theme wrapper, so dark is fine). Primary now reads `--oniva-accent-on-solid` directly; `soft` buttons still show blue under amber in light mode. Fix belongs in ThemeProvider/themes (re-declare the derived group for light).
+
+Screenshots: `_ref/depth/b1-*.png` (states light/dark, buttons/controls/switch for light/dark x blue/amber/emerald, primary top-light A/B).
+
 ## Open questions
 
-- Primary button: flat vs one faint top-light. Study recommends flat; owner call.
-- Off-state switch keeps a `border-control` ring (needs >=3:1 non-text contrast). It is the heaviest remaining line; if the owner wants it softer, the off fill must reach 3:1 on its own.
+- Primary button: decided flat (see DEPTH-B1 section). Off-state switch: ring removed, solid `control-off` fill (see DEPTH-B1).
 - Inputs went recessed. Text inputs on white in light mode show a faint inner top edge; if it reads as noise, set `ff.control` back to hairline only (one line).
 - Legacy `shadow-card`/`xs` flat-card cleanup touches ~25 files outside this worker's scope.
 - `dist/oniva-ui.css` must be rebuilt before `stable-vars.test.ts` "defines every documented name" passes (it checks the stale dist for the 6 new `--oniva-elevation-*` names).
+
+## DEPTH-B2 sweep (everything except the B1 button family)
+
+| Group | Change |
+|---|---|
+| Inputs | Input, InputOTP, Select trigger moved `shadow-xs` to `elevation-recessed` (matches `forms-field.ts`). |
+| Flat cards/tiles | `shadow-xs`/`shadow-card` removed (hairline only): Card (both variants), KpiStrip, DataGrid, DataSheet, FileUpload, IntegrationPicker/Settings, Alert, Accordion, DescriptionList, Toolbar, StepperForm, TipsPanel, DateRangePresets, EmptyState, ChartCard (+selected tab), widgets (UsageOverview, ChangeSummary, InvoiceCard, widgets-parts), blocks (InvoiceCredit, AiWorkspace, blocks-styles), internal dash/data-table/data-list/w4/w8/s3/w1 cards, ai cards (CodeBlock, SpeechInput, WritingAssistant, ThinkingLoader, Suggestions, SourceChip, ComposerAttachments, Artifact), s1-files, w7 tiles/pills (ring kept, shadow dropped), calendar frame. |
+| Docked chrome | Navbar and Sidebar frame `shadow-float` replaced by none. |
+| Selected/active | Pagination current (accent), Stepper complete, Sidebar active pill, Calendar/RangeCalendar selected: flat `accent-solid`, gradient and `accent-inset` removed. Pagination default current and numbered items now hairline only. |
+| Floating | Tooltip, NotificationStack, Toast, Popover, HoverCard, NavigationMenu, forms-popover (Select/Combobox lists), overlays-menu (Dropdown/Context menu, CommandPalette), data-table popups, w1 popups, ChartTooltip, SiteHeader menu, ChatContainer jump button, SettingsBilling popup: `elevation-floating`. |
+| Overlay | Dialog, Drawer, BottomSheet, AppShell/AgentRun narrow drawers: `elevation-overlay` (AlertDialog uses Dialog styles). |
+| Ad-hoc rgba | TaskBoard settle keyframe and DelegateBoard active chip now use `elevation-floating`. |
+
+Exceptions kept (raised on purpose): Kanban cards while `data-dragging` and the drop "settle" keyframe, TaskBoard drop settle, DelegateBoard chip while `:active` (all grabbed objects, `elevation-floating`, rest state flat). r6-switcher pill uses `elevation-raised` (a pressable pill).
+Kept as is: Hero (marketing, overlay alias), LogoCluster (illustration), TiltCard hover shadows and GlowCard/Spotlight/BorderBeam/Shimmer/GradientFloor (motion), ProgressTracker/ContextMap/ParallelAttempts/ConflictRadar/FanOutGrid sheen sweeps (shimmer), ParallelAttempts running glow, VoiceOrb (illustration), AgentAvatar/AgentGallery/ImageGenerationLoader gradients (decorative thumbnails), chart fills, mask gradients, InvoiceCredit `backgroundImage` (paint-layer trick for the translucent dark surface, not decoration), focus halos and ring shadows (state rings, not depth).
+Not done: Stepper/Pagination docs text still says "xs shadow" in specs (off limits). Select `ff.control` anatomy copy likewise.

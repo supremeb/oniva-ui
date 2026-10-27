@@ -4,7 +4,6 @@ import { font } from '../tokens/font.stylex';
 import { media } from '../tokens/media.stylex';
 import { motion } from '../tokens/motion.stylex';
 import { radius } from '../tokens/radius.stylex';
-import { shadow } from '../tokens/shadow.stylex';
 
 /** Shared surfaces for the loop-7 W4 cards (tray + white inner card, quiet type). */
 export const w4 = stylex.create({
@@ -45,7 +44,7 @@ export const w4 = stylex.create({
     borderRadius: radius['--oniva-radius-xl'],
     borderStyle: 'solid',
     borderWidth: 1,
-    boxShadow: shadow['--oniva-shadow-card'],
+    boxShadow: 'none',
     boxSizing: 'border-box',
     color: colors['--oniva-color-text'],
     fontFamily: font['--oniva-font-sans'],

@@ -23,6 +23,8 @@ export const colors = stylex.defineVars({
   '--oniva-color-border-hover': '#d4d4d4',
   '--oniva-color-border-active': '#737373', // 4.7:1 on white: hover/pressed control edges
   '--oniva-color-border-control': '#8a8a8a', // checkbox / radio / switch edge: >= 3:1 on bg, surface and inset
+  '--oniva-color-control-off': '#8c8c8c', // switch OFF track fill: >= 3:1 on bg, surface and inset by itself (no ring)
+  '--oniva-color-segment-selected': '#ffffff', // raised pill on a recessed segmented / tabs track (dark: lighter than the track)
   '--oniva-color-separator': '#ebebeb',
   '--oniva-color-focus-ring': accent['--oniva-accent-focus'], // >= 3:1 on bg/surface/inset for all 8 accents (dark: accent-400)
 

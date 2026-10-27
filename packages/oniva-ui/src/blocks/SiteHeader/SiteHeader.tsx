@@ -84,7 +84,7 @@ const styles = stylex.create({
     borderRadius: radius['--oniva-radius-card'],
     borderStyle: 'solid',
     borderWidth: 1,
-    boxShadow: shadow['--oniva-shadow-dropdown'],
+    boxShadow: shadow['--oniva-elevation-floating'],
     boxSizing: 'border-box',
     maxWidth: 'calc(100vw - 32px)',
     transformOrigin: 'var(--trigger-anchor-point, top left)',

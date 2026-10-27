@@ -7,7 +7,6 @@ import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 import { motion } from '../../tokens/motion.stylex';
 import { radius } from '../../tokens/radius.stylex';
-import { shadow } from '../../tokens/shadow.stylex';
 
 const styles = stylex.create({
   nav: { flexGrow: 1 },
@@ -31,7 +30,7 @@ const styles = stylex.create({
     borderRadius: radius['--oniva-radius-xxl'],
     borderStyle: 'solid',
     borderWidth: 1,
-    boxShadow: shadow['--oniva-shadow-float'],
+    boxShadow: 'none',
   },
   sticky: { position: 'sticky', top: 0, zIndex: 10 },
   brand: {

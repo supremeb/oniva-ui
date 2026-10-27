@@ -69,8 +69,8 @@ export function moveCards(
 }
 
 const settle = stylex.keyframes({
-  from: { boxShadow: shadow['--oniva-shadow-lg'], transform: 'scale(1.02)' },
-  to: { boxShadow: shadow['--oniva-shadow-xs'], transform: 'scale(1)' },
+  from: { boxShadow: shadow['--oniva-elevation-floating'], transform: 'scale(1.02)' },
+  to: { boxShadow: 'none', transform: 'scale(1)' },
 });
 
 const styles = stylex.create({
@@ -119,8 +119,8 @@ const styles = stylex.create({
     borderStyle: 'solid',
     borderWidth: 1,
     boxShadow: {
-      default: shadow['--oniva-shadow-xs'],
-      ':is([data-dragging])': shadow['--oniva-shadow-lg'],
+      default: 'none',
+      ':is([data-dragging])': shadow['--oniva-elevation-floating'],
     },
     boxSizing: 'border-box',
     cursor: 'grab',

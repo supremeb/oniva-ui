@@ -29,6 +29,8 @@ export const darkTheme = stylex.createTheme(colors, {
   '--oniva-color-border-active': '#a1a1a1', // > border-hover (#737373)
   '--oniva-color-border-control': '#8a8a8a',
   '--oniva-color-focus-ring': accent['--oniva-accent-400'], // >= 3:1 on #121212/#262626/#171717 for all 8 accents
+  '--oniva-color-control-off': '#757575', // >= 3:1 on #121212, #262626 and #171717
+  '--oniva-color-segment-selected': '#4a4a4a',
   '--oniva-color-separator': '#262626',
 
   '--oniva-color-text': '#fafafa',
@@ -107,6 +109,18 @@ export const darkShadowTheme = stylex.createTheme(shadow, {
     '0 0 0 1px #ffffff26, inset 0 1px 0 #ffffff1a, 0 2px 6px #000000b3',
   '--oniva-elevation-pressed': '0 0 0 1px #ffffff14, 0 0 1px #00000080',
   '--oniva-elevation-recessed': 'inset 0 1px 2px #00000080',
+  // Coloured solid buttons: colour carries the edge, so no ring and no rim, only a soft contact drop.
+  '--oniva-elevation-solid': '0 1px 2px #00000066',
+  '--oniva-elevation-solid-hover': '0 2px 5px #00000073',
+  '--oniva-elevation-solid-pressed': '0 0 1px #00000066',
+  // Bordered controls: the border is the hairline; lighter surface already reads as raised.
+  '--oniva-elevation-control': '0 1px 2px #00000080',
+  '--oniva-elevation-control-hover': '0 2px 5px #00000099',
+  '--oniva-elevation-control-pressed': '0 0 1px #00000066',
+  // White knob: light-from-top is built into the fill, so no ring or rim, only a soft drop.
+  '--oniva-elevation-knob': '0 1px 2px #00000066, 0 2px 4px -1px #00000040',
+  '--oniva-elevation-knob-hover': '0 1px 2px #00000066, 0 3px 6px -1px #00000059',
+  '--oniva-elevation-knob-pressed': '0 0 1px #00000066',
   '--oniva-elevation-floating':
     '0 0 0 1px #ffffff1a, inset 0 1px 0 #ffffff14, 0 4px 8px -2px #00000066, 0 12px 28px -6px #000000a6',
   '--oniva-elevation-overlay':

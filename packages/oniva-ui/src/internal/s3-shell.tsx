@@ -14,7 +14,6 @@ import { AppShell } from '../screens/AppShell';
 import { colors } from '../tokens/colors.stylex';
 import { font } from '../tokens/font.stylex';
 import { radius } from '../tokens/radius.stylex';
-import { shadow } from '../tokens/shadow.stylex';
 
 /** Shared frame for the loop-7 screens (S3): sidebar + header + a container-query page. */
 
@@ -55,7 +54,7 @@ export const s3 = stylex.create({
     borderRadius: radius['--oniva-radius-xl'],
     borderStyle: 'solid',
     borderWidth: 1,
-    boxShadow: shadow['--oniva-shadow-card'],
+    boxShadow: 'none',
     boxSizing: 'border-box',
     color: colors['--oniva-color-text'],
     display: 'flex',

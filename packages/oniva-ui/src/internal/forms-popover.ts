@@ -14,7 +14,7 @@ export const fp = stylex.create({
     borderRadius: radius['--oniva-radius-xl'],
     borderStyle: 'solid',
     borderWidth: 1,
-    boxShadow: shadow['--oniva-shadow-dropdown'],
+    boxShadow: shadow['--oniva-elevation-floating'],
     boxSizing: 'border-box',
     color: colors['--oniva-color-text'],
     fontFamily: font['--oniva-font-sans'],

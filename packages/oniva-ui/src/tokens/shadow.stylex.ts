@@ -18,6 +18,18 @@ export const shadow = stylex.defineVars({
     '0 0 0 1px #00000014, 0 1px 1px #00000014, 0 3px 7px -1px #00000029',
   /** Press flattens: contact only, ambient gone. */
   '--oniva-elevation-pressed': '0 0 0 1px #0000000f, 0 0 1px #00000014',
+  /** Bordered raised control (secondary / icon / toggle button): the border is the hairline, so no ring here. */
+  '--oniva-elevation-control': '0 1px 1px #00000014, 0 2px 5px -1px #0000001f',
+  '--oniva-elevation-control-hover': '0 1px 1px #00000014, 0 3px 7px -1px #00000029',
+  '--oniva-elevation-control-pressed': '0 0 1px #00000014',
+  /** Coloured solid button (primary / danger): contact + ambient, no ring. Dark swaps the ring for a top rim. */
+  '--oniva-elevation-solid': '0 1px 1px #00000014, 0 2px 5px -1px #0000002e',
+  '--oniva-elevation-solid-hover': '0 1px 1px #00000014, 0 3px 7px -1px #0000003d',
+  '--oniva-elevation-solid-pressed': '0 0 1px #00000014',
+  /** Switch / slider knob (white, on a coloured track): same as raised in light; dark drops the ring. */
+  '--oniva-elevation-knob': '0 0 0 1px #0000000f, 0 1px 1px #00000014, 0 2px 5px -1px #0000001f',
+  '--oniva-elevation-knob-hover': '0 0 0 1px #00000014, 0 1px 1px #00000014, 0 3px 7px -1px #00000029',
+  '--oniva-elevation-knob-pressed': '0 0 0 1px #0000000f, 0 0 1px #00000014',
   /** Very subtle inner top shadow. No outer shadow. */
   '--oniva-elevation-recessed': 'inset 0 1px 2px #00000014',
   /** Ambient + key shadow + hairline. */

@@ -15,7 +15,6 @@ import { colors } from '../tokens/colors.stylex';
 import { font } from '../tokens/font.stylex';
 import { motion } from '../tokens/motion.stylex';
 import { radius } from '../tokens/radius.stylex';
-import { shadow } from '../tokens/shadow.stylex';
 import { ff } from './forms-field';
 import { fp } from './forms-popover';
 
@@ -33,7 +32,7 @@ export const fc = stylex.create({
     borderRadius: radius['--oniva-radius-xl'],
     borderStyle: 'solid',
     borderWidth: 1,
-    boxShadow: shadow['--oniva-shadow-xs'],
+    boxShadow: 'none',
   },
   header: {
     alignItems: 'center',
@@ -84,8 +83,8 @@ export const fc = stylex.create({
   disabled: { color: colors['--oniva-color-text-disabled'], cursor: 'not-allowed' },
   unavailable: { color: colors['--oniva-color-text-error'], textDecoration: 'line-through' },
   selected: {
-    backgroundImage: `linear-gradient(180deg, ${accent['--oniva-accent-solid']}, ${accent['--oniva-accent-solid-end']})`,
-    boxShadow: shadow['--oniva-shadow-accent-inset'],
+    backgroundColor: accent['--oniva-accent-solid'],
+    boxShadow: 'none',
     color: colors['--oniva-color-accent-fg'],
   },
   rangeMid: {

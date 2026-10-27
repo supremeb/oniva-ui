@@ -10,7 +10,6 @@ import { mergeSx } from '../../internal/sx';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 import { radius } from '../../tokens/radius.stylex';
-import { shadow } from '../../tokens/shadow.stylex';
 
 export type DataGridValue = string | number;
 export interface DataGridRow {
@@ -38,7 +37,7 @@ const styles = stylex.create({
     borderRadius: radius['--oniva-radius-lg'],
     borderStyle: 'solid',
     borderWidth: 1,
-    boxShadow: shadow['--oniva-shadow-xs'],
+    boxShadow: 'none',
     overflow: 'hidden',
     scrollPaddingBlockStart: HEADER_H,
   },
