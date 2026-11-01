@@ -3,6 +3,19 @@
 All notable changes to oniva-ui. Versions follow [Semantic Versioning](https://semver.org): while the major version is 0,
 a minor bump (0.x.0) adds components or opt-in props, and a patch bump (0.x.y) fixes bugs without API changes.
 
+## 0.4.1 — 2026-11-01
+
+### Changed
+- **Icons:** the core glyphs (arrows, interface, status, content, people, data, objects) are redrawn to a tightened spec:
+  larger keylines that nearly fill the 18-unit canvas, a detail budget of one idea and at most one or two inner marks,
+  calm geometric construction, and shared shapes across siblings (one circle, one page, one arrowhead).
+- **Icons:** every other hand-drawn glyph gets a generated optical scale (`scripts/gen-icon-optical.mjs`, at most +10%)
+  so the whole set sits at the same visual size; variants follow their base.
+
+### Fixed
+- Arrowheads on curved arrows (refresh, rotate, history) no longer merge into the arc.
+- Slash glyphs (pin off, eye off) erase a clean band around the slash instead of hand-split outlines.
+
 ## 0.4.0 — 2026-11-01
 
 ### Breaking

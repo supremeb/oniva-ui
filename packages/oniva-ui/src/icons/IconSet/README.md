@@ -22,15 +22,26 @@ Props: `size` (px or CSS length, default 24), `variant` (`outline` | `duo` | `fi
 ## Grid
 
 - Canvas 18 x 18 units (`viewBox="0 0 18 18"`). Coordinates use quarter units (x.0, x.25, x.5, x.75).
-- Live area: stroke centerlines stay inside 2 to 16, so the stroke's outer edge stays inside 1.25 to 16.75 and nothing
-  touches the canvas edge. Small overshoots (arrow tips, star points) may reach 1.75 to 16.25 at the centerline.
+- Size: glyphs fill the canvas. Target 14.75 units on the larger side for container shapes (geometry, without the
+  stroke); centerlines stay inside 1.75 to 16.25. Small marks (check, x, plus, chevrons) are naturally smaller.
 - Keyline shapes (centerline), so a circle, a square and a page look the same size:
-  - circle: center 9,9, radius 7
-  - square: 2.5 to 15.5, corner radius 2.5
-  - landscape: x 2 to 16, y 3.75 to 14.25, corner radius 2.5
-  - portrait: x 3.25 to 14.75, y 2 to 16, corner radius 2
+  - circle: center 9,9, radius 7.25
+  - square: 2 to 16, corner radius 3
+  - landscape: x 1.75 to 16.25, y 3.5 to 14.5, corner radius 3
+  - portrait: x 2.75 to 15.25, y 1.75 to 16.25, corner radius 2.75
 - Center on visual mass, not the bounding box (a play triangle shifts right; a bell sits a little high to leave room
   for its clapper).
+- `scripts/gen-icon-optical.mjs` measures every glyph and writes a small per-glyph scale (at most +10%) for drawings
+  that come in under the target; redraws should hit the target directly.
+
+## Detail budget
+
+- One idea per glyph. A container gets at most one or two interior marks (a page has a fold; a lock has one keyhole
+  stroke; a calendar has two tabs and one header line). Text lines, dots and ticks are added only when they are the
+  subject (FileText, List).
+- Prefer one continuous stroke over several short ones. Avoid marks shorter than 2 units; they turn into dots at 16px.
+- Calm geometry: straight lines at 0/45/90 degrees, arcs from circles, generous even corners. No wobbly hand-drawn
+  curves, no decorative serifs.
 
 ## Stroke
 

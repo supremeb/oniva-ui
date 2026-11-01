@@ -2,8 +2,9 @@ import * as stylex from '@stylexjs/stylex';
 import { createElement, useId, type ReactElement, type Ref, type SVGAttributes } from 'react';
 import { mergeSx } from '../../internal/sx';
 import { COMPACT } from './compact';
+import { OPTICAL } from './glyphs/optical';
 import { buildIcon, type IconNode } from './render';
-import type { IconVariant, Part } from './shapes';
+import { transformParts, type IconVariant, type Part } from './shapes';
 
 export type { IconVariant } from './shapes';
 
@@ -54,7 +55,9 @@ function toElement(node: IconNode, key: number): ReactElement {
  */
 export function createIcon(name: string, draw: () => Part[], options: { compact?: () => Part[] } = {}): IconGlyph {
   let cache: readonly Part[] | undefined;
-  const parts = () => (cache ??= draw());
+  // Optical scale (generated, see scripts/gen-icon-optical.mjs) brings small drawings up to the spec size.
+  const k = OPTICAL[name];
+  const parts = () => (cache ??= k ? transformParts(draw(), k, 9 - 9 * k, 9 - 9 * k) : draw());
   const drawCompact = options.compact ?? COMPACT[name];
   let compactCache: readonly Part[] | undefined;
   const compactParts = drawCompact ? () => (compactCache ??= drawCompact()) : undefined;
