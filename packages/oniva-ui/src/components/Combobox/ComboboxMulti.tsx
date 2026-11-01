@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { ChevronDown, X } from 'lucide-react';
+import { ChevronDownIcon, XIcon } from '../../icons/IconSet';
 import { Autocomplete, Input, Label, TextField, useFilter, type Key, type Selection } from 'react-aria-components';
 import { useId, useMemo, useRef, useState, type ReactNode, type Ref } from 'react';
 import { colors } from '../../tokens/colors.stylex';
@@ -161,7 +161,7 @@ export function ComboboxMulti({
                   }}
                   {...stylex.props(styles.chipX)}
                 >
-                  <X size={12} aria-hidden="true" />
+                  <XIcon size={12} aria-hidden="true" />
                 </button>
               </span>
             ))}
@@ -179,7 +179,7 @@ export function ComboboxMulti({
               />
             </TextField>
           </div>
-          <ChevronDown size={16} aria-hidden="true" {...stylex.props(fp.iconButton)} />
+          <ChevronDownIcon size={16} aria-hidden="true" {...stylex.props(fp.iconButton)} />
         </div>
         <FormsPopover triggerRef={triggerRef} isOpen={open} onOpenChange={setOpen} isNonModal placement="bottom start">
           <div {...stylex.props(styles.listWrap)}>

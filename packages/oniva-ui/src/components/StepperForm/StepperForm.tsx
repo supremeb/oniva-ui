@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { Check } from 'lucide-react';
+import { CheckIcon } from '../../icons/IconSet';
 import {
   createContext,
   use,
@@ -628,7 +628,7 @@ export function StepperFormSuccess({
   return (
     <div role="status" {...stylex.props(styles.success)}>
       <span aria-hidden="true" {...stylex.props(styles.successIcon)}>
-        <Check size={24} />
+        <CheckIcon size={24} />
       </span>
       <h2 {...stylex.props(styles.heading)}>{title}</h2>
       {description != null && <p {...stylex.props(styles.desc)}>{description}</p>}

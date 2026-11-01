@@ -1,5 +1,4 @@
 import * as stylex from '@stylexjs/stylex';
-import { MessageCircle, Paperclip, Plus } from 'lucide-react';
 import {
   Avatar,
   AvatarGroup,
@@ -10,7 +9,7 @@ import {
   ProgressBar,
   Tag,
   TagGroup,
-  type TagColor,
+  type TagColor, MessageCircleIcon, PaperclipIcon, PlusIcon,
 } from 'oniva-ui';
 import { colors } from '@oniva-tokens/colors.stylex';
 import { font } from '@oniva-tokens/font.stylex';
@@ -214,7 +213,7 @@ export function ProjectBoard() {
       }
       header={
         <PageTitle title="Sprint 14 · Release v0.2" sub="Oct 6 to Oct 20 · 10 open tasks">
-          <Button size="sm" startIcon={<Plus size={16} />}>
+          <Button size="sm" startIcon={<PlusIcon size={16} />}>
             New task
           </Button>
         </PageTitle>
@@ -248,10 +247,10 @@ export function ProjectBoard() {
                   </AvatarGroup>
                   <span {...stylex.props(styles.group)}>
                     <span {...stylex.props(styles.metaItem)}>
-                      <MessageCircle size={14} /> {t.comments}
+                      <MessageCircleIcon size={14} /> {t.comments}
                     </span>
                     <span {...stylex.props(styles.metaItem)}>
-                      <Paperclip size={14} /> {t.files}
+                      <PaperclipIcon size={14} /> {t.files}
                     </span>
                   </span>
                 </div>

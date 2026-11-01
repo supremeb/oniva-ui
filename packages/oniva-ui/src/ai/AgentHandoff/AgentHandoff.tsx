@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRightIcon } from '../../icons/IconSet';
 import type { HTMLAttributes, Ref } from 'react';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
@@ -36,9 +36,13 @@ const styles = stylex.create({
     fontSize: font['--oniva-font-size-13'],
     lineHeight: font['--oniva-font-lh-18'],
     margin: 0,
+    overflowWrap: 'anywhere',
     padding: 10,
   },
   tags: { display: 'flex', flexWrap: 'wrap', gap: 6 },
+  tag: { maxWidth: '100%', minWidth: 0 },
+  wrap: { overflowWrap: 'anywhere' },
+  status: { flexShrink: 0 },
 });
 
 export interface AgentHandoffProps extends Omit<HTMLAttributes<HTMLDivElement>, 'style'> {
@@ -63,21 +67,23 @@ export function AgentHandoff({ from, to, reason, context, carried = [], status =
         <div {...stylex.props(styles.who)}>
           <AgentAvatar name={from.name} size={32} />
           <div {...stylex.props(aib.grow)}>
-            <p {...stylex.props(aib.name, aib.clamp)}>{from.name}</p>
-            {from.role && <p {...stylex.props(aib.meta, aib.clamp)}>{from.role}</p>}
+            <p title={from.name} {...stylex.props(aib.name, aib.clamp)}>{from.name}</p>
+            {from.role && <p title={from.role} {...stylex.props(aib.meta, aib.clamp)}>{from.role}</p>}
           </div>
         </div>
-        <ArrowRight size={16} aria-hidden="true" {...stylex.props(styles.arrow)} />
+        <ArrowRightIcon size={16} aria-hidden="true" {...stylex.props(styles.arrow)} />
         <div {...stylex.props(styles.who)}>
           <AgentAvatar name={to.name} size={32} status={status === 'pending' ? 'waiting' : 'working'} />
           <div {...stylex.props(aib.grow)}>
-            <p {...stylex.props(aib.name, aib.clamp)}>{to.name}</p>
-            {to.role && <p {...stylex.props(aib.meta, aib.clamp)}>{to.role}</p>}
+            <p title={to.name} {...stylex.props(aib.name, aib.clamp)}>{to.name}</p>
+            {to.role && <p title={to.role} {...stylex.props(aib.meta, aib.clamp)}>{to.role}</p>}
           </div>
         </div>
-        <Badge variant={status === 'pending' ? 'warning' : 'success'}>{status}</Badge>
+        <Badge role="status" variant={status === 'pending' ? 'warning' : 'success'} xstyle={styles.status}>
+          {status}
+        </Badge>
       </div>
-      <p {...stylex.props(aib.meta)} style={{ margin: 0 }}>
+      <p {...stylex.props(aib.meta, styles.wrap)}>
         <strong {...stylex.props(aib.name)}>Reason: </strong>
         {reason}
       </p>
@@ -85,7 +91,9 @@ export function AgentHandoff({ from, to, reason, context, carried = [], status =
       {carried.length > 0 && (
         <div {...stylex.props(styles.tags)}>
           {carried.map((c) => (
-            <Badge key={c} variant="neutral">{c}</Badge>
+            <Badge key={c} variant="neutral" xstyle={styles.tag} title={c}>
+              <span {...stylex.props(aib.clamp)}>{c}</span>
+            </Badge>
           ))}
         </div>
       )}

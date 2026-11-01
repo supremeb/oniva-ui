@@ -78,6 +78,29 @@ describe('TraceWaterfall', () => {
     vi.useRealTimers();
   });
 
+  it('places each value after its bar, or before it when the bar runs to the right edge', () => {
+    render(<TraceWaterfall root={run} />);
+    const valueOf = (name: RegExp, text: string) => {
+      const row = screen.getByRole('treeitem', { name });
+      return within(row).getByText(text).closest('[style*="--tw-"]') as HTMLElement;
+    };
+    const early = valueOf(/Plan the launch/, '3.0s');
+    expect(early.style.getPropertyValue('--tw-r')).toBe('auto');
+    expect(early.style.getPropertyValue('--tw-l')).toMatch(/^calc\(/);
+    const late = valueOf(/Orchestrator/, '9.0s');
+    expect(late.style.getPropertyValue('--tw-l')).toBe('auto');
+    expect(late.style.getPropertyValue('--tw-r')).toMatch(/^calc\(/);
+    expect(late.style.getPropertyValue('--tw-nl')).toMatch(/^calc\(/);
+  });
+
+  it('keeps the duration stat plain text when nothing runs', () => {
+    const { container } = render(<TraceWaterfall root={run} />);
+    const stat = screen.getByText('Duration').parentElement as HTMLElement;
+    expect(stat.lastElementChild?.children).toHaveLength(0);
+    expect(stat).toHaveTextContent('9.0s');
+    expect(container.querySelector('[role="tree"]')).toBeInTheDocument();
+  });
+
   it('forwards ref and className', () => {
     const ref = createRef<HTMLDivElement>();
     render(<TraceWaterfall root={run} ref={ref} className="x" />);

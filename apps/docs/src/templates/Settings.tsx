@@ -1,5 +1,4 @@
 import * as stylex from '@stylexjs/stylex';
-import { Bell, CreditCard, Shield, User } from 'lucide-react';
 import {
   Alert,
   Avatar,
@@ -16,7 +15,7 @@ import {
   TabList,
   TabPanel,
   Tabs,
-  Textarea,
+  Textarea, BellIcon, CreditCardIcon, ShieldIcon, UserIcon,
 } from 'oniva-ui';
 import { colors } from '@oniva-tokens/colors.stylex';
 import { font } from '@oniva-tokens/font.stylex';
@@ -65,16 +64,16 @@ export function Settings() {
       <div {...stylex.props(styles.wrap)}>
         <Tabs>
           <TabList aria-label="Settings sections">
-            <Tab id="profile" icon={<User size={16} />}>
+            <Tab id="profile" icon={<UserIcon size={16} />}>
               Profile
             </Tab>
-            <Tab id="notifications" icon={<Bell size={16} />}>
+            <Tab id="notifications" icon={<BellIcon size={16} />}>
               Notifications
             </Tab>
-            <Tab id="security" icon={<Shield size={16} />}>
+            <Tab id="security" icon={<ShieldIcon size={16} />}>
               Security
             </Tab>
-            <Tab id="billing" icon={<CreditCard size={16} />}>
+            <Tab id="billing" icon={<CreditCardIcon size={16} />}>
               Billing
             </Tab>
           </TabList>

@@ -1,6 +1,6 @@
 import * as stylex from '@stylexjs/stylex';
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode, type Ref } from 'react';
-import { AlertCircle, Check } from 'lucide-react';
+import { CircleAlertIcon, CheckIcon } from '../../icons/IconSet';
 import { Button } from 'react-aria-components';
 import { shakeStyles, useShake } from '../../internal/controls-motion';
 import { SlidingIndicator } from '../../motion/SlidingIndicator';
@@ -400,7 +400,7 @@ function OtpBody({
           {centered
             ? (v: ValidationResult) => (
                 <span {...stylex.props(styles.errLine)}>
-                  <AlertCircle size={14} aria-hidden="true" />
+                  <CircleAlertIcon size={14} aria-hidden="true" />
                   {typeof errorMessage === 'function' ? errorMessage(v) : errorMessage}
                 </span>
               )
@@ -473,7 +473,7 @@ function OtpBody({
       </div>
       {status === 'success' && (
         <div role="status" {...stylex.props(styles.pill)}>
-          <Check size={16} aria-hidden="true" />
+          <CheckIcon size={16} aria-hidden="true" />
           {successLabel}
         </div>
       )}

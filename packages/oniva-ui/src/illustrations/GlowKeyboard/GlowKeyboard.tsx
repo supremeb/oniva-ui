@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { ArrowUp, Sparkles } from 'lucide-react';
+import { ArrowUpIcon, SparklesIcon } from '../../icons/IconSet';
 import { useCallback, useEffect, useRef, useState, type KeyboardEvent } from 'react';
 import { accent } from '../../tokens/accent.stylex';
 import { colors } from '../../tokens/colors.stylex';
@@ -400,7 +400,7 @@ function Board({
       <div {...stylex.props(styles.inputWrap)}>
         <div {...stylex.props(styles.input)}>
           {flashAt && <span key={flashAt.id} aria-hidden="true" {...stylex.props(styles.glow, styles.glowAt(flashAt.x), loop.once)} />}
-          <Sparkles {...stylex.props(styles.inputIcon)} />
+          <SparklesIcon {...stylex.props(styles.inputIcon)} />
           {sent && (
             <span key={sent.id} aria-hidden="true" {...stylex.props(styles.sent)}>
               {sent.text}
@@ -417,7 +417,7 @@ function Board({
             {...stylex.props(styles.field)}
           />
           <span key={sendId} aria-hidden="true" {...stylex.props(styles.send, sendId > 0 && styles.sendPop)}>
-            <ArrowUp size={16} />
+            <ArrowUpIcon size={16} />
           </span>
         </div>
       </div>

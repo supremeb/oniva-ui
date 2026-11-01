@@ -1,8 +1,7 @@
 import * as stylex from '@stylexjs/stylex';
-import { Check, Copy, Link2, X } from 'lucide-react';
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
-import { Input, Kbd, SegmentedControl, SegmentedControlItem, Select, SelectItem, Switch, Tag, TagGroup } from 'oniva-ui';
+import { Input, Kbd, SegmentedControl, SegmentedControlItem, Select, SelectItem, Switch, Tag, TagGroup, CheckIcon, CopyIcon, LinkIcon, XIcon } from 'oniva-ui';
 import { accent } from '@oniva-tokens/accent.stylex';
 import { colors } from '@oniva-tokens/colors.stylex';
 import { font } from '@oniva-tokens/font.stylex';
@@ -134,11 +133,11 @@ export function MetaStrip({ page }: { page: DocPage }) {
       <span {...stylex.props(s.pill)}><span {...stylex.props(s.dot, dot)} aria-hidden="true" />{page.status}</span>
       <span {...stylex.props(s.pill)} title={`Available since v${page.version}`}>v{VERSION}</span>
       <button type="button" {...stylex.props(s.pill, s.pillBtn, s.monoPill)} aria-label={`Copy import: import { ${page.importName} } from 'oniva-ui'`} onClick={() => copy(`import { ${page.importName} } from 'oniva-ui';`)}>
-        {`<${page.importName}>`} {done ? <Check size={14} aria-hidden="true" /> : null}
+        {`<${page.importName}>`} {done ? <CheckIcon size={14} aria-hidden="true" /> : null}
       </button>
       <a {...stylex.props(s.pill, s.pillBtn)} href={`https://github.com/supremeb/oniva-ui/tree/main/packages/oniva-ui/src/${page.sourcePath}`} target="_blank" rel="noreferrer">Source ↗</a>
       <button type="button" {...stylex.props(s.pill, s.pillBtn)} onClick={() => copyLink(window.location.href)}>
-        {linked ? <Check size={14} aria-hidden="true" /> : <Link2 size={14} aria-hidden="true" />} {linked ? 'Copied' : 'Copy link'}
+        {linked ? <CheckIcon size={14} aria-hidden="true" /> : <LinkIcon size={14} aria-hidden="true" />} {linked ? 'Copied' : 'Copy link'}
       </button>
     </div>
   );
@@ -311,11 +310,11 @@ export function UsageCards({ usage }: { usage: DocPage['usage'] }) {
   return (
     <div {...stylex.props(s.cards2)}>
       <div {...stylex.props(s.card)}>
-        <div {...stylex.props(s.cardHead)}><span {...stylex.props(s.icoGood)}><Check size={14} aria-hidden="true" /></span><h3 {...stylex.props(s.cardTitle)}>Use it for</h3></div>
+        <div {...stylex.props(s.cardHead)}><span {...stylex.props(s.icoGood)}><CheckIcon size={14} aria-hidden="true" /></span><h3 {...stylex.props(s.cardTitle)}>Use it for</h3></div>
         <ul {...stylex.props(s.list)}>{usage.use.map((u) => <li key={u}>{u}</li>)}</ul>
       </div>
       <div {...stylex.props(s.card)}>
-        <div {...stylex.props(s.cardHead)}><span {...stylex.props(s.icoBad)}><X size={14} aria-hidden="true" /></span><h3 {...stylex.props(s.cardTitle)}>Don’t use it for</h3></div>
+        <div {...stylex.props(s.cardHead)}><span {...stylex.props(s.icoBad)}><XIcon size={14} aria-hidden="true" /></span><h3 {...stylex.props(s.cardTitle)}>Don’t use it for</h3></div>
         <ul {...stylex.props(s.list)}>
           {usage.avoid.map((a) => (
             <li key={a.text}>
@@ -422,7 +421,7 @@ export function Playground({ pg }: { pg: DocPage['playground'] }) {
       <div {...stylex.props(s.codeWrap)}>
         <pre {...stylex.props(s.codePre)} tabIndex={0}><code>{code}</code></pre>
         <button type="button" {...stylex.props(s.pill, s.pillBtn, s.copyBtn)} onClick={() => copy(code)}>
-          {done ? <Check size={14} aria-hidden="true" /> : <Copy size={14} aria-hidden="true" />} {done ? 'Copied' : 'Copy'}
+          {done ? <CheckIcon size={14} aria-hidden="true" /> : <CopyIcon size={14} aria-hidden="true" />} {done ? 'Copied' : 'Copy'}
         </button>
       </div>
     </div>
@@ -470,7 +469,7 @@ export function DoDont({ items }: { items: DoDontItem[] }) {
       {items.map((it) => (
         <div key={it.caption} {...stylex.props(s.card)}>
           <div {...stylex.props(s.cardHead)}>
-            <span {...stylex.props(it.kind === 'do' ? s.icoGood : s.icoBad)}>{it.kind === 'do' ? <Check size={14} aria-hidden="true" /> : <X size={14} aria-hidden="true" />}</span>
+            <span {...stylex.props(it.kind === 'do' ? s.icoGood : s.icoBad)}>{it.kind === 'do' ? <CheckIcon size={14} aria-hidden="true" /> : <XIcon size={14} aria-hidden="true" />}</span>
             <h3 {...stylex.props(s.cardTitle)}>{it.kind === 'do' ? 'Do' : 'Don’t'}</h3>
           </div>
           {it.example ? <div {...stylex.props(s.stage)} style={{ marginBottom: 16 }}><div {...stylex.props(s.stateStage)}><FitBox min={0.5}><it.example /></FitBox></div></div> : null}

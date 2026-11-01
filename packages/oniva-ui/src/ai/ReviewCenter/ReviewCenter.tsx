@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { Check, ClipboardCheck, Link2, Pencil, SkipForward, Sparkles, Undo2, X } from 'lucide-react';
+import { CheckIcon, ClipboardCheckIcon, LinkIcon, ListFilterIcon, PencilIcon, SkipForwardIcon, SparklesIcon, UndoIcon, XIcon } from '../../icons/IconSet';
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type HTMLAttributes, type KeyboardEvent, type ReactNode, type Ref } from 'react';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
@@ -67,25 +67,27 @@ const styles = stylex.create({
   root: { containerType: 'inline-size', fontFamily: font['--oniva-font-sans'], outlineStyle: 'none', overflow: 'hidden', width: '100%' },
   bar: { alignItems: 'center', borderBottomColor: colors['--oniva-color-border'], borderBottomStyle: 'solid', borderBottomWidth: 1, display: 'flex', flexWrap: 'wrap', gap: 10, paddingBlock: 10, paddingInline: 14 },
   title: { alignItems: 'center', color: colors['--oniva-color-text'], display: 'inline-flex', fontSize: font['--oniva-font-size-14'], fontWeight: font['--oniva-font-weight-semibold'], gap: 6, margin: 0 },
-  progress: { alignItems: 'center', color: colors['--oniva-color-text-muted'], display: 'flex', flexGrow: 1, fontSize: font['--oniva-font-size-12'], fontVariantNumeric: 'tabular-nums', gap: 8, minWidth: 120 },
-  track: { backgroundColor: colors['--oniva-color-chart-track'], borderRadius: radius['--oniva-radius-full'], flexGrow: 1, height: 4, maxWidth: 160, overflow: 'hidden' },
+  progress: { alignItems: 'center', color: colors['--oniva-color-text-muted'], display: 'flex', flexGrow: 1, flexWrap: 'wrap', fontSize: font['--oniva-font-size-12'], fontVariantNumeric: 'tabular-nums', gap: 8, minWidth: 120 },
+  track: { backgroundColor: colors['--oniva-color-chart-track'], borderRadius: radius['--oniva-radius-full'], flexGrow: 1, height: 4, maxWidth: 160, minWidth: 40, overflow: 'hidden' },
   fill: { backgroundColor: colors['--oniva-color-success-solid'], display: 'block', height: '100%', transformOrigin: 'left center', transitionDuration: motion['--oniva-motion-dur-slower'], transitionProperty: 'transform', transitionTimingFunction: motion['--oniva-motion-ease-out'], width: '100%' },
   work: { display: 'grid', gridTemplateColumns: { default: 'minmax(0, 1fr)', [WIDE]: '240px minmax(0, 1fr)' }, height: { default: 'auto', [WIDE]: 'var(--oniva-review-height, 460px)' } },
   queueCol: { borderBottomColor: colors['--oniva-color-border'], borderBottomStyle: { default: 'solid', [WIDE]: 'none' }, borderBottomWidth: 1, borderInlineEndColor: colors['--oniva-color-border'], borderInlineEndStyle: { default: 'none', [WIDE]: 'solid' }, borderInlineEndWidth: 1, display: 'flex', flexDirection: 'column', minHeight: 0, minWidth: 0 },
   tabs: { borderBottomColor: colors['--oniva-color-border'], borderBottomStyle: 'solid', borderBottomWidth: 1, paddingBlock: 8, paddingInline: 10 },
-  cnt: { color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-11'], fontVariantNumeric: 'tabular-nums', marginInlineStart: 4 },
+  cnt: { color: 'inherit', fontSize: font['--oniva-font-size-11'], fontVariantNumeric: 'tabular-nums', marginInlineStart: 4 },
   oldest: { color: colors['--oniva-color-text-muted'] },
   avatar: { alignItems: 'center', backgroundColor: colors['--oniva-color-surface-inset'], borderColor: colors['--oniva-color-border'], borderRadius: radius['--oniva-radius-md'], borderStyle: 'solid', borderWidth: 1, boxSizing: 'border-box', color: colors['--oniva-color-text-muted'], display: 'inline-flex', flexShrink: 0, height: 28, justifyContent: 'center', width: 28 },
   avatarLg: { height: 36, width: 36 },
   qText: { display: 'flex', flexDirection: 'column', gap: 1, minWidth: 0 },
   dTop: { alignItems: 'center', display: 'flex', gap: 10 },
-  dWho: { alignItems: 'center', color: colors['--oniva-color-text'], display: 'flex', flexWrap: 'wrap', fontSize: font['--oniva-font-size-13'], fontWeight: font['--oniva-font-weight-medium'], gap: 6 },
-  dModel: { color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-12'] },
+  dWho: { overflowWrap: 'anywhere', alignItems: 'center', color: colors['--oniva-color-text'], display: 'flex', flexWrap: 'wrap', fontSize: font['--oniva-font-size-13'], fontWeight: font['--oniva-font-weight-medium'], gap: 6 },
+  dModel: { overflowWrap: 'anywhere', color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-12'] },
   why: { color: colors['--oniva-color-text'], fontWeight: font['--oniva-font-weight-medium'] },
-  links: { alignItems: 'center', color: colors['--oniva-color-text-muted'], display: 'flex', flexWrap: 'wrap', fontSize: font['--oniva-font-size-12'], gap: 14 },
+  links: { overflowWrap: 'anywhere', alignItems: 'center', color: colors['--oniva-color-text-muted'], display: 'flex', flexWrap: 'wrap', fontSize: font['--oniva-font-size-12'], gap: 14 },
   link: { alignItems: 'center', display: 'inline-flex', gap: 5 },
   hint: { opacity: 0.8, display: { default: 'inline-flex', [TINY]: 'none' } },
   queue: { display: 'flex', flexDirection: 'column', gap: 2, listStyle: 'none', margin: 0, maxHeight: { default: 132, [WIDE]: 'none' }, minHeight: 0, flexGrow: 1, overflowY: 'auto', padding: 6 },
+  segItem: { paddingInline: 6 },
+  queueEmpty: { display: 'none' },
   qRow: {
     alignItems: 'center',
     appearance: 'none',
@@ -107,20 +109,29 @@ const styles = stylex.create({
   qCurrent: { backgroundColor: colors['--oniva-color-accent-soft'] },
   qTitle: { fontSize: font['--oniva-font-size-13'], fontWeight: font['--oniva-font-weight-medium'], overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
   qMeta: { color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-12'], overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
-  wait: { fontSize: font['--oniva-font-size-12'], fontVariantNumeric: 'tabular-nums' },
+  wait: { alignItems: 'center', display: 'inline-flex', fontSize: font['--oniva-font-size-12'], fontVariantNumeric: 'tabular-nums', gap: 4 },
+  waitDot: { backgroundColor: 'currentcolor', borderRadius: radius['--oniva-radius-full'], flexShrink: 0, height: 5, width: 5 },
+  waitDotWarn: { backgroundColor: colors['--oniva-color-warning-solid'] },
+  waitDotLate: { backgroundColor: colors['--oniva-color-danger-solid'] },
+  waitOnCurrent: { color: colors['--oniva-color-accent-soft-fg'], fontWeight: font['--oniva-font-weight-medium'] },
   waitOk: { color: colors['--oniva-color-text-muted'] },
   waitWarn: { color: colors['--oniva-color-warning-fg'] },
   waitLate: { color: colors['--oniva-color-danger-fg'] },
-  detail: { display: 'flex', flexDirection: 'column', gap: 12, minWidth: 0, outlineStyle: 'none', overflowY: 'auto', padding: 14 },
+  detail: { display: 'flex', flexDirection: 'column', gap: 12, minWidth: 0, outlineStyle: 'none', overflowY: 'auto', paddingBlockEnd: 0, paddingBlockStart: 14, paddingInline: 14 },
   dHead: { display: 'flex', flexDirection: 'column', gap: 4 },
-  dTitle: { color: colors['--oniva-color-text'], fontSize: font['--oniva-font-size-16'], fontWeight: font['--oniva-font-weight-semibold'], lineHeight: font['--oniva-font-lh-20'], margin: 0 },
-  reasoning: { color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-13'], lineHeight: font['--oniva-font-lh-18'], margin: 0 },
+  dTitle: { overflowWrap: 'anywhere', color: colors['--oniva-color-text'], fontSize: font['--oniva-font-size-16'], fontWeight: font['--oniva-font-weight-semibold'], lineHeight: font['--oniva-font-lh-20'], margin: 0 },
+  reasoning: { overflowWrap: 'anywhere', color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-13'], lineHeight: font['--oniva-font-lh-18'], margin: 0 },
   sec: { display: 'flex', flexDirection: 'column', gap: 6 },
   secTitle: { color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-11'], fontWeight: font['--oniva-font-weight-medium'], letterSpacing: font['--oniva-font-track-label'], margin: 0, textTransform: 'uppercase' },
   fields: { backgroundColor: colors['--oniva-color-surface-inset'], borderRadius: radius['--oniva-radius-md'], columnGap: 12, display: 'grid', fontSize: font['--oniva-font-size-13'], gridTemplateColumns: 'minmax(80px, auto) minmax(0, 1fr)', margin: 0, padding: 10, rowGap: 6 },
   fk: { color: colors['--oniva-color-text-muted'], margin: 0 },
   fv: { color: colors['--oniva-color-text'], fontVariantNumeric: 'tabular-nums', margin: 0, overflowWrap: 'anywhere' },
-  body: { backgroundColor: colors['--oniva-color-surface-inset'], borderRadius: radius['--oniva-radius-md'], color: colors['--oniva-color-text'], fontSize: font['--oniva-font-size-13'], lineHeight: font['--oniva-font-lh-18'], margin: 0, padding: 10, whiteSpace: 'pre-wrap' },
+  body: { overflowWrap: 'anywhere', backgroundColor: colors['--oniva-color-surface-inset'], borderRadius: radius['--oniva-radius-md'], color: colors['--oniva-color-text'], fontSize: font['--oniva-font-size-13'], lineHeight: font['--oniva-font-lh-18'], margin: 0, padding: 10, whiteSpace: 'pre-wrap' },
+  fileRow: { alignItems: 'baseline', borderColor: colors['--oniva-color-border'], borderRadius: radius['--oniva-radius-md'], borderStyle: 'solid', borderWidth: 1, columnGap: 12, display: 'flex', fontSize: font['--oniva-font-size-12'], justifyContent: 'space-between', paddingBlock: 8, paddingInline: 10 },
+  fileName: { color: colors['--oniva-color-text'], minWidth: 0, overflowWrap: 'anywhere' },
+  fileStat: { display: 'inline-flex', flexShrink: 0, fontVariantNumeric: 'tabular-nums', gap: 8 },
+  fileAdd: { color: colors['--oniva-color-success-fg'] },
+  fileDel: { color: colors['--oniva-color-danger-fg'] },
   code: { fontFamily: font['--oniva-font-mono'], fontSize: font['--oniva-font-size-12'], overflowX: 'auto', whiteSpace: 'pre' },
   cAdd: { backgroundColor: colors['--oniva-color-success-bg'], display: 'block' },
   cDel: { backgroundColor: colors['--oniva-color-error-bg'], display: 'block' },
@@ -128,10 +139,10 @@ const styles = stylex.create({
   edit: { backgroundColor: colors['--oniva-color-surface-inner'], borderColor: { default: colors['--oniva-color-border-control'], ':focus': colors['--oniva-color-text'] }, borderRadius: radius['--oniva-radius-md'], borderStyle: 'solid', borderWidth: 1, boxSizing: 'border-box', color: colors['--oniva-color-text'], fontFamily: 'inherit', fontSize: font['--oniva-font-size-13'], lineHeight: font['--oniva-font-lh-18'], minHeight: 96, outlineStyle: 'none', padding: 8, resize: 'vertical', width: '100%' },
   input: { backgroundColor: colors['--oniva-color-surface-inner'], borderColor: { default: colors['--oniva-color-border-control'], ':focus': colors['--oniva-color-text'] }, borderRadius: radius['--oniva-radius-sm'], borderStyle: 'solid', borderWidth: 1, boxSizing: 'border-box', color: colors['--oniva-color-text'], fontFamily: 'inherit', fontSize: font['--oniva-font-size-13'], outlineStyle: 'none', padding: 4, width: '100%' },
   steps: { display: 'flex', flexDirection: 'column', gap: 6, margin: 0, paddingInlineStart: 22 },
-  step: { color: colors['--oniva-color-text'], fontSize: font['--oniva-font-size-13'] },
+  step: { overflowWrap: 'anywhere', color: colors['--oniva-color-text'], fontSize: font['--oniva-font-size-13'] },
   stepFlag: { color: colors['--oniva-color-warning-fg'] },
-  stepDetail: { color: colors['--oniva-color-text-muted'], display: 'block', fontSize: font['--oniva-font-size-12'] },
-  actions: { alignItems: 'center', borderTopColor: colors['--oniva-color-border'], borderTopStyle: 'solid', borderTopWidth: 1, display: 'flex', flexWrap: 'wrap', gap: 6, marginBlockStart: 'auto', paddingBlockStart: 10 },
+  stepDetail: { overflowWrap: 'anywhere', color: colors['--oniva-color-text-muted'], display: 'block', fontSize: font['--oniva-font-size-12'] },
+  actions: { alignItems: 'center', backgroundColor: colors['--oniva-color-surface-inset'], bottom: 0, borderTopColor: colors['--oniva-color-border'], borderTopStyle: 'solid', borderTopWidth: 1, display: 'flex', flexWrap: 'wrap', gap: 6, marginBlockStart: 'auto', paddingBlock: 10, position: 'sticky', zIndex: 1 },
   grow: { flexGrow: { default: 0, [TINY]: 1 } },
   icon: { display: { default: 'inline', [TINY]: 'none' } },
   flagCount: { color: colors['--oniva-color-text-muted'], display: { default: 'inline', [TINY]: 'none' }, fontSize: font['--oniva-font-size-12'], marginInlineStart: 'auto' },
@@ -496,13 +507,15 @@ export function ReviewCenter({
     if (typeof ref === 'function') ref(el);
     else if (ref) (ref as { current: HTMLDivElement | null }).current = el;
   };
+  const rows: { item: ReviewItem; ghost?: { ok: boolean } }[] = queue.map((item) => ({ item }));
+  for (const g of ghosts) rows.splice(Math.min(g.at, rows.length), 0, { item: g.item, ghost: { ok: g.ok } });
   const flagTotal = current ? flagIds(detailEl.current).length : 0;
 
   return (
     <div {...rest} ref={setRefs} tabIndex={-1} onKeyDown={onKey} {...mergeSx(sx, className)}>
       <div {...stylex.props(styles.bar)}>
         <h4 {...stylex.props(styles.title)}>
-          <ClipboardCheck size={14} aria-hidden="true" /> {title}
+          <ClipboardCheckIcon size={14} aria-hidden="true" /> {title}
         </h4>
         <div {...stylex.props(styles.progress)}>
           <span aria-hidden="true" {...stylex.props(styles.track)}>
@@ -518,31 +531,28 @@ export function ReviewCenter({
         <SegmentedControl
           aria-label="Filter queue"
           size="sm"
+          fullWidth
           value={filter}
           onChange={(v) => {
             if (filterProp === undefined) setFilterState(v as ReviewFilter);
             onFilterChange?.(v as ReviewFilter);
           }}
         >
-          <SegmentedControlItem value="all">All <span aria-hidden="true" {...stylex.props(styles.cnt)}>{waiting.length}</span></SegmentedControlItem>
-          <SegmentedControlItem value="high">High risk <span aria-hidden="true" {...stylex.props(styles.cnt)}>{waiting.filter((i) => i.risk === 'high').length}</span></SegmentedControlItem>
-          <SegmentedControlItem value="unsure">Unsure <span aria-hidden="true" {...stylex.props(styles.cnt)}>{waiting.filter(unsure).length}</span></SegmentedControlItem>
+          <SegmentedControlItem value="all" xstyle={styles.segItem}>All <span aria-hidden="true" {...stylex.props(styles.cnt)}>{waiting.length}</span></SegmentedControlItem>
+          <SegmentedControlItem value="high" xstyle={styles.segItem}>High risk <span aria-hidden="true" {...stylex.props(styles.cnt)}>{waiting.filter((i) => i.risk === 'high').length}</span></SegmentedControlItem>
+          <SegmentedControlItem value="unsure" xstyle={styles.segItem}>Unsure <span aria-hidden="true" {...stylex.props(styles.cnt)}>{waiting.filter(unsure).length}</span></SegmentedControlItem>
         </SegmentedControl>
         </div>
-        <ul ref={queueEl} aria-label="Review queue" {...stylex.props(styles.queue)}>
-          {(() => {
-            const list: ({ item: ReviewItem; ghost?: { ok: boolean } })[] = queue.map((item) => ({ item }));
-            for (const g of ghosts) list.splice(Math.min(g.at, list.length), 0, { item: g.item, ghost: { ok: g.ok } });
-            return list;
-          })().map(({ item, ghost }) => {
+        <ul ref={queueEl} aria-label="Review queue" hidden={!rows.length} {...stylex.props(styles.queue, !rows.length && styles.queueEmpty)}>
+          {rows.map(({ item, ghost }) => {
             if (ghost) {
               return (
                 <li key={item.id} aria-hidden="true" {...stylex.props(styles.ghost)}>
                   <div {...stylex.props(styles.ghostInner)}>
                     <div {...stylex.props(styles.qRow)}>
-                      <span {...stylex.props(styles.avatar)}>{item.icon ?? <Sparkles size={14} />}</span>
+                      <span {...stylex.props(styles.avatar)}>{item.icon ?? <SparklesIcon size={14} />}</span>
                       <span {...stylex.props(styles.qTitle)}>{item.title}</span>
-                      <span {...stylex.props(styles.ghostMark)}>{ghost.ok ? <Check size={12} /> : <X size={12} />}</span>
+                      <span {...stylex.props(styles.ghostMark)}>{ghost.ok ? <CheckIcon size={12} /> : <XIcon size={12} />}</span>
                     </div>
                   </div>
                 </li>
@@ -564,12 +574,15 @@ export function ReviewCenter({
                   onClick={() => select(item.id)}
                   {...stylex.props(styles.qRow, focus.inset, isCur && styles.qCurrent)}
                 >
-                  <span aria-hidden="true" {...stylex.props(styles.avatar)}>{item.icon ?? <Sparkles size={14} />}</span>
+                  <span aria-hidden="true" {...stylex.props(styles.avatar)}>{item.icon ?? <SparklesIcon size={14} />}</span>
                   <span aria-hidden="true" {...stylex.props(styles.qText)}>
                     <span {...stylex.props(styles.qTitle)}>{item.title}</span>
                     <span {...stylex.props(styles.qMeta)}>{item.type}</span>
                   </span>
-                  <span aria-hidden="true" {...stylex.props(styles.wait, w.tone)}>{skipped.includes(item.id) ? 'skipped' : w.text}</span>
+                  <span aria-hidden="true" {...stylex.props(styles.wait, w.tone, isCur && w.tone !== styles.waitOk && styles.waitOnCurrent)}>
+                    {!skipped.includes(item.id) && w.tone !== styles.waitOk && <span {...stylex.props(styles.waitDot, w.tone === styles.waitLate ? styles.waitDotLate : styles.waitDotWarn)} />}
+                    {skipped.includes(item.id) ? 'skipped' : w.text}
+                  </span>
                 </button>
                 </div>
               </li>
@@ -581,7 +594,7 @@ export function ReviewCenter({
           <div key={current.id} ref={detailEl} data-state="entering" aria-label="Current item" role="region" {...stylex.props(styles.detail, enterExit.slide)}>
             <div {...stylex.props(styles.dHead)}>
               <div {...stylex.props(styles.dTop)}>
-                <span aria-hidden="true" {...stylex.props(styles.avatar, styles.avatarLg)}>{current.icon ?? <Sparkles size={16} />}</span>
+                <span aria-hidden="true" {...stylex.props(styles.avatar, styles.avatarLg)}>{current.icon ?? <SparklesIcon size={16} />}</span>
                 <div {...stylex.props(styles.qText)}>
                   <div {...stylex.props(styles.dWho)}>
                     <span>{current.agent}</span>
@@ -629,7 +642,13 @@ export function ReviewCenter({
                 <p {...stylex.props(styles.secTitle)}>{f.plural(current.files.length, { one: '# file changed', other: '# files changed' })}</p>
                 {current.files.map((file) =>
                   file.diff ? <FileDiff key={file.path} fileName={file.path} diff={file.diff} /> : (
-                    <div key={file.path} {...stylex.props(styles.body, w2s.mono)}>{file.path} +{file.added ?? 0} −{file.removed ?? 0}</div>
+                    <div key={file.path} {...stylex.props(styles.fileRow, w2s.mono)}>
+                      <span {...stylex.props(styles.fileName)}>{file.path}</span>
+                      <span {...stylex.props(styles.fileStat)}>
+                        <span aria-label={`${f.number(file.added ?? 0)} added`} {...stylex.props(styles.fileAdd)}>+{f.number(file.added ?? 0)}</span>
+                        <span aria-label={`${f.number(file.removed ?? 0)} removed`} {...stylex.props(styles.fileDel)}>−{f.number(file.removed ?? 0)}</span>
+                      </span>
+                    </div>
                   ),
                 )}
               </div>
@@ -651,7 +670,7 @@ export function ReviewCenter({
             )}
             {current.links && current.links.length > 0 && (
               <div {...stylex.props(styles.links)}>
-                {current.links.map((l) => <span key={l.label} {...stylex.props(styles.link)}>{l.icon ?? <Link2 size={13} aria-hidden="true" />}{l.label}</span>)}
+                {current.links.map((l) => <span key={l.label} {...stylex.props(styles.link)}>{l.icon ?? <LinkIcon size={13} aria-hidden="true" />}{l.label}</span>)}
               </div>
             )}
             <div {...stylex.props(styles.actions)}>
@@ -667,20 +686,20 @@ export function ReviewCenter({
               ) : (
                 <>
                   <Button size="sm" aria-keyshortcuts={editing ? 'Control+Enter Meta+Enter' : 'A'} xstyle={styles.grow} onPress={(e) => { flashTint(e, 'success'); approve(); }}>
-                    <Check size={14} aria-hidden="true" {...stylex.props(styles.icon)} /> {editing ? 'Approve with edits' : 'Approve'}{!editing && <Kbd size="sm" aria-hidden="true" xstyle={styles.hint}>A</Kbd>}
+                    <CheckIcon size={14} aria-hidden="true" {...stylex.props(styles.icon)} /> {editing ? 'Approve with edits' : 'Approve'}{!editing && <Kbd size="sm" aria-hidden="true" xstyle={styles.hint}>A</Kbd>}
                   </Button>
                   {editing ? (
                     <Button size="sm" variant="secondary" aria-keyshortcuts="Escape" xstyle={styles.grow} onPress={() => setEditing(false)}>Cancel</Button>
                   ) : (
                     <Button size="sm" variant="secondary" aria-keyshortcuts="E" isDisabled={current.body === undefined && !current.fields?.length} xstyle={styles.grow} onPress={startEdit}>
-                      <Pencil size={14} aria-hidden="true" {...stylex.props(styles.icon)} /> Edit <Kbd size="sm" aria-hidden="true" xstyle={styles.hint}>E</Kbd>
+                      <PencilIcon size={14} aria-hidden="true" {...stylex.props(styles.icon)} /> Edit <Kbd size="sm" aria-hidden="true" xstyle={styles.hint}>E</Kbd>
                     </Button>
                   )}
                   <Button size="sm" variant="secondary" aria-keyshortcuts="R" xstyle={styles.grow} onPress={() => setRejecting(true)}>
-                    <X size={14} aria-hidden="true" {...stylex.props(styles.icon)} /> Reject <Kbd size="sm" aria-hidden="true" xstyle={styles.hint}>R</Kbd>
+                    <XIcon size={14} aria-hidden="true" {...stylex.props(styles.icon)} /> Reject <Kbd size="sm" aria-hidden="true" xstyle={styles.hint}>R</Kbd>
                   </Button>
                   <Button size="sm" variant="ghost" aria-keyshortcuts="S" xstyle={styles.grow} onPress={skip}>
-                    <SkipForward size={14} aria-hidden="true" {...stylex.props(styles.icon)} /> Skip <Kbd size="sm" aria-hidden="true" xstyle={styles.hint}>S</Kbd>
+                    <SkipForwardIcon size={14} aria-hidden="true" {...stylex.props(styles.icon)} /> Skip <Kbd size="sm" aria-hidden="true" xstyle={styles.hint}>S</Kbd>
                   </Button>
                   {flagTotal > 0 && <span aria-hidden="true" {...stylex.props(styles.flagCount)}>{f.plural(flagTotal, { one: '# flag · F', other: '# flags · F' })}</span>}
                 </>
@@ -689,11 +708,23 @@ export function ReviewCenter({
           </div>
         ) : (
           <div {...stylex.props(styles.empty)}>
-            <Check size={20} aria-hidden="true" />
+            {waiting.length ? <ListFilterIcon size={20} aria-hidden="true" /> : <CheckIcon size={20} aria-hidden="true" />}
             <span>{waiting.length ? 'Nothing matches this filter.' : 'All caught up. Nothing is waiting for review.'}</span>
+            {waiting.length > 0 && (
+              <Button
+                size="sm"
+                variant="secondary"
+                onPress={() => {
+                  if (filterProp === undefined) setFilterState('all');
+                  onFilterChange?.('all');
+                }}
+              >
+                Show all
+              </Button>
+            )}
             {history.length > 0 && (
               <Button size="sm" variant="secondary" aria-keyshortcuts="Z" onPress={undo}>
-                <Undo2 size={14} aria-hidden="true" /> Undo last
+                <UndoIcon size={14} aria-hidden="true" /> Undo last
               </Button>
             )}
           </div>

@@ -1,4 +1,4 @@
-import { Copy, Download, FolderOpen, Pencil, Star, Trash2 } from 'lucide-react';
+import { CopyIcon, DownloadIcon, FolderOpenIcon, PencilIcon, StarIcon, TrashIcon } from '../../icons/IconSet';
 import type { DemoModule } from '../../internal/demo';
 import { DropdownMenuItem, DropdownMenuSeparator } from '../DropdownMenu';
 import { ContextMenu } from './ContextMenu';
@@ -31,10 +31,10 @@ const demo: DemoModule = {
   menuLabel="File actions"
   onAction={(k) => …}
   menu={<>
-    <DropdownMenuItem id="open" icon={<FolderOpen size={16} />}>Open</DropdownMenuItem>
-    <DropdownMenuItem id="rename" icon={<Pencil size={16} />} shortcut="F2">Rename</DropdownMenuItem>
+    <DropdownMenuItem id="open" icon={<FolderOpenIcon size={16} />}>Open</DropdownMenuItem>
+    <DropdownMenuItem id="rename" icon={<PencilIcon size={16} />} shortcut="F2">Rename</DropdownMenuItem>
     <DropdownMenuSeparator />
-    <DropdownMenuItem id="delete" icon={<Trash2 size={16} />} variant="danger">Delete</DropdownMenuItem>
+    <DropdownMenuItem id="delete" icon={<TrashIcon size={16} />} variant="danger">Delete</DropdownMenuItem>
   </>}
 >
   <div>Right-click Q3-board-deck.pdf</div>
@@ -44,23 +44,23 @@ const demo: DemoModule = {
           menuLabel="File actions"
           menu={
             <>
-              <DropdownMenuItem id="open" icon={<FolderOpen size={16} />}>
+              <DropdownMenuItem id="open" icon={<FolderOpenIcon size={16} />}>
                 Open
               </DropdownMenuItem>
-              <DropdownMenuItem id="star" icon={<Star size={16} />}>
+              <DropdownMenuItem id="star" icon={<StarIcon size={16} />}>
                 Add to starred
               </DropdownMenuItem>
-              <DropdownMenuItem id="copy" icon={<Copy size={16} />} shortcut="⌘C">
+              <DropdownMenuItem id="copy" icon={<CopyIcon size={16} />} shortcut="⌘C">
                 Copy link
               </DropdownMenuItem>
-              <DropdownMenuItem id="download" icon={<Download size={16} />}>
+              <DropdownMenuItem id="download" icon={<DownloadIcon size={16} />}>
                 Download
               </DropdownMenuItem>
-              <DropdownMenuItem id="rename" icon={<Pencil size={16} />} shortcut="F2">
+              <DropdownMenuItem id="rename" icon={<PencilIcon size={16} />} shortcut="F2">
                 Rename
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem id="delete" icon={<Trash2 size={16} />} variant="danger">
+              <DropdownMenuItem id="delete" icon={<TrashIcon size={16} />} variant="danger">
                 Delete
               </DropdownMenuItem>
             </>

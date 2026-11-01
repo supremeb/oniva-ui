@@ -1,4 +1,4 @@
-import { Copy, HelpCircle, Trash2 } from 'lucide-react';
+import { CopyIcon, CircleHelpIcon, TrashIcon } from '../../icons/IconSet';
 import { Button } from '../Button';
 import type { DemoModule } from '../../internal/demo';
 import { Tooltip } from './Tooltip';
@@ -17,23 +17,23 @@ const demo: DemoModule = {
     {
       name: 'Icon buttons',
       code: `<Tooltip content="Copy invoice link">
-  <Button isIconOnly variant="secondary" aria-label="Copy link"><Copy size={16} /></Button>
+  <Button isIconOnly variant="secondary" aria-label="Copy link"><CopyIcon size={16} /></Button>
 </Tooltip>`,
       Component: () => (
         <div style={row}>
           <Tooltip content="Copy invoice link">
             <Button isIconOnly variant="secondary" aria-label="Copy link">
-              <Copy size={16} />
+              <CopyIcon size={16} />
             </Button>
           </Tooltip>
           <Tooltip content="Delete draft">
             <Button isIconOnly variant="secondary" aria-label="Delete draft">
-              <Trash2 size={16} />
+              <TrashIcon size={16} />
             </Button>
           </Tooltip>
           <Tooltip content="Net revenue after refunds and fees">
             <Button isIconOnly variant="ghost" aria-label="About net revenue">
-              <HelpCircle size={16} />
+              <CircleHelpIcon size={16} />
             </Button>
           </Tooltip>
         </div>

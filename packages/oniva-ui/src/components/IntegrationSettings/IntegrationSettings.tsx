@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { Check, Eye, EyeOff, RefreshCw } from 'lucide-react';
+import { CheckIcon, EyeIcon, EyeOffIcon, RefreshIcon } from '../../icons/IconSet';
 import { useId, useState, type ReactNode, type Ref } from 'react';
 import { AnimatedHeight } from '../../motion/AnimatedHeight';
 import { Presence } from '../../motion/Presence';
@@ -263,7 +263,7 @@ export function IntegrationSettings({
                       aria-label={reveal ? 'Hide key' : 'Show key'}
                       onPress={() => setReveal((r) => !r)}
                     >
-                      {reveal ? <EyeOff size={14} aria-hidden="true" /> : <Eye size={14} aria-hidden="true" />}
+                      {reveal ? <EyeOffIcon size={14} aria-hidden="true" /> : <EyeIcon size={14} aria-hidden="true" />}
                     </Button>
                   ) : undefined
                 }
@@ -271,7 +271,7 @@ export function IntegrationSettings({
               {values.apiKey && <CopyButton value={values.apiKey} size="md" aria-label="Copy API key" />}
               <Button
                 variant="secondary"
-                startIcon={<RefreshCw size={14} aria-hidden="true" />}
+                startIcon={<RefreshIcon size={14} aria-hidden="true" />}
                 onPress={() => void generate()}
               >
                 {values.apiKey ? 'Regenerate' : 'Generate key'}
@@ -288,7 +288,7 @@ export function IntegrationSettings({
               suffix={
                 values.siteUrl && !urlInvalid ? (
                   <span aria-hidden="true" {...stylex.props(styles.valid)}>
-                    <Check size={16} />
+                    <CheckIcon size={16} />
                   </span>
                 ) : undefined
               }

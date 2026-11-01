@@ -1,13 +1,16 @@
 import * as stylex from '@stylexjs/stylex';
-import { AlertCircle, FileText, Image as ImageIcon, X } from 'lucide-react';
+import { CircleAlertIcon, FileTextIcon, ImageIcon, XIcon } from '../../icons/IconSet';
 import type { HTMLAttributes, Ref } from 'react';
 import { Button as AriaButton } from 'react-aria-components';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
+import { media } from '../../tokens/media.stylex';
 import { motion } from '../../tokens/motion.stylex';
 import { radius } from '../../tokens/radius.stylex';
 import { RingProgress } from '../../components/RingProgress';
-import { mergeSx } from '../../internal/sx';
+import { focus } from '../../internal/focus';
+import { type Formatters, useFormatters } from '../../internal/format';
+import { mergeSx, sxClass } from '../../internal/sx';
 
 const styles = stylex.create({
   root: { display: 'flex', flexWrap: 'wrap', gap: 8, listStyle: 'none', margin: 0, padding: 0 },
@@ -25,6 +28,7 @@ const styles = stylex.create({
     gap: 8,
     height: 44,
     maxWidth: 220,
+    minWidth: 0,
     paddingInlineEnd: 28,
     paddingInlineStart: 6,
     position: 'relative',
@@ -40,10 +44,22 @@ const styles = stylex.create({
     height: 32,
     justifyContent: 'center',
     overflow: 'hidden',
+    position: 'relative',
     width: 32,
   },
   img: { height: '100%', objectFit: 'cover', width: '100%' },
   meta: { display: 'flex', flexDirection: 'column', minWidth: 0 },
+  srOnly: {
+    borderWidth: 0,
+    clipPath: 'inset(50%)',
+    height: 1,
+    margin: -1,
+    overflow: 'hidden',
+    padding: 0,
+    position: 'absolute',
+    whiteSpace: 'nowrap',
+    width: 1,
+  },
   name: {
     color: colors['--oniva-color-text'],
     fontSize: font['--oniva-font-size-12'],
@@ -63,24 +79,24 @@ const styles = stylex.create({
   remove: {
     alignItems: 'center',
     appearance: 'none',
-    backgroundColor: { default: 'transparent', ':hover': colors['--oniva-color-surface-tertiary'] },
+    backgroundColor: {
+      default: 'transparent',
+      ':hover': { default: null, [media.hover]: colors['--oniva-color-surface-tertiary'] },
+    },
     borderRadius: radius['--oniva-radius-full'],
     borderWidth: 0,
     color: colors['--oniva-color-icon-muted'],
     cursor: 'pointer',
     display: 'inline-flex',
-    height: 20,
+    height: 24,
     insetBlockStart: 4,
     insetInlineEnd: 4,
     justifyContent: 'center',
-    outlineColor: colors['--oniva-color-focus-ring'],
-    outlineOffset: 1,
-    outlineStyle: { default: 'none', ':focus-visible': 'solid' },
-    outlineWidth: 2,
+    padding: 0,
     position: 'absolute',
     transitionDuration: motion['--oniva-motion-dur-base'],
     transitionProperty: 'background-color',
-    width: 20,
+    width: 24,
   },
   ringWrap: {
     position: 'absolute',
@@ -88,8 +104,8 @@ const styles = stylex.create({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: colors['--oniva-color-overlay'],
   },
+  ringDim: { backgroundColor: colors['--oniva-color-overlay'] },
 });
 
 export interface AttachmentFile {
@@ -116,11 +132,11 @@ export interface ComposerAttachmentsProps extends Omit<
   ref?: Ref<HTMLUListElement>;
 }
 
-function formatSize(b?: number) {
+function formatSize(b: number | undefined, fmt: Formatters) {
   if (b == null) return '';
-  if (b < 1024) return `${b} B`;
-  if (b < 1024 * 1024) return `${Math.round(b / 1024)} KB`;
-  return `${(b / 1024 / 1024).toFixed(1)} MB`;
+  if (b < 1024) return `${fmt.number(b)} B`;
+  if (b < 1024 * 1024) return `${fmt.number(Math.round(b / 1024))} KB`;
+  return `${fmt.number(b / 1024 / 1024, { minimumFractionDigits: 1, maximumFractionDigits: 1 })} MB`;
 }
 
 /** File tiles for a composer; uploading files show a circular progress ring. */
@@ -132,6 +148,7 @@ export function ComposerAttachments({
   ref,
   ...rest
 }: ComposerAttachmentsProps) {
+  const fmt = useFormatters();
   const sx = stylex.props(styles.root, xstyle);
   return (
     <ul aria-label="Attachments" {...rest} ref={ref} {...mergeSx(sx, className)}>
@@ -139,26 +156,28 @@ export function ComposerAttachments({
         const uploading =
           f.status === 'uploading' ||
           (f.progress != null && f.progress < 100 && f.status !== 'error');
+        const pct = Math.min(100, Math.max(0, f.progress ?? 0));
         const isImg = f.type?.startsWith('image/');
+        const hasPreview = Boolean(isImg && f.previewUrl);
         return (
           <li key={f.id} {...stylex.props(styles.tile, f.status === 'error' && styles.error)}>
             <span {...stylex.props(styles.thumb)}>
-              {isImg && f.previewUrl ? (
+              {hasPreview ? (
                 <img src={f.previewUrl} alt="" {...stylex.props(styles.img)} />
-              ) : f.status === 'error' ? (
-                <AlertCircle size={16} aria-hidden="true" />
+              ) : uploading ? null : f.status === 'error' ? (
+                <CircleAlertIcon size={16} aria-hidden="true" />
               ) : isImg ? (
                 <ImageIcon size={16} aria-hidden="true" />
               ) : (
-                <FileText size={16} aria-hidden="true" />
+                <FileTextIcon size={16} aria-hidden="true" />
               )}
               {uploading && (
-                <span {...stylex.props(styles.ringWrap)}>
+                <span {...stylex.props(styles.ringWrap, hasPreview && styles.ringDim)}>
                   <RingProgress
                     diameter={24}
                     strokeWidth={3}
                     aria-label={`Uploading ${f.name}`}
-                    value={f.progress ?? 0}
+                    value={pct}
                   >
                     {''}
                   </RingProgress>
@@ -166,22 +185,27 @@ export function ComposerAttachments({
               )}
             </span>
             <span {...stylex.props(styles.meta)}>
-              <span {...stylex.props(styles.name)}>{f.name}</span>
-              <span {...stylex.props(styles.sub, f.status === 'error' && styles.subError)}>
-                {f.status === 'error'
-                  ? 'Upload failed'
-                  : uploading
-                    ? `${Math.round(f.progress ?? 0)}%`
-                    : formatSize(f.size)}
+              <span {...stylex.props(styles.name)} title={f.name}>
+                {f.name}
               </span>
+              {f.status === 'error' ? (
+                <span role="alert" {...stylex.props(styles.sub, styles.subError)}>
+                  Upload failed
+                  <span {...stylex.props(styles.srOnly)}>: {f.name}</span>
+                </span>
+              ) : (
+                <span {...stylex.props(styles.sub)}>
+                  {uploading ? fmt.percent(Math.round(pct) / 100) : formatSize(f.size, fmt)}
+                </span>
+              )}
             </span>
             {onRemove && (
               <AriaButton
                 aria-label={`Remove ${f.name}`}
                 onPress={() => onRemove(f.id)}
-                className={() => stylex.props(styles.remove).className ?? ''}
+                className={() => sxClass(stylex.props(styles.remove, focus.ring))}
               >
-                <X size={12} aria-hidden="true" />
+                <XIcon size={12} aria-hidden="true" />
               </AriaButton>
             )}
           </li>

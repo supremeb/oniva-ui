@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { ChevronRight, Sparkles, Square } from 'lucide-react';
+import { ChevronRightIcon, SparklesIcon, SquareIcon } from '../../icons/IconSet';
 import { Fragment, useEffect, useRef, useState, type CSSProperties, type HTMLAttributes, type ReactNode, type Ref } from 'react';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
@@ -8,6 +8,7 @@ import { motion } from '../../tokens/motion.stylex';
 import { radius } from '../../tokens/radius.stylex';
 import { Button } from '../../components/Button';
 import { aiStyles } from '../../internal/ai-styles';
+import { focus } from '../../internal/focus';
 import { useFormatters } from '../../internal/format';
 import { mergeSx } from '../../internal/sx';
 import { parseAnswer, toPlain, trimPartial, type Inline } from '../../internal/w3-answer-text';
@@ -95,10 +96,7 @@ const styles = stylex.create({
     fontSize: font['--oniva-font-size-14'],
     gap: 8,
     justifyContent: 'space-between',
-    outlineColor: colors['--oniva-color-focus-ring'],
-    outlineOffset: -2,
-    outlineStyle: { default: 'none', ':focus-visible': 'solid' },
-    outlineWidth: 2,
+    overflowWrap: 'anywhere',
     paddingBlock: 10,
     paddingInline: 0,
     textAlign: 'start',
@@ -124,7 +122,9 @@ const styles = stylex.create({
     fontSize: font['--oniva-font-size-16'],
     fontWeight: font['--oniva-font-weight-semibold'],
     margin: 0,
+    overflowWrap: 'anywhere',
   },
+  cardItem: { display: 'contents' },
   cards: {
     display: 'flex',
     gap: 8,
@@ -171,7 +171,12 @@ const styles = stylex.create({
     color: colors['--oniva-color-text-muted'],
     fontSize: font['--oniva-font-size-12'],
     fontVariantNumeric: 'tabular-nums',
+    minWidth: 0,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
   },
+  cardIndex: { flexShrink: 0 },
   cardTitle: {
     color: colors['--oniva-color-text'],
     display: '-webkit-box',
@@ -179,6 +184,7 @@ const styles = stylex.create({
     fontWeight: font['--oniva-font-weight-medium'],
     lineHeight: 1.35,
     overflow: 'hidden',
+    overflowWrap: 'anywhere',
     WebkitBoxOrient: 'vertical',
     WebkitLineClamp: 2,
   },
@@ -189,6 +195,8 @@ const styles = stylex.create({
     fontSize: font['--oniva-font-size-14'],
     gap: 10,
     lineHeight: 1.6,
+    minWidth: 0,
+    overflowWrap: 'anywhere',
   },
   p: { margin: 0 },
   ul: { margin: 0, paddingInlineStart: 20 },
@@ -365,12 +373,12 @@ export function AiAnswer({
       {question && <h3 {...stylex.props(styles.question)}>{question}</h3>}
       {sources.length > 0 && (
         <>
-          <CrossFade as="span" contentKey={done ? 'done' : 'reading'} duration={200} xstyle={styles.sr}>
+          <CrossFade as="span" role="status" contentKey={done ? 'done' : 'reading'} duration={200} xstyle={styles.sr}>
             {done ? fmt.plural(sources.length, { one: '# source', other: '# sources' }) : `Reading ${fmt.plural(sources.length, { one: '# source', other: '# sources' })}`}
           </CrossFade>
           <ul aria-label="Sources" {...stylex.props(styles.cards)}>
             {sources.map((s, i) => (
-              <li key={s.url} style={{ display: 'contents' }}>
+              <li key={s.url} {...stylex.props(styles.cardItem)}>
                 <a
                   href={/^https?:/i.test(s.url) ? s.url : undefined}
                   target="_blank"
@@ -380,12 +388,12 @@ export function AiAnswer({
                   onMouseLeave={() => setActive(null)}
                   onFocus={() => setActive(i + 1)}
                   onBlur={() => setActive(null)}
-                  {...stylex.props(styles.card)}
+                  {...stylex.props(styles.card, focus.inset)}
                   style={{ animationDelay: `${i * 60}ms` }}
                 >
                   <span {...stylex.props(styles.cardHead)}>
                     <span {...stylex.props(styles.cardName)}>{s.name}</span>
-                    <span aria-label={`Source ${i + 1}`} {...stylex.props(styles.cardName)}>{i + 1}</span>
+                    <span aria-label={`Source ${i + 1}`} {...stylex.props(styles.cardName, styles.cardIndex)}>{i + 1}</span>
                   </span>
                   <span {...stylex.props(styles.cardTitle)}>{s.title}</span>
                 </a>
@@ -396,7 +404,7 @@ export function AiAnswer({
       )}
       {label !== false && (
         <div {...stylex.props(styles.label)}>
-          <Sparkles size={14} aria-hidden="true" {...stylex.props(styles.labelIcon)} />
+          <SparklesIcon size={14} aria-hidden="true" {...stylex.props(styles.labelIcon)} />
           {label}
         </div>
       )}
@@ -413,7 +421,7 @@ export function AiAnswer({
       />
       <Presence isPresent={!done && !!onStop} preset="slide" initial={false}>
         <div>
-          <Button size="sm" variant="secondary" startIcon={<Square size={12} fill="currentColor" aria-hidden="true" />} onPress={onStop}>
+          <Button size="sm" variant="secondary" startIcon={<SquareIcon size={12} fill="currentColor" aria-hidden="true" />} onPress={onStop}>
             Stop
           </Button>
         </div>
@@ -424,9 +432,9 @@ export function AiAnswer({
           <ul {...stylex.props(styles.related)}>
             {followUps.map((q) => (
               <li key={q}>
-                <button type="button" onClick={() => onFollowUp?.(q)} {...stylex.props(styles.relatedRow)}>
+                <button type="button" onClick={() => onFollowUp?.(q)} {...stylex.props(styles.relatedRow, focus.inset)}>
                   {q}
-                  <ChevronRight size={14} aria-hidden="true" {...stylex.props(styles.relatedChevron)} />
+                  <ChevronRightIcon size={14} aria-hidden="true" {...stylex.props(styles.relatedChevron)} />
                 </button>
               </li>
             ))}

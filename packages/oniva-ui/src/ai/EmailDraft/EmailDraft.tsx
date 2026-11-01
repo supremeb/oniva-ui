@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { Check, ChevronDown, Paperclip, Pencil, Plus, X } from 'lucide-react';
+import { CheckIcon, ChevronDownIcon, PaperclipIcon, PencilIcon, PlusIcon, XIcon } from '../../icons/IconSet';
 import { useRef, useState, type Ref } from 'react';
 import { ToggleButton as AriaToggleButton } from 'react-aria-components';
 import { colors } from '../../tokens/colors.stylex';
@@ -125,8 +125,30 @@ const styles = stylex.create({
     resize: 'vertical',
     width: '100%',
   },
+  recipientBtn: { maxWidth: '100%', minWidth: 0 },
+  recipientText: {
+    alignItems: 'baseline',
+    display: 'inline-flex',
+    gap: 6,
+    // Button's content wrapper does not shrink, so cap against the card width (row padding + button padding + chevron).
+    maxWidth: 'calc(100cqw - 90px)',
+    minWidth: 0,
+  },
+  recipientName: { minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
+  recipientEmail: {
+    color: colors['--oniva-color-text-muted'],
+    fontSize: font['--oniva-font-size-12'],
+    minWidth: 0,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  attachName: { minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
+  attachIcon: { flexShrink: 0 },
+  attachClose: { flexShrink: 0 },
   attach: {
     alignItems: 'center',
+    maxWidth: '100%',
     borderRadius: radius['--oniva-radius-md'],
     color: colors['--oniva-color-text-muted'],
     display: 'inline-flex',
@@ -186,6 +208,8 @@ export interface DraftEmail {
 }
 
 const first = (c: DraftContact) => c.name.trim().split(/\s+/)[0] ?? '';
+const hi = (c: DraftContact) => (first(c) ? `Hi ${first(c)}, ` : 'Hi, ');
+const dear = (c: DraftContact) => (c.name.trim() ? `Dear ${c.name.trim()}, ` : 'Hello, ');
 
 const defaultContacts: DraftContact[] = [
   { name: 'Jonas Weber', email: 'jonas@nwlog.example' },
@@ -198,14 +222,14 @@ const defaultTones: DraftTone[] = [
     id: 'friendly',
     label: 'Friendly',
     body: (c) =>
-      `Hi ${first(c)}, a heads-up that your Growth plan renews on Nov 2 for $8,900 a year. If you'd like to add seats or switch to monthly billing, you can review the quote here:`,
+      `${hi(c)}a heads-up that your Growth plan renews on Nov 2 for $8,900 a year. If you'd like to add seats or switch to monthly billing, you can review the quote here:`,
   },
-  { id: 'short', label: 'Short', body: (c) => `Hi ${first(c)}, your Growth plan renews on Nov 2 ($8,900/year). Quote for changes:` },
+  { id: 'short', label: 'Short', body: (c) => `${hi(c)}your Growth plan renews on Nov 2 ($8,900/year). Quote for changes:` },
   {
     id: 'formal',
     label: 'Formal',
     body: (c) =>
-      `Dear ${c.name}, this is a reminder that your Growth subscription renews on Nov 2 at $8,900 per year. Should you wish to adjust seats or billing, please review the quote:`,
+      `${dear(c)}this is a reminder that your Growth subscription renews on Nov 2 at $8,900 per year. Should you wish to adjust seats or billing, please review the quote:`,
   },
 ];
 
@@ -313,9 +337,18 @@ export function EmailDraft({
             <div {...stylex.props(styles.toRow)}>
               <span {...stylex.props(styles.to)}>To</span>
               <DropdownMenu>
-                <Button size="sm" variant="secondary" isDisabled={!to || phase === 'sending'} endIcon={<ChevronDown size={14} />} aria-label={`Recipient: ${recipient.name}`}>
-                  {recipient.name || 'No recipient'}
-                  {to && <span {...stylex.props(styles.email)}>{to.email}</span>}
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  xstyle={styles.recipientBtn}
+                  isDisabled={!to || phase === 'sending'}
+                  endIcon={<ChevronDownIcon size={14} />}
+                  aria-label={to ? `Recipient: ${to.name}` : 'No recipient'}
+                >
+                  <span {...stylex.props(styles.recipientText)}>
+                    <span {...stylex.props(styles.recipientName)}>{recipient.name || 'No recipient'}</span>
+                    {to && <span {...stylex.props(styles.recipientEmail)}>{to.email}</span>}
+                  </span>
                 </Button>
                 <DropdownMenuContent
                   aria-label="Recipient"
@@ -336,15 +369,15 @@ export function EmailDraft({
               </DropdownMenu>
               {file ? (
                 <span {...stylex.props(styles.attach)}>
-                  <Paperclip size={14} aria-hidden="true" />
-                  {file}
-                  <Button size="xs" variant="ghost" isIconOnly aria-label={`Remove ${file}`} onPress={() => setFile(null)}>
-                    <X size={12} />
+                  <PaperclipIcon size={14} aria-hidden="true" {...stylex.props(styles.attachIcon)} />
+                  <span title={file} {...stylex.props(styles.attachName)}>{file}</span>
+                  <Button size="xs" variant="ghost" isIconOnly xstyle={styles.attachClose} aria-label={`Remove ${file}`} onPress={() => setFile(null)}>
+                    <XIcon size={12} />
                   </Button>
                 </span>
               ) : (
                 attachment && (
-                  <Button size="xs" variant="ghost" startIcon={<Plus size={12} />} onPress={() => setFile(attachment)}>
+                  <Button size="xs" variant="ghost" startIcon={<PlusIcon size={12} />} onPress={() => setFile(attachment)}>
                     Add {attachment}
                   </Button>
                 )
@@ -378,6 +411,7 @@ export function EmailDraft({
             </div>
 
             <div {...stylex.props(styles.toolbar)}>
+              {tones.length > 0 && (
               <div role="group" aria-label="Tone" {...stylex.props(styles.tones)}>
                 {tones.map((t) => (
                   <AriaToggleButton
@@ -391,8 +425,9 @@ export function EmailDraft({
                   </AriaToggleButton>
                 ))}
               </div>
+              )}
               <button type="button" aria-label="Edit text" onClick={startEditing} {...stylex.props(w4.reset, styles.editBtn, focus.ring)}>
-                <Pencil size={14} aria-hidden="true" />
+                <PencilIcon size={14} aria-hidden="true" />
               </button>
               <span {...stylex.props(styles.hint, styles.toolbarHint)}>⌘ Enter to send</span>
             </div>
@@ -414,12 +449,12 @@ export function EmailDraft({
           <span {...stylex.props(styles.receiptText)}>
             {phase === 'sent' ? (
               <>
-                <Check size={16} aria-hidden="true" {...stylex.props(styles.ok, m3.pop)} />
+                <CheckIcon size={16} aria-hidden="true" {...stylex.props(styles.ok, m3.pop)} />
                 Sent to {recipient.name}
               </>
             ) : (
               <>
-                <X size={16} aria-hidden="true" {...stylex.props(styles.muted, m3.pop)} />
+                <XIcon size={16} aria-hidden="true" {...stylex.props(styles.muted, m3.pop)} />
                 Draft discarded
               </>
             )}

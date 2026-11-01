@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { ChevronDown, X } from 'lucide-react';
+import { ChevronDownIcon, XIcon } from '../../icons/IconSet';
 import { useRef, useState, type Key as ReactKey, type ReactNode, type Ref } from 'react';
 import {
   Button,
@@ -222,7 +222,7 @@ export function MultiSelect({
                             }}
                             {...stylex.props(styles.chipX)}
                           >
-                            <X size={12} aria-hidden="true" />
+                            <XIcon size={12} aria-hidden="true" />
                           </button>
                         )}
                       </span>
@@ -231,7 +231,7 @@ export function MultiSelect({
                 )
               }
             </SelectValue>
-            <ChevronDown
+            <ChevronDownIcon
               size={16}
               aria-hidden="true"
               {...stylex.props(fp.chevron, styles.chevron)}

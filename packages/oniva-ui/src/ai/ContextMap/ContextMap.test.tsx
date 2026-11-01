@@ -55,6 +55,20 @@ describe('ContextMap', () => {
     expect(screen.getByText(/Not compacted yet/)).toBeInTheDocument();
   });
 
+  it('says so when nothing is in context and there is no limit', () => {
+    render(<ContextMap blocks={[]} />);
+    expect(screen.getByText('Nothing in context yet')).toBeInTheDocument();
+    expect(screen.queryByRole('button')).not.toBeInTheDocument();
+  });
+
+  it('drops the free space tile when the window is full or over', () => {
+    const { rerender } = render(<ContextMap blocks={blocks} limit={70_200} />);
+    expect(screen.queryByRole('button', { name: /Free space/ })).not.toBeInTheDocument();
+    rerender(<ContextMap blocks={blocks} limit={50_000} />);
+    expect(screen.queryByRole('button', { name: /Free space/ })).not.toBeInTheDocument();
+    expect(screen.getByText('140%')).toBeInTheDocument();
+  });
+
   it('forwards ref and className', () => {
     const ref = createRef<HTMLDivElement>();
     render(<ContextMap blocks={blocks} ref={ref} className="x" />);

@@ -1,5 +1,4 @@
-import { Copy, Pencil, Trash2 } from 'lucide-react';
-import { Button, Kbd } from 'oniva-ui';
+import { Button, Kbd, CopyIcon, PencilIcon, TrashIcon } from 'oniva-ui';
 import type { DocPage } from '../types';
 
 // The open menu is a popover. The stage composes the same surface and item rows (200px min, 12px radius,
@@ -13,10 +12,10 @@ const Menu = ({ danger = true, disabled = false, label = 'Actions' }: { danger?:
   <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
     <Button variant="secondary">{label}</Button>
     <div role="menu" aria-label="Invoice actions" style={{ background: 'var(--oniva-color-surface)', border: '1px solid var(--oniva-color-border)', borderRadius: 12, boxShadow: 'var(--oniva-shadow-dropdown)', display: 'flex', flexDirection: 'column', gap: 2, minWidth: 200, padding: 4 }}>
-      <Item active icon={<Pencil size={16} />} label="Edit invoice" shortcut="⌘E" />
-      <Item icon={<Copy size={16} />} label="Duplicate" disabled={disabled} />
+      <Item active icon={<PencilIcon size={16} />} label="Edit invoice" shortcut="⌘E" />
+      <Item icon={<CopyIcon size={16} />} label="Duplicate" disabled={disabled} />
       <div role="separator" style={{ background: 'var(--oniva-color-separator)', height: 1, margin: '2px 0' }} />
-      {danger && <Item danger icon={<Trash2 size={16} />} label="Delete" />}
+      {danger && <Item danger icon={<TrashIcon size={16} />} label="Delete" />}
     </div>
   </div>
 );
@@ -57,7 +56,7 @@ const page: DocPage = {
     ],
     initial: { label: 'Actions', danger: true, disabled: false, placement: 'bottom start' },
     render: (p, ev) => <div onClick={() => ev('onAction("edit")')}><Menu label={String(p.label)} danger={Boolean(p.danger)} disabled={Boolean(p.disabled)} /></div>,
-    code: (p) => `<DropdownMenu>\n  <Button variant="secondary">${p.label}</Button>\n  <DropdownMenuContent${p.placement !== 'bottom start' ? ` placement="${p.placement}"` : ''} onAction={run}>\n    <DropdownMenuItem id="edit" icon={<Pencil />} shortcut="⌘E">Edit invoice</DropdownMenuItem>\n    <DropdownMenuItem id="duplicate"${p.disabled ? ' isDisabled' : ''}>Duplicate</DropdownMenuItem>\n${p.danger ? '    <DropdownMenuSeparator />\n    <DropdownMenuItem id="delete" variant="danger">Delete</DropdownMenuItem>\n' : ''}  </DropdownMenuContent>\n</DropdownMenu>`,
+    code: (p) => `<DropdownMenu>\n  <Button variant="secondary">${p.label}</Button>\n  <DropdownMenuContent${p.placement !== 'bottom start' ? ` placement="${p.placement}"` : ''} onAction={run}>\n    <DropdownMenuItem id="edit" icon={<PencilIcon />} shortcut="⌘E">Edit invoice</DropdownMenuItem>\n    <DropdownMenuItem id="duplicate"${p.disabled ? ' isDisabled' : ''}>Duplicate</DropdownMenuItem>\n${p.danger ? '    <DropdownMenuSeparator />\n    <DropdownMenuItem id="delete" variant="danger">Delete</DropdownMenuItem>\n' : ''}  </DropdownMenuContent>\n</DropdownMenu>`,
   },
   states: [
     { name: 'Default', description: 'First item highlighted from the keyboard.', Render: () => <Menu /> },
@@ -70,8 +69,8 @@ const page: DocPage = {
     {
       type: 'itemTypes', id: 'item-types', title: 'Item types', intro: 'Everything inside the menu surface.',
       items: [
-        { name: 'DropdownMenuItem', description: 'Action row with optional icon and shortcut.', Render: () => <div style={{ width: 200 }}><Item icon={<Pencil size={16} />} label="Edit invoice" shortcut="⌘E" /></div> },
-        { name: 'Danger variant', description: 'Destructive action in error color.', Render: () => <div style={{ width: 200 }}><Item danger icon={<Trash2 size={16} />} label="Delete" /></div> },
+        { name: 'DropdownMenuItem', description: 'Action row with optional icon and shortcut.', Render: () => <div style={{ width: 200 }}><Item icon={<PencilIcon size={16} />} label="Edit invoice" shortcut="⌘E" /></div> },
+        { name: 'Danger variant', description: 'Destructive action in error color.', Render: () => <div style={{ width: 200 }}><Item danger icon={<TrashIcon size={16} />} label="Delete" /></div> },
         { name: 'DropdownMenuSection', description: 'Titled group of items with 12px muted heading.', Render: () => <div style={{ width: 200 }}><div style={{ color: 'var(--oniva-color-text-muted)', fontSize: 12, padding: '6px 8px' }}>Export</div><Item label="PDF" /></div> },
         { name: 'DropdownMenuSubmenu', description: 'Item that opens a nested menu on hover, Right arrow or Enter.', Render: () => <div style={{ width: 200 }}><Item label="Move to ›" /></div> },
       ],

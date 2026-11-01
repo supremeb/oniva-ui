@@ -13,12 +13,12 @@ interface Inv extends Record<string, unknown> {
 }
 
 const data: Inv[] = [
-  { id: 'INV-20411', vendor: 'Acme Industrial', due: 'Oct 14', amount: '$12,480.00', status: 'Matched' },
-  { id: 'INV-20418', vendor: 'Globex Freight', due: 'Oct 15', amount: '$3,912.50', status: 'Variance' },
-  { id: 'INV-20422', vendor: 'Initech Software', due: 'Oct 18', amount: '$8,200.00', status: 'Matched' },
-  { id: 'INV-20430', vendor: 'Umbrella Packaging', due: 'Oct 21', amount: '$1,764.30', status: 'Missing PO' },
-  { id: 'INV-20437', vendor: 'Soylent Supplies', due: 'Oct 22', amount: '$6,055.00', status: 'Matched' },
-  { id: 'INV-20441', vendor: 'Hooli Cloud', due: 'Oct 28', amount: '$22,310.75', status: 'Variance' },
+  { id: 'INV-20411', vendor: 'Northwind Industrial', due: 'Oct 14', amount: '$12,480.00', status: 'Matched' },
+  { id: 'INV-20418', vendor: 'Harbor Freight Partners', due: 'Oct 15', amount: '$3,912.50', status: 'Variance' },
+  { id: 'INV-20422', vendor: 'Lumen Software Co.', due: 'Oct 18', amount: '$8,200.00', status: 'Matched' },
+  { id: 'INV-20430', vendor: 'Birchwood Packaging', due: 'Oct 21', amount: '$1,764.30', status: 'Missing PO' },
+  { id: 'INV-20437', vendor: 'Summit Supplies', due: 'Oct 22', amount: '$6,055.00', status: 'Matched' },
+  { id: 'INV-20441', vendor: 'Cedar Cloud Services', due: 'Oct 28', amount: '$22,310.75', status: 'Variance' },
 ];
 
 const tone = { Matched: 'success', Variance: 'warning', 'Missing PO': 'danger' } as const;

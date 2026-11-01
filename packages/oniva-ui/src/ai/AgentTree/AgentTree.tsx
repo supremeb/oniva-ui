@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { AlertTriangle, Ban, Check, ChevronDown, Circle, Clock, Loader2, Sparkles } from 'lucide-react';
+import { TriangleAlertIcon, BanIcon, CheckIcon, ChevronDownIcon, CircleIcon, ClockIcon, LoaderIcon, SparklesIcon } from '../../icons/IconSet';
 import { useLayoutEffect, useRef, useState, type ReactNode, type Ref } from 'react';
 import { prefersReducedMotion } from '../../internal/motion-hooks';
 import { AnimatedHeight } from '../../motion/AnimatedHeight';
@@ -132,23 +132,23 @@ const styles = stylex.create({
   },
   kid: { transitionDuration: motion['--oniva-motion-dur-base'], transitionProperty: 'opacity', transitionTimingFunction: motion['--oniva-motion-ease-out'] },
   leaving: { animationDuration: motion['--oniva-motion-dur-base'], animationFillMode: 'forwards', animationName: { default: goneOut, [media.reducedMotion]: 'none' }, animationTimingFunction: motion['--oniva-motion-ease-out'], pointerEvents: 'none' },
-  glyphSwap: { animationDuration: motion['--oniva-motion-dur-enter'], animationName: { default: glyphIn, [media.reducedMotion]: 'none' }, animationTimingFunction: motion['--oniva-motion-ease-spring'], display: 'inline-flex' },
+  glyphSwap: { flexShrink: 0, animationDuration: motion['--oniva-motion-dur-enter'], animationName: { default: glyphIn, [media.reducedMotion]: 'none' }, animationTimingFunction: motion['--oniva-motion-ease-spring'], display: 'inline-flex' },
   muted: { borderStyle: 'dashed' },
   card: { display: 'flex', flexDirection: 'column', gap: 8, minWidth: 0, padding: 10 },
   top: { alignItems: 'flex-start', display: 'flex', gap: 8, minWidth: 0 },
   body: { display: 'flex', flexDirection: 'column', flexGrow: 1, gap: 0, minWidth: 0 },
-  head: { alignItems: 'center', display: 'flex', gap: 6, justifyContent: 'space-between', minWidth: 0 },
+  head: { alignItems: 'center', columnGap: 6, display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', minWidth: 0, rowGap: 2 },
   taskRow: { alignItems: 'flex-start', display: 'flex', gap: 6, minWidth: 0 },
   foot: { alignItems: 'center', display: 'flex', fontSize: font['--oniva-font-size-12'], gap: 6, justifyContent: 'space-between', minHeight: 20 },
   costTxt: { color: colors['--oniva-color-text'], fontWeight: font['--oniva-font-weight-medium'] },
   fold2: { alignItems: 'center', color: colors['--oniva-color-text-muted'], display: 'inline-flex', fontSize: font['--oniva-font-size-12'], gap: 2, height: 22, paddingInline: 4, width: 'auto' },
   totalsRun: { color: colors['--oniva-color-info-fg'] },
-  name: { fontWeight: font['--oniva-font-weight-semibold'] },
-  nameBtn: { textDecoration: { default: 'none', ':hover': 'underline' } },
-  model: { color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-12'] },
-  task: { color: colors['--oniva-color-text'], display: '-webkit-box', fontSize: font['--oniva-font-size-13'], lineHeight: 1.4, overflow: 'hidden', WebkitBoxOrient: 'vertical', WebkitLineClamp: 2, minWidth: 0 },
+  name: { fontWeight: font['--oniva-font-weight-semibold'], minWidth: 0, overflowWrap: 'anywhere' },
+  nameBtn: { textAlign: 'start', textDecoration: { default: 'none', ':hover': { default: null, [media.hover]: 'underline' } } },
+  model: { color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-12'], overflowWrap: 'anywhere' },
+  task: { color: colors['--oniva-color-text'], display: '-webkit-box', fontSize: font['--oniva-font-size-13'], lineHeight: 1.4, overflow: 'hidden', WebkitBoxOrient: 'vertical', WebkitLineClamp: 2, minWidth: 0, overflowWrap: 'anywhere' },
   meta: { alignItems: 'center', color: colors['--oniva-color-text-muted'], display: 'flex', flexShrink: 0, flexWrap: 'wrap', fontSize: font['--oniva-font-size-12'], gap: 8, justifyContent: 'flex-end' },
-  popText: { margin: 0, marginBlockStart: 4 },
+  popText: { margin: 0, marginBlockStart: 4, overflowWrap: 'anywhere' },
   tools: { display: 'inline-flex', flexShrink: 0, marginBlockStart: 1 },
   tool: {
     alignItems: 'center',
@@ -165,6 +165,7 @@ const styles = stylex.create({
   },
   chip: {
     appearance: 'none',
+    flexShrink: 0,
     borderWidth: 0,
     borderRadius: radius['--oniva-radius-full'],
     cursor: 'pointer',
@@ -201,12 +202,12 @@ const styles = stylex.create({
 function StatusTag({ status }: { status: TreeStatus }) {
   const { tone, label } = STATUS[status];
   const icon =
-    status === 'running' ? <Loader2 size={11} aria-hidden="true" {...stylex.props(w1.spin)} />
-    : status === 'done' ? <Check size={11} aria-hidden="true" />
-    : status === 'failed' ? <AlertTriangle size={11} aria-hidden="true" />
-    : status === 'waiting' ? <Clock size={11} aria-hidden="true" />
-    : status === 'stopped' ? <Ban size={11} aria-hidden="true" />
-    : <Circle size={11} aria-hidden="true" />;
+    status === 'running' ? <LoaderIcon size={11} aria-hidden="true" {...stylex.props(w1.spin)} />
+    : status === 'done' ? <CheckIcon size={11} aria-hidden="true" />
+    : status === 'failed' ? <TriangleAlertIcon size={11} aria-hidden="true" />
+    : status === 'waiting' ? <ClockIcon size={11} aria-hidden="true" />
+    : status === 'stopped' ? <BanIcon size={11} aria-hidden="true" />
+    : <CircleIcon size={11} aria-hidden="true" />;
   return (
     <span key={status} data-status={status} {...stylex.props(styles.glyphSwap)}>
       <Tag tone={tone} icon={icon}>{label}</Tag>
@@ -232,7 +233,9 @@ interface Ctx {
   onResolve?: (a: TreeAgent, action: TreeAction) => void;
 }
 
-function Node({ agent, ctx, depth, last = true, index = 0, leaving = false, hide = false, hideDelay = 0 }: { agent: TreeAgent; ctx: Ctx; depth: number; last?: boolean; index?: number; leaving?: boolean; hide?: boolean; hideDelay?: number }) {
+type Edge = 'first' | 'mid' | 'last' | 'solo';
+
+function Node({ agent, ctx, depth, last = true, index = 0, edge, leaving = false, hide = false, hideDelay = 0 }: { agent: TreeAgent; ctx: Ctx; depth: number; last?: boolean; index?: number; edge?: Edge; leaving?: boolean; hide?: boolean; hideDelay?: number }) {
   const kids = agent.children ?? [];
   const shownKids = useLeaving(kids, 200);
   const folded = ctx.collapsed.includes(agent.id);
@@ -248,11 +251,35 @@ function Node({ agent, ctx, depth, last = true, index = 0, leaving = false, hide
     wasFolded.current = folded;
     return () => window.clearTimeout(id);
   }, [folded]);
+  // Sub-agents of the root sit in wrapping columns; the connector bar ends at the first and last column of each row.
+  const rowRef = useRef<HTMLUListElement>(null);
+  const [edges, setEdges] = useState<Edge[] | null>(null);
+  useLayoutEffect(() => {
+    const el = rowRef.current;
+    if (depth !== 0 || !el) return;
+    const measure = () => {
+      const tops = Array.from(el.children).map((c) => (c as HTMLElement).offsetTop);
+      const next = tops.map((t, i): Edge => {
+        const first = i === 0 || tops[i - 1] !== t;
+        const end = i === tops.length - 1 || tops[i + 1] !== t;
+        return first && end ? 'solo' : first ? 'first' : end ? 'last' : 'mid';
+      });
+      setEdges((prev) => (prev && prev.join() === next.join() ? prev : next));
+    };
+    measure();
+    if (typeof ResizeObserver === 'undefined') return;
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [depth, folded, linger, shownKids.length]);
   const st = STATUS[agent.status];
   const end = agent.ended ?? ctx.now;
-  const dur = agent.started != null && agent.status !== 'queued' ? formatDuration(end - agent.started) : null;
+  // A finished agent without an `ended` stamp has no honest duration; do not let it keep counting.
+  const live = agent.status === 'running' || agent.status === 'waiting';
+  const dur = agent.started != null && agent.status !== 'queued' && (live || agent.ended != null) ? formatDuration(end - agent.started) : null;
   const cost = branchCost(agent);
   const label = `${agent.name}, ${st.label}`;
+  const col: Edge = edge ?? (index === 0 && last ? 'solo' : index === 0 ? 'first' : last ? 'last' : 'mid');
   const muted = agent.status === 'queued' || agent.status === 'stopped';
   const popBody = (close: () => void) => {
     const act = (a: TreeAction) => {
@@ -288,7 +315,7 @@ function Node({ agent, ctx, depth, last = true, index = 0, leaving = false, hide
       aria-expanded={kids.length ? !folded : undefined}
       aria-label={label}
       style={{ opacity: hide ? 0 : undefined, transitionDelay: hide ? `${hideDelay}ms` : undefined }}
-      {...stylex.props(styles.item, styles.kid, depth === 1 && styles.col, depth === 1 && index === 0 && styles.colFirst, depth === 1 && last && styles.colLast, depth === 1 && index === 0 && last && styles.colSolo, depth > 1 && styles.child, depth > 1 && last && styles.lastChild, leaving && styles.leaving)}
+      {...stylex.props(styles.item, styles.kid, depth === 1 && styles.col, depth === 1 && col === 'first' && styles.colFirst, depth === 1 && col === 'last' && styles.colLast, depth === 1 && col === 'solo' && styles.colSolo, depth > 1 && styles.child, depth > 1 && last && styles.lastChild, leaving && styles.leaving)}
     >
       <div data-flip-id={leaving ? undefined : agent.id} style={{ animationDelay: depth > 0 ? `${100 + Math.min(index, 5) * 45}ms` : undefined }} {...stylex.props(w1.tile, styles.card, depth === 0 && styles.rootCard, depth > 1 && styles.stub, w1.rise, muted && styles.muted)}>
         <div {...stylex.props(styles.top)}>
@@ -304,7 +331,7 @@ function Node({ agent, ctx, depth, last = true, index = 0, leaving = false, hide
               )}
               {agent.status === 'waiting' ? (
                 <DialogTrigger>
-                  <Button className={() => sxClass(stylex.props(styles.chip, styles.chipWarn, focus.ring))}>Needs you</Button>
+                  <Button aria-label={`Needs you: ${agent.name}`} className={() => sxClass(stylex.props(styles.chip, styles.chipWarn, focus.ring))}>Needs you</Button>
                   <Popover placement="bottom start">
                     <Dialog aria-label={`${agent.name} needs you`} className={sxClass(stylex.props(w1.popover))}>
                       {({ close }) => popBody(close)}
@@ -313,7 +340,7 @@ function Node({ agent, ctx, depth, last = true, index = 0, leaving = false, hide
                 </DialogTrigger>
               ) : agent.status === 'failed' ? (
                 <DialogTrigger>
-                  <Button className={() => sxClass(stylex.props(styles.chip, styles.chipErr, focus.ring))}>Failed</Button>
+                  <Button aria-label={`Failed: ${agent.name}`} className={() => sxClass(stylex.props(styles.chip, styles.chipErr, focus.ring))}>Failed</Button>
                   <Popover placement="bottom start">
                     <Dialog aria-label={`${agent.name} failed`} className={sxClass(stylex.props(w1.popover))}>
                       {({ close }) => popBody(close)}
@@ -351,7 +378,7 @@ function Node({ agent, ctx, depth, last = true, index = 0, leaving = false, hide
               className={() => sxClass(stylex.props(w1.iconBtn, styles.fold2, focus.ring))}
             >
               {kids.length}
-              <ChevronDown size={13} aria-hidden="true" {...stylex.props(styles.fold, folded && styles.foldOpen)} />
+              <ChevronDownIcon size={13} aria-hidden="true" {...stylex.props(styles.fold, folded && styles.foldOpen)} />
             </Button>
           )}
         </div>
@@ -359,7 +386,7 @@ function Node({ agent, ctx, depth, last = true, index = 0, leaving = false, hide
       {kids.length > 0 && (
         <AnimatedHeight isOpen={!folded}>
           {(!folded || linger) && (
-          <ul role="group" {...stylex.props(depth === 0 ? styles.rowGroup : styles.group)}>
+          <ul ref={rowRef} role="group" {...stylex.props(depth === 0 ? styles.rowGroup : styles.group)}>
             {shownKids.map(({ item: c, leaving: gone }, i) => (
               <Node
                 key={c.id}
@@ -368,6 +395,7 @@ function Node({ agent, ctx, depth, last = true, index = 0, leaving = false, hide
                 depth={depth + 1}
                 last={i === shownKids.length - 1}
                 index={i}
+                edge={depth === 0 ? edges?.[i] : undefined}
                 leaving={gone}
                 hide={folded}
                 hideDelay={(shownKids.length - 1 - i) * 35}
@@ -441,7 +469,7 @@ export function AgentTree({
   return (
     <div {...mergeSx(stylex.props(w1.root, styles.root, xstyle), className)} ref={ref}>
       <div {...stylex.props(w1.bar)}>
-        <Sparkles size={14} aria-hidden="true" {...stylex.props(styles.headIcon)} />
+        <SparklesIcon size={14} aria-hidden="true" {...stylex.props(styles.headIcon)} />
         <h3 {...stylex.props(w1.title)}>{title}</h3>
         <span {...stylex.props(w1.grow)} />
         <span aria-hidden="true" {...stylex.props(styles.totals, w1.num)}>

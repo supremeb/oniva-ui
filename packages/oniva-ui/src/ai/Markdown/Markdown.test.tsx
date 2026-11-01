@@ -35,4 +35,59 @@ describe('Markdown', () => {
     expect(screen.queryByRole('link', { name: 'bad' })).toBeNull();
     expect(screen.getByRole('link', { name: 'ok' })).toHaveAttribute('rel', 'noopener noreferrer');
   });
+
+  it('opens only http(s) links in a new tab', () => {
+    render(
+      <Markdown>
+        {'[web](https://example.com) [mail](mailto:a@example.com) [anchor](#top) [path](/docs)'}
+      </Markdown>,
+    );
+    expect(screen.getByRole('link', { name: 'web' })).toHaveAttribute('target', '_blank');
+    for (const name of ['mail', 'anchor', 'path']) {
+      expect(screen.getByRole('link', { name })).not.toHaveAttribute('target');
+    }
+  });
+
+  it('renders task list checkboxes read-only with a state name, without inline styles', () => {
+    render(<Markdown>{'- [x] Backfill\n- [ ] Publish runbook'}</Markdown>);
+    const done = screen.getByRole('checkbox', { name: 'Done' });
+    const open = screen.getByRole('checkbox', { name: 'Not done' });
+    expect(done).toBeChecked();
+    expect(open).not.toBeChecked();
+    expect(done).toHaveAttribute('readonly');
+    expect(done).not.toHaveAttribute('style');
+  });
+
+  it('keeps ordered list start and nests lists', () => {
+    const { container } = render(<Markdown>{'4. a\n5. b\n   - inner\n'}</Markdown>);
+    expect(container.querySelector('ol')).toHaveAttribute('start', '4');
+    expect(container.querySelector('li ul')).not.toBeNull();
+  });
+
+  it('renders an empty string as an empty container and forwards ref/className', () => {
+    let node: HTMLDivElement | null = null;
+    const { container } = render(
+      <Markdown
+        className="custom"
+        ref={(n) => {
+          node = n;
+        }}
+      >
+        {''}
+      </Markdown>,
+    );
+    expect(container.firstElementChild).toBe(node);
+    expect(container.firstElementChild).toHaveClass('custom');
+    expect(container.firstElementChild).toBeEmptyDOMElement();
+  });
+
+  it('shows alt text when an image source is unsafe and keeps safe images lazy', () => {
+    const { container } = render(
+      <Markdown>{'![chart](javascript:alert(1)) ![logo](/og.svg)'}</Markdown>,
+    );
+    const imgs = container.querySelectorAll('img');
+    expect(imgs).toHaveLength(1);
+    expect(imgs[0]).toHaveAttribute('loading', 'lazy');
+    expect(container).toHaveTextContent('chart');
+  });
 });

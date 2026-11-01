@@ -1,5 +1,5 @@
 import type { ColumnDef } from '@tanstack/react-table';
-import { Calendar, Link2, Table2, Text } from 'lucide-react';
+import { CalendarIcon, LinkIcon, TableIcon, TextIcon } from '../../icons/IconSet';
 import type { DemoModule } from '../../internal/demo';
 import { CustomerCell, DateCell, PriceCell, StatusBadgeCell, StatusSelectCell } from './cells';
 import { DataTable, type DataTableFilter, type DataTableMeta } from './DataTable';
@@ -106,14 +106,14 @@ const tools: Tool[] = [
 ];
 const toolTones = { Design: 'violet', 'Issue tracking': 'blue', Hosting: 'gray', Website: 'pink', Video: 'green' } as const;
 const toolColumns: ColumnDef<Tool>[] = [
-  { accessorKey: 'tool', header: 'Tool', meta: { sheet: { type: 'title', icon: <Text size={14} />, width: 220 } } },
+  { accessorKey: 'tool', header: 'Tool', meta: { sheet: { type: 'title', icon: <TextIcon size={14} />, width: 220 } } },
   {
     accessorKey: 'category',
     header: 'Category',
-    meta: { sheet: { type: 'tag', icon: <Table2 size={14} />, options: Object.keys(toolTones) } },
+    meta: { sheet: { type: 'tag', icon: <TableIcon size={14} />, options: Object.keys(toolTones) } },
   },
-  { accessorKey: 'site', header: 'Website', meta: { sheet: { type: 'link', icon: <Link2 size={14} /> } } },
-  { accessorKey: 'renews', header: 'Renews', meta: { sheet: { type: 'date', icon: <Calendar size={14} /> } } },
+  { accessorKey: 'site', header: 'Website', meta: { sheet: { type: 'link', icon: <LinkIcon size={14} /> } } },
+  { accessorKey: 'renews', header: 'Renews', meta: { sheet: { type: 'date', icon: <CalendarIcon size={14} /> } } },
 ];
 
 const demo: DemoModule = {
@@ -135,14 +135,14 @@ const demo: DemoModule = {
   { accessorKey: 'renews', header: 'Renews', meta: { sheet: { type: 'date' } } },
 ];
 
-<DataTable layout="sheet" title="Design stack" icon={<Table2 size={14} />}
+<DataTable layout="sheet" title="Design stack" icon={<TableIcon size={14} />}
   aria-label="Design stack" data={tools} columns={columns} tagTones={tones}
   onDataChange={setTools} />`,
       Component: () => (
         <DataTable
           layout="sheet"
           title="Design stack"
-          icon={<Table2 size={14} />}
+          icon={<TableIcon size={14} />}
           aria-label="Design stack"
           data={tools}
           columns={toolColumns}

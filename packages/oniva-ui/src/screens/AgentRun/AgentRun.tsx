@@ -1,19 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import {
-  Check,
-  CircleDashed,
-  Database,
-  FileText,
-  Loader2,
-  Mail,
-  Minus,
-  PanelRight,
-  Search,
-  ShieldAlert,
-  Square,
-  X,
-  XCircle,
-} from 'lucide-react';
+import { CheckIcon, CircleDashedIcon, DatabaseIcon, FileTextIcon, LoaderIcon, MailIcon, MinusIcon, PanelRightIcon, SearchIcon, ShieldAlertIcon, SquareIcon, XIcon, CircleXIcon } from '../../icons/IconSet';
 import {
   useCallback,
   useEffect,
@@ -292,10 +278,10 @@ function initialSim(steps: RunStep[]): Record<string, SimStep> {
 }
 
 function toolIcon(name: string): ReactNode {
-  if (/query|warehouse/.test(name)) return <Database size={14} />;
-  if (/search/.test(name)) return <Search size={14} />;
-  if (/mail|send/.test(name)) return <Mail size={14} />;
-  return <FileText size={14} />;
+  if (/query|warehouse/.test(name)) return <DatabaseIcon size={14} />;
+  if (/search/.test(name)) return <SearchIcon size={14} />;
+  if (/mail|send/.test(name)) return <MailIcon size={14} />;
+  return <FileTextIcon size={14} />;
 }
 
 function StatusIcon({ status }: { status: RunStepStatus }) {
@@ -304,38 +290,38 @@ function StatusIcon({ status }: { status: RunStepStatus }) {
     case 'running':
       return (
         <span aria-hidden="true" {...stylex.props(base, styles.iconRunning)}>
-          <Loader2 size={16} {...stylex.props(styles.spinning)} />
+          <LoaderIcon size={16} {...stylex.props(styles.spinning)} />
         </span>
       );
     case 'waiting':
       return (
         <span aria-hidden="true" {...stylex.props(base, styles.iconWaiting)}>
-          <ShieldAlert size={16} />
+          <ShieldAlertIcon size={16} />
         </span>
       );
     case 'done':
       return (
         <span aria-hidden="true" {...stylex.props(base, styles.iconDone)}>
-          <Check size={16} />
+          <CheckIcon size={16} />
         </span>
       );
     case 'denied':
     case 'stopped':
       return (
         <span aria-hidden="true" {...stylex.props(base, styles.iconDenied)}>
-          <XCircle size={16} />
+          <CircleXIcon size={16} />
         </span>
       );
     case 'skipped':
       return (
         <span aria-hidden="true" {...stylex.props(base, styles.iconPending)}>
-          <Minus size={16} />
+          <MinusIcon size={16} />
         </span>
       );
     default:
       return (
         <span aria-hidden="true" {...stylex.props(base, styles.iconPending)}>
-          <CircleDashed size={16} />
+          <CircleDashedIcon size={16} />
         </span>
       );
   }
@@ -560,7 +546,7 @@ export function AgentRun({
             size="sm"
             variant="secondary"
             xstyle={styles.narrowOnly}
-            startIcon={<PanelRight size={14} />}
+            startIcon={<PanelRightIcon size={14} />}
             aria-expanded={panelOpen}
             aria-controls={panelId}
             onPress={() => setPanelOpen((o) => !o)}
@@ -570,7 +556,7 @@ export function AgentRun({
           <Button
             size="sm"
             variant="danger"
-            startIcon={<Square size={12} />}
+            startIcon={<SquareIcon size={12} />}
             isDisabled={runStatus !== 'running' && runStatus !== 'waiting'}
             onPress={stop}
           >
@@ -685,7 +671,7 @@ export function AgentRun({
                           {...stylex.props(styles.approval, m8.pop)}
                         >
                           <p {...stylex.props(styles.approvalTitle)}>
-                            <ShieldAlert size={16} aria-hidden="true" />
+                            <ShieldAlertIcon size={16} aria-hidden="true" />
                             {step.approval.title}
                             <Badge
                               size="sm"
@@ -712,7 +698,7 @@ export function AgentRun({
                             <Button
                               ref={approveRef}
                               size="sm"
-                              startIcon={<Check size={14} />}
+                              startIcon={<CheckIcon size={14} />}
                               onPress={() => approve(step.id)}
                             >
                               Approve
@@ -720,7 +706,7 @@ export function AgentRun({
                             <Button
                               size="sm"
                               variant="secondary"
-                              startIcon={<X size={14} />}
+                              startIcon={<XIcon size={14} />}
                               onPress={() => deny(step.id)}
                             >
                               Deny
@@ -762,7 +748,7 @@ export function AgentRun({
               xstyle={styles.narrowOnly}
               onPress={() => setPanelOpen(false)}
             >
-              <X size={14} />
+              <XIcon size={14} />
             </Button>
           </div>
           <dl {...stylex.props(styles.dl)}>

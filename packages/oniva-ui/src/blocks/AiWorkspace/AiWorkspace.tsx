@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { Folder, MoreHorizontal, PanelLeft, Pin, Plus, Search, Settings } from 'lucide-react';
+import { FolderIcon, MoreIcon, PanelLeftIcon, PinIcon, PlusIcon, SearchIcon, SettingsIcon } from '../../icons/IconSet';
 import { useEffect, useRef, useState } from 'react';
 import type { HTMLAttributes, ReactNode, Ref } from 'react';
 import { Composer } from '../../ai/Composer';
@@ -244,7 +244,7 @@ export function AiWorkspace({
             <strong {...stylex.props(w8.h3)}>Workspace</strong>
           </div>
           <label {...stylex.props(styles.search)}>
-            <Search size={14} aria-hidden="true" />
+            <SearchIcon size={14} aria-hidden="true" />
             <input type="search" aria-label="Search chats" placeholder="Search chats…" value={query} onChange={(e) => setQuery(e.target.value)} {...stylex.props(styles.searchInput)} />
           </label>
           <button
@@ -255,11 +255,11 @@ export function AiWorkspace({
             }}
             {...stylex.props(w8.press, styles.navBtn, view === 'chat' && activeId === null && styles.navOn, focus.ring)}
           >
-            <Plus size={14} aria-hidden="true" />
+            <PlusIcon size={14} aria-hidden="true" />
             <span>New chat</span>
           </button>
           <button type="button" aria-current={view === 'projects' ? 'page' : undefined} onClick={() => setView('projects')} {...stylex.props(w8.press, styles.navBtn, view === 'projects' && styles.navOn, focus.ring)}>
-            <Folder size={14} aria-hidden="true" />
+            <FolderIcon size={14} aria-hidden="true" />
             <span {...stylex.props(w8.ellipsis)}>Projects</span>
           </button>
           {pinned.length > 0 && <p {...stylex.props(styles.navLabel)}>Pinned</p>}
@@ -274,7 +274,7 @@ export function AiWorkspace({
                   }}
                   {...stylex.props(w8.press, styles.navBtn, focus.ring)}
                 >
-                  <Pin size={14} aria-hidden="true" />
+                  <PinIcon size={14} aria-hidden="true" />
                   <span {...stylex.props(w8.ellipsis)}>{name}</span>
                 </button>
               </li>
@@ -306,20 +306,20 @@ export function AiWorkspace({
               <Avatar size="sm" name={userName} />
               {userName}
             </span>
-            <Settings size={14} aria-hidden="true" />
+            <SettingsIcon size={14} aria-hidden="true" />
           </div>
         </nav>
         <div {...stylex.props(styles.main)}>
           <div {...stylex.props(styles.bar)}>
             <Button size="sm" variant="ghost" isIconOnly aria-label={open ? 'Collapse sidebar' : 'Expand sidebar'} aria-expanded={open} onPress={() => setOpen((o) => !o)}>
-              <PanelLeft size={16} aria-hidden="true" />
+              <PanelLeftIcon size={16} aria-hidden="true" />
             </Button>
             <div {...stylex.props(styles.crumb)}>
               {view === 'chat' && <span {...stylex.props(w8.muted)}>{projectName} /</span>}
               <h2 {...stylex.props(w8.h3, w8.ellipsis)} style={{ fontWeight: 500 }}>{view === 'projects' ? 'Projects' : active?.title ?? 'New chat'}</h2>
             </div>
             <span {...stylex.props(styles.spacer)} />
-            <MoreHorizontal size={16} aria-hidden="true" />
+            <MoreIcon size={16} aria-hidden="true" />
           </div>
           {view === 'projects' ? (
             <div key="projects" {...stylex.props(styles.scroll, styles.view)}>

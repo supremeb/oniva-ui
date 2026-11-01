@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { ArrowLeft, Folder as FolderIcon, MoreHorizontal, Share2, Upload } from 'lucide-react';
+import { ArrowLeftIcon, FolderIcon, MoreIcon, ShareNodesIcon, UploadIcon } from '../../icons/IconSet';
 import type { Ref } from 'react';
 import { FOLDER_FILES, FileCard, type FileItem } from '../../internal/s1-files';
 import { NORTHWIND_PROJECTS, NORTHWIND_WHATS_NEW } from '../../internal/s1-frame';
@@ -84,7 +84,7 @@ export function Folder({
         <>
           <DropdownMenu>
             <Button variant="ghost" size="sm" isIconOnly aria-label="Folder actions">
-              <MoreHorizontal size={16} />
+              <MoreIcon size={16} />
             </Button>
             <DropdownMenuContent
               aria-label="Folder actions"
@@ -97,10 +97,10 @@ export function Folder({
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <Button variant="secondary" size="sm" startIcon={<Share2 size={14} />} onPress={onShare}>
+          <Button variant="secondary" size="sm" startIcon={<ShareNodesIcon size={14} />} onPress={onShare}>
             Share
           </Button>
-          <Button size="sm" startIcon={<Upload size={14} />} onPress={onUpload}>
+          <Button size="sm" startIcon={<UploadIcon size={14} />} onPress={onUpload}>
             Upload file
           </Button>
         </>
@@ -112,7 +112,7 @@ export function Folder({
           <Breadcrumb>{folder}</Breadcrumb>
         </Breadcrumbs>
         <div>
-          <Button variant="ghost" size="sm" startIcon={<ArrowLeft size={14} />} onPress={() => onNavigate?.('Folders')}>
+          <Button variant="ghost" size="sm" startIcon={<ArrowLeftIcon size={14} />} onPress={() => onNavigate?.('Folders')}>
             Files
           </Button>
         </div>
@@ -124,7 +124,7 @@ export function Folder({
             title="This folder is empty"
             description="Upload files or save chat outputs here so your assistant can use them."
             actions={
-              <Button size="sm" startIcon={<Upload size={14} />} onPress={onUpload}>
+              <Button size="sm" startIcon={<UploadIcon size={14} />} onPress={onUpload}>
                 Upload file
               </Button>
             }

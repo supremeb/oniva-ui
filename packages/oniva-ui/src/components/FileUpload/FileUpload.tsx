@@ -1,6 +1,6 @@
 import * as stylex from '@stylexjs/stylex';
 import { media } from '../../tokens/media.stylex';
-import { AlertCircle, Check, FileText, UploadCloud, X } from 'lucide-react';
+import { CircleAlertIcon, CheckIcon, FileTextIcon, CloudUploadIcon, XIcon } from '../../icons/IconSet';
 import { useEffect, useId, useRef, useState, type CSSProperties, type ReactNode, type Ref } from 'react';
 import { Button, DropZone, FileTrigger, Text, type DropZoneProps } from 'react-aria-components';
 import { accent } from '../../tokens/accent.stylex';
@@ -538,13 +538,13 @@ export function FileUpload({
         {(({ over }) => (
           <span aria-hidden="true" {...stylex.props(motionStyles.iconHost)}>
             <span {...stylex.props(motionStyles.ghost, over && motionStyles.ghostL)}>
-              <FileText size={18} />
+              <FileTextIcon size={18} />
             </span>
             <span {...stylex.props(motionStyles.ghost, over && motionStyles.ghostR)}>
-              <FileText size={18} />
+              <FileTextIcon size={18} />
             </span>
             <span data-lift={over ? '' : undefined} {...stylex.props(styles.iconWrap, motionStyles.zoneIcon, motionStyles.iconLift)}>
-              <UploadCloud size={20} />
+              <CloudUploadIcon size={20} />
             </span>
           </span>
         ))({ over: dragCount > 0 })}
@@ -586,7 +586,7 @@ export function FileUpload({
                 )}
               >
                 <span aria-hidden="true" {...stylex.props(styles.fileIcon, isPanel && panel.fileIcon)}>
-                  <FileText size={18} />
+                  <FileTextIcon size={18} />
                 </span>
                 <span {...stylex.props(styles.meta)}>
                   <span title={f.name} {...stylex.props(styles.name)}>{f.name}</span>
@@ -612,9 +612,9 @@ export function FileUpload({
                   )}
                 </span>
                 {isPanel && !done && !f.error ? null : f.error ? (
-                  <AlertCircle size={20} role="img" aria-label={labels?.uploadFailed ?? 'Upload failed'} {...stylex.props(styles.bad)} />
+                  <CircleAlertIcon size={20} role="img" aria-label={labels?.uploadFailed ?? 'Upload failed'} {...stylex.props(styles.bad)} />
                 ) : done ? (
-                  <Check size={20} role="img" aria-label={labels?.uploadComplete ?? 'Upload complete'} {...stylex.props(styles.ok, motionStyles.checkPop)} />
+                  <CheckIcon size={20} role="img" aria-label={labels?.uploadComplete ?? 'Upload complete'} {...stylex.props(styles.ok, motionStyles.checkPop)} />
                 ) : (
                   <ProgressRing value={f.progress} label={labels?.uploading ? labels.uploading(f.name) : `Uploading ${f.name}`} />
                 )}
@@ -632,7 +632,7 @@ export function FileUpload({
                   onPress={() => remove(f.id)}
                   {...stylex.props(fp.iconButton)}
                 >
-                  <X size={14} aria-hidden="true" />
+                  <XIcon size={14} aria-hidden="true" />
                 </Button>
               </li>
             );

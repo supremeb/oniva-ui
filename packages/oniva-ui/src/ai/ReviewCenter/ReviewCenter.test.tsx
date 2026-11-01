@@ -76,6 +76,29 @@ describe('ReviewCenter', () => {
     expect(screen.getByRole('heading', { name: 'Update plan tiers' })).toBeInTheDocument();
   });
 
+  it('shows a Show all action when the filter matches nothing, and it resets the filter', () => {
+    const onFilterChange = vi.fn();
+    const { container } = render(<ReviewCenter items={[items[0]!]} now={NOW} defaultFilter="high" onFilterChange={onFilterChange} />);
+    expect(screen.getByText('Nothing matches this filter.')).toBeInTheDocument();
+    expect(container.querySelector('ul[aria-label="Review queue"]')).toHaveAttribute('hidden');
+    fireEvent.click(screen.getByRole('button', { name: 'Show all' }));
+    expect(onFilterChange).toHaveBeenCalledWith('all');
+    expect(screen.getByRole('heading', { name: 'Reply to Sam' })).toBeInTheDocument();
+  });
+
+  it('lists files without a diff with their counts', () => {
+    const file: ReviewItem = { id: 'f', title: 'Touch files', agent: 'Coder', type: 'Code change', risk: 'low', confidence: 0.9, createdAt: NOW, files: [{ path: 'src/a.ts', added: 1200, removed: 3 }] };
+    render(<ReviewCenter items={[file]} now={NOW} />);
+    expect(screen.getByLabelText('1,200 added')).toHaveTextContent('+1,200');
+    expect(screen.getByLabelText('3 removed')).toHaveTextContent('−3');
+  });
+
+  it('does not rely on colour alone for waiting rows that are late', () => {
+    render(<ReviewCenter items={items} now={NOW} sla={20 * 60_000} />);
+    const rows = within(screen.getByRole('list', { name: 'Review queue' })).getAllByRole('button');
+    expect(rows[0]).toHaveAccessibleName(/waiting 26m, overdue/);
+  });
+
   it('forwards ref and className', () => {
     const ref = createRef<HTMLDivElement>();
     render(<ReviewCenter items={items} ref={ref} className="x" now={NOW} />);

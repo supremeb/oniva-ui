@@ -27,4 +27,25 @@ describe('AgentProgress', () => {
     render(<AgentProgress items={items.map((i) => ({ ...i, status: 'done' as const }))} />);
     expect(screen.getByText('All steps complete')).toBeInTheDocument();
   });
+
+  it('does not report an empty plan as complete', () => {
+    render(<AgentProgress items={[]} />);
+    expect(screen.queryByText('All steps complete')).not.toBeInTheDocument();
+    expect(screen.getByText('No steps yet')).toBeInTheDocument();
+    expect(screen.getByRole('button')).toBeDisabled();
+    expect(screen.queryByRole('list')).not.toBeInTheDocument();
+  });
+
+  it('announces progress through a status region', () => {
+    render(<AgentProgress items={items} />);
+    const region = screen
+      .getAllByRole('status')
+      .find((el) => el.textContent === '2 steps left. Group by segment');
+    expect(region).toBeDefined();
+  });
+
+  it('disables the trigger when isDisabled is set', () => {
+    render(<AgentProgress items={items} isDisabled />);
+    expect(screen.getByRole('button')).toBeDisabled();
+  });
 });

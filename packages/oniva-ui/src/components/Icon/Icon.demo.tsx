@@ -1,4 +1,4 @@
-import { Bell, CreditCard, ShieldCheck, TriangleAlert } from 'lucide-react';
+import { BellIcon, CreditCardIcon, ShieldCheckIcon, TriangleAlertIcon } from '../../icons/IconSet';
 import type { DemoModule } from '../../internal/demo';
 import { Icon } from './Icon';
 
@@ -9,34 +9,34 @@ const demo: DemoModule = {
     title: 'Icon',
     slug: 'icon',
     category: 'Primitives',
-    description: 'Lucide wrapper with size and tone tokens. Decorative unless labelled.',
+    description: 'Glyph wrapper with size, tone and style tokens. Decorative unless labelled.',
   },
   demos: [
     {
       name: 'Sizes',
-      code: `<Icon icon={Bell} size="xs" />
-<Icon icon={Bell} size="sm" />
-<Icon icon={Bell} size="md" />
-<Icon icon={Bell} size="lg" />
-<Icon icon={Bell} size="xl" />`,
+      code: `<Icon icon={BellIcon} size="xs" />
+<Icon icon={BellIcon} size="sm" />
+<Icon icon={BellIcon} size="md" />
+<Icon icon={BellIcon} size="lg" />
+<Icon icon={BellIcon} size="xl" />`,
       Component: () => (
         <div style={row}>
           {(['xs', 'sm', 'md', 'lg', 'xl'] as const).map((s) => (
-            <Icon key={s} icon={Bell} size={s} />
+            <Icon key={s} icon={BellIcon} size={s} />
           ))}
         </div>
       ),
     },
     {
       name: 'Tones',
-      code: `<Icon icon={CreditCard} tone="muted" />
-<Icon icon={ShieldCheck} tone="success" />
-<Icon icon={TriangleAlert} tone="warning" label="Payment overdue" />`,
+      code: `<Icon icon={CreditCardIcon} tone="muted" />
+<Icon icon={ShieldCheckIcon} tone="success" />
+<Icon icon={TriangleAlertIcon} tone="warning" label="Payment overdue" />`,
       Component: () => (
         <div style={row}>
-          <Icon icon={CreditCard} tone="muted" size="lg" />
-          <Icon icon={ShieldCheck} tone="success" size="lg" />
-          <Icon icon={TriangleAlert} tone="warning" size="lg" label="Payment overdue" />
+          <Icon icon={CreditCardIcon} tone="muted" size="lg" />
+          <Icon icon={ShieldCheckIcon} tone="success" size="lg" />
+          <Icon icon={TriangleAlertIcon} tone="warning" size="lg" label="Payment overdue" />
         </div>
       ),
     },

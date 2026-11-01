@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { createRef } from 'react';
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { expectNoA11yViolations } from '../../internal/test-a11y';
 import { AgentCursors, acceptSuggestion, type CursorAgent, type DocBlock, type DocSuggestion } from './AgentCursors';
 
@@ -77,5 +77,63 @@ describe('AgentCursors', () => {
     const { container } = render(<AgentCursors ref={ref} className="x" agents={agents} blocks={blocks} suggestions={suggestions} cursors={{ r: { block: 'why', at: 5 } }} />);
     expect(ref.current).toHaveClass('x');
     await expectNoA11yViolations(container);
+  });
+
+  it('shows a hint instead of a blank page for an empty document', () => {
+    render(<AgentCursors agents={agents} blocks={[]} />);
+    expect(screen.getByText('This document is empty.')).toBeInTheDocument();
+  });
+
+  it('keeps the leading space of an inserted suggestion', () => {
+    render(<AgentCursors agents={agents} blocks={blocks} suggestions={[{ id: 'x', agent: 'w', block: 'a', at: 18, insert: ' by Friday' }]} />);
+    expect(screen.getByRole('button', { name: /Writer suggests adding/ }).textContent).toBe(' by Friday');
+  });
+
+  it('truncates a long title in the header and keeps the full name on hover', () => {
+    const long = 'Reviewing the proration worker for the Northwind Labs checkout rewrite';
+    render(<AgentCursors agents={agents} blocks={blocks} title={long} />);
+    expect(screen.getByTitle(long)).toHaveTextContent(long);
+  });
+});
+
+describe('AgentCursors geometry', () => {
+  const protoRange = Range.prototype as unknown as { getClientRects?: unknown };
+  const saved = { range: protoRange.getClientRects, rect: HTMLElement.prototype.getBoundingClientRect, off: Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'offsetHeight'), client: Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'clientHeight') };
+  afterEach(() => {
+    protoRange.getClientRects = saved.range;
+    HTMLElement.prototype.getBoundingClientRect = saved.rect;
+    if (saved.off) Object.defineProperty(HTMLElement.prototype, 'offsetHeight', saved.off);
+    else delete (HTMLElement.prototype as unknown as Record<string, unknown>).offsetHeight;
+    if (saved.client) Object.defineProperty(HTMLElement.prototype, 'clientHeight', saved.client);
+    else delete (HTMLElement.prototype as unknown as Record<string, unknown>).clientHeight;
+  });
+  const measure = (caret: { left: number; top: number }) => {
+    protoRange.getClientRects = () => [{ left: caret.left, top: caret.top, width: 0, height: 18, right: caret.left, bottom: caret.top + 18, x: caret.left, y: caret.top, toJSON: () => ({}) }];
+    HTMLElement.prototype.getBoundingClientRect = () => ({ left: 0, top: 0, width: 700, height: 300, right: 700, bottom: 300, x: 0, y: 0, toJSON: () => ({}) });
+  };
+  const cursors = { r: { block: 'why', at: 5, doing: 'Checking the numbers' } };
+
+  it('opens the flag towards the page when the pointer is at the right or bottom edge', () => {
+    measure({ left: 640, top: 270 });
+    const { container } = render(<AgentCursors agents={agents} blocks={blocks} cursors={cursors} />);
+    const flag = container.querySelector('[data-flip-x]');
+    expect(flag).not.toBeNull();
+    expect(flag).toHaveAttribute('data-flip-y');
+  });
+
+  it('keeps the flag below and to the right when there is room', () => {
+    measure({ left: 40, top: 40 });
+    const { container } = render(<AgentCursors agents={agents} blocks={blocks} cursors={cursors} />);
+    expect(container.querySelector('[data-flip-x]')).toBeNull();
+    expect(container.querySelector('[data-flip-y]')).toBeNull();
+  });
+
+  it('fades the bottom edge only when a fixed height cuts the document off', () => {
+    Object.defineProperty(HTMLElement.prototype, 'clientHeight', { configurable: true, get: () => 200 });
+    Object.defineProperty(HTMLElement.prototype, 'offsetHeight', { configurable: true, get: () => 500 });
+    const { container, rerender } = render(<AgentCursors agents={agents} blocks={blocks} height={200} />);
+    expect(container.querySelector('[data-fade]')).not.toBeNull();
+    rerender(<AgentCursors agents={agents} blocks={blocks} />);
+    expect(container.querySelector('[data-fade]')).toBeNull();
   });
 });

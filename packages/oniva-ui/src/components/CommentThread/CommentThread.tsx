@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { CheckCircle2, ChevronDown, Send, Sparkles } from 'lucide-react';
+import { CircleCheckIcon, ChevronDownIcon, SendIcon, SparklesIcon } from '../../icons/IconSet';
 import {
   useEffect,
   useId,
@@ -234,7 +234,7 @@ function Who({ author }: { author: ThreadAuthor }) {
       color="accent"
       name={author.name}
       src={author.avatar}
-      fallback={<Sparkles size={14} />}
+      fallback={<SparklesIcon size={14} />}
     />
   ) : (
     <Avatar size="sm" name={author.name} src={author.avatar} />
@@ -378,10 +378,10 @@ export function CommentThread({
                       }
                       className={() => sxClass(stylex.props(styles.statusBtn, focus.ring))}
                     >
-                      <CheckCircle2 size={16} aria-hidden="true" {...stylex.props(styles.ok)} />
+                      <CircleCheckIcon size={16} aria-hidden="true" {...stylex.props(styles.ok)} />
                       {m.status.label}
                       {m.status.details && (
-                        <ChevronDown
+                        <ChevronDownIcon
                           size={14}
                           aria-hidden="true"
                           {...stylex.props(styles.chevron, isOpen && styles.chevronOpen)}
@@ -436,7 +436,7 @@ export function CommentThread({
           aria-label="Send reply"
           isDisabled={!draft.trim() || thinking}
         >
-          <Send size={16} />
+          <SendIcon size={16} />
         </IconButton>
       </form>
     </section>

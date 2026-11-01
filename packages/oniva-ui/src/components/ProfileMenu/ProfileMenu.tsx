@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRightIcon } from '../../icons/IconSet';
 import { Button as AriaButton, Menu as AriaMenu, MenuItem as AriaMenuItem, Text as AriaText } from 'react-aria-components';
 import type { ReactNode, Ref } from 'react';
 import { focus } from '../../internal/focus';
@@ -172,7 +172,7 @@ export function ProfileMenu({ name, email, avatar, items, setup, className, xsty
                 <span {...stylex.props(w4.clamp1)}>
                   <span {...stylex.props(styles.nextHint)}>Next:</span> {setup.next}
                 </span>
-                <ArrowRight size={16} aria-hidden="true" {...stylex.props(styles.nextHint)} />
+                <ArrowRightIcon size={16} aria-hidden="true" {...stylex.props(styles.nextHint)} />
               </AriaButton>
             ) : (
               <span {...stylex.props(w4.clamp1)}>

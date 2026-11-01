@@ -1,4 +1,4 @@
-import { Copy, Pencil, Trash2 } from 'lucide-react';
+import { CopyIcon, PencilIcon, TrashIcon } from 'oniva-ui';
 import type { DocPage } from '../types';
 
 // The real menu opens at the pointer in a portal. The stage draws the right-click region and the open menu
@@ -11,10 +11,10 @@ const Demo = ({ disabled = false }: { disabled?: boolean }) => (
     <div style={{ color: 'var(--oniva-color-text-muted)', fontSize: 14, padding: 16 }}>Invoice INV-1042 row</div>
     {!disabled && (
       <div role="menu" aria-label="Row actions" style={{ background: 'var(--oniva-color-surface)', border: '1px solid var(--oniva-color-border)', borderRadius: 12, boxShadow: 'var(--oniva-shadow-dropdown)', left: 80, minWidth: 200, padding: 4, position: 'absolute', top: 44 }}>
-        <Row active icon={<Pencil size={16} />} label="Edit invoice" />
-        <Row icon={<Copy size={16} />} label="Duplicate" />
+        <Row active icon={<PencilIcon size={16} />} label="Edit invoice" />
+        <Row icon={<CopyIcon size={16} />} label="Duplicate" />
         <div role="separator" style={{ background: 'var(--oniva-color-separator)', height: 1, margin: '2px 0' }} />
-        <Row danger icon={<Trash2 size={16} />} label="Delete" />
+        <Row danger icon={<TrashIcon size={16} />} label="Delete" />
       </div>
     )}
   </div>

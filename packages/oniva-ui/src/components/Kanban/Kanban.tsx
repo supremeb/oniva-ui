@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { CalendarDays, GripVertical, Plus, TriangleAlert } from 'lucide-react';
+import { CalendarDaysIcon, GripIcon, PlusIcon, TriangleAlertIcon } from '../../icons/IconSet';
 import { useCallback, useId, useRef, useState } from 'react';
 import type { FormEvent, HTMLAttributes, Ref } from 'react';
 import {
@@ -379,7 +379,7 @@ function KanbanColumn({
         </h3>
         {over && (
           <span {...stylex.props(styles.due, styles.wipWarn)}>
-            <TriangleAlert size={14} aria-hidden="true" />
+            <TriangleAlertIcon size={14} aria-hidden="true" />
             <span {...stylex.props(dash.sr)}>{L.overLimit}</span>
             <span aria-hidden="true">{L.wipLimit(col.wipLimit!)}</span>
           </span>
@@ -406,7 +406,7 @@ function KanbanColumn({
             <div {...stylex.props(styles.cardTop)}>
               <h4 {...stylex.props(styles.cardTitle)}>{card.title}</h4>
               <AriaButton slot="drag" {...stylex.props(styles.grip, focus.ring)}>
-                <GripVertical size={14} aria-hidden="true" />
+                <GripIcon size={14} aria-hidden="true" />
               </AriaButton>
             </div>
             {card.tags && card.tags.length > 0 && (
@@ -426,7 +426,7 @@ function KanbanColumn({
               )}
               {card.due && (
                 <span {...stylex.props(styles.due, card.due < today && styles.dueLate)}>
-                  <CalendarDays size={12} aria-hidden="true" />
+                  <CalendarDaysIcon size={12} aria-hidden="true" />
                   <span {...stylex.props(dash.sr)}>{card.due < today ? L.overdue : L.due}</span>
                   {fmtDue(card.due, locale)}
                 </span>
@@ -464,7 +464,7 @@ function KanbanColumn({
           </div>
         </form>
       ) : (
-        <Button variant="ghost" size="sm" startIcon={<Plus size={14} aria-hidden="true" />} onPress={() => setAdding(true)} aria-label={L.addCardTo(col.title)}>
+        <Button variant="ghost" size="sm" startIcon={<PlusIcon size={14} aria-hidden="true" />} onPress={() => setAdding(true)} aria-label={L.addCardTo(col.title)}>
           {L.addCard}
         </Button>
       )}

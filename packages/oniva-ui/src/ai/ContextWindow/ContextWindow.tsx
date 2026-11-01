@@ -1,12 +1,11 @@
 import * as stylex from '@stylexjs/stylex';
-import { ArrowRight, Check, ChevronUp, Lock, Minimize2, X } from 'lucide-react';
+import { ArrowRightIcon, CheckIcon, ChevronUpIcon, LockIcon, CollapseIcon, XIcon } from '../../icons/IconSet';
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type HTMLAttributes, type ReactNode, type Ref } from 'react';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 import { media } from '../../tokens/media.stylex';
 import { motion } from '../../tokens/motion.stylex';
 import { aiStyles } from '../../internal/ai-styles';
-import { compactNumber } from '../../internal/ai-motion';
 import { focus } from '../../internal/focus';
 import { useFormatters } from '../../internal/format';
 import { mergeSx } from '../../internal/sx';
@@ -25,8 +24,9 @@ const wave = stylex.keyframes({ '0%': { opacity: 1 }, '50%': { opacity: 0.25 }, 
 const styles = stylex.create({
   root: { containerType: 'inline-size', display: 'flex', flexDirection: 'column', fontFamily: font['--oniva-font-sans'], gap: 14, maxWidth: 360, padding: 16, width: '100%' },
   head: { alignItems: 'center', display: 'flex', gap: 8, justifyContent: 'space-between' },
-  title: { color: colors['--oniva-color-text'], fontSize: font['--oniva-font-size-14'], fontWeight: font['--oniva-font-weight-semibold'], margin: 0 },
-  model: { maxWidth: { default: 'none', [NARROW]: 110 }, overflow: 'hidden', textOverflow: 'ellipsis' },
+  title: { color: colors['--oniva-color-text'], fontSize: font['--oniva-font-size-14'], fontWeight: font['--oniva-font-weight-semibold'], margin: 0, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
+  model: { flexShrink: 1, maxWidth: { default: '60%', [NARROW]: 110 }, minWidth: 0 },
+  modelText: { minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
   big: { alignItems: 'baseline', display: 'flex', flexWrap: 'wrap', gap: 6 },
   num: { color: colors['--oniva-color-text'], fontSize: font['--oniva-font-size-24'], fontVariantNumeric: 'tabular-nums', fontWeight: font['--oniva-font-weight-semibold'], lineHeight: 1.1 },
   of: { color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-13'], fontVariantNumeric: 'tabular-nums' },
@@ -98,6 +98,14 @@ const styles = stylex.create({
   done: { alignItems: 'center', color: colors['--oniva-color-success-fg'], display: 'inline-flex', fontSize: font['--oniva-font-size-12'], gap: 4 },
 });
 
+function isFocusVisible(el: EventTarget): boolean {
+  try {
+    return (el as Element).matches(':focus-visible');
+  } catch {
+    return false;
+  }
+}
+
 /** Compact button that morphs into a green check and fades away; it returns only when `show` is true again. */
 function CompactSlot({ done, show, button }: { done: boolean; show: boolean; button: ReactNode }) {
   const { mounted, presenceProps } = usePresence(done, { initial: true, exitTimeoutMs: 400 });
@@ -113,7 +121,7 @@ function CompactSlot({ done, show, button }: { done: boolean; show: boolean; but
       )}
       {mounted && (
         <span role="status" {...pp} ref={pref as React.Ref<HTMLSpanElement>} {...stylex.props(styles.done, styles.slotCell, enterExit.blur)}>
-          <Check size={12} aria-hidden="true" /> <span {...stylex.props(styles.compactLabel)}>Compacted</span>
+          <CheckIcon size={12} aria-hidden="true" /> <span {...stylex.props(styles.compactLabel)}>Compacted</span>
         </span>
       )}
     </span>
@@ -155,10 +163,10 @@ function PartItems({ part, items, isOpen, label, onRemove, tokenText }: { part: 
           <li key={it.id}>
             <AnimatedHeight isOpen={!gone}>
               <div {...stylex.props(styles.item)}>
-                <span {...stylex.props(styles.itemName)}>{it.label}</span>
+                <span title={it.label} {...stylex.props(styles.itemName)}>{it.label}</span>
                 <span {...stylex.props(styles.tokens)}>{tokenText(it.tokens)}</span>
                 <Button size="xs" variant="ghost" isIconOnly aria-label={label(it)} isDisabled={gone} onPress={() => onRemove(part, it)}>
-                  <X size={12} aria-hidden="true" />
+                  <XIcon size={12} aria-hidden="true" />
                 </Button>
               </div>
             </AnimatedHeight>
@@ -287,7 +295,9 @@ export function ContextWindow({ parts, limit, title = 'Context window', model, m
         {model && (
           <span {...stylex.props(w2s.tag, w2s.tagNeutral, styles.model)}>
             {modelIcon}
-            {model}
+            <span title={model} {...stylex.props(styles.modelText)}>
+              {model}
+            </span>
           </span>
         )}
       </div>
@@ -295,7 +305,7 @@ export function ContextWindow({ parts, limit, title = 'Context window', model, m
         <span aria-hidden="true" {...stylex.props(styles.num)}>
           <AnimatedNumber value={hover ? (tokens[parts.findIndex((p) => p.id === hover)] ?? used) : used} format={{ maximumFractionDigits: 0 }} />
         </span>
-        <span aria-hidden="true" {...stylex.props(styles.of)}>of {compactNumber(limit)}</span>
+        <span aria-hidden="true" {...stylex.props(styles.of)}>of {f.compact(limit)}</span>
         <span {...stylex.props(w2s.tag, full ? w2s.tagDanger : warn ? w2s.tagWarning : w2s.tagNeutral, styles.pct)}>{f.percent(ratio)}</span>
       </div>
       <div aria-hidden="true" style={colsVar} {...stylex.props(styles.field)}>
@@ -317,7 +327,15 @@ export function ContextWindow({ parts, limit, title = 'Context window', model, m
           const t = tokens[i]!;
           const canCompact = !!p.compact && !p.locked && t > 0 && (after[p.id] === undefined || t > after[p.id]! * 1.05);
           return (
-            <li key={p.id} onMouseEnter={() => setHover(p.id)} onMouseLeave={() => setHover(null)}>
+            <li
+              key={p.id}
+              onMouseEnter={() => setHover(p.id)}
+              onMouseLeave={() => setHover(null)}
+              onFocus={(e) => {
+                if (isFocusVisible(e.target)) setHover(p.id);
+              }}
+              onBlur={() => setHover(null)}
+            >
               <div {...stylex.props(styles.row, !!hover && hover !== p.id && styles.rowDim)}>
                 <span aria-hidden="true" {...stylex.props(styles.swatch, swatchStyles[(p.color ?? i) % swatchStyles.length])} />
                 {p.items ? (
@@ -327,13 +345,13 @@ export function ContextWindow({ parts, limit, title = 'Context window', model, m
                     onClick={() => setOpen((o) => (isOpen ? o.filter((x) => x !== p.id) : [...o, p.id]))}
                     {...stylex.props(styles.name, styles.nameBtn, focus.ring)}
                   >
-                    <span {...stylex.props(styles.nameText)}>{p.label}</span>
-                    <ChevronUp size={12} aria-hidden="true" {...stylex.props(styles.chev, !isOpen && styles.chevOpen)} />
+                    <span title={p.label} {...stylex.props(styles.nameText)}>{p.label}</span>
+                    <ChevronUpIcon size={12} aria-hidden="true" {...stylex.props(styles.chev, !isOpen && styles.chevOpen)} />
                   </button>
                 ) : (
                   <span {...stylex.props(styles.name)}>
-                    <span {...stylex.props(styles.nameText)}>{p.label}</span>
-                    {p.locked && <Lock size={11} aria-label="Locked" />}
+                    <span title={p.label} {...stylex.props(styles.nameText)}>{p.label}</span>
+                    {p.locked && <LockIcon size={11} role="img" aria-label="Locked" />}
                   </span>
                 )}
                 <CompactSlot
@@ -341,7 +359,7 @@ export function ContextWindow({ parts, limit, title = 'Context window', model, m
                   show={canCompact}
                   button={
                     <Button size="xs" variant="secondary" isDisabled={working === p.id} aria-label={`Compact ${p.label}`} onPress={() => void compact(p, i)}>
-                      <Minimize2 size={12} aria-hidden="true" /> <span {...stylex.props(styles.compactLabel)}>{working === p.id ? 'Compacting…' : 'Compact'}</span>
+                      <CollapseIcon size={12} aria-hidden="true" /> <span {...stylex.props(styles.compactLabel)}>{working === p.id ? 'Compacting…' : 'Compact'}</span>
                     </Button>
                   }
                 />
@@ -361,7 +379,7 @@ export function ContextWindow({ parts, limit, title = 'Context window', model, m
         </span>
         {action && (
           <Button size="sm" variant="secondary" onPress={action.onClick}>
-            {action.label} <ArrowRight size={12} aria-hidden="true" />
+            {action.label} <ArrowRightIcon size={12} aria-hidden="true" />
           </Button>
         )}
       </div>

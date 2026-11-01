@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { CreditCard, Download, KeyRound, Plus, Trash2 } from 'lucide-react';
+import { CreditCardIcon, DownloadIcon, KeyIcon, PlusIcon, TrashIcon } from '../../icons/IconSet';
 import { useEffect, useRef, useState, type Ref } from 'react';
 import { Avatar } from '../../components/Avatar';
 import { Badge, type BadgeVariant } from '../../components/Badge';
@@ -421,7 +421,7 @@ export function SettingsBilling({
                 xstyle={styles.grow}
                 placeholder="name@company.com"
               />
-              <Button type="submit" startIcon={<Plus size={14} />}>
+              <Button type="submit" startIcon={<PlusIcon size={14} />}>
                 Send invite
               </Button>
             </form>
@@ -464,7 +464,7 @@ export function SettingsBilling({
                             say(`${m.name} removed.`);
                           }}
                         >
-                          <Trash2 size={14} />
+                          <TrashIcon size={14} />
                         </Button>
                       </Cell>
                     </Row>
@@ -512,7 +512,7 @@ export function SettingsBilling({
               <div {...stylex.props(styles.key)}>
                 <span {...stylex.props(styles.keyMain)}>
                   <span aria-hidden="true" {...stylex.props(styles.keyIcon)}>
-                    <CreditCard size={16} />
+                    <CreditCardIcon size={16} />
                   </span>
                   <span {...stylex.props(styles.personText)}>
                     <span {...stylex.props(styles.name, s3.num)}>Card ending 4242</span>
@@ -614,7 +614,7 @@ export function SettingsBilling({
                             say(`Downloading ${i.id}.`);
                           }}
                         >
-                          <Download size={14} />
+                          <DownloadIcon size={14} />
                         </Button>
                       </Cell>
                     </Row>
@@ -629,7 +629,7 @@ export function SettingsBilling({
           <section aria-label="API keys" {...stylex.props(s3.card)}>
             <div {...stylex.props(s3.between)}>
               <h2 {...stylex.props(s3.h)}>API keys</h2>
-              <Button size="sm" startIcon={<Plus size={14} />} onPress={createKey}>
+              <Button size="sm" startIcon={<PlusIcon size={14} />} onPress={createKey}>
                 Create key
               </Button>
             </div>
@@ -644,7 +644,7 @@ export function SettingsBilling({
                 <li key={k.id} data-glide-id={k.id} {...stylex.props(styles.key)}>
                   <span {...stylex.props(styles.keyMain)}>
                     <span aria-hidden="true" {...stylex.props(styles.keyIcon)}>
-                      <KeyRound size={16} />
+                      <KeyIcon size={16} />
                     </span>
                     <span {...stylex.props(styles.personText)}>
                       <span {...stylex.props(styles.name)}>{k.name}</span>
@@ -665,7 +665,7 @@ export function SettingsBilling({
                         say(`${k.name} revoked.`);
                       }}
                     >
-                      <Trash2 size={14} />
+                      <TrashIcon size={14} />
                     </Button>
                   </span>
                 </li>

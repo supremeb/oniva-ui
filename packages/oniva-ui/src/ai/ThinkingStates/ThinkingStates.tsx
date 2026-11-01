@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { Check, ChevronDown, ChevronRight, LayoutGrid, Search } from 'lucide-react';
+import { CheckIcon, ChevronDownIcon, ChevronRightIcon, LayoutGridIcon, SearchIcon } from '../../icons/IconSet';
 import { useEffect, useId, useLayoutEffect, useRef, useState, type HTMLAttributes, type ReactNode, type Ref } from 'react';
 import { accent } from '../../tokens/accent.stylex';
 import { colors } from '../../tokens/colors.stylex';
@@ -11,6 +11,7 @@ import { AnimatedHeight } from '../../motion/AnimatedHeight';
 import { CrossFade } from '../../motion/CrossFade';
 import { m3 } from '../../internal/m3-motion';
 import { prefersReducedMotion } from '../../internal/motion-hooks';
+import { focus } from '../../internal/focus';
 import { useFormatters } from '../../internal/format';
 import { mergeSx } from '../../internal/sx';
 import { TextShimmer } from '../TextShimmer';
@@ -83,7 +84,7 @@ const styles = stylex.create({
   },
   chevOpen: { transform: 'rotate(90deg)' },
   chevFlip: { transform: 'rotate(180deg)' },
-  steps: { display: 'flex', flexDirection: 'column', gap: 10, listStyle: 'none', margin: 0, paddingBlock: 6, paddingInlineEnd: 0, paddingInlineStart: 4, position: 'relative' },
+  steps: { display: 'flex', flexDirection: 'column', gap: 10, listStyle: 'none', margin: 0, minWidth: 0, paddingBlock: 6, paddingInlineEnd: 0, paddingInlineStart: 4, position: 'relative' },
   step: {
     animationDuration: motion['--oniva-motion-dur-enter'],
     animationFillMode: 'both',
@@ -95,6 +96,7 @@ const styles = stylex.create({
     flexDirection: 'column',
     fontSize: font['--oniva-font-size-13'],
     gap: 6,
+    minWidth: 0,
     paddingInlineStart: 18,
     position: 'relative',
   },
@@ -113,7 +115,8 @@ const styles = stylex.create({
     animationName: pulse,
     backgroundColor: accent['--oniva-accent-solid'],
   },
-  stepLabel: { alignItems: 'center', display: 'inline-flex', gap: 6 },
+  stepLabel: { alignItems: 'flex-start', display: 'inline-flex', gap: 6, maxWidth: '100%', minWidth: 0, overflowWrap: 'anywhere' },
+  stepIcon: { flexShrink: 0, marginBlockStart: 3 },
   line: {
     backgroundColor: colors['--oniva-color-border-control'],
     insetInlineStart: 7.5,
@@ -123,9 +126,9 @@ const styles = stylex.create({
     transformOrigin: 'top center',
     width: 1,
   },
-  srcRow: { display: 'flex', flexWrap: 'wrap', gap: 6 },
+  srcRow: { display: 'flex', flexWrap: 'wrap', gap: 6, maxWidth: '100%', minWidth: 0 },
   src: {
-    backgroundColor: { default: colors['--oniva-color-surface-inner'], ':hover': colors['--oniva-color-surface-hover'] },
+    backgroundColor: { default: colors['--oniva-color-surface-inner'], ':hover': { default: null, [media.hover]: colors['--oniva-color-surface-hover'] } },
     borderColor: colors['--oniva-color-border'],
     borderRadius: radius['--oniva-radius-full'],
     borderStyle: 'solid',
@@ -133,9 +136,13 @@ const styles = stylex.create({
     color: colors['--oniva-color-text-muted'],
     fontFamily: font['--oniva-font-sans'],
     fontSize: font['--oniva-font-size-12'],
+    maxWidth: '100%',
+    overflow: 'hidden',
     paddingBlock: 2,
     paddingInline: 8,
     textDecoration: 'none',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
   },
   moreBtn: { appearance: 'none', cursor: 'pointer' },
   doneIcon: { color: colors['--oniva-color-accent-text'] },
@@ -144,10 +151,13 @@ const styles = stylex.create({
     display: 'inline-grid',
     fontFamily: font['--oniva-font-sans'],
     fontSize: font['--oniva-font-size-14'],
+    gridTemplateColumns: 'minmax(0, 1fr)',
     lineHeight: font['--oniva-font-lh-20'],
+    maxWidth: '100%',
     overflow: 'hidden',
   },
-  layer: { gridArea: '1 / 1', whiteSpace: 'nowrap' },
+  clip: { display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
+  layer: { gridArea: '1 / 1', minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
   enter: {
     animationDuration: motion['--oniva-motion-dur-base'],
     animationFillMode: 'both',
@@ -225,13 +235,14 @@ function ThinkingLine({ messages = [], holdMs = 2000, loop = false, paused = fal
         </span>
       )}
       <span key={`in-${idx}`} {...stylex.props(styles.layer, prev !== null && styles.enter)}>
-        <TextShimmer>{messages[idx]}</TextShimmer>
+        <TextShimmer xstyle={styles.clip}>{messages[idx]}</TextShimmer>
       </span>
     </div>
   );
 }
 
 const MAX_SOURCES = 3;
+const srcKey = (s: { label: string }, i: number) => `${i}:${s.label}`;
 
 function Sources({ sources }: { sources: NonNullable<ThinkingStep['sources']> }) {
   const [all, setAll] = useState(false);
@@ -242,16 +253,16 @@ function Sources({ sources }: { sources: NonNullable<ThinkingStep['sources']> })
     <span {...stylex.props(styles.srcRow)}>
       {shown.map((s, i) =>
         s.href ? (
-          <a key={s.label} href={s.href} target="_blank" rel="noreferrer" title={s.href} style={{ animationDelay: `${(i % 6) * 50}ms` }} {...stylex.props(styles.src, m3.pop)}>
+          <a key={srcKey(s, i)} href={s.href} target="_blank" rel="noreferrer" title={s.href} style={{ animationDelay: `${(i % 6) * 50}ms` }} {...stylex.props(styles.src, focus.inset, m3.pop)}>
             {s.icon && <span aria-hidden="true" {...stylex.props(styles.srcIcon)}>{s.icon}</span>}
             {s.label}
           </a>
         ) : (
-          <span key={s.label} style={{ animationDelay: `${(i % 6) * 50}ms` }} {...stylex.props(styles.src, m3.pop)}>{s.icon && <span aria-hidden="true" {...stylex.props(styles.srcIcon)}>{s.icon}</span>}{s.label}</span>
+          <span key={srcKey(s, i)} title={s.label} style={{ animationDelay: `${(i % 6) * 50}ms` }} {...stylex.props(styles.src, m3.pop)}>{s.icon && <span aria-hidden="true" {...stylex.props(styles.srcIcon)}>{s.icon}</span>}{s.label}</span>
         ),
       )}
       {more > 0 && (
-        <button type="button" onClick={() => setAll(true)} {...stylex.props(styles.src, styles.moreBtn, m3.press)}>
+        <button type="button" onClick={() => setAll(true)} {...stylex.props(styles.src, styles.moreBtn, focus.inset, m3.press)}>
           +{fmt.number(more)} more
         </button>
       )}
@@ -334,8 +345,8 @@ function ThinkingPanel({
   const sx = stylex.props(styles.panelRoot, card && styles.card, xstyle);
   return (
     <div {...rest} ref={ref} {...mergeSx(sx, className)}>
-      <button type="button" aria-expanded={open} aria-controls={uid} onClick={() => setOpen((o) => !o)} {...stylex.props(styles.head, card && styles.cardHead, card && !open && styles.cardHeadClosed)}>
-        {card && <LayoutGrid size={14} aria-hidden="true" {...stylex.props(styles.cardIcon)} />}
+      <button type="button" aria-expanded={open} aria-controls={uid} onClick={() => setOpen((o) => !o)} {...stylex.props(styles.head, card ? focus.inset : focus.ring, card && styles.cardHead, card && !open && styles.cardHeadClosed)}>
+        {card && <LayoutGridIcon size={14} aria-hidden="true" {...stylex.props(styles.cardIcon)} />}
         <CrossFade as="span" contentKey={finished ? 'done' : 'live'} duration={220}>
           {finished ? (
             <span>{card ? <><span {...stylex.props(styles.cardTitle)}>Thought</span> {secs}s</> : <>Worked for {secs}s</>}</span>
@@ -347,9 +358,9 @@ function ThinkingPanel({
         </CrossFade>
         {card && <span {...stylex.props(styles.spacer)} />}
         {card ? (
-          <ChevronDown size={14} aria-hidden="true" {...stylex.props(styles.chev, open && styles.chevFlip)} />
+          <ChevronDownIcon size={14} aria-hidden="true" {...stylex.props(styles.chev, open && styles.chevFlip)} />
         ) : (
-          <ChevronRight size={14} aria-hidden="true" {...stylex.props(styles.chev, open && styles.chevOpen)} />
+          <ChevronRightIcon size={14} aria-hidden="true" {...stylex.props(styles.chev, open && styles.chevOpen)} />
         )}
       </button>
       <AnimatedHeight isOpen={open} id={uid}>
@@ -361,7 +372,7 @@ function ThinkingPanel({
               <li key={i} {...stylex.props(styles.step)}>
                 <span aria-hidden="true" {...stylex.props(styles.node, active && styles.nodeActive)} />
                 <span {...stylex.props(styles.stepLabel)}>
-                  {s.kind === 'search' && <Search size={13} aria-hidden="true" />}
+                  {s.kind === 'search' && <SearchIcon size={13} aria-hidden="true" {...stylex.props(styles.stepIcon)} />}
                   {active ? <TextShimmer>{s.label}</TextShimmer> : s.label}
                 </span>
                 {s.sources && s.sources.length > 0 && <Sources sources={s.sources} />}
@@ -372,7 +383,7 @@ function ThinkingPanel({
             <li {...stylex.props(styles.step)}>
               <span aria-hidden="true" {...stylex.props(styles.node)} />
               <span {...stylex.props(styles.stepLabel)}>
-                <Check size={14} aria-hidden="true" {...stylex.props(styles.doneIcon, m3.pop, m3.draw)} />
+                <CheckIcon size={14} aria-hidden="true" {...stylex.props(styles.stepIcon, styles.doneIcon, m3.pop, m3.draw)} />
                 {doneLabel}
               </span>
             </li>

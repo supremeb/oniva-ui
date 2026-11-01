@@ -1,8 +1,9 @@
 import * as stylex from '@stylexjs/stylex';
-import { ArrowRight, Check, Copy, ExternalLink } from 'lucide-react';
-import { useId, useRef, useState, type CSSProperties, type HTMLAttributes, type KeyboardEvent, type ReactNode, type Ref } from 'react';
+import { ArrowRightIcon, CheckIcon, CopyIcon, ExternalLinkIcon } from '../../icons/IconSet';
+import { useEffect, useId, useRef, useState, type CSSProperties, type HTMLAttributes, type KeyboardEvent, type ReactNode, type Ref } from 'react';
 import { accent } from '../../tokens/accent.stylex';
 import { colors } from '../../tokens/colors.stylex';
+import { media } from '../../tokens/media.stylex';
 import { font } from '../../tokens/font.stylex';
 import { motion } from '../../tokens/motion.stylex';
 import { radius } from '../../tokens/radius.stylex';
@@ -10,6 +11,7 @@ import { AnimatedHeight } from '../../motion/AnimatedHeight';
 import { CrossFade } from '../../motion/CrossFade';
 import { m3 } from '../../internal/m3-motion';
 import { aiStyles } from '../../internal/ai-styles';
+import { focus } from '../../internal/focus';
 import { useFormatters } from '../../internal/format';
 import { mergeSx } from '../../internal/sx';
 import { markQuote } from '../../internal/w3-answer-text';
@@ -45,7 +47,7 @@ const styles = stylex.create({
     width: 18,
   },
   faceFirst: { marginInlineStart: 0 },
-  body: { display: 'flex', flexDirection: 'column', gap: 10, padding: '10px 14px 12px' },
+  body: { display: 'flex', flexDirection: 'column', gap: 10, padding: '10px 14px 14px' },
   foot: {
     alignItems: 'center',
     borderTopColor: colors['--oniva-color-border'],
@@ -56,11 +58,12 @@ const styles = stylex.create({
     fontSize: font['--oniva-font-size-12'],
     gap: 8,
     justifyContent: 'space-between',
-    marginBlockStart: 14,
     padding: '8px 10px 8px 14px',
   },
   footN: { color: colors['--oniva-color-text'], fontWeight: font['--oniva-font-weight-medium'] },
-  tray: { display: 'flex', flexDirection: 'column', gap: 8 },
+  tray: { display: 'flex', flexDirection: 'column', gap: 0 },
+  nowrap: { whiteSpace: 'nowrap' },
+  previewBody: { display: 'flex', flexDirection: 'column', gap: 6, minWidth: 0 },
   chipAv: {
     alignItems: 'center',
     backgroundColor: colors['--oniva-color-surface-hover'],
@@ -72,13 +75,13 @@ const styles = stylex.create({
     justifyContent: 'center',
     width: 16,
   },
-  text: { color: colors['--oniva-color-text'], fontSize: font['--oniva-font-size-14'], lineHeight: 1.6, margin: 0 },
+  text: { color: colors['--oniva-color-text'], fontSize: font['--oniva-font-size-14'], lineHeight: 1.6, margin: 0, overflowWrap: 'anywhere' },
   seg: {
     backgroundColor: {
       default: 'transparent',
       ':is([data-lit])': colors['--oniva-color-accent-soft'],
     },
-    borderRadius: 4,
+    borderRadius: radius['--oniva-radius-xs'],
     opacity: { default: 1, ':is([data-dim])': 0.45 },
     transitionDuration: motion['--oniva-motion-dur-base'],
     transitionProperty: 'background-color, opacity',
@@ -113,7 +116,7 @@ const styles = stylex.create({
     transitionTimingFunction: motion['--oniva-motion-ease-out'],
   },
   head: { color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-12'], fontVariantNumeric: 'tabular-nums' },
-  chips: { display: 'flex', flexWrap: 'wrap', gap: 6 },
+  chips: { display: 'flex', flexWrap: 'wrap', gap: 6, paddingBlockStart: 2 },
   chip: {
     alignItems: 'center',
     appearance: 'none',
@@ -151,11 +154,12 @@ const styles = stylex.create({
     display: 'flex',
     flexDirection: 'column',
     gap: 6,
-    marginBlockStart: 4,
+    marginBlockStart: 10,
+    minWidth: 0,
     padding: 12,
   },
-  pTitle: { color: colors['--oniva-color-text'], fontSize: font['--oniva-font-size-13'], fontWeight: font['--oniva-font-weight-medium'], margin: 0 },
-  pMeta: { color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-12'], margin: 0 },
+  pTitle: { color: colors['--oniva-color-text'], fontSize: font['--oniva-font-size-13'], fontWeight: font['--oniva-font-weight-medium'], margin: 0, overflowWrap: 'anywhere' },
+  pMeta: { color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-12'], margin: 0, overflowWrap: 'anywhere' },
   quote: {
     borderInlineStartColor: colors['--oniva-color-border-control'],
     borderInlineStartStyle: 'solid',
@@ -164,14 +168,15 @@ const styles = stylex.create({
     fontSize: font['--oniva-font-size-13'],
     lineHeight: 1.5,
     margin: 0,
+    overflowWrap: 'anywhere',
     paddingInlineStart: 10,
   },
-  mark: { backgroundColor: colors['--oniva-color-warning-bg'], borderRadius: 2, color: 'inherit' },
+  mark: { backgroundColor: colors['--oniva-color-warning-bg'], borderRadius: radius['--oniva-radius-xs'], color: 'inherit' },
   btns: { alignItems: 'center', display: 'flex', flexWrap: 'wrap', gap: 6 },
   btn: {
     alignItems: 'center',
     appearance: 'none',
-    backgroundColor: { default: 'transparent', ':hover': colors['--oniva-color-surface-hover'] },
+    backgroundColor: { default: 'transparent', ':hover': { default: null, [media.hover]: colors['--oniva-color-surface-hover'] } },
     borderColor: colors['--oniva-color-border'],
     borderRadius: radius['--oniva-radius-md'],
     borderStyle: 'solid',
@@ -295,8 +300,12 @@ export function CitedAnswer({
   const shownSrc = openSrc ?? lastSrc.current;
   const citing = open ? segments.filter((s) => s.cite?.includes(open)).map((s) => s.text) : [];
   const [copied, setCopied] = useState(false);
+  const copyTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  useEffect(() => () => clearTimeout(copyTimer.current), []);
 
   const backed = segments.filter((sg) => sg.cite?.some((id) => byId.has(id))).length;
+  // The default summary says nothing useful for an empty answer, so it only shows when there are sentences.
+  const showFoot = !!action || (summary !== null && (summary !== undefined || segments.length > 0));
   const sx = stylex.props(aiStyles.panel, styles.root, xstyle);
   return (
     <div
@@ -320,7 +329,7 @@ export function CitedAnswer({
         </span>
         <span {...stylex.props(styles.head)}>
           <CrossFade as="span" contentKey={`${sources.length}-${pagesRead ?? ''}`} duration={220}>
-            {fmt.plural(sources.length, { one: '# source', other: '# sources' })}
+            {sources.length === 0 ? 'No sources' : fmt.plural(sources.length, { one: '# source', other: '# sources' })}
             {pagesRead != null && ` · ${fmt.plural(pagesRead, { one: '# page read', other: '# pages read' })}`}
           </CrossFade>
         </span>
@@ -345,7 +354,7 @@ export function CitedAnswer({
                 <span data-lit={isLit ? '' : undefined} data-dim={dim ? '' : undefined} {...stylex.props(styles.seg)}>
                   {head}
                   {ids.length > 0 && (
-                    <span style={{ whiteSpace: 'nowrap' }}>
+                    <span {...stylex.props(styles.nowrap)}>
                       {last}
                       {ids.map((id) => (
                         <button
@@ -360,7 +369,7 @@ export function CitedAnswer({
                           onMouseLeave={() => point(null)}
                           onFocus={() => point(id)}
                           onBlur={() => point(null)}
-                          {...stylex.props(styles.marker)}
+                          {...stylex.props(styles.marker, focus.ring)}
                         >
                           {byId.get(id)!.n}
                         </button>
@@ -394,7 +403,7 @@ export function CitedAnswer({
               onMouseLeave={() => point(null)}
               onFocus={() => point(s.id)}
               onBlur={() => point(null)}
-              {...stylex.props(styles.chip, m3.rise)}
+              {...stylex.props(styles.chip, focus.ring, m3.rise)}
               style={{ '--oniva-i': Math.min(i, 6) } as CSSProperties}
             >
               <span aria-hidden="true" {...stylex.props(styles.chipAv)}>{s.site.charAt(0).toUpperCase()}</span>
@@ -407,7 +416,7 @@ export function CitedAnswer({
           <div id={`${uid}-preview`} role="region" aria-label={openSrc ? `Source ${openSrc.n} preview` : 'Source preview'} inert={!openSrc} {...stylex.props(styles.preview)}>
             {shownSrc && (
               <CrossFade contentKey={shownSrc.s.id} morph="height" duration={220}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              <div {...stylex.props(styles.previewBody)}>
                 <p {...stylex.props(styles.pTitle)}>{shownSrc.s.title}</p>
                 <p {...stylex.props(styles.pMeta)}>
                   {shownSrc.s.site}
@@ -428,19 +437,20 @@ export function CitedAnswer({
                         void Promise.resolve(navigator.clipboard?.writeText(shownSrc.s.quote!)).catch(() => {});
                         setCopied(true);
                         setLive('Quote copied');
-                        setTimeout(() => setCopied(false), 1600);
+                        clearTimeout(copyTimer.current);
+                        copyTimer.current = setTimeout(() => setCopied(false), 1600);
                       }}
-                      {...stylex.props(styles.btn)}
+                      {...stylex.props(styles.btn, focus.ring)}
                     >
                       <CrossFade as="span" contentKey={copied ? 'check' : 'copy'} duration={200}>
-                        {copied ? <Check size={12} aria-hidden="true" /> : <Copy size={12} aria-hidden="true" />}
+                        {copied ? <CheckIcon size={12} aria-hidden="true" /> : <CopyIcon size={12} aria-hidden="true" />}
                       </CrossFade>
                       <span>{copied ? 'Copied' : 'Copy quote'}</span>
                     </button>
                   )}
-                  {(shownSrc.s.url || onOpenSource) && (
+                  {(onOpenSource || (shownSrc.s.url && /^https?:/i.test(shownSrc.s.url))) && (
                     <a
-                      href={onOpenSource || !shownSrc.s.url || !/^https?:/i.test(shownSrc.s.url) ? undefined : shownSrc.s.url}
+                      href={onOpenSource ? undefined : shownSrc.s.url}
                       role={onOpenSource ? 'button' : undefined}
                       tabIndex={0}
                       target="_blank"
@@ -452,9 +462,9 @@ export function CitedAnswer({
                           onOpenSource(shownSrc.s);
                         }
                       }}
-                      {...stylex.props(styles.btn)}
+                      {...stylex.props(styles.btn, focus.ring)}
                     >
-                      <ExternalLink size={12} aria-hidden="true" /> Open source
+                      <ExternalLinkIcon size={12} aria-hidden="true" /> Open source
                     </a>
                   )}
                 </div>
@@ -468,12 +478,12 @@ export function CitedAnswer({
         </span>
       </div>
       </div>
-      {(action || summary !== null) && (
+      {showFoot && (
         <div {...stylex.props(styles.foot)}>
-          <span>{summary !== undefined ? summary : <><span {...stylex.props(styles.footN)}>{backed}</span> of {segments.length} {segments.length === 1 ? 'sentence' : 'sentences'} backed by a source</>}</span>
+          <span>{summary !== undefined ? summary : <><span {...stylex.props(styles.footN)}>{fmt.number(backed)}</span> of {fmt.plural(segments.length, { one: '# sentence', other: '# sentences' })} backed by a source</>}</span>
           {action && (
-            <button type="button" onClick={action.onPress} {...stylex.props(styles.btn)}>
-              {action.label} <ArrowRight size={12} aria-hidden="true" />
+            <button type="button" onClick={action.onPress} {...stylex.props(styles.btn, focus.ring)}>
+              {action.label} <ArrowRightIcon size={12} aria-hidden="true" />
             </button>
           )}
         </div>

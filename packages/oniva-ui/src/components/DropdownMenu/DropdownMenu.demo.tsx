@@ -1,14 +1,4 @@
-import {
-  Archive,
-  Copy,
-  CreditCard,
-  LogOut,
-  Pencil,
-  Settings,
-  Trash2,
-  User,
-  UserPlus,
-} from 'lucide-react';
+import { ArchiveIcon, CopyIcon, CreditCardIcon, LogOutIcon, PencilIcon, SettingsIcon, TrashIcon, UserIcon, UserPlusIcon } from '../../icons/IconSet';
 import { useState } from 'react';
 import type { Selection } from 'react-aria-components';
 import { Button } from '../Button';
@@ -37,11 +27,11 @@ const demo: DemoModule = {
   <Button variant="secondary">Priya Nair</Button>
   <DropdownMenuContent placement="bottom start" onAction={(k) => …}>
     <DropdownMenuSection title="Account">
-      <DropdownMenuItem id="profile" icon={<User size={16} />} shortcut="⌘P">Profile</DropdownMenuItem>
-      <DropdownMenuItem id="billing" icon={<CreditCard size={16} />}>Billing</DropdownMenuItem>
+      <DropdownMenuItem id="profile" icon={<UserIcon size={16} />} shortcut="⌘P">Profile</DropdownMenuItem>
+      <DropdownMenuItem id="billing" icon={<CreditCardIcon size={16} />}>Billing</DropdownMenuItem>
     </DropdownMenuSection>
     <DropdownMenuSeparator />
-    <DropdownMenuItem id="out" icon={<LogOut size={16} />} variant="danger">Sign out</DropdownMenuItem>
+    <DropdownMenuItem id="out" icon={<LogOutIcon size={16} />} variant="danger">Sign out</DropdownMenuItem>
   </DropdownMenuContent>
 </DropdownMenu>`,
       Component: function Account() {
@@ -52,21 +42,21 @@ const demo: DemoModule = {
               <Button variant="secondary">Priya Nair</Button>
               <DropdownMenuContent placement="bottom start" onAction={(k) => setLast(String(k))}>
                 <DropdownMenuSection title="Account">
-                  <DropdownMenuItem id="profile" icon={<User size={16} />} shortcut="⌘P">
+                  <DropdownMenuItem id="profile" icon={<UserIcon size={16} />} shortcut="⌘P">
                     Profile
                   </DropdownMenuItem>
-                  <DropdownMenuItem id="billing" icon={<CreditCard size={16} />}>
+                  <DropdownMenuItem id="billing" icon={<CreditCardIcon size={16} />}>
                     Billing
                   </DropdownMenuItem>
-                  <DropdownMenuItem id="settings" icon={<Settings size={16} />} shortcut="⌘,">
+                  <DropdownMenuItem id="settings" icon={<SettingsIcon size={16} />} shortcut="⌘,">
                     Settings
                   </DropdownMenuItem>
                 </DropdownMenuSection>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem id="invite" icon={<UserPlus size={16} />} isDisabled>
+                <DropdownMenuItem id="invite" icon={<UserPlusIcon size={16} />} isDisabled>
                   Invite teammates (Pro)
                 </DropdownMenuItem>
-                <DropdownMenuItem id="signout" icon={<LogOut size={16} />} variant="danger">
+                <DropdownMenuItem id="signout" icon={<LogOutIcon size={16} />} variant="danger">
                   Sign out
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -142,17 +132,17 @@ const demo: DemoModule = {
         <DropdownMenu>
           <Button variant="secondary">Invoice INV-2041</Button>
           <DropdownMenuContent placement="bottom start">
-            <DropdownMenuItem id="edit" icon={<Pencil size={16} />} shortcut="E">
+            <DropdownMenuItem id="edit" icon={<PencilIcon size={16} />} shortcut="E">
               Edit
             </DropdownMenuItem>
-            <DropdownMenuItem id="dup" icon={<Copy size={16} />} shortcut="⌘D">
+            <DropdownMenuItem id="dup" icon={<CopyIcon size={16} />} shortcut="⌘D">
               Duplicate
             </DropdownMenuItem>
-            <DropdownMenuItem id="archive" icon={<Archive size={16} />}>
+            <DropdownMenuItem id="archive" icon={<ArchiveIcon size={16} />}>
               Archive
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem id="delete" icon={<Trash2 size={16} />} variant="danger">
+            <DropdownMenuItem id="delete" icon={<TrashIcon size={16} />} variant="danger">
               Delete
             </DropdownMenuItem>
           </DropdownMenuContent>

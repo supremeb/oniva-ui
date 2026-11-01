@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { Minus, Plus } from 'lucide-react';
+import { MinusIcon, PlusIcon } from '../../icons/IconSet';
 import {
   Button,
   FieldError,
@@ -66,11 +66,11 @@ export function NumberField({
             )}
           >
             <Button slot="decrement" {...stylex.props(fp.iconButton, styles.step)}>
-              <Minus size={14} aria-hidden="true" />
+              <MinusIcon size={14} aria-hidden="true" />
             </Button>
             <Input ref={ref} placeholder={placeholder} {...stylex.props(ff.bare, styles.input)} />
             <Button slot="increment" {...stylex.props(fp.iconButton, styles.step)}>
-              <Plus size={14} aria-hidden="true" />
+              <PlusIcon size={14} aria-hidden="true" />
             </Button>
           </Group>
           {description != null && (

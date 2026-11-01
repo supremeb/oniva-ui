@@ -1,4 +1,4 @@
-import { Calendar, Droplet, Mail, MapPin, Stethoscope, User } from 'lucide-react';
+import { CalendarIcon, DropletIcon, MailIcon, MapPinIcon, StethoscopeIcon, UserIcon } from '../../icons/IconSet';
 import type { DemoModule } from '../../internal/demo';
 import { DescriptionItem, DescriptionList } from './DescriptionList';
 
@@ -14,24 +14,24 @@ const demo: DemoModule = {
     {
       name: 'Profile card',
       code: `<DescriptionList title="Medical ID">
-  <DescriptionItem icon={<Calendar size={16} />} label="Date of Birth">Mar 14, 1991</DescriptionItem>
-  <DescriptionItem icon={<User size={16} />} label="Gender">Female</DescriptionItem>
-  <DescriptionItem icon={<Droplet size={16} />} label="Blood Type">O positive</DescriptionItem>
-  <DescriptionItem icon={<Stethoscope size={16} />} label="GP Doctor">Dr. Elena Marsh</DescriptionItem>
+  <DescriptionItem icon={<CalendarIcon size={16} />} label="Date of Birth">Mar 14, 1991</DescriptionItem>
+  <DescriptionItem icon={<UserIcon size={16} />} label="Gender">Female</DescriptionItem>
+  <DescriptionItem icon={<DropletIcon size={16} />} label="Blood Type">O positive</DescriptionItem>
+  <DescriptionItem icon={<StethoscopeIcon size={16} />} label="GP Doctor">Dr. Elena Marsh</DescriptionItem>
 </DescriptionList>`,
       Component: () => (
         <div style={{ maxWidth: 360 }}>
           <DescriptionList title="Medical ID">
-            <DescriptionItem icon={<Calendar size={16} />} label="Date of Birth">
+            <DescriptionItem icon={<CalendarIcon size={16} />} label="Date of Birth">
               Mar 14, 1991
             </DescriptionItem>
-            <DescriptionItem icon={<User size={16} />} label="Gender">
+            <DescriptionItem icon={<UserIcon size={16} />} label="Gender">
               Female
             </DescriptionItem>
-            <DescriptionItem icon={<Droplet size={16} />} label="Blood Type">
+            <DescriptionItem icon={<DropletIcon size={16} />} label="Blood Type">
               O positive
             </DescriptionItem>
-            <DescriptionItem icon={<Stethoscope size={16} />} label="GP Doctor">
+            <DescriptionItem icon={<StethoscopeIcon size={16} />} label="GP Doctor">
               Dr. Elena Marsh
             </DescriptionItem>
           </DescriptionList>
@@ -41,22 +41,22 @@ const demo: DemoModule = {
     {
       name: 'Two columns',
       code: `<DescriptionList title="Customer" columns={2}>
-  <DescriptionItem icon={<Mail size={16} />} label="Email">amara@northwind.co</DescriptionItem>
-  <DescriptionItem icon={<MapPin size={16} />} label="Region">Lisbon, PT</DescriptionItem>
+  <DescriptionItem icon={<MailIcon size={16} />} label="Email">amara@northwind.co</DescriptionItem>
+  <DescriptionItem icon={<MapPinIcon size={16} />} label="Region">Lisbon, PT</DescriptionItem>
   ...
 </DescriptionList>`,
       Component: () => (
         <DescriptionList title="Customer" columns={2}>
-          <DescriptionItem icon={<Mail size={16} />} label="Email">
+          <DescriptionItem icon={<MailIcon size={16} />} label="Email">
             amara@northwind.co
           </DescriptionItem>
-          <DescriptionItem icon={<MapPin size={16} />} label="Region">
+          <DescriptionItem icon={<MapPinIcon size={16} />} label="Region">
             Lisbon, PT
           </DescriptionItem>
-          <DescriptionItem icon={<Calendar size={16} />} label="Customer since">
+          <DescriptionItem icon={<CalendarIcon size={16} />} label="Customer since">
             Jan 08, 2024
           </DescriptionItem>
-          <DescriptionItem icon={<User size={16} />} label="Plan">
+          <DescriptionItem icon={<UserIcon size={16} />} label="Plan">
             Growth, $249.00 / mo
           </DescriptionItem>
         </DescriptionList>

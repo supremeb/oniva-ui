@@ -20,4 +20,16 @@ describe('RunLog', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Copy output' }));
     expect(writeText).toHaveBeenCalledWith('$ ls\ndone');
   });
+
+  it('shows a placeholder and disables copy when there are no lines', () => {
+    render(<RunLog lines={[]} />);
+    expect(screen.getByText('Waiting for output…')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Copy output' })).toBeDisabled();
+    expect(screen.getByText('Waiting for output…')).toHaveAttribute('aria-hidden', 'true');
+  });
+
+  it('exposes the full title on a truncated title bar', () => {
+    render(<RunLog title="pnpm --filter @northwind/very-long-package run test" lines={['ok']} />);
+    expect(screen.getByTitle('pnpm --filter @northwind/very-long-package run test')).toBeInTheDocument();
+  });
 });

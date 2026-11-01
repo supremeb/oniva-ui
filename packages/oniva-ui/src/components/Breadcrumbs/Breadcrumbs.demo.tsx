@@ -1,4 +1,4 @@
-import { Home } from 'lucide-react';
+import { HomeIcon } from '../../icons/IconSet';
 import type { DemoModule } from '../../internal/demo';
 import { Breadcrumb, Breadcrumbs } from './Breadcrumbs';
 
@@ -28,10 +28,10 @@ const demo: DemoModule = {
     },
     {
       name: 'With icon and custom separator',
-      code: `<Breadcrumb href="#" icon={<Home size={14} />} separator="/">Home</Breadcrumb>`,
+      code: `<Breadcrumb href="#" icon={<HomeIcon size={14} />} separator="/">Home</Breadcrumb>`,
       Component: () => (
         <Breadcrumbs aria-label="Path">
-          <Breadcrumb href="#" icon={<Home size={14} />} separator="/">
+          <Breadcrumb href="#" icon={<HomeIcon size={14} />} separator="/">
             Home
           </Breadcrumb>
           <Breadcrumb href="#" separator="/">

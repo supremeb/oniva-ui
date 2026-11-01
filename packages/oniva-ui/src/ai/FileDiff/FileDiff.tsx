@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { Check, ChevronLeft, ChevronRight, Sparkles, Undo2, X } from 'lucide-react';
+import { CheckIcon, ChevronLeftIcon, ChevronRightIcon, SparklesIcon, UndoIcon, XIcon } from '../../icons/IconSet';
 import { useEffect, useId, useMemo, useState, type HTMLAttributes, type Ref } from 'react';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
@@ -16,6 +16,11 @@ import { usePresence } from '../../motion/Presence';
 import { enterExit } from '../../internal/motion-styles';
 import { prefersReducedMotion } from '../../internal/motion-hooks';
 import { media } from '../../tokens/media.stylex';
+import { radius } from '../../tokens/radius.stylex';
+import { shadow } from '../../tokens/shadow.stylex';
+import { focus } from '../../internal/focus';
+import { useFormatters } from '../../internal/format';
+import { VisuallyHidden } from '../../components/VisuallyHidden';
 
 const drawCheck = stylex.keyframes({ from: { strokeDashoffset: 14 }, to: { strokeDashoffset: 0 } });
 
@@ -68,11 +73,12 @@ const styles = stylex.create({
     paddingInline: 12,
   },
   file: { color: colors['--oniva-color-text'], flexGrow: 1, fontFamily: font['--oniva-font-mono'], fontSize: font['--oniva-font-size-13'], minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
-  add: { color: colors['--oniva-color-success-fg'], fontFamily: font['--oniva-font-mono'], fontSize: font['--oniva-font-size-12'] },
-  del: { color: colors['--oniva-color-danger-fg'], fontFamily: font['--oniva-font-mono'], fontSize: font['--oniva-font-size-12'] },
+  add: { color: colors['--oniva-color-success-fg'], fontFamily: font['--oniva-font-mono'], fontSize: font['--oniva-font-size-12'], fontVariantNumeric: 'tabular-nums' },
+  del: { color: colors['--oniva-color-danger-fg'], fontFamily: font['--oniva-font-mono'], fontSize: font['--oniva-font-size-12'], fontVariantNumeric: 'tabular-nums' },
   hunkHead: { alignItems: 'center', backgroundColor: colors['--oniva-color-surface'], display: 'flex', gap: 8, paddingInlineEnd: 10 },
   hunkToggle: { color: colors['--oniva-color-text-muted'], flexGrow: 1, fontFamily: font['--oniva-font-mono'], fontSize: font['--oniva-font-size-12'], gap: 6, paddingBlock: 6, paddingInline: 12, width: 'auto' },
-  stat: { color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-12'] },
+  stat: { color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-12'], fontVariantNumeric: 'tabular-nums' },
+  empty: { color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-13'], paddingBlock: 16, paddingInline: 16, textAlign: 'center' },
   decided: { fontSize: font['--oniva-font-size-12'], fontWeight: font['--oniva-font-weight-medium'] },
   acc: { color: colors['--oniva-color-success-fg'] },
   rej: { color: colors['--oniva-color-danger-fg'] },
@@ -90,7 +96,8 @@ const styles = stylex.create({
     width: 1,
   },
   code: { paddingInline: 8, whiteSpace: 'pre', width: '100%' },
-  splitCode: { paddingInline: 8, whiteSpace: 'pre', width: '50%' },
+  splitCode: { overflowWrap: 'anywhere', paddingInline: 8, whiteSpace: 'pre-wrap', width: '50%' },
+  tableSplit: { tableLayout: 'fixed', width: '100%' },
   cAdd: { backgroundColor: colors['--oniva-color-success-bg'] },
   cDel: { backgroundColor: colors['--oniva-color-error-bg'] },
   cEmpty: { backgroundColor: colors['--oniva-color-surface-inset'] },
@@ -104,11 +111,11 @@ const styles = stylex.create({
   proseSpark: { color: colors['--oniva-color-accent-soft-fg'] },
   proseBody: { display: 'flex', flexDirection: 'column', gap: 6, paddingBlock: 10, paddingInline: 16, paddingBlockEnd: 16 },
   proseP: { color: colors['--oniva-color-text'], fontSize: font['--oniva-font-size-16'], lineHeight: 1.7, margin: 0, position: 'relative' },
-  proseActive: { borderRadius: 6, boxShadow: `0 0 0 4px ${colors['--oniva-color-accent-soft']}`, backgroundColor: colors['--oniva-color-accent-soft'] },
+  proseActive: { borderRadius: radius['--oniva-radius-sm'], boxShadow: `0 0 0 4px ${colors['--oniva-color-accent-soft']}`, backgroundColor: colors['--oniva-color-accent-soft'] },
   proseSug: { cursor: 'pointer' },
-  prosePop: { alignItems: 'center', backgroundColor: colors['--oniva-color-surface'], borderColor: colors['--oniva-color-border'], borderRadius: 10, borderStyle: 'solid', borderWidth: 1, boxShadow: '0 6px 20px rgba(0,0,0,0.18)', display: 'inline-flex', gap: 2, insetBlockStart: '100%', insetInlineStart: 0, marginBlockStart: 4, padding: 3, position: 'absolute', zIndex: 2 },
+  prosePop: { alignItems: 'center', backgroundColor: colors['--oniva-color-surface'], borderColor: colors['--oniva-color-border'], borderRadius: radius['--oniva-radius-lg'], borderStyle: 'solid', borderWidth: 1, boxShadow: shadow['--oniva-elevation-floating'], display: 'inline-flex', gap: 2, insetBlockStart: '100%', insetInlineStart: 0, marginBlockStart: 4, padding: 3, position: 'absolute', zIndex: 2 },
   proseFoot: { alignItems: 'center', borderTopColor: colors['--oniva-color-border'], borderTopStyle: 'solid', borderTopWidth: 1, display: 'flex', flexWrap: 'wrap', gap: 8, paddingBlock: 10, paddingInline: 16 },
-  proseCount: { alignItems: 'center', backgroundColor: colors['--oniva-color-surface-inset'], borderRadius: 6, color: colors['--oniva-color-text'], display: 'inline-flex', fontSize: font['--oniva-font-size-13'], fontVariantNumeric: 'tabular-nums', fontWeight: font['--oniva-font-weight-medium'], justifyContent: 'center', minWidth: 24, paddingInline: 6 },
+  proseCount: { alignItems: 'center', backgroundColor: colors['--oniva-color-surface-inset'], borderRadius: radius['--oniva-radius-sm'], color: colors['--oniva-color-text'], display: 'inline-flex', fontSize: font['--oniva-font-size-13'], fontVariantNumeric: 'tabular-nums', fontWeight: font['--oniva-font-weight-medium'], justifyContent: 'center', minWidth: 24, paddingInline: 6 },
   proseSpacer: { flexGrow: 1 },
   hunkActions: { alignItems: 'center', display: 'flex', gap: 6 },
   hint: { display: { default: 'inline-flex', '@media (pointer: coarse)': 'none' }, marginInlineStart: 2 },
@@ -144,6 +151,8 @@ function ProseReview({ hunks, label }: { hunks: DiffHunk[]; label: string }) {
   const total = sugIdx.filter((x) => x >= 0).length;
   const [dec, setDec] = useState<HunkDecision[]>([]);
   const [active, setActive] = useState(0);
+  const f = useFormatters();
+  const { message, announce } = useAnnouncer();
   const pending = Array.from({ length: total }, (_, i) => i).filter((i) => !dec[i]);
   const set = (i: number, d: HunkDecision) => setDec((p) => { const n = [...p]; n[i] = d; return n; });
   const go = (delta: number) => {
@@ -155,9 +164,13 @@ function ProseReview({ hunks, label }: { hunks: DiffHunk[]; label: string }) {
   const decide = (i: number, d: Exclude<HunkDecision, null>) => {
     set(i, d);
     const rest = pending.filter((x) => x !== i);
+    announce(`Suggestion ${i + 1} ${d}. ${rest.length} left.`);
     if (rest.length) setActive(rest.find((x) => x > i) ?? rest[0]!);
   };
-  const all = (d: Exclude<HunkDecision, null>) => setDec(Array.from({ length: total }, (_, i) => dec[i] ?? d));
+  const all = (d: Exclude<HunkDecision, null>) => {
+    setDec(Array.from({ length: total }, (_, i) => dec[i] ?? d));
+    announce(`All suggestions ${d}.`);
+  };
   return (
     <div
       onKeyDown={(e) => {
@@ -170,11 +183,12 @@ function ProseReview({ hunks, label }: { hunks: DiffHunk[]; label: string }) {
       }}
     >
       <div {...stylex.props(styles.proseHead)}>
-        <Sparkles size={14} aria-hidden="true" {...stylex.props(styles.proseSpark)} />
+        <SparklesIcon size={14} aria-hidden="true" {...stylex.props(styles.proseSpark)} />
         <span>{label}</span>
       </div>
       <div {...stylex.props(styles.proseBody)}>
-        {rows.map((r, i) => {
+        {total === 0 && <p {...stylex.props(styles.empty)}>No suggestions</p>}
+        {total > 0 && rows.map((r, i) => {
           const si = sugIdx[i]!;
           if (si < 0) return <p key={i} {...stylex.props(styles.proseP)}>{r.line.text}</p>;
           const d = dec[si] ?? null;
@@ -187,14 +201,14 @@ function ProseReview({ hunks, label }: { hunks: DiffHunk[]; label: string }) {
                 : <Word kind="del" decision={d} text={r.line.text} />;
           return (
             <p key={i} {...stylex.props(styles.proseP)} onClick={() => !d && setActive(si)}>
-              <span tabIndex={d ? undefined : 0} role={d ? undefined : 'button'} aria-label={d ? undefined : `Suggestion ${si + 1} of ${total}`} onFocus={() => !d && setActive(si)} {...stylex.props(!d && styles.proseSug, isActive && styles.proseActive)}>{body}</span>
+              <span tabIndex={d ? undefined : 0} role={d ? undefined : 'button'} aria-label={d ? undefined : `Suggestion ${si + 1} of ${total}`} onFocus={() => !d && setActive(si)} {...stylex.props(!d && styles.proseSug, !d && focus.ring, isActive && styles.proseActive)}>{body}</span>
               {isActive && (
                 <span role="group" aria-label="Suggestion actions" {...stylex.props(styles.prosePop)}>
                   <Button size="xs" variant="soft" aria-keyshortcuts="Y" onPress={() => decide(si, 'accepted')}>
-                    <Check size={12} aria-hidden="true" /> Accept <Kbd size="sm" aria-hidden="true" xstyle={styles.hint}>Y</Kbd>
+                    <CheckIcon size={12} aria-hidden="true" /> Accept <Kbd size="sm" aria-hidden="true" xstyle={styles.hint}>Y</Kbd>
                   </Button>
                   <Button size="xs" variant="ghost" aria-keyshortcuts="N" onPress={() => decide(si, 'rejected')}>
-                    <X size={12} aria-hidden="true" /> Reject <Kbd size="sm" aria-hidden="true" xstyle={styles.hint}>N</Kbd>
+                    <XIcon size={12} aria-hidden="true" /> Reject <Kbd size="sm" aria-hidden="true" xstyle={styles.hint}>N</Kbd>
                   </Button>
                 </span>
               )}
@@ -203,14 +217,15 @@ function ProseReview({ hunks, label }: { hunks: DiffHunk[]; label: string }) {
         })}
       </div>
       <div {...stylex.props(styles.proseFoot)}>
-        <span {...stylex.props(styles.proseCount)}>{pending.length}</span>
-        <span>{pending.length === 1 ? 'suggestion' : 'suggestions'}</span>
+        <span {...stylex.props(styles.proseCount)}>{f.number(pending.length)}</span>
+        <span>{f.plural(pending.length, { one: 'suggestion', other: 'suggestions' })}</span>
         <span {...stylex.props(styles.proseSpacer)} />
-        <Button size="xs" variant="ghost" isIconOnly aria-label="Previous suggestion" isDisabled={pending.length < 2} onPress={() => go(-1)}><ChevronLeft size={14} aria-hidden="true" /></Button>
-        <Button size="xs" variant="ghost" isIconOnly aria-label="Next suggestion" isDisabled={pending.length < 2} onPress={() => go(1)}><ChevronRight size={14} aria-hidden="true" /></Button>
+        <Button size="xs" variant="ghost" isIconOnly aria-label="Previous suggestion" isDisabled={pending.length < 2} onPress={() => go(-1)}><ChevronLeftIcon size={14} aria-hidden="true" /></Button>
+        <Button size="xs" variant="ghost" isIconOnly aria-label="Next suggestion" isDisabled={pending.length < 2} onPress={() => go(1)}><ChevronRightIcon size={14} aria-hidden="true" /></Button>
         <Button size="sm" variant="secondary" isDisabled={!pending.length} onPress={() => all('rejected')}>Reject all</Button>
         <Button size="sm" isDisabled={!pending.length} onPress={() => all('accepted')}>Accept all</Button>
       </div>
+      <Announcer message={message} />
     </div>
   );
 }
@@ -229,7 +244,7 @@ function Unified({ hunk }: { hunk: DiffHunk }) {
           <td {...stylex.props(styles.no, cellBg(l))}>{l.newNo ?? ''}</td>
           <td aria-hidden="true" {...stylex.props(styles.sign, cellBg(l))}>{sign(l)}</td>
           <td {...stylex.props(styles.code, cellBg(l))}>
-            {l.type !== 'ctx' && <span style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', clip: 'rect(0 0 0 0)' }}>{l.type === 'add' ? 'Added: ' : 'Removed: '}</span>}
+            {l.type !== 'ctx' && <VisuallyHidden>{l.type === 'add' ? 'Added: ' : 'Removed: '}</VisuallyHidden>}
             {l.text || ' '}
           </td>
         </tr>
@@ -352,6 +367,7 @@ type View = 'unified' | 'split' | 'inline';
 function Hunk({ hunk, index, view, reviewable, decision, onDecide, onUndo }: { hunk: DiffHunk; index: number; view: View; reviewable: boolean; decision: HunkDecision; onDecide: (d: Exclude<HunkDecision, null>) => void; onUndo: () => void }) {
   const [open, setOpen] = useState(true);
   const uid = useId();
+  const f = useFormatters();
   return (
     <div>
       <div
@@ -370,10 +386,10 @@ function Hunk({ hunk, index, view, reviewable, decision, onDecide, onUndo }: { h
         }}
       >
         <button type="button" aria-expanded={open} aria-controls={uid} onClick={() => setOpen((o) => !o)} {...stylex.props(aiStyles.triggerReset, styles.hunkToggle)}>
-          <ChevronRight size={14} aria-hidden="true" {...stylex.props(aiStyles.chevron, open && aiStyles.chevronOpen)} />
+          <ChevronRightIcon size={14} aria-hidden="true" {...stylex.props(aiStyles.chevron, open && aiStyles.chevronOpen)} />
           <span>{hunk.header.replace(/ @@.*$/, ' @@')}</span>
           <span {...stylex.props(styles.stat)}>
-            +{hunk.added} −{hunk.removed}
+            +{f.number(hunk.added)} −{f.number(hunk.removed)}
           </span>
         </button>
         {reviewable &&
@@ -383,23 +399,23 @@ function Hunk({ hunk, index, view, reviewable, decision, onDecide, onUndo }: { h
                 {decision === 'accepted' ? 'Accepted' : 'Rejected'}
               </span>
               <Button size="xs" variant="ghost" aria-label={`Undo decision for change ${index + 1}`} onPress={onUndo}>
-                <Undo2 size={12} aria-hidden="true" /> Undo
+                <UndoIcon size={12} aria-hidden="true" /> Undo
               </Button>
             </span>
           ) : (
             <>
               <Button size="xs" variant="ghost" aria-label={`Reject change ${index + 1}`} aria-keyshortcuts="N" onPress={() => onDecide('rejected')}>
-                <X size={12} aria-hidden="true" /> Reject <Kbd size="sm" aria-hidden="true" xstyle={styles.hint}>N</Kbd>
+                <XIcon size={12} aria-hidden="true" /> Reject <Kbd size="sm" aria-hidden="true" xstyle={styles.hint}>N</Kbd>
               </Button>
               <Button size="xs" variant="soft" aria-label={`Accept change ${index + 1}`} aria-keyshortcuts="Y" onPress={() => onDecide('accepted')}>
-                <Check size={12} aria-hidden="true" /> Accept <Kbd size="sm" aria-hidden="true" xstyle={styles.hint}>Y</Kbd>
+                <CheckIcon size={12} aria-hidden="true" /> Accept <Kbd size="sm" aria-hidden="true" xstyle={styles.hint}>Y</Kbd>
               </Button>
             </>
           ))}
       </div>
       <AnimatedHeight isOpen={open} id={uid}>
         <div {...stylex.props(styles.scroll)} tabIndex={0} role="region" aria-label={`Hunk ${index + 1} changes`}>
-          <table {...stylex.props(styles.table)}>
+          <table {...stylex.props(styles.table, view === 'split' && styles.tableSplit)}>
             <tbody {...stylex.props(decision === 'rejected' && view !== 'inline' && styles.tbodyRejected)}>
               {view === 'unified' ? <Unified hunk={hunk} /> : view === 'split' ? <Split hunk={hunk} /> : <Inline hunk={hunk} decision={decision} />}
             </tbody>
@@ -420,6 +436,7 @@ export function FileDiff({ diff, fileName, defaultView = 'unified', layout = 'co
   const removed = hunks.reduce((n, h) => n + h.removed, 0);
   const pending = hunks.filter((_, i) => !decisions[i]).length;
   const bulk = usePresence(reviewable && pending > 1, { initial: false });
+  const f = useFormatters();
   const sx = stylex.props(aiStyles.tile, styles.root, xstyle);
   const decide = (i: number, d: Exclude<HunkDecision, null>) => {
     setDecisions((prev) => {
@@ -440,9 +457,9 @@ export function FileDiff({ diff, fileName, defaultView = 'unified', layout = 'co
   return (
     <div {...rest} ref={ref} {...mergeSx(sx, className)}>
       <div {...stylex.props(styles.bar)}>
-        <span {...stylex.props(styles.file)}>{fileName}</span>
-        <span {...stylex.props(styles.add)}>+{added}</span>
-        <span {...stylex.props(styles.del)}>−{removed}</span>
+        <span title={fileName} {...stylex.props(styles.file)}>{fileName}</span>
+        <span {...stylex.props(styles.add)}>+{f.number(added)}</span>
+        <span {...stylex.props(styles.del)}>−{f.number(removed)}</span>
         {reviewable && bulk.mounted && (
           <span {...bulk.presenceProps} ref={bulk.presenceProps.ref as React.Ref<HTMLSpanElement>} {...stylex.props(styles.bulk, enterExit.blur)}>
             <Button size="xs" variant="ghost" onPress={() => hunks.forEach((_, i) => !decisions[i] && decide(i, 'rejected'))}>Reject all</Button>
@@ -463,6 +480,7 @@ export function FileDiff({ diff, fileName, defaultView = 'unified', layout = 'co
           <SegmentedControlItem value="inline">Inline</SegmentedControlItem>
         </SegmentedControl>
       </div>
+      {hunks.length === 0 && <p {...stylex.props(styles.empty)}>No changes</p>}
       {hunks.map((h, i) => (
         <Hunk
           key={h.header + i}

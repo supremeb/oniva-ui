@@ -1,11 +1,13 @@
 import * as stylex from '@stylexjs/stylex';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRightIcon } from '../../icons/IconSet';
 import { useId, useState, type HTMLAttributes, type Ref } from 'react';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
+import { media } from '../../tokens/media.stylex';
 import { motion } from '../../tokens/motion.stylex';
 import { radius } from '../../tokens/radius.stylex';
 import { aiStyles } from '../../internal/ai-styles';
+import { focus } from '../../internal/focus';
 import { hostOf, safeUrl } from '../../internal/ai-motion';
 import { mergeSx } from '../../internal/sx';
 import { useFormatters } from '../../internal/format';
@@ -14,6 +16,7 @@ import { AnimatedHeight } from '../../motion/AnimatedHeight';
 const styles = stylex.create({
   root: { fontFamily: font['--oniva-font-sans'] },
   trigger: { color: colors['--oniva-color-text-muted'], gap: 8, paddingBlock: 4, width: 'auto' },
+  count: { fontVariantNumeric: 'tabular-nums' },
   stack: { display: 'inline-flex' },
   fav: {
     alignItems: 'center',
@@ -37,16 +40,16 @@ const styles = stylex.create({
   list: { display: 'flex', flexDirection: 'column', gap: 2, listStyle: 'none', margin: 0, paddingBlock: 6, paddingInline: 0 },
   link: {
     alignItems: 'center',
-    backgroundColor: { default: 'transparent', ':hover': colors['--oniva-color-surface-hover'] },
+    backgroundColor: {
+      default: 'transparent',
+      ':hover': { default: null, [media.hover]: colors['--oniva-color-surface-hover'] },
+    },
     borderRadius: radius['--oniva-radius-md'],
     color: colors['--oniva-color-text'],
     display: 'flex',
     fontSize: font['--oniva-font-size-13'],
     gap: 10,
-    outlineColor: colors['--oniva-color-focus-ring'],
-    outlineOffset: -2,
-    outlineStyle: { default: 'none', ':focus-visible': 'solid' },
-    outlineWidth: 2,
+    minWidth: 0,
     paddingBlock: 6,
     paddingInline: 8,
     textDecoration: 'none',
@@ -55,7 +58,16 @@ const styles = stylex.create({
   },
   num: { color: colors['--oniva-color-text-subtle'], fontVariantNumeric: 'tabular-nums', minWidth: 14 },
   name: { flexGrow: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
-  host: { color: colors['--oniva-color-text-muted'], flexShrink: 0, fontSize: font['--oniva-font-size-12'] },
+  host: {
+    color: colors['--oniva-color-text-muted'],
+    flexShrink: 0,
+    fontSize: font['--oniva-font-size-12'],
+    maxWidth: '45%',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  plain: { backgroundColor: 'transparent' },
   img: { borderRadius: radius['--oniva-radius-full'], height: 16, width: 16 },
 });
 
@@ -76,7 +88,31 @@ export interface SourcesProps extends Omit<HTMLAttributes<HTMLDivElement>, 'styl
 }
 
 function Fav({ s }: { s: SourceItem }) {
-  return s.favicon ? <img src={s.favicon} alt="" {...stylex.props(styles.img)} /> : <>{hostOf(s.url).charAt(0)}</>;
+  const [broken, setBroken] = useState(false);
+  if (s.favicon && !broken) return <img src={s.favicon} alt="" onError={() => setBroken(true)} {...stylex.props(styles.img)} />;
+  return <>{(hostOf(s.url).charAt(0) || s.title.charAt(0) || '·')}</>;
+}
+
+function Row({ s, n }: { s: SourceItem; n: number }) {
+  const href = safeUrl(s.url);
+  const host = hostOf(s.url);
+  const body = (
+    <>
+      <span {...stylex.props(styles.num)}>{n}</span>
+      <span aria-hidden="true" {...stylex.props(styles.fav, styles.favFirst)}>
+        <Fav s={s} />
+      </span>
+      <span {...stylex.props(styles.name)}>{s.title}</span>
+      {host ? <span {...stylex.props(styles.host)}>{host}</span> : null}
+    </>
+  );
+  return href ? (
+    <a href={href} target="_blank" rel="noopener noreferrer" {...stylex.props(styles.link, focus.inset)}>
+      {body}
+    </a>
+  ) : (
+    <span {...stylex.props(styles.link, styles.plain)}>{body}</span>
+  );
 }
 
 /** "Used 6 sources" disclosure: stacked favicons in the trigger, numbered link list in the panel. */
@@ -85,33 +121,27 @@ export function Sources({ sources, defaultOpen = false, label, className, xstyle
   const [open, setOpen] = useState(defaultOpen);
   const uid = useId();
   const sx = stylex.props(styles.root, xstyle);
+  if (sources.length === 0) return <div {...rest} ref={ref} {...mergeSx(sx, className)} />;
   return (
     <div {...rest} ref={ref} {...mergeSx(sx, className)}>
-      <button type="button" aria-expanded={open} aria-controls={uid} onClick={() => setOpen((o) => !o)} {...stylex.props(aiStyles.triggerReset, styles.trigger)}>
+      <button type="button" aria-expanded={open} aria-controls={uid} onClick={() => setOpen((o) => !o)} {...stylex.props(aiStyles.triggerReset, styles.trigger, focus.ring)}>
         <span aria-hidden="true" {...stylex.props(styles.stack)}>
           {sources.slice(0, 4).map((s, i) => (
-            <span key={s.url} {...stylex.props(styles.fav, i === 0 && styles.favFirst)}>
+            <span key={`${i}-${s.url}`} {...stylex.props(styles.fav, i === 0 && styles.favFirst)}>
               <Fav s={s} />
             </span>
           ))}
         </span>
-        <span>
+        <span {...stylex.props(styles.count)}>
           {label ?? fmt.plural(sources.length, { one: 'Used # source', other: 'Used # sources' })}
         </span>
-        <ChevronRight size={14} aria-hidden="true" {...stylex.props(aiStyles.chevron, open && aiStyles.chevronOpen)} />
+        <ChevronRightIcon size={14} aria-hidden="true" {...stylex.props(aiStyles.chevron, open && aiStyles.chevronOpen)} />
       </button>
       <AnimatedHeight isOpen={open} id={uid}>
         <ol {...stylex.props(styles.list)}>
           {sources.map((s, i) => (
-            <li key={s.url}>
-              <a href={safeUrl(s.url)} target="_blank" rel="noopener noreferrer" {...stylex.props(styles.link)}>
-                <span {...stylex.props(styles.num)}>{i + 1}</span>
-                <span aria-hidden="true" {...stylex.props(styles.fav, styles.favFirst)}>
-                  <Fav s={s} />
-                </span>
-                <span {...stylex.props(styles.name)}>{s.title}</span>
-                <span {...stylex.props(styles.host)}>{hostOf(s.url)}</span>
-              </a>
+            <li key={`${i}-${s.url}`}>
+              <Row s={s} n={i + 1} />
             </li>
           ))}
         </ol>

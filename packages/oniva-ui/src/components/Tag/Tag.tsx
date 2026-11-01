@@ -11,7 +11,7 @@ import {
   type TagProps as AriaTagProps,
   type TagListProps,
 } from 'react-aria-components';
-import { X } from 'lucide-react';
+import { XIcon } from '../../icons/IconSet';
 import type { ReactNode, Ref } from 'react';
 import type { StatusTone } from '../../internal/feedback-control';
 import { mergeSx } from '../../internal/sx';
@@ -210,7 +210,7 @@ export function Tag({
           {children}
           {allowsRemoving && (
             <AriaButton slot="remove" {...stylex.props(styles.remove)}>
-              <X size={12} aria-hidden="true" />
+              <XIcon size={12} aria-hidden="true" />
             </AriaButton>
           )}
         </>

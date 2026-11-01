@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { CalendarDays, ChevronDown } from 'lucide-react';
+import { CalendarDaysIcon, ChevronDownIcon } from '../../icons/IconSet';
 import {
   Button,
   DateRangePicker as AriaDateRangePicker,
@@ -242,9 +242,9 @@ export function DateRangePicker<T extends DateValue>({
           {panel ? (
             <Group {...stylex.props(styles.triggerGroup)}>
             <Button {...stylex.props(styles.trigger, focus.ring)}>
-              <CalendarDays size={16} aria-hidden="true" />
+              <CalendarDaysIcon size={16} aria-hidden="true" />
               <RangeText value={current ?? (rest.value as RangeValue<DateValue> | null | undefined) ?? inner} />
-              <ChevronDown size={16} aria-hidden="true" />
+              <ChevronDownIcon size={16} aria-hidden="true" />
             </Button>
             </Group>
           ) : (
@@ -265,7 +265,7 @@ export function DateRangePicker<T extends DateValue>({
               <Segments slot="end" />
             </div>
             <Button aria-label="Open calendar" {...stylex.props(fp.iconButton)}>
-              <CalendarDays size={16} aria-hidden="true" />
+              <CalendarDaysIcon size={16} aria-hidden="true" />
             </Button>
           </Group>
           )}

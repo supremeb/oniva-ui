@@ -1,9 +1,11 @@
 import * as stylex from '@stylexjs/stylex';
-import { Fragment, type ReactNode, type Ref } from 'react';
+import { Fragment, useEffect, useRef, useState, type ReactNode, type Ref } from 'react';
 import { marked, type Token, type Tokens } from 'marked';
+import { accent } from '../../tokens/accent.stylex';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 import { radius } from '../../tokens/radius.stylex';
+import { focus } from '../../internal/focus';
 import { safeUrl } from '../../internal/ai-motion';
 import { CodeBlock } from '../CodeBlock';
 
@@ -16,6 +18,9 @@ const styles = stylex.create({
     overflowWrap: 'anywhere',
   },
   p: { marginBlock: 0, marginBlockEnd: 12 },
+  // First/last block inside the root, a quote or a list item: no outer margin so the box hugs its content.
+  noStart: { marginBlockStart: 0 },
+  noEnd: { marginBlockEnd: 0 },
   h1: {
     fontSize: font['--oniva-font-size-20'],
     fontWeight: font['--oniva-font-weight-semibold'],
@@ -41,8 +46,12 @@ const styles = stylex.create({
     marginBlockStart: 12,
   },
   list: { marginBlock: 0, marginBlockEnd: 12, paddingInlineStart: 22 },
+  ordered: { fontVariantNumeric: 'tabular-nums' },
+  nestedList: { marginBlockEnd: 0, marginBlockStart: 4 },
   li: { marginBlockEnd: 4 },
+  liLoose: { marginBlockEnd: 16 },
   task: { listStyle: 'none', marginInlineStart: -22 },
+  check: { accentColor: accent['--oniva-accent-solid'], marginInlineEnd: 6 },
   quote: {
     borderInlineStartColor: colors['--oniva-color-border-hover'],
     borderInlineStartStyle: 'solid',
@@ -50,6 +59,8 @@ const styles = stylex.create({
     color: colors['--oniva-color-text-muted'],
     marginBlock: 0,
     marginBlockEnd: 12,
+    // Cancel the user-agent's 40px quote indent; the bar sits flush with surrounding text.
+    marginInline: 0,
     paddingInlineStart: 12,
   },
   hr: {
@@ -65,6 +76,7 @@ const styles = stylex.create({
     textDecorationThickness: 1,
     textUnderlineOffset: 2,
   },
+  aWrap: { borderRadius: radius['--oniva-radius-xs'] },
   code: {
     backgroundColor: colors['--oniva-color-surface-tertiary'],
     borderRadius: radius['--oniva-radius-xs'],
@@ -75,6 +87,7 @@ const styles = stylex.create({
     paddingInline: 5,
   },
   block: { marginBlockEnd: 12 },
+  blockEnd: { marginBlockEnd: 0 },
   tableWrap: {
     borderColor: colors['--oniva-color-border'],
     borderRadius: radius['--oniva-radius-lg'],
@@ -100,13 +113,15 @@ const styles = stylex.create({
     borderBottomStyle: 'solid',
     borderBottomWidth: 1,
     fontVariantNumeric: 'tabular-nums',
+    // The root breaks anywhere; cells keep words whole and let the wrapper scroll instead.
+    overflowWrap: 'normal',
     paddingBlock: 8,
     paddingInline: 12,
   },
   left: { textAlign: 'left' },
   right: { textAlign: 'right' },
   center: { textAlign: 'center' },
-  img: { maxWidth: '100%', borderRadius: radius['--oniva-radius-lg'] },
+  img: { height: 'auto', maxWidth: '100%', borderRadius: radius['--oniva-radius-lg'] },
 });
 
 export interface MarkdownProps {
@@ -124,7 +139,12 @@ export interface MarkdownProps {
   ref?: Ref<HTMLDivElement>;
 }
 
-type Ctx = { renderLink?: MarkdownProps['renderLink'] };
+type Ctx = {
+  renderLink?: MarkdownProps['renderLink'];
+  /** Drop the outer margin of the first and last block (root, quote, list item). */
+  trim?: boolean;
+  nested?: boolean;
+};
 
 function inline(tokens: Token[] | undefined, ctx: Ctx): ReactNode {
   if (!tokens) return null;
@@ -159,9 +179,9 @@ function inlineToken(t: Token, ctx: Ctx): ReactNode {
         <a
           href={href}
           title={l.title ?? undefined}
-          target="_blank"
+          target={/^https?:/i.test(href) ? '_blank' : undefined}
           rel="noopener noreferrer"
-          {...stylex.props(styles.a)}
+          {...stylex.props(styles.a, styles.aWrap, focus.ring)}
         >
           {kids}
         </a>
@@ -192,15 +212,60 @@ function inlineToken(t: Token, ctx: Ctx): ReactNode {
   }
 }
 
+/** Horizontal scroller for wide tables. Becomes a labelled, keyboard-focusable region only while it overflows. */
+function TableScroll({
+  children,
+  trimStart,
+  trimEnd,
+}: {
+  children: ReactNode;
+  trimStart?: boolean;
+  trimEnd?: boolean;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [overflows, setOverflows] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || typeof ResizeObserver === 'undefined') return;
+    const measure = () => setOverflows(el.scrollWidth > el.clientWidth + 1);
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    if (el.firstElementChild) ro.observe(el.firstElementChild);
+    return () => ro.disconnect();
+  }, []);
+  return (
+    <div
+      ref={ref}
+      {...(overflows ? { tabIndex: 0, role: 'region', 'aria-label': 'Table, scrollable' } : {})}
+      {...stylex.props(
+        styles.tableWrap,
+        overflows && focus.inset,
+        trimStart && styles.noStart,
+        trimEnd && styles.noEnd,
+      )}
+    >
+      {children}
+    </div>
+  );
+}
+
 function block(tokens: Token[], ctx: Ctx): ReactNode[] {
   const out: ReactNode[] = [];
+  const visible = tokens.map((t, i) => (t.type === 'space' ? -1 : i)).filter((i) => i >= 0);
+  const firstIdx = visible[0];
+  const lastIdx = visible[visible.length - 1];
   tokens.forEach((t, i) => {
+    const edge = [
+      ctx.trim && i === firstIdx && styles.noStart,
+      ctx.trim && i === lastIdx && styles.noEnd,
+    ];
     switch (t.type) {
       case 'space':
         return;
       case 'paragraph':
         out.push(
-          <p key={i} {...stylex.props(styles.p)}>
+          <p key={i} {...stylex.props(styles.p, edge)}>
             {inline((t as Tokens.Paragraph).tokens, ctx)}
           </p>,
         );
@@ -210,7 +275,7 @@ function block(tokens: Token[], ctx: Ctx): ReactNode[] {
         const Tag = `h${Math.min(h.depth, 6)}` as 'h1';
         const s = h.depth === 1 ? styles.h1 : h.depth === 2 ? styles.h2 : styles.h3;
         out.push(
-          <Tag key={i} {...stylex.props(s)}>
+          <Tag key={i} {...stylex.props(s, edge)}>
             {inline(h.tokens, ctx)}
           </Tag>,
         );
@@ -219,19 +284,24 @@ function block(tokens: Token[], ctx: Ctx): ReactNode[] {
       case 'code': {
         const c = t as Tokens.Code;
         out.push(
-          <CodeBlock key={i} code={c.text} language={c.lang || undefined} xstyle={styles.block} />,
+          <CodeBlock
+            key={i}
+            code={c.text}
+            language={c.lang || undefined}
+            xstyle={ctx.trim && i === lastIdx ? styles.blockEnd : styles.block}
+          />,
         );
         return;
       }
       case 'blockquote':
         out.push(
-          <blockquote key={i} {...stylex.props(styles.quote)}>
-            {block((t as Tokens.Blockquote).tokens, ctx)}
+          <blockquote key={i} {...stylex.props(styles.quote, edge)}>
+            {block((t as Tokens.Blockquote).tokens, { ...ctx, trim: true })}
           </blockquote>,
         );
         return;
       case 'hr':
-        out.push(<hr key={i} {...stylex.props(styles.hr)} />);
+        out.push(<hr key={i} {...stylex.props(styles.hr, edge)} />);
         return;
       case 'list': {
         const l = t as Tokens.List;
@@ -240,20 +310,33 @@ function block(tokens: Token[], ctx: Ctx): ReactNode[] {
           <Tag
             key={i}
             start={l.ordered && l.start !== '' ? Number(l.start) : undefined}
-            {...stylex.props(styles.list)}
+            {...stylex.props(
+              styles.list,
+              l.ordered && styles.ordered,
+              ctx.nested && i !== firstIdx && styles.nestedList,
+              edge,
+            )}
           >
             {l.items.map((it, j) => (
-              <li key={j} {...stylex.props(styles.li, it.task && styles.task)}>
+              <li
+                key={j}
+                {...stylex.props(
+                  styles.li,
+                  l.loose && styles.liLoose,
+                  j === l.items.length - 1 && styles.noEnd,
+                  it.task && styles.task,
+                )}
+              >
                 {it.task && (
                   <input
                     type="checkbox"
                     checked={Boolean(it.checked)}
                     readOnly
                     aria-label={it.checked ? 'Done' : 'Not done'}
-                    style={{ marginInlineEnd: 6 }}
+                    {...stylex.props(styles.check)}
                   />
                 )}
-                {block(it.tokens, { ...ctx }).map((n, k) => (
+                {block(it.tokens, { ...ctx, trim: true, nested: true }).map((n, k) => (
                   <Fragment key={k}>{n}</Fragment>
                 ))}
               </li>
@@ -267,7 +350,11 @@ function block(tokens: Token[], ctx: Ctx): ReactNode[] {
         const al = (a: string | null) =>
           a === 'right' ? styles.right : a === 'center' ? styles.center : styles.left;
         out.push(
-          <div key={i} {...stylex.props(styles.tableWrap)}>
+          <TableScroll
+            key={i}
+            trimStart={ctx.trim && i === firstIdx}
+            trimEnd={ctx.trim && i === lastIdx}
+          >
             <table {...stylex.props(styles.table)}>
               <thead>
                 <tr>
@@ -290,13 +377,13 @@ function block(tokens: Token[], ctx: Ctx): ReactNode[] {
                 ))}
               </tbody>
             </table>
-          </div>,
+          </TableScroll>,
         );
         return;
       }
       case 'html':
         out.push(
-          <p key={i} {...stylex.props(styles.p)}>
+          <p key={i} {...stylex.props(styles.p, edge)}>
             {(t as Tokens.HTML).text}
           </p>,
         );
@@ -320,7 +407,7 @@ export function Markdown({ children, renderLink, className, xstyle, ref }: Markd
   const sx = stylex.props(styles.root, xstyle);
   return (
     <div ref={ref} className={[sx.className, className].filter(Boolean).join(' ')} style={sx.style}>
-      {block(tokens, { renderLink })}
+      {block(tokens, { renderLink, trim: true })}
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { ChevronDown, FileText, MessageSquare, Paperclip, Plug, RefreshCw } from 'lucide-react';
+import { ChevronDownIcon, FileTextIcon, MessageSquareIcon, PaperclipIcon, PlugIcon, RefreshIcon } from '../../icons/IconSet';
 import { useId, useMemo, useState } from 'react';
 import type { HTMLAttributes, KeyboardEvent, Ref } from 'react';
 import { Sparkline } from '../../charts/Sparkline';
@@ -191,7 +191,7 @@ export const defaultClients: ContextClient[] = [
   },
 ];
 
-const ICON = { note: MessageSquare, report: FileText, files: Paperclip, integration: Plug } as const;
+const ICON = { note: MessageSquareIcon, report: FileTextIcon, files: PaperclipIcon, integration: PlugIcon } as const;
 
 export function ClientContext({ clients = defaultClients, me = { name: 'You' }, onAddContext, className, xstyle, ref, ...rest }: ClientContextProps) {
   const [clientId, setClientId] = useState(clients[0]?.id ?? '');
@@ -277,7 +277,7 @@ export function ClientContext({ clients = defaultClients, me = { name: 'You' }, 
             <span {...stylex.props(styles.synced)}>
               <span aria-hidden="true" {...stylex.props(styles.syncDot)} />
               Synced 3m ago
-              <RefreshCw size={12} aria-hidden="true" />
+              <RefreshIcon size={12} aria-hidden="true" />
             </span>
             <Select aria-label="Client" selectedKey={clientId} onSelectionChange={(k) => k && (setClientId(String(k)), setPressed(null))} xstyle={styles.picker}>
               {clients.map((c) => (
@@ -352,7 +352,7 @@ export function ClientContext({ clients = defaultClients, me = { name: 'You' }, 
                   </div>
                 )}
                 <div {...stylex.props(w8.row, w8.between)}>
-                  <Button size="sm" variant="ghost" startIcon={<Paperclip size={14} aria-hidden="true" />} onPress={() => setFiles((f) => [...f, { name: `Attachment-${f.length + 1}.pdf`, type: 'pdf' }])}>
+                  <Button size="sm" variant="ghost" startIcon={<PaperclipIcon size={14} aria-hidden="true" />} onPress={() => setFiles((f) => [...f, { name: `Attachment-${f.length + 1}.pdf`, type: 'pdf' }])}>
                     Attach file
                   </Button>
                   <span {...stylex.props(w8.row)}>
@@ -414,7 +414,7 @@ export function ClientContext({ clients = defaultClients, me = { name: 'You' }, 
                   <li key={r.id} {...stylex.props(w8.tile, styles.report)}>
                     <button type="button" aria-expanded={open} aria-controls={`${uid}-${r.id}`} onClick={() => setOpenReport(open ? null : r.id)} {...stylex.props(w8.press, styles.reportBtn, focus.ring)}>
                       {r.name}
-                      <ChevronDown size={16} aria-hidden="true" {...stylex.props(styles.chev, open && styles.chevOpen)} />
+                      <ChevronDownIcon size={16} aria-hidden="true" {...stylex.props(styles.chev, open && styles.chevOpen)} />
                     </button>
                     <AnimatedHeight isOpen={open}>
                       <p id={`${uid}-${r.id}`} {...stylex.props(w8.muted)}>{r.summary}</p>

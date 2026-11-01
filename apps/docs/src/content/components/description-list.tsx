@@ -1,14 +1,13 @@
-import { CalendarDays, CreditCard, Mail, User } from 'lucide-react';
-import { DescriptionItem, DescriptionList } from 'oniva-ui';
+import { DescriptionItem, DescriptionList, CalendarDaysIcon, CreditCardIcon, MailIcon, UserIcon } from 'oniva-ui';
 import type { DocPage } from '../types';
 
 const Demo = (p: { columns?: 1 | 2; icons?: boolean; title?: string; empty?: boolean; long?: boolean }) => (
   <div style={{ width: p.columns === 2 ? 560 : 320 }}>
     <DescriptionList title={p.title} columns={p.columns}>
-      <DescriptionItem label="Customer" icon={p.icons ? <User size={16} /> : undefined}>Ada Lovelace</DescriptionItem>
-      <DescriptionItem label="Email" icon={p.icons ? <Mail size={16} /> : undefined}>{p.long ? 'ada.lovelace@analytical-engine-research-institute.example.com' : 'ada@example.com'}</DescriptionItem>
-      <DescriptionItem label="Plan" icon={p.icons ? <CreditCard size={16} /> : undefined}>Scale, billed yearly</DescriptionItem>
-      <DescriptionItem label="Renews" icon={p.icons ? <CalendarDays size={16} /> : undefined}>{p.empty ? 'Not set' : 'Oct 28, 2026'}</DescriptionItem>
+      <DescriptionItem label="Customer" icon={p.icons ? <UserIcon size={16} /> : undefined}>Ada Lovelace</DescriptionItem>
+      <DescriptionItem label="Email" icon={p.icons ? <MailIcon size={16} /> : undefined}>{p.long ? 'ada.lovelace@analytical-engine-research-institute.example.com' : 'ada@example.com'}</DescriptionItem>
+      <DescriptionItem label="Plan" icon={p.icons ? <CreditCardIcon size={16} /> : undefined}>Scale, billed yearly</DescriptionItem>
+      <DescriptionItem label="Renews" icon={p.icons ? <CalendarDaysIcon size={16} /> : undefined}>{p.empty ? 'Not set' : 'Oct 28, 2026'}</DescriptionItem>
     </DescriptionList>
   </div>
 );
@@ -49,7 +48,7 @@ const page: DocPage = {
     ],
     initial: { columns: '1', icons: false, title: 'Subscription' },
     render: (p) => <Demo columns={p.columns === '2' ? 2 : 1} icons={Boolean(p.icons)} title={String(p.title) || undefined} />,
-    code: (p) => `<DescriptionList${p.title ? ` title="${p.title}"` : ''}${p.columns === '2' ? ' columns={2}' : ''}>\n  <DescriptionItem label="Customer"${p.icons ? ' icon={<User size={16} />}' : ''}>Ada Lovelace</DescriptionItem>\n  <DescriptionItem label="Plan">Scale, billed yearly</DescriptionItem>\n</DescriptionList>`,
+    code: (p) => `<DescriptionList${p.title ? ` title="${p.title}"` : ''}${p.columns === '2' ? ' columns={2}' : ''}>\n  <DescriptionItem label="Customer"${p.icons ? ' icon={<UserIcon size={16} />}' : ''}>Ada Lovelace</DescriptionItem>\n  <DescriptionItem label="Plan">Scale, billed yearly</DescriptionItem>\n</DescriptionList>`,
   },
   states: [
     { name: 'One column', description: 'The default; best in narrow panels.', Render: () => <Demo title="Subscription" /> },

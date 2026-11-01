@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { Mail, Search, Sparkles } from 'lucide-react';
+import { MailIcon, SearchIcon, SparklesIcon } from '../../icons/IconSet';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 import { BeamPath, Tile, fillSvg, type IllustrationItem } from '../../internal/w7-parts';
@@ -77,9 +77,9 @@ export interface LeadSourcingProps extends IllustrationProps {
 }
 
 const DEFAULT: [IllustrationItem, IllustrationItem, IllustrationItem] = [
-  { name: 'Assistant', icon: <Sparkles {...stylex.props(fillSvg.svg)} /> },
-  { name: 'Mail', icon: <Mail {...stylex.props(fillSvg.svg)} /> },
-  { name: 'Web search', icon: <Search {...stylex.props(fillSvg.svg)} /> },
+  { name: 'Assistant', icon: <SparklesIcon {...stylex.props(fillSvg.svg)} /> },
+  { name: 'Mail', icon: <MailIcon {...stylex.props(fillSvg.svg)} /> },
+  { name: 'Web search', icon: <SearchIcon {...stylex.props(fillSvg.svg)} /> },
 ];
 
 /** An assistant tile linked to two lead sources, with a shine that runs along the connection and rests between passes. */

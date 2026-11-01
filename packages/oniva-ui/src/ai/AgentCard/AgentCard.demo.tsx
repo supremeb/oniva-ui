@@ -12,7 +12,7 @@ const demo: DemoModule = {
   demos: [
     {
       name: 'Working agent',
-      code: `<AgentCard name="Invoice Reconciler" role="Finance operations" status="working" model="Claude Sonnet 4.5" tools={['NetSuite', 'Gmail']} stats={[...]} />`,
+      code: `<AgentCard name="Invoice Reconciler" role="Finance operations" status="working" model="Atlas 2" tools={['Ledger sync', 'Mail triage']} stats={[...]} />`,
       Component: () => (
         <div style={{ maxWidth: 380, width: '100%' }}>
           <AgentCard
@@ -20,8 +20,8 @@ const demo: DemoModule = {
             role="Finance operations"
             description="Matches vendor invoices against purchase orders and flags variances over 2%."
             status="working"
-            model="Claude Sonnet 4.5"
-            tools={['NetSuite', 'Gmail', 'Sheets']}
+            model="Atlas 2"
+            tools={['Ledger sync', 'Mail triage', 'Sheets export']}
             stats={[
               { label: 'Runs', value: '1,284' },
               { label: 'Success', value: '97.4%' },
@@ -46,8 +46,8 @@ const demo: DemoModule = {
             name="Compliance Reviewer"
             role="Policy checks"
             status="waiting"
-            model="GPT-5"
-            tools={['Confluence']}
+            model="Nova Pro"
+            tools={['Policy wiki']}
             stats={[
               { label: 'Runs', value: '312' },
               { label: 'Success', value: '99.1%' },

@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { ChevronLeft, ChevronRight, ChevronsUpDown, Plus, RefreshCw, ShieldCheck, Zap } from 'lucide-react';
+import { ChevronLeftIcon, ChevronRightIcon, ChevronsUpDownIcon, PlusIcon, RefreshIcon, ShieldCheckIcon, ZapIcon } from '../../icons/IconSet';
 import { useState } from 'react';
 import type { HTMLAttributes, KeyboardEvent, Ref } from 'react';
 import { Badge } from '../../components/Badge/Badge';
@@ -283,11 +283,11 @@ export function AgentGallery({ title = 'Agents that fit your workflow', subtitle
               <span {...stylex.props(styles.pick)}>
                 <span {...stylex.props(styles.dotTile, GRADS[tone])} />
                 {item.name}
-                <ChevronsUpDown size={10} />
+                <ChevronsUpDownIcon size={10} />
               </span>
               <span {...stylex.props(styles.spacer)} />
               <span {...stylex.props(styles.ghostBtn)}>
-                <Plus size={10} />
+                <PlusIcon size={10} />
                 New agent
               </span>
               <span {...stylex.props(styles.avatar)}>LH</span>
@@ -295,7 +295,7 @@ export function AgentGallery({ title = 'Agents that fit your workflow', subtitle
             <div {...stylex.props(styles.body, dir > 0 ? styles.enterR : styles.enterL)}>
               <div aria-hidden="true" {...stylex.props(styles.metaTop)}>
                 3m ago
-                <RefreshCw size={10} />
+                <RefreshIcon size={10} />
               </div>
               <div {...stylex.props(styles.agentHead)}>
                 <span aria-hidden="true" {...stylex.props(styles.tileLg, GRADS[tone])} />
@@ -318,7 +318,7 @@ export function AgentGallery({ title = 'Agents that fit your workflow', subtitle
               <div {...stylex.props(styles.sec)}>
                 <h4 {...stylex.props(styles.secTitle)}>How it runs</h4>
                 <span {...stylex.props(styles.trigger, styles.small)}>
-                  <Zap size={13} aria-hidden="true" />
+                  <ZapIcon size={13} aria-hidden="true" />
                   {item.trigger}
                 </span>
                 <ol {...stylex.props(styles.steps)}>
@@ -335,7 +335,7 @@ export function AgentGallery({ title = 'Agents that fit your workflow', subtitle
                   ))}
                 </div>
                 <div {...stylex.props(styles.guard)}>
-                  <ShieldCheck size={14} aria-hidden="true" />
+                  <ShieldCheckIcon size={14} aria-hidden="true" />
                   <span>{item.guardrail}</span>
                 </div>
               </div>
@@ -346,13 +346,13 @@ export function AgentGallery({ title = 'Agents that fit your workflow', subtitle
       </div>
       <div {...stylex.props(styles.nav)}>
         <Button size="sm" variant="secondary" isIconOnly aria-label="Previous agent" onPress={() => go(index - 1)}>
-          <ChevronLeft size={16} aria-hidden="true" />
+          <ChevronLeftIcon size={16} aria-hidden="true" />
         </Button>
         <p role="status" aria-live="polite" {...stylex.props(w8.muted, w8.num)}>
           {item.name}, {index + 1} of {items.length}
         </p>
         <Button size="sm" variant="secondary" isIconOnly aria-label="Next agent" onPress={() => go(index + 1)}>
-          <ChevronRight size={16} aria-hidden="true" />
+          <ChevronRightIcon size={16} aria-hidden="true" />
         </Button>
       </div>
     </section>

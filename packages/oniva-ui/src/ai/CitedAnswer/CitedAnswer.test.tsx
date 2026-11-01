@@ -46,4 +46,26 @@ describe('CitedAnswer', () => {
     render(<CitedAnswer ref={ref} className="extra" segments={segments} sources={sources} />);
     expect(ref.current).toHaveClass('extra');
   });
+
+  it('shows an honest empty state with no summary', () => {
+    render(<CitedAnswer segments={[]} sources={[]} />);
+    expect(screen.getByText('No sources')).toBeInTheDocument();
+    expect(screen.queryByText(/backed by a source/)).toBeNull();
+  });
+
+  it('keeps the summary and action when there are no segments but an action is given', () => {
+    render(<CitedAnswer segments={[]} sources={[]} action={{ label: 'Retry', onPress: () => {} }} />);
+    expect(screen.getByRole('button', { name: /Retry/ })).toBeInTheDocument();
+  });
+
+  it('only offers Open source for http(s) urls or when a handler is given', () => {
+    const unsafe = [{ id: 'x', site: 'Docs', title: 'Local', url: 'javascript:void(0)', quote: 'q' }];
+    const segs = [{ text: 'Claim.', cite: ['x'] }];
+    const { rerender } = render(<CitedAnswer segments={segs} sources={unsafe} defaultOpen="x" />);
+    expect(screen.queryByText('Open source')).toBeNull();
+    rerender(<CitedAnswer segments={segs} sources={unsafe} defaultOpen="x" onOpenSource={() => {}} />);
+    expect(screen.getByRole('button', { name: /Open source/ })).toBeInTheDocument();
+    rerender(<CitedAnswer segments={segs} sources={[{ ...unsafe[0]!, url: 'https://docs.example.com/a' }]} defaultOpen="x" />);
+    expect(screen.getByRole('link', { name: /Open source/ })).toHaveAttribute('href', 'https://docs.example.com/a');
+  });
 });

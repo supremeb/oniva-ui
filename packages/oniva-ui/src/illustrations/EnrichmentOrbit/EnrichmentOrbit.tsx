@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { Database, Mail, Sparkles, UserRound } from 'lucide-react';
+import { DatabaseIcon, MailIcon, SparklesIcon, UserRoundIcon } from '../../icons/IconSet';
 import { motion } from '../../tokens/motion.stylex';
 import { accent } from '../../tokens/accent.stylex';
 import { colors } from '../../tokens/colors.stylex';
@@ -98,11 +98,11 @@ export interface EnrichmentOrbitProps extends IllustrationProps {
 }
 
 const icon = (n: React.ReactNode) => n;
-const DEFAULT_CENTER: IllustrationItem = { name: 'Enrichment', icon: icon(<Sparkles {...stylex.props(fillSvg.svg)} />) };
+const DEFAULT_CENTER: IllustrationItem = { name: 'Enrichment', icon: icon(<SparklesIcon {...stylex.props(fillSvg.svg)} />) };
 const DEFAULT_NODES: [IllustrationItem, IllustrationItem, IllustrationItem] = [
-  { name: 'Contacts', icon: <UserRound {...stylex.props(fillSvg.svg)} /> },
-  { name: 'Mail', icon: <Mail {...stylex.props(fillSvg.svg)} /> },
-  { name: 'Warehouse', icon: <Database {...stylex.props(fillSvg.svg)} /> },
+  { name: 'Contacts', icon: <UserRoundIcon {...stylex.props(fillSvg.svg)} /> },
+  { name: 'Mail', icon: <MailIcon {...stylex.props(fillSvg.svg)} /> },
+  { name: 'Warehouse', icon: <DatabaseIcon {...stylex.props(fillSvg.svg)} /> },
 ];
 
 /** A tile inside two rings. Comets circle the rings in opposite directions while three data nodes orbit and stay upright. */

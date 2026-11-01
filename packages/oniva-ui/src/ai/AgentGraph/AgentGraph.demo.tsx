@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Database, FileText, Globe, Mail, GitBranch, Calendar } from 'lucide-react';
+import { DatabaseIcon, FileTextIcon, GlobeIcon, MailIcon, BranchIcon, CalendarIcon } from '../../icons/IconSet';
 import type { DemoModule } from '../../internal/demo';
 import { AgentGraph, type GraphCall, type GraphNode } from './AgentGraph';
 
@@ -7,14 +7,14 @@ const nodes: GraphNode[] = [
   { id: 'lead', kind: 'agent', name: 'Orchestrator', detail: 'Atlas 2', status: 'working', lead: true, cost: 0.31, doing: 'Planning the launch brief' },
   { id: 'research', kind: 'agent', name: 'Researcher', detail: 'Nova Pro', status: 'working', cost: 0.12, doing: 'Comparing five vendors' },
   { id: 'writer', kind: 'agent', name: 'Writer', detail: 'Lumen Fast', status: 'waiting', cost: 0.05, doing: 'Needs sign-off on the claims' },
-  { id: 'web', kind: 'tool', name: 'Web search', short: 'Search', detail: 'Public web', icon: <Globe size={16} /> },
-  { id: 'docs', kind: 'tool', name: 'Docs', detail: 'Team wiki', icon: <FileText size={16} /> },
-  { id: 'wh', kind: 'tool', name: 'Warehouse', short: 'Data', detail: 'Sales tables', icon: <Database size={16} /> },
+  { id: 'web', kind: 'tool', name: 'Web search', short: 'Search', detail: 'Public web', icon: <GlobeIcon size={16} /> },
+  { id: 'docs', kind: 'tool', name: 'Docs', detail: 'Team wiki', icon: <FileTextIcon size={16} /> },
+  { id: 'wh', kind: 'tool', name: 'Warehouse', short: 'Data', detail: 'Sales tables', icon: <DatabaseIcon size={16} /> },
   { id: 'coder', kind: 'agent', name: 'Coder', detail: 'Quill Reasoner', status: 'working', cost: 0.09, doing: 'Fixing the export script' },
-  { id: 'analyst', kind: 'agent', name: 'Analyst', detail: 'Nova Flash', status: 'idle', cost: 0.04 },
-  { id: 'mail', kind: 'tool', name: 'Mail', detail: 'Team inbox', icon: <Mail size={16} /> },
-  { id: 'git', kind: 'tool', name: 'Repo', detail: 'Repos', icon: <GitBranch size={16} /> },
-  { id: 'cal', kind: 'tool', name: 'Calendar', detail: 'Shared', icon: <Calendar size={16} /> },
+  { id: 'analyst', kind: 'agent', name: 'Analyst', detail: 'Lumen Fast', status: 'idle', cost: 0.04 },
+  { id: 'mail', kind: 'tool', name: 'Mail', detail: 'Team inbox', icon: <MailIcon size={16} /> },
+  { id: 'git', kind: 'tool', name: 'Repo', detail: 'Repos', icon: <BranchIcon size={16} /> },
+  { id: 'cal', kind: 'tool', name: 'Calendar', detail: 'Shared', icon: <CalendarIcon size={16} /> },
   { id: 'you', kind: 'user', name: 'You' },
 ];
 

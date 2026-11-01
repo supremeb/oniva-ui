@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { Pause, Play } from 'lucide-react';
+import { PauseIcon, PlayIcon } from '../../icons/IconSet';
 import { useState } from 'react';
 import { VoiceOrb, type VoiceOrbState } from '../../ai/VoiceOrb/VoiceOrb';
 import { Button } from '../../components/Button/Button';
@@ -120,7 +120,7 @@ export function VoiceOrbScene({
             aria-label={paused ? 'Play voice demo' : 'Pause voice demo'}
             onPress={() => setPaused((p) => !p)}
           >
-            {paused ? <Play size={14} /> : <Pause size={14} />}
+            {paused ? <PlayIcon size={14} /> : <PauseIcon size={14} />}
           </Button>
         </span>
       )}

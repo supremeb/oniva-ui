@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { Plus } from 'lucide-react';
+import { PlusIcon } from '../../icons/IconSet';
 import type { ReactNode, Ref } from 'react';
 import { Avatar } from '../../components/Avatar';
 import { Card } from '../../components/Card';
@@ -83,7 +83,7 @@ export function ProfileCard({
               xstyle={styles.add}
               onPress={onAddPhoto}
             >
-              <Plus size={14} />
+              <PlusIcon size={14} />
             </IconButton>
           )}
         </div>

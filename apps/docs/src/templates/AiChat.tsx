@@ -1,5 +1,4 @@
 import * as stylex from '@stylexjs/stylex';
-import { MessageSquare, Plus } from 'lucide-react';
 import { useState } from 'react';
 import {
   AgentProgress,
@@ -18,7 +17,7 @@ import {
   SidebarSearch,
   SidebarSection,
   ToolCallCard,
-  type TaskItem,
+  type TaskItem, MessageSquareIcon, PlusIcon,
 } from 'oniva-ui';
 import { PageTitle } from './shared';
 
@@ -73,7 +72,7 @@ export function AiChat() {
           <SidebarSearch hint="⌘K" />
           <SidebarContent>
             <SidebarSection title="New">
-              <SidebarItem href="#/templates/ai-chat" icon={<Plus size={18} />}>
+              <SidebarItem href="#/templates/ai-chat" icon={<PlusIcon size={18} />}>
                 New chat
               </SidebarItem>
             </SidebarSection>
@@ -82,7 +81,7 @@ export function AiChat() {
                 <SidebarItem
                   key={t}
                   href="#/templates/ai-chat"
-                  icon={<MessageSquare size={18} />}
+                  icon={<MessageSquareIcon size={18} />}
                   isActive={active}
                 >
                   {t}

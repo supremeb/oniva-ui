@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { BarChart3, ChevronDown, Menu, ShieldCheck, Workflow, X, Zap } from 'lucide-react';
+import { BarChartIcon, ChevronDownIcon, MenuIcon, ShieldCheckIcon, WorkflowIcon, XIcon, ZapIcon } from '../../icons/IconSet';
 import { useState } from 'react';
 import type { HTMLAttributes, ReactNode, Ref } from 'react';
 import { Button as AriaButton, Dialog, DialogTrigger, Popover } from 'react-aria-components';
@@ -144,10 +144,10 @@ const defaultLinks: SiteHeaderLink[] = [
 ];
 
 const mega = [
-  { icon: <Workflow size={18} />, title: 'Workflows', desc: 'Orchestrate agents and approvals.' },
-  { icon: <BarChart3 size={18} />, title: 'Observability', desc: 'Traces, evals and cost in one view.' },
-  { icon: <ShieldCheck size={18} />, title: 'Guardrails', desc: 'Policies, redaction and audit logs.' },
-  { icon: <Zap size={18} />, title: 'Gateway', desc: 'Route, cache and fail over models.' },
+  { icon: <WorkflowIcon size={18} />, title: 'Workflows', desc: 'Orchestrate agents and approvals.' },
+  { icon: <BarChartIcon size={18} />, title: 'Observability', desc: 'Traces, evals and cost in one view.' },
+  { icon: <ShieldCheckIcon size={18} />, title: 'Guardrails', desc: 'Policies, redaction and audit logs.' },
+  { icon: <ZapIcon size={18} />, title: 'Gateway', desc: 'Route, cache and fail over models.' },
 ];
 
 export function SiteHeader({
@@ -172,7 +172,7 @@ export function SiteHeader({
           {megaMenu && (
             <DialogTrigger>
               <AriaButton className={item.className}>
-                Product <ChevronDown size={14} aria-hidden="true" {...stylex.props(styles.chev)} />
+                Product <ChevronDownIcon size={14} aria-hidden="true" {...stylex.props(styles.chev)} />
               </AriaButton>
               <Popover placement="bottom start" offset={8} className={({ isExiting }) => stylex.props(styles.popover, isExiting && styles.popExit).className ?? ''}>
                 <Dialog aria-label="Product menu" {...stylex.props(styles.dlg)}>
@@ -213,7 +213,7 @@ export function SiteHeader({
           aria-expanded={open}
           onPress={() => setOpen((o) => !o)}
         >
-          {open ? <X size={18} /> : <Menu size={18} />}
+          {open ? <XIcon size={18} /> : <MenuIcon size={18} />}
         </Button>
       </div>
       {open && (

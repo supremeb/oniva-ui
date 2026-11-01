@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { ArrowDown, Check, Copy } from 'lucide-react';
+import { ArrowDownIcon, CheckIcon, CopyIcon } from '../../icons/IconSet';
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type HTMLAttributes, type Ref } from 'react';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
@@ -7,6 +7,7 @@ import { media } from '../../tokens/media.stylex';
 import { motion } from '../../tokens/motion.stylex';
 import { aiStyles } from '../../internal/ai-styles';
 import { IconSwap, useCopy } from '../../internal/n1-ai';
+import { focus } from '../../internal/focus';
 import { mergeSx } from '../../internal/sx';
 import { Button } from '../../components/Button';
 import { IconButton } from '../../components/IconButton';
@@ -32,7 +33,17 @@ const styles = stylex.create({
     paddingBlock: 6,
     paddingInline: 12,
   },
-  title: { color: colors['--oniva-color-text-muted'], flexGrow: 1, fontFamily: font['--oniva-font-mono'], fontSize: font['--oniva-font-size-12'] },
+  title: {
+    color: colors['--oniva-color-text-muted'],
+    flexGrow: 1,
+    flexShrink: 1,
+    fontFamily: font['--oniva-font-mono'],
+    fontSize: font['--oniva-font-size-12'],
+    minWidth: 0,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
   scroller: {
     backgroundColor: colors['--oniva-color-surface'],
     boxSizing: 'border-box',
@@ -41,14 +52,11 @@ const styles = stylex.create({
     fontSize: font['--oniva-font-size-12'],
     lineHeight: font['--oniva-font-lh-18'],
     maxHeight: 'var(--oniva-runlog-height, 260px)',
-    outlineColor: colors['--oniva-color-focus-ring'],
-    outlineOffset: -2,
-    outlineStyle: { default: 'none', ':focus-visible': 'solid' },
-    outlineWidth: 2,
     overflow: 'auto',
     paddingBlock: 8,
     paddingInline: 12,
   },
+  empty: { color: colors['--oniva-color-text-muted'], minHeight: 18 },
   line: { minHeight: 18, whiteSpace: 'pre-wrap', wordBreak: 'break-word' },
   fresh: {
     animationDuration: motion['--oniva-motion-dur-base'],
@@ -65,11 +73,12 @@ const styles = stylex.create({
   gray: { color: colors['--oniva-color-text-muted'] },
   bold: { fontWeight: font['--oniva-font-weight-bold'] },
   dim: { opacity: 0.65 },
+  dimColored: { opacity: 0.92 },
   jump: { bottom: 12, insetInlineEnd: 16, position: 'absolute' },
 });
 
 function Span({ s }: { s: AnsiSpan }) {
-  return <span {...stylex.props(s.color && styles[s.color], s.bold && styles.bold, s.dim && styles.dim)}>{s.text}</span>;
+  return <span {...stylex.props(s.color && styles[s.color], s.bold && styles.bold, s.dim && (s.color ? styles.dimColored : styles.dim))}>{s.text}</span>;
 }
 
 export interface RunLogProps extends Omit<HTMLAttributes<HTMLDivElement>, 'style' | 'children' | 'title'> {
@@ -117,12 +126,17 @@ export function RunLog({ lines, title = 'Output', className, xstyle, ref, ...res
   return (
     <div {...rest} ref={ref} {...mergeSx(sx, className)}>
       <div {...stylex.props(styles.bar)}>
-        <span {...stylex.props(styles.title)}>{title}</span>
-        <IconButton size="xs" variant="ghost" aria-label={copied ? 'Copied' : 'Copy output'} onPress={copy}>
-          <IconSwap on={copied} a={<Copy size={14} />} b={<Check size={14} />} />
+        <span title={title} {...stylex.props(styles.title)}>{title}</span>
+        <IconButton size="xs" variant="ghost" aria-label={copied ? 'Copied' : 'Copy output'} isDisabled={lines.length === 0} onPress={copy}>
+          <IconSwap on={copied} a={<CopyIcon size={14} />} b={<CheckIcon size={14} />} />
         </IconButton>
       </div>
-      <div ref={scroller} role="log" aria-label={title} tabIndex={0} onScroll={onScroll} {...stylex.props(styles.scroller)}>
+      <div ref={scroller} role="log" aria-label={title} tabIndex={0} onScroll={onScroll} {...stylex.props(styles.scroller, focus.inset)}>
+        {parsed.length === 0 && (
+          <div aria-hidden="true" {...stylex.props(styles.empty)}>
+            Waiting for output…
+          </div>
+        )}
         {parsed.map((spans, i) => (
           <div key={i} {...stylex.props(styles.line, i >= initial.current && styles.fresh)}>
             {spans.length ? spans.map((s, j) => <Span key={j} s={s} />) : ' '}
@@ -131,7 +145,7 @@ export function RunLog({ lines, title = 'Output', className, xstyle, ref, ...res
       </div>
       <Presence isPresent={!pinned} preset="scale" initial={false} xstyle={styles.jump}>
         <Button size="xs" variant="secondary" onPress={jump}>
-          <ArrowDown size={12} aria-hidden="true" /> Jump to latest
+          <ArrowDownIcon size={12} aria-hidden="true" /> Jump to latest
         </Button>
       </Presence>
     </div>

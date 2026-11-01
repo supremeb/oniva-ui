@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { Check, ChevronDown, ChevronUp, Globe, Lightbulb, Sparkles } from 'lucide-react';
+import { CheckIcon, ChevronDownIcon, ChevronUpIcon, GlobeIcon, LightbulbIcon, SparklesIcon } from '../../icons/IconSet';
 import { useState, type CSSProperties, type Ref } from 'react';
 import { Button } from '../../components/Button';
 import {
@@ -12,6 +12,8 @@ import {
 import { accent } from '../../tokens/accent.stylex';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
+import { media } from '../../tokens/media.stylex';
+import { motion } from '../../tokens/motion.stylex';
 import { radius } from '../../tokens/radius.stylex';
 import { useFormatters } from '../../internal/format';
 import { m3 } from '../../internal/m3-motion';
@@ -27,10 +29,12 @@ const styles = stylex.create({
   },
   chevron: { color: colors['--oniva-color-icon-muted'] },
   inl: { display: 'inline-flex' },
-  row: { alignItems: 'center', display: 'flex', gap: 12, justifyContent: 'space-between', minWidth: 240 },
+  row: { alignItems: 'center', display: 'flex', gap: 12, justifyContent: 'space-between', maxWidth: 420, minWidth: 240 },
   col: { display: 'flex', flexDirection: 'column', minWidth: 0 },
+  clip: { minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
+  triggerName: { display: 'block', maxWidth: 240, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
   metrics: { alignItems: 'flex-end', display: 'flex', flexDirection: 'column', flexShrink: 0, gap: 3 },
-  meters: { display: 'flex', gap: 8 },
+  meters: { display: 'flex', flexShrink: 0, gap: 8 },
   meter: { alignItems: 'center', color: colors['--oniva-color-text-muted'], display: 'inline-flex', fontSize: font['--oniva-font-size-11'], gap: 3 },
   segs: { display: 'inline-flex', gap: 1 },
   seg: { backgroundColor: colors['--oniva-color-border-control'], borderRadius: radius['--oniva-radius-full'], height: 6, width: 4 },
@@ -53,8 +57,8 @@ const styles = stylex.create({
     width: 28,
   },
   tileSm: { borderRadius: radius['--oniva-radius-sm'], fontSize: font['--oniva-font-size-11'], height: 20, width: 20 },
-  nameRow: { alignItems: 'center', display: 'inline-flex', gap: 6 },
-  tick: { color: accent['--oniva-accent-solid'] },
+  nameRow: { alignItems: 'center', display: 'flex', gap: 6, minWidth: 0 },
+  tick: { color: accent['--oniva-accent-solid'], flexShrink: 0 },
   headRow: {
     alignItems: 'center',
     color: colors['--oniva-color-text-muted'],
@@ -99,8 +103,9 @@ const styles = stylex.create({
     height: 18,
     marginInlineStart: 'auto',
     position: 'relative',
-    transitionDuration: '150ms',
-    transitionProperty: 'background-color',
+    transitionDuration: motion['--oniva-motion-dur-base'],
+    transitionProperty: { default: 'background-color', [media.reducedMotion]: 'none' },
+    transitionTimingFunction: motion['--oniva-motion-ease-out'],
     width: 32,
   },
   toggleOn: { backgroundColor: accent['--oniva-accent-solid'] },
@@ -111,8 +116,9 @@ const styles = stylex.create({
     insetBlockStart: 2,
     insetInlineStart: 2,
     position: 'absolute',
-    transitionDuration: '150ms',
-    transitionProperty: 'transform',
+    transitionDuration: motion['--oniva-motion-dur-base'],
+    transitionProperty: { default: 'transform', [media.reducedMotion]: 'none' },
+    transitionTimingFunction: motion['--oniva-motion-ease-out'],
     width: 14,
   },
   knobOn: { transform: 'translateX(14px)' },
@@ -177,7 +183,7 @@ export interface ModelSelectorProps {
 function Tile({ name, small }: { name: string; small?: boolean }) {
   return (
     <span aria-hidden="true" {...stylex.props(styles.tile, small && styles.tileSm)}>
-      {name === 'Auto' ? <Sparkles size={12} /> : name[0]}
+      {name === 'Auto' ? <SparklesIcon size={12} /> : name[0]}
     </span>
   );
 }
@@ -266,10 +272,10 @@ export function ModelSelector({
           <Tile name={m.name} />
           <span {...stylex.props(styles.col)} style={{ flexGrow: 1 }}>
             <span {...stylex.props(styles.nameRow)}>
-              {m.name}
-              {m.id === current?.id && <Check size={13} aria-hidden="true" {...stylex.props(styles.tick)} />}
+              <span {...stylex.props(styles.clip)}>{m.name}</span>
+              {m.id === current?.id && <CheckIcon size={13} aria-hidden="true" {...stylex.props(styles.tick)} />}
             </span>
-            {m.description && <span {...stylex.props(styles.desc)}>{m.description}</span>}
+            {m.description && <span {...stylex.props(styles.desc, styles.clip)}>{m.description}</span>}
           </span>
           {hasMetrics ? (
             <span {...stylex.props(styles.meters)}>
@@ -286,8 +292,8 @@ export function ModelSelector({
     return (
       <span {...stylex.props(styles.row)}>
         <span {...stylex.props(styles.col)}>
-          <span>{m.name}</span>
-          {m.description && <span {...stylex.props(styles.desc)}>{m.description}</span>}
+          <span {...stylex.props(styles.clip)}>{m.name}</span>
+          {m.description && <span {...stylex.props(styles.desc, styles.clip)}>{m.description}</span>}
         </span>
         <span {...stylex.props(styles.metrics)}>
           {hasMetrics ? (
@@ -297,7 +303,7 @@ export function ModelSelector({
               {m.cost != null && <Meter label="Cost" value={m.cost} />}
             </span>
           ) : (
-            (m.latencyMs != null || m.pricePerM != null) && <span {...stylex.props(styles.cost)}>Varies</span>
+            <span {...stylex.props(styles.cost)}>Varies</span>
           )}
           {(m.latencyMs != null || m.pricePerM != null) && hasMetrics && (
             <span {...stylex.props(styles.cost)}>
@@ -320,25 +326,25 @@ export function ModelSelector({
       ref={ref}
       variant="ghost"
       size="sm"
-      isDisabled={isDisabled}
-      aria-label={`Model: ${current?.name ?? ''}${thinkingOn ? ', extended thinking on' : ''}`}
-      startIcon={detailed && current ? <Tile name={current.name} small /> : <Sparkles size={14} aria-hidden="true" />}
+      isDisabled={isDisabled || !current}
+      aria-label={`Model: ${current?.name ?? 'none available'}${thinkingOn ? ', extended thinking on' : ''}`}
+      startIcon={detailed && current ? <Tile name={current.name} small /> : <SparklesIcon size={14} aria-hidden="true" />}
       endIcon={
         <>
           <Presence isPresent={thinkingOn} preset="scale" initial={false} xstyle={styles.inl}>
-            <Lightbulb size={14} aria-hidden="true" {...stylex.props(styles.bulb)} />
+            <LightbulbIcon size={14} aria-hidden="true" {...stylex.props(styles.bulb)} />
           </Presence>
           {detailed && open ? (
-            <ChevronUp size={14} aria-hidden="true" {...stylex.props(styles.chevron)} />
+            <ChevronUpIcon size={14} aria-hidden="true" {...stylex.props(styles.chevron)} />
           ) : (
-            <ChevronDown size={14} aria-hidden="true" {...stylex.props(styles.chevron)} />
+            <ChevronDownIcon size={14} aria-hidden="true" {...stylex.props(styles.chevron)} />
           )}
         </>
       }
       xstyle={xstyle}
     >
       <CrossFade as="span" contentKey={current?.id ?? ''} duration={200} morph="both">
-        {current?.name}
+        <span {...stylex.props(styles.triggerName)}>{current?.name ?? 'No models'}</span>
       </CrossFade>
     </Button>
   );
@@ -421,7 +427,7 @@ export function ModelSelector({
       <span>
         {current?.latencyMs != null && (
           <>
-            ~<span {...stylex.props(styles.strong)}>{((current.latencyMs * mult) / 1000).toFixed(1)}s</span> first token
+            ~<span {...stylex.props(styles.strong)}>{fmt.number((current.latencyMs * mult) / 1000, { maximumFractionDigits: 1, minimumFractionDigits: 1 })}s</span> first token
           </>
         )}
         {current?.latencyMs != null && current?.pricePerM != null && ' · '}
@@ -460,7 +466,7 @@ export function ModelSelector({
         </DropdownMenuSection>
         <DropdownMenuSeparator />
         <DropdownMenuSection aria-label="Settings">
-          <DropdownMenuItem id="t" textValue="Extended thinking" icon={detailed ? <Lightbulb size={16} /> : undefined}>
+          <DropdownMenuItem id="t" textValue="Extended thinking" icon={detailed ? <LightbulbIcon size={16} /> : undefined}>
             {detailed ? <span {...stylex.props(styles.settingRow)}>Extended thinking<Toggle on={thinkingOn} /></span> : 'Extended thinking'}
           </DropdownMenuItem>
           {thinkingOn &&
@@ -471,7 +477,7 @@ export function ModelSelector({
                 </span>
               </DropdownMenuItem>
             ))}
-          <DropdownMenuItem id="w" textValue="Web search" icon={detailed ? <Globe size={16} /> : undefined}>
+          <DropdownMenuItem id="w" textValue="Web search" icon={detailed ? <GlobeIcon size={16} /> : undefined}>
             {detailed ? <span {...stylex.props(styles.settingRow)}>Web search<Toggle on={webOn} /></span> : 'Web search'}
           </DropdownMenuItem>
         </DropdownMenuSection>

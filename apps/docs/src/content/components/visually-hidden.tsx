@@ -1,10 +1,9 @@
-import { Bell } from 'lucide-react';
-import { Button, VisuallyHidden } from 'oniva-ui';
+import { Button, VisuallyHidden, BellIcon } from 'oniva-ui';
 import type { DocPage } from '../types';
 
 const Sample = () => (
   <Button variant="secondary" isIconOnly>
-    <Bell size={16} />
+    <BellIcon size={16} />
     <VisuallyHidden>3 unread notifications</VisuallyHidden>
   </Button>
 );
@@ -43,13 +42,13 @@ const page: DocPage = {
     render: (p) => (
       <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
         <Button variant="secondary" isIconOnly>
-          <Bell size={16} />
+          <BellIcon size={16} />
           <VisuallyHidden>{String(p.text)}</VisuallyHidden>
         </Button>
         {p.visible ? <span style={{ fontSize: 13 }}>Screen reader hears: “{String(p.text)}”</span> : null}
       </div>
     ),
-    code: (p) => `<Button variant="secondary" isIconOnly>\n  <Bell size={16} />\n  <VisuallyHidden>${p.text}</VisuallyHidden>\n</Button>`,
+    code: (p) => `<Button variant="secondary" isIconOnly>\n  <BellIcon size={16} />\n  <VisuallyHidden>${p.text}</VisuallyHidden>\n</Button>`,
   },
   states: [
     { name: 'Icon-only button', description: 'The button has no visible text but reads "3 unread notifications, button".', Render: Sample },

@@ -1,7 +1,6 @@
 import * as stylex from '@stylexjs/stylex';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeftIcon, ChevronRightIcon, StarIcon, BadgeCheckIcon } from '../../icons/IconSet';
 import { useEffect, useState } from 'react';
-import { Star, BadgeCheck } from 'lucide-react';
 import { focus } from '../../internal/focus';
 import { useReducedMotion } from '../../internal/motion-hooks';
 import { useLoopScroller } from '../../internal/w8-loop';
@@ -132,7 +131,7 @@ function WallCard({ t, dim }: { t: Testimonial; dim?: boolean }) {
       {t.rating ? (
         <span role="img" aria-label={`Rated ${t.rating} out of 5`} {...stylex.props(wallStyles.stars)}>
           {[1, 2, 3, 4, 5].map((n) => (
-            <Star key={n} size={14} aria-hidden="true" fill="currentColor" {...stylex.props(n > t.rating! && wallStyles.starOff)} />
+            <StarIcon key={n} size={14} aria-hidden="true" fill="currentColor" {...stylex.props(n > t.rating! && wallStyles.starOff)} />
           ))}
         </span>
       ) : null}
@@ -142,7 +141,7 @@ function WallCard({ t, dim }: { t: Testimonial; dim?: boolean }) {
         <span {...stylex.props(wallStyles.meta)}>
           <span {...stylex.props(styles.name, wallStyles.nameRow)}>
             <span {...stylex.props(wallStyles.nameText)}>{t.name}</span>
-            {t.verified ? <BadgeCheck size={14} role="img" aria-label="Verified customer" {...stylex.props(wallStyles.check)} /> : null}
+            {t.verified ? <BadgeCheckIcon size={14} role="img" aria-label="Verified customer" {...stylex.props(wallStyles.check)} /> : null}
           </span>
           <span {...stylex.props(styles.role, wallStyles.roleText)}>{t.role}</span>
         </span>
@@ -271,8 +270,8 @@ export function Testimonials({ variant = 'grid', items: itemsProp, columns = 3, 
               <div {...stylex.props(styles.nav)}>
                 <span {...stylex.props(styles.count)}>{i + 1} / {items.length}</span>
                 <span {...stylex.props(bs.row)}>
-                  <Button variant="secondary" isIconOnly aria-label="Previous quote" onPress={() => go(-1)}><ChevronLeft size={16} /></Button>
-                  <Button variant="secondary" isIconOnly aria-label="Next quote" onPress={() => go(1)}><ChevronRight size={16} /></Button>
+                  <Button variant="secondary" isIconOnly aria-label="Previous quote" onPress={() => go(-1)}><ChevronLeftIcon size={16} /></Button>
+                  <Button variant="secondary" isIconOnly aria-label="Next quote" onPress={() => go(1)}><ChevronRightIcon size={16} /></Button>
                 </span>
               </div>
             </div>

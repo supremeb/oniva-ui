@@ -1,5 +1,4 @@
-import { Home } from 'lucide-react';
-import { Breadcrumb, Breadcrumbs } from 'oniva-ui';
+import { Breadcrumb, Breadcrumbs, HomeIcon } from 'oniva-ui';
 import type { DocPage } from '../types';
 
 const Trail = ({ items = ['Workspace', 'Projects', 'Atlas redesign'], home = false, label = 'Breadcrumb' }: { items?: string[]; home?: boolean; label?: string }) => (
@@ -7,7 +6,7 @@ const Trail = ({ items = ['Workspace', 'Projects', 'Atlas redesign'], home = fal
     {items.map((t, i) => (
       i === items.length - 1
         ? <Breadcrumb key={t}>{t}</Breadcrumb>
-        : <Breadcrumb key={t} href="#" icon={home && i === 0 ? <Home size={14} /> : undefined}>{t}</Breadcrumb>
+        : <Breadcrumb key={t} href="#" icon={home && i === 0 ? <HomeIcon size={14} /> : undefined}>{t}</Breadcrumb>
     ))}
   </Breadcrumbs>
 );
@@ -51,7 +50,7 @@ const page: DocPage = {
       const items = [...all.slice(0, n - 1), String(p.current)];
       return <div onClick={() => ev('onPress(link)')}><Trail items={items} home={Boolean(p.home)} /></div>;
     },
-    code: (p) => `<Breadcrumbs aria-label="Breadcrumb">\n  <Breadcrumb href="/"${p.home ? ' icon={<Home size={14} />}' : ''}>Workspace</Breadcrumb>\n  <Breadcrumb href="/projects">Projects</Breadcrumb>\n  <Breadcrumb>${p.current}</Breadcrumb>\n</Breadcrumbs>`,
+    code: (p) => `<Breadcrumbs aria-label="Breadcrumb">\n  <Breadcrumb href="/"${p.home ? ' icon={<HomeIcon size={14} />}' : ''}>Workspace</Breadcrumb>\n  <Breadcrumb href="/projects">Projects</Breadcrumb>\n  <Breadcrumb>${p.current}</Breadcrumb>\n</Breadcrumbs>`,
   },
   states: [
     { name: 'Default', description: 'Three levels, current page is text.', Render: () => <Trail /> },

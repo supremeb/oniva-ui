@@ -1,13 +1,13 @@
-import { Globe, LayoutGrid, Link2, CalendarDays, Table2, Text } from 'lucide-react';
+import { GlobeIcon, LayoutGridIcon, LinkIcon, CalendarDaysIcon, TableIcon, TextIcon } from '../../icons/IconSet';
 import type { DemoModule } from '../../internal/demo';
 import { DataSheet } from './DataSheet';
 import type { SheetColumn, SheetRow, TagTone } from './types';
 
 const columns: SheetColumn[] = [
-  { key: 'tool', label: 'Tool', type: 'title', icon: <Text size={14} />, width: 200 },
-  { key: 'category', label: 'Category', type: 'tag', icon: <LayoutGrid size={14} />, options: ['Design', 'Issue tracking', 'Hosting', 'Website', 'Video'], width: 180 },
-  { key: 'website', label: 'Website', type: 'link', icon: <Link2 size={14} />, width: 160 },
-  { key: 'renews', label: 'Renews', type: 'date', icon: <CalendarDays size={14} />, width: 150 },
+  { key: 'tool', label: 'Tool', type: 'title', icon: <TextIcon size={14} />, width: 200 },
+  { key: 'category', label: 'Category', type: 'tag', icon: <LayoutGridIcon size={14} />, options: ['Design', 'Issue tracking', 'Hosting', 'Website', 'Video'], width: 180 },
+  { key: 'website', label: 'Website', type: 'link', icon: <LinkIcon size={14} />, width: 160 },
+  { key: 'renews', label: 'Renews', type: 'date', icon: <CalendarDaysIcon size={14} />, width: 150 },
 ];
 
 const rows: SheetRow[] = [
@@ -50,24 +50,24 @@ const demo: DemoModule = {
       name: 'Design Stack',
       code: `<DataSheet
   title="Design Stack"
-  icon={<Table2 size={14} />}
+  icon={<TableIcon size={14} />}
   columns={columns}
   rows={rows}
   tagTones={tagTones}
 />`,
-      Component: () => <DataSheet title="Design Stack" icon={<Table2 size={14} />} columns={columns} rows={rows} tagTones={tagTones} />,
+      Component: () => <DataSheet title="Design Stack" icon={<TableIcon size={14} />} columns={columns} rows={rows} tagTones={tagTones} />,
     },
     {
       name: 'Read-only',
       code: `<DataSheet title="Design Stack" columns={columns} rows={rows} tagTones={tagTones} editable={false} />`,
       Component: () => (
-        <DataSheet title="Design Stack" icon={<Globe size={14} />} columns={columns} rows={rows} tagTones={tagTones} editable={false} />
+        <DataSheet title="Design Stack" icon={<GlobeIcon size={14} />} columns={columns} rows={rows} tagTones={tagTones} editable={false} />
       ),
     },
     {
       name: 'Numbers',
       code: `<DataSheet title="Budget" columns={budgetColumns} rows={budgetRows} />`,
-      Component: () => <DataSheet title="Budget" icon={<Table2 size={14} />} columns={budgetColumns} rows={budgetRows} />,
+      Component: () => <DataSheet title="Budget" icon={<TableIcon size={14} />} columns={budgetColumns} rows={budgetRows} />,
     },
   ],
 };

@@ -92,4 +92,36 @@ describe('PlanCard improvements', () => {
     render(<PlanCard steps={steps} ref={ref} className="x" />);
     expect(ref.current).toHaveClass('x');
   });
+
+  it('says the run stopped when a step failed and nothing is active', () => {
+    const run = [
+      { id: 'a', title: 'Read diff', status: 'done' as const, duration: 1200 },
+      { id: 'b', title: 'Write review', status: 'failed' as const, error: 'Rate limited' },
+      { id: 'c', title: 'Post', status: 'pending' as const },
+    ];
+    render(<PlanCard steps={run} status="running" />);
+    expect(screen.getByRole('status')).toHaveTextContent('Stopped at step 2 · 1 of 3 done');
+    expect(screen.queryByText(/^Running/)).not.toBeInTheDocument();
+  });
+
+  it('announces step progress after the first render', () => {
+    const first = [
+      { id: 'a', title: 'Read diff', status: 'active' as const },
+      { id: 'b', title: 'Post', status: 'pending' as const },
+    ];
+    const { container, rerender } = render(<PlanCard steps={first} status="running" />);
+    const live = () => container.querySelector('[aria-live="polite"]')!;
+    expect(live()).toHaveTextContent('');
+    rerender(<PlanCard steps={[{ ...first[0]!, status: 'done', duration: 900 }, { ...first[1]!, status: 'active' }]} status="running" />);
+    expect(live()).toHaveTextContent('Started "Post"');
+    rerender(<PlanCard steps={[{ ...first[0]!, status: 'done', duration: 900 }, { ...first[1]!, status: 'failed', error: 'Offline' }]} status="running" />);
+    expect(live()).toHaveTextContent('Failed "Post": Offline');
+  });
+
+  it('does not let an empty plan be approved or run', () => {
+    const { rerender } = render(<PlanCard steps={[]} onApprove={() => {}} />);
+    expect(screen.getByRole('button', { name: 'Approve plan' })).toBeDisabled();
+    rerender(<PlanCard steps={[]} onRun={() => {}} />);
+    expect(screen.getByRole('button', { name: 'Run plan' })).toBeDisabled();
+  });
 });

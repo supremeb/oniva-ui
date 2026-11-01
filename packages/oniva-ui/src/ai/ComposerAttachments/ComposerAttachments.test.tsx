@@ -28,4 +28,39 @@ describe('ComposerAttachments', () => {
     render(<ComposerAttachments files={[{ id: 'c', name: 'bad.zip', status: 'error' }]} />);
     expect(screen.getByText('Upload failed')).toBeInTheDocument();
   });
+
+  it('announces a failed upload with the file name', () => {
+    render(<ComposerAttachments files={[{ id: 'c', name: 'bad.zip', status: 'error' }]} />);
+    expect(screen.getByRole('alert')).toHaveTextContent('Upload failed: bad.zip');
+  });
+
+  it('exposes the full name on truncated tiles', () => {
+    const name = 'northwind-labs-quarterly-business-review-appendix-final-v3.xlsx';
+    render(<ComposerAttachments files={[{ id: 'l', name, size: 3_900_000 }]} />);
+    expect(screen.getByText(name)).toHaveAttribute('title', name);
+    expect(screen.getByText('3.7 MB')).toBeInTheDocument();
+  });
+
+  it('clamps progress to 0-100 and treats 100 as done', () => {
+    render(
+      <ComposerAttachments
+        files={[
+          { id: 'a', name: 'over.bin', status: 'uploading', progress: 140 },
+          { id: 'b', name: 'under.bin', status: 'uploading', progress: -5 },
+          { id: 'c', name: 'done.bin', size: 2048, progress: 100 },
+        ]}
+      />,
+    );
+    expect(screen.getByRole('progressbar', { name: 'Uploading over.bin' })).toHaveAttribute('aria-valuenow', '100');
+    expect(screen.getByRole('progressbar', { name: 'Uploading under.bin' })).toHaveAttribute('aria-valuenow', '0');
+    expect(screen.queryByRole('progressbar', { name: 'Uploading done.bin' })).toBeNull();
+    expect(screen.getByText('2 KB')).toBeInTheDocument();
+  });
+
+  it('omits remove buttons without onRemove and forwards ref', () => {
+    const ref = { current: null as HTMLUListElement | null };
+    render(<ComposerAttachments ref={ref} files={[{ id: 'a', name: 'a.md', size: 90 }]} />);
+    expect(screen.queryByRole('button')).toBeNull();
+    expect(ref.current?.tagName).toBe('UL');
+  });
 });

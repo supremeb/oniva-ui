@@ -1,7 +1,6 @@
 import * as stylex from '@stylexjs/stylex';
-import { Check, Copy } from 'lucide-react';
 import { useState } from 'react';
-import { Button } from 'oniva-ui';
+import { Button, CheckIcon, CopyIcon } from 'oniva-ui';
 import { colors } from '@oniva-tokens/colors.stylex';
 import { font } from '@oniva-tokens/font.stylex';
 import { radius } from '@oniva-tokens/radius.stylex';
@@ -42,7 +41,7 @@ export function CodeBlock({ code }: { code: string }) {
           setTimeout(() => setCopied(false), 1500);
         }}
       >
-        {copied ? <Check size={14} /> : <Copy size={14} />}
+        {copied ? <CheckIcon size={14} /> : <CopyIcon size={14} />}
       </Button>
     </div>
   );

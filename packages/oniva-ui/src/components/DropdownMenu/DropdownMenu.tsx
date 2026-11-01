@@ -16,7 +16,7 @@ import {
   type MenuTriggerProps as AriaMenuTriggerProps,
   type PopoverProps as AriaPopoverProps,
 } from 'react-aria-components';
-import { Check, ChevronRight, Circle } from 'lucide-react';
+import { CheckIcon, ChevronRightIcon, CircleIcon } from '../../icons/IconSet';
 import type { ReactNode, Ref } from 'react';
 import { menuStyles as m } from '../../internal/overlays-menu';
 import { mergeSx } from '../../internal/sx';
@@ -78,7 +78,7 @@ export interface DropdownMenuItemProps extends Omit<
   'className' | 'style' | 'children'
 > {
   children?: ReactNode;
-  /** Leading icon (e.g. a lucide icon at 16px). */
+  /** Leading icon (e.g. an oniva glyph at 16px). */
   icon?: ReactNode;
   /** Keyboard shortcut hint, e.g. "⌘K". Display only. */
   shortcut?: string;
@@ -124,9 +124,9 @@ export function DropdownMenuItem({
             <span {...stylex.props(m.check)} aria-hidden="true">
               {isSelected &&
                 (selectionMode === 'multiple' ? (
-                  <Check size={14} />
+                  <CheckIcon size={14} />
                 ) : (
-                  <Circle size={6} fill="currentColor" />
+                  <CircleIcon size={6} fill="currentColor" />
                 ))}
             </span>
           )}
@@ -141,7 +141,7 @@ export function DropdownMenuItem({
           {shortcut && <AriaKeyboard {...stylex.props(m.shortcut)}>{shortcut}</AriaKeyboard>}
           {hasSubmenu && (
             <span {...stylex.props(m.chevron)} aria-hidden="true">
-              <ChevronRight size={14} />
+              <ChevronRightIcon size={14} />
             </span>
           )}
         </>

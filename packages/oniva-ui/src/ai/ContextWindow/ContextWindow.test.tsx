@@ -57,6 +57,19 @@ describe('ContextWindow', () => {
     await waitFor(() => expect(screen.getByText('Compacted')).toBeInTheDocument());
   });
 
+  it('exposes full text of truncated model, part and item names as titles', () => {
+    render(<ContextWindow parts={parts} limit={200_000} model="Quill Reasoner with extended thinking budget" defaultOpen={['files']} />);
+    expect(screen.getByTitle('Quill Reasoner with extended thinking budget')).toBeInTheDocument();
+    expect(screen.getByTitle('Files')).toBeInTheDocument();
+    expect(screen.getByTitle('billing.ts')).toBeInTheDocument();
+  });
+
+  it('labels the locked icon as an image and formats the limit like the tray', () => {
+    render(<ContextWindow parts={parts} limit={200_000} />);
+    expect(screen.getByRole('img', { name: 'Locked' })).toBeInTheDocument();
+    expect(screen.getByText('of 200K')).toBeInTheDocument();
+  });
+
   it('forwards ref and className', () => {
     const ref = createRef<HTMLDivElement>();
     render(<ContextWindow parts={parts} limit={200_000} ref={ref} className="x" />);

@@ -1,4 +1,4 @@
-import { User } from 'lucide-react';
+import { UserIcon } from '../../icons/IconSet';
 import type { DemoModule } from '../../internal/demo';
 import { Avatar, AvatarGroup } from './Avatar';
 
@@ -18,14 +18,14 @@ const demo: DemoModule = {
       code: `<Avatar size="xs" name="Ada Lovelace" />
 <Avatar size="sm" name="Grace Hopper" />
 <Avatar size="md" name="Alan Turing" color="accent" />
-<Avatar size="lg" fallback={<User size={16} />} />
+<Avatar size="lg" fallback={<UserIcon size={16} />} />
 <Avatar size="xl" name="Broken" src="/missing.png" />`,
       Component: () => (
         <div style={row}>
           <Avatar size="xs" name="Ada Lovelace" />
           <Avatar size="sm" name="Grace Hopper" />
           <Avatar size="md" name="Alan Turing" color="accent" />
-          <Avatar size="lg" name="Anon" fallback={<User size={16} />} />
+          <Avatar size="lg" name="Anon" fallback={<UserIcon size={16} />} />
           <Avatar size="xl" name="Broken Image" src="/missing.png" />
         </div>
       ),

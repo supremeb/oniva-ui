@@ -1,5 +1,4 @@
 import * as stylex from '@stylexjs/stylex';
-import { CreditCard, DollarSign, Users, Wallet } from 'lucide-react';
 import type { ColumnDef } from '@tanstack/react-table';
 import {
   AreaChart,
@@ -13,7 +12,7 @@ import {
   PriceCell,
   StatCard,
   StatusBadgeCell,
-  CustomerCell,
+  CustomerCell, CreditCardIcon, DollarIcon, UsersIcon, WalletIcon,
 } from 'oniva-ui';
 import {
   revenueByMonth,
@@ -99,7 +98,7 @@ export function Dashboard() {
             value="$88,400"
             delta={10.8}
             deltaLabel="vs Nov"
-            icon={<DollarSign size={16} />}
+            icon={<DollarIcon size={16} />}
             trend={[42, 46, 52, 50, 57, 63, 61, 69, 74, 71, 80, 88]}
           />
           <StatCard
@@ -107,7 +106,7 @@ export function Dashboard() {
             value="2,940"
             delta={4.1}
             deltaLabel="vs Nov"
-            icon={<Users size={16} />}
+            icon={<UsersIcon size={16} />}
             tone={5}
             trend={[18, 20, 19, 22, 24, 23, 26, 27, 26, 29, 30, 31]}
           />
@@ -117,7 +116,7 @@ export function Dashboard() {
             delta={-0.4}
             invertDelta
             deltaLabel="vs Nov"
-            icon={<CreditCard size={16} />}
+            icon={<CreditCardIcon size={16} />}
             tone={3}
             trend={[24, 22, 23, 21, 20, 19, 19, 18]}
           />
@@ -126,7 +125,7 @@ export function Dashboard() {
             value="$1.24M"
             delta={2.3}
             deltaLabel="vs Nov"
-            icon={<Wallet size={16} />}
+            icon={<WalletIcon size={16} />}
             tone={4}
             trend={[100, 104, 99, 108, 112, 118, 121, 124]}
           />

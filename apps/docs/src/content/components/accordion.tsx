@@ -1,5 +1,4 @@
-import { CreditCard, Shield, Truck } from 'lucide-react';
-import { Accordion, AccordionItem } from 'oniva-ui';
+import { Accordion, AccordionItem, CreditCardIcon, ShieldIcon, TruckIcon } from 'oniva-ui';
 import type { DocPage } from '../types';
 
 const Demo = (p: { variant?: 'divided' | 'cards'; multiple?: boolean; icons?: boolean; open?: string[]; disabled?: boolean; onEvent?: (n: string) => void }) => (
@@ -10,13 +9,13 @@ const Demo = (p: { variant?: 'divided' | 'cards'; multiple?: boolean; icons?: bo
       defaultExpandedKeys={p.open ?? ['shipping']}
       onExpandedChange={() => p.onEvent?.('onExpandedChange')}
     >
-      <AccordionItem id="shipping" icon={p.icons ? <Truck size={16} /> : undefined} title="Shipping & delivery">
+      <AccordionItem id="shipping" icon={p.icons ? <TruckIcon size={16} /> : undefined} title="Shipping & delivery">
         Orders ship within 2 business days. Standard delivery takes 3 to 5 days.
       </AccordionItem>
-      <AccordionItem id="returns" icon={p.icons ? <CreditCard size={16} /> : undefined} title="Returns" isDisabled={p.disabled}>
+      <AccordionItem id="returns" icon={p.icons ? <CreditCardIcon size={16} /> : undefined} title="Returns" isDisabled={p.disabled}>
         Return unused items within 30 days for a full refund.
       </AccordionItem>
-      <AccordionItem id="warranty" icon={p.icons ? <Shield size={16} /> : undefined} title="Warranty">
+      <AccordionItem id="warranty" icon={p.icons ? <ShieldIcon size={16} /> : undefined} title="Warranty">
         Every plan includes a 12-month limited warranty.
       </AccordionItem>
     </Accordion>

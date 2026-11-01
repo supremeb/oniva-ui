@@ -1,5 +1,4 @@
-import { Bell, BellOff, Star } from 'lucide-react';
-import { ToggleButton } from 'oniva-ui';
+import { ToggleButton, BellIcon, BellOffIcon, StarIcon } from 'oniva-ui';
 import type { DocPage } from '../types';
 
 const page: DocPage = {
@@ -13,13 +12,13 @@ const page: DocPage = {
   anatomy: {
     intro: 'Three parts. The container and label are required. The icon is optional. Selected state changes fill, border and text colour together.',
     Render: () => (
-      <ToggleButton defaultSelected startIcon={<Bell size={16} />}>
+      <ToggleButton defaultSelected startIcon={<BellIcon size={16} />}>
         Mute alerts
       </ToggleButton>
     ),
     parts: [
       { name: 'Container', description: 'Native button with aria-pressed. 36px tall at md, 10px radius, 12px padding, 1px border. Selected secondary: accent-soft fill and accent border.', selector: 'button[aria-pressed]' },
-      { name: 'Leading icon', description: '16px lucide icon, 6px gap. Swap the glyph with the state (Bell to BellOff) so state is not carried by colour alone.', selector: 'button svg:first-of-type' },
+      { name: 'Leading icon', description: '16px icon, 6px gap. Swap the glyph with the state (BellIcon to BellOffIcon) so state is not carried by colour alone.', selector: 'button svg:first-of-type' },
       { name: 'Label', description: '14px, medium weight. Name the thing being toggled, not the state.', selector: 'button', fallback: { x: 65, y: 50 } },
     ],
   },
@@ -48,7 +47,7 @@ const page: DocPage = {
         size={p.size as 'md'}
         defaultSelected={Boolean(p.defaultSelected)}
         isDisabled={Boolean(p.isDisabled)}
-        startIcon={<Bell size={16} />}
+        startIcon={<BellIcon size={16} />}
         onChange={(on) => ev(`onChange: ${on}`)}
       >
         {String(p.label)}
@@ -56,7 +55,7 @@ const page: DocPage = {
     ),
     code: (p) => {
       const attrs = [p.variant !== 'secondary' && `variant="${p.variant}"`, p.size !== 'md' && `size="${p.size}"`, p.defaultSelected && 'defaultSelected', p.isDisabled && 'isDisabled'].filter(Boolean).join(' ');
-      return `<ToggleButton${attrs ? ' ' + attrs : ''} startIcon={<Bell size={16} />} onChange={setMuted}>${p.label}</ToggleButton>`;
+      return `<ToggleButton${attrs ? ' ' + attrs : ''} startIcon={<BellIcon size={16} />} onChange={setMuted}>${p.label}</ToggleButton>`;
     },
   },
   states: [
@@ -64,8 +63,8 @@ const page: DocPage = {
     { name: 'On', description: 'aria-pressed="true". Accent-soft fill, accent border and text.', Render: () => <ToggleButton defaultSelected>Mute alerts</ToggleButton> },
     { name: 'On, ghost', description: 'Selected ghost uses the tertiary surface and full text colour.', Render: () => <ToggleButton variant="ghost" defaultSelected>Pinned</ToggleButton> },
     { name: 'On, soft', description: 'Selected soft deepens the accent tint.', Render: () => <ToggleButton variant="soft" defaultSelected>Watching</ToggleButton> },
-    { name: 'Icon only', description: 'Needs aria-label. Square at the size width.', Render: () => <ToggleButton isIconOnly aria-label="Favourite" defaultSelected><Star size={16} /></ToggleButton> },
-    { name: 'Swapped glyph', description: 'The icon and label change with state.', Render: () => <ToggleButton defaultSelected startIcon={<BellOff size={16} />}>Muted</ToggleButton> },
+    { name: 'Icon only', description: 'Needs aria-label. Square at the size width.', Render: () => <ToggleButton isIconOnly aria-label="Favourite" defaultSelected><StarIcon size={16} /></ToggleButton> },
+    { name: 'Swapped glyph', description: 'The icon and label change with state.', Render: () => <ToggleButton defaultSelected startIcon={<BellOffIcon size={16} />}>Muted</ToggleButton> },
     { name: 'Disabled', description: '50% opacity, no toggle.', Render: () => <ToggleButton isDisabled defaultSelected>Mute alerts</ToggleButton> },
   ],
   sections: [
@@ -80,7 +79,7 @@ const page: DocPage = {
     {
       type: 'dodont', id: 'do-and-dont', title: 'Do and don’t',
       items: [
-        { kind: 'do', caption: 'Fixed noun, glyph reflects state.', example: () => <ToggleButton defaultSelected startIcon={<Star size={16} />}>Favourite</ToggleButton> },
+        { kind: 'do', caption: 'Fixed noun, glyph reflects state.', example: () => <ToggleButton defaultSelected startIcon={<StarIcon size={16} />}>Favourite</ToggleButton> },
         { kind: 'dont', caption: 'Verb label that flips. Users cannot tell state from action.', example: () => <ToggleButton defaultSelected>Click to unfavourite</ToggleButton> },
       ],
     },

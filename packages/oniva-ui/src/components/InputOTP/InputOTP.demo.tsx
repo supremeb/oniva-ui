@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Mail } from 'lucide-react';
+import { MailIcon } from '../../icons/IconSet';
 import type { DemoModule } from '../../internal/demo';
 import { InputOTP, type InputOTPStatus } from './InputOTP';
 
@@ -46,7 +46,7 @@ function EmailCard() {
     <div style={{ background: 'var(--oniva-color-surface)', border: '1px solid var(--oniva-color-border)', borderRadius: 16, boxShadow: 'var(--oniva-shadow-xs)', maxWidth: 400, overflow: 'hidden', width: '100%' }}>
       <div style={{ alignItems: 'center', display: 'flex', flexDirection: 'column', gap: 16, padding: '28px 24px 24px' }}>
         <span style={{ alignItems: 'center', border: '1px solid var(--oniva-color-border)', borderRadius: 12, color: 'var(--oniva-color-text-muted)', display: 'inline-flex', height: 40, justifyContent: 'center', width: 40 }}>
-          <Mail size={18} aria-hidden="true" />
+          <MailIcon size={18} aria-hidden="true" />
         </span>
         <div style={{ textAlign: 'center' }}>
           <h3 style={{ fontSize: 18, fontWeight: 600, margin: 0 }}>Check your email</h3>

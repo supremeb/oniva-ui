@@ -1,7 +1,6 @@
 import { useLayoutEffect, useRef, useState, type ComponentType, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
-import { Alert, Badge, Button, Card, CardDescription, CardHeader, CardHeaderText, CardTitle, EmptyState, Input, Select, SelectItem, Slider, Switch } from 'oniva-ui';
-import { Check, Search, Settings, Plus, Inbox, Sparkles, X, ArrowRight } from 'lucide-react';
+import { Alert, Badge, Button, Card, CardDescription, CardHeader, CardHeaderText, CardTitle, EmptyState, Input, Select, SelectItem, Slider, Switch, CheckIcon, SearchIcon, SettingsIcon, PlusIcon, InboxIcon, SparklesIcon, XIcon, ArrowRightIcon } from 'oniva-ui';
 import { CodeBlock } from '../components/CodeBlock';
 import { counts } from '../lib/site';
 import { principles } from './principles';
@@ -174,10 +173,10 @@ const Elevation = () => (
     </div>
   </div>
 );
-const ICONS = [Search, Settings, Plus, Inbox, Sparkles, Check, X, ArrowRight];
+const ICONS = [SearchIcon, SettingsIcon, PlusIcon, InboxIcon, SparklesIcon, CheckIcon, XIcon, ArrowRightIcon];
 const Icons = () => (
   <>
-    <P>Icons are lucide-react. Default to 16px at stroke 2 inside controls, 20px in empty states and nav, 14px in dense rows. Never mix stroke widths in one view. Icon-only buttons need an aria-label.</P>
+    <P>Icons are the oniva icon set (18-unit grid, 1.5 stroke; see Icon set). Default to 16px inside controls, 20px in empty states and nav, 14px in dense rows. Never mix stroke widths in one view. Icon-only buttons need an aria-label.</P>
     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 24 }}>
       {[14, 16, 20, 24].map((sz) => (
         <div key={sz} style={{ ...box, alignItems: 'center', display: 'flex', gap: 10 }}>
@@ -186,14 +185,14 @@ const Icons = () => (
         </div>
       ))}
     </div>
-    <CodeBlock code={`import { Search } from 'lucide-react';\n\n<Button startIcon={<Search size={16} />}>Search</Button>`} />
+    <CodeBlock code={`import { SearchIcon } from 'oniva-ui';\n\n<Button startIcon={<SearchIcon size={16} />}>Search</Button>`} />
   </>
 );
 
 /* ---- Getting started ---- */
 const Install = () => (
   <>
-    <CodeBlock code={`npm install oniva-ui react react-dom react-aria-components lucide-react`} />
+    <CodeBlock code={`npm install oniva-ui react react-dom react-aria-components`} />
     <P>Import the stylesheet once, then wrap the app in ThemeProvider. StyleX is only needed if you author your own styles or pass xstyle.</P>
     <CodeBlock code={`import 'oniva-ui/styles.css';\nimport { ThemeProvider } from 'oniva-ui';\n\n<ThemeProvider theme="system" accent="blue">\n  <App />\n</ThemeProvider>`} />
   </>
@@ -278,7 +277,7 @@ export const staticPages: StaticPage[] = [
   { path: '/foundations/spacing', group: 'foundations', title: 'Spacing', lede: 'Fifteen steps from 1px to 96px. Pick the token, never the number.', sections: [sec('scale', 'Scale', Space)] },
   { path: '/foundations/radius', group: 'foundations', title: 'Radius', lede: 'Nine radii. Controls use md (10px), cards xl, pills full.', sections: [sec('scale', 'Scale', Radius)] },
   { path: '/foundations/elevation', group: 'foundations', title: 'Depth', lede: 'Five levels: flat, recessed, raised, floating and overlay. Each means one thing, and most surfaces are flat.', sections: [sec('levels', 'The five levels', Depth), sec('rules', 'Rules', DepthRules), sec('tokens', 'Elevation tokens', Elevation)] },
-  { path: '/foundations/iconography', group: 'foundations', title: 'Iconography', lede: 'lucide-react only. 16px at stroke 2 is the default.', sections: [sec('sizes', 'Sizes and usage', Icons)] },
+  { path: '/foundations/iconography', group: 'foundations', title: 'Iconography', lede: 'The oniva icon set only: outline by default, duo and fill for emphasis. 16px is the default.', sections: [sec('sizes', 'Sizes and usage', Icons)] },
   { path: '/patterns/ai-assistance', group: 'patterns', title: 'AI assistance', lede: 'Show what the model did, how sure it is, and how to undo it.', sections: [sec('disclose', 'Disclose and allow undo', AiPattern), sec('sources', 'Sources and confidence', AiSources), sec('streaming', 'Streaming and waiting', AiStream), sec('apply', 'Preview, apply, undo', AiApply), sec('failure', 'When it fails', AiFail)] },
   { path: '/patterns/empty-states', group: 'patterns', title: 'Empty states', lede: 'An empty state is the first thing a new user sees. Make it a next step.', sections: [sec('first-use', 'First use', EmptyPattern), sec('no-results', 'No results', EmptyNoResults), sec('all-done', 'All done', EmptyDone), sec('empty-vs-error', 'Empty is not an error', EmptyVsError), sec('writing', 'Writing an empty state', EmptyWriting)] },
   { path: '/patterns/forms-and-validation', group: 'patterns', title: 'Forms & validation', lede: 'Validate on blur, say how to fix it, keep what the user typed.', sections: [sec('errors', 'Error messages', FormsPattern), sec('when', 'When to validate', FormWhen), sec('required', 'Required, optional, order', FormRequired), sec('submit', 'Submitting', FormSubmit), sec('long-forms', 'Long forms', FormLong)] },

@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { Check, Copy } from 'lucide-react';
+import { CheckIcon, CopyIcon } from '../../icons/IconSet';
 import { useEffect, useRef, useState } from 'react';
 import type { Ref } from 'react';
 import { Button } from '../../components/Button/Button';
@@ -59,8 +59,8 @@ export function CopyButton({ value, resetAfter = 1600, onCopy, variant = 'second
       }}
     >
       <span {...stylex.props(styles.stack)} aria-hidden="true">
-        <Copy size={16} {...mark} {...stylex.props(styles.icon, styles.copyIcon)} />
-        <Check size={16} {...mark} {...stylex.props(styles.icon, styles.checkIcon)} />
+        <CopyIcon size={16} {...mark} {...stylex.props(styles.icon, styles.copyIcon)} />
+        <CheckIcon size={16} {...mark} {...stylex.props(styles.icon, styles.checkIcon)} />
       </span>
       <VisuallyHidden>
         <span role="status">{copied ? 'Copied' : ''}</span>

@@ -2,7 +2,7 @@ import * as stylex from '@stylexjs/stylex';
 import { media } from '../../tokens/media.stylex';
 import { focus } from '../../internal/focus';
 import { Button as AriaButton } from 'react-aria-components';
-import { Menu } from 'lucide-react';
+import { MenuIcon } from '../../icons/IconSet';
 import { useState, type CSSProperties, type HTMLAttributes, type ReactNode, type Ref } from 'react';
 import { mergeSx } from '../../internal/sx';
 import { colors } from '../../tokens/colors.stylex';
@@ -171,7 +171,7 @@ export function LayoutShell({
                 onPress={() => setOpen(!open)}
                 {...stylex.props(styles.menuBtn, focus.ring)}
               >
-                <Menu size={18} />
+                <MenuIcon size={18} />
               </AriaButton>
             )}
             <div {...stylex.props(styles.headerContent)}>{header}</div>

@@ -5,12 +5,12 @@ import { expectNoA11yViolations } from '../../internal/test-a11y';
 import { FanOutGrid, type FanoutTask } from './FanOutGrid';
 
 const tasks: FanoutTask[] = [
-  { id: '1', label: 'acme.io', status: 'done', start: 0, end: 4000, cost: 0.02, result: 'Series B, 120 staff' },
-  { id: '2', label: 'globex.com', status: 'done', start: 0, end: 6000, cost: 0.03 },
-  { id: '3', label: 'initech.dev', status: 'done', start: 1000, end: 6000, cost: 0.02 },
-  { id: '4', label: 'umbrella.co', status: 'failed', start: 1000, end: 3000, error: 'Site blocked the crawler', attempts: 2 },
-  { id: '5', label: 'hooli.net', status: 'running', start: 5000 },
-  { id: '6', label: 'stark.org', status: 'queued' },
+  { id: '1', label: 'northwind-labs.example', status: 'done', start: 0, end: 4000, cost: 0.02, result: 'Series B, 120 staff' },
+  { id: '2', label: 'harbor-freight.example', status: 'done', start: 0, end: 6000, cost: 0.03 },
+  { id: '3', label: 'lumen-works.example', status: 'done', start: 1000, end: 6000, cost: 0.02 },
+  { id: '4', label: 'quill-press.example', status: 'failed', start: 1000, end: 3000, error: 'Site blocked the crawler', attempts: 2 },
+  { id: '5', label: 'atlas-cargo.example', status: 'running', start: 5000 },
+  { id: '6', label: 'meridian-bio.example', status: 'queued' },
 ];
 
 
@@ -21,7 +21,7 @@ describe('FanOutGrid', () => {
   it('renders the same content under prefers-reduced-motion', () => {
     stubReduce();
     render(<FanOutGrid tasks={tasks} now={7000} />);
-    expect(screen.getByRole('button', { name: 'hooli.net, running' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'atlas-cargo.example, running' })).toBeInTheDocument();
     vi.unstubAllGlobals();
   });
 
@@ -36,16 +36,16 @@ describe('FanOutGrid', () => {
   it('walks cells with arrows and shows details; Enter pins, Esc releases', () => {
     const onSelect = vi.fn();
     render(<FanOutGrid tasks={tasks} now={7000} onSelect={onSelect} />);
-    const first = screen.getByRole('button', { name: 'acme.io, done' });
+    const first = screen.getByRole('button', { name: 'northwind-labs.example, done' });
     first.focus();
     fireEvent.keyDown(first, { key: 'ArrowRight' });
-    expect(screen.getByRole('button', { name: 'globex.com, done' })).toHaveFocus();
+    expect(screen.getByRole('button', { name: 'harbor-freight.example, done' })).toHaveFocus();
     fireEvent.keyDown(document.activeElement!, { key: 'End' });
-    expect(screen.getByRole('button', { name: 'stark.org, queued' })).toHaveFocus();
-    fireEvent.click(screen.getByRole('button', { name: 'umbrella.co, failed' }));
+    expect(screen.getByRole('button', { name: 'meridian-bio.example, queued' })).toHaveFocus();
+    fireEvent.click(screen.getByRole('button', { name: 'quill-press.example, failed' }));
     expect(onSelect).toHaveBeenCalledWith(expect.objectContaining({ id: '4' }));
     expect(screen.getByText('Site blocked the crawler')).toBeInTheDocument();
-    fireEvent.keyDown(screen.getByRole('button', { name: 'umbrella.co, failed' }), { key: 'Escape' });
+    fireEvent.keyDown(screen.getByRole('button', { name: 'quill-press.example, failed' }), { key: 'Escape' });
     expect(onSelect).toHaveBeenLastCalledWith(null);
   });
 
@@ -57,6 +57,28 @@ describe('FanOutGrid', () => {
     const chip = screen.getByRole('button', { name: /1\s*Failed/ });
     fireEvent.click(chip);
     expect(chip).toHaveAttribute('aria-pressed', 'true');
+  });
+
+  it('shows a hint instead of details, an empty message with no tasks, and hides time left once settled', () => {
+    const { rerender } = render(<FanOutGrid tasks={tasks} now={7000} />);
+    expect(screen.getByText('Hover or focus a cell for details.')).toBeInTheDocument();
+    rerender(<FanOutGrid tasks={[]} />);
+    expect(screen.getByText('No tasks in this job yet.')).toBeInTheDocument();
+    expect(screen.queryByText(/left$|Time left/)).not.toBeInTheDocument();
+    rerender(<FanOutGrid tasks={tasks.map((t) => ({ ...t, status: 'done' as const }))} />);
+    expect(screen.queryByText(/Time left|left$/)).not.toBeInTheDocument();
+  });
+
+  it('does not announce progress on first render', async () => {
+    render(<FanOutGrid tasks={tasks.map((t) => ({ ...t, status: 'done' as const }))} />);
+    await Promise.resolve();
+    expect(screen.queryByText(/Finished:/)).not.toBeInTheDocument();
+  });
+
+  it('announces when a job settles after mounting', async () => {
+    const { rerender } = render(<FanOutGrid tasks={tasks} now={7000} />);
+    rerender(<FanOutGrid tasks={tasks.map((t) => ({ ...t, status: 'done' as const }))} now={9000} />);
+    expect(await screen.findByText('Finished: 6 done, 0 failed.')).toBeInTheDocument();
   });
 
   it('forwards ref/className and passes axe', async () => {

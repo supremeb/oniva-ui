@@ -1,5 +1,4 @@
 import * as stylex from '@stylexjs/stylex';
-import { Activity, DollarSign, Users } from 'lucide-react';
 import { memo, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import type { ColumnDef } from '@tanstack/react-table';
 import {
@@ -15,7 +14,7 @@ import {
   StatCard,
   StatusBadgeCell,
   ToolApproval,
-  type TaskItem,
+  type TaskItem, ActivityIcon, DollarIcon, UsersIcon,
 } from 'oniva-ui';
 import { colors } from '@oniva-tokens/colors.stylex';
 import { font } from '@oniva-tokens/font.stylex';
@@ -373,7 +372,7 @@ export function Showcase() {
                     valueFormat={{ style: 'currency', currency: 'USD', maximumFractionDigits: 0 }}
                     delta={8.2}
                     deltaLabel="vs Q2"
-                    icon={<DollarSign size={16} />}
+                    icon={<DollarIcon size={16} />}
                     trend={[31, 34, 33, 38, 41, 40, 46, 48]}
                   />
                 </Slot>
@@ -383,7 +382,7 @@ export function Showcase() {
                     value={2940}
                     delta={-1.4}
                     deltaLabel="vs Q2"
-                    icon={<Users size={16} />}
+                    icon={<UsersIcon size={16} />}
                     tone={5}
                     trend={[29, 30, 31, 31, 30, 29, 30, 29]}
                   />
@@ -394,7 +393,7 @@ export function Showcase() {
                     value="112%"
                     delta={3.1}
                     deltaLabel="vs plan"
-                    icon={<Activity size={16} />}
+                    icon={<ActivityIcon size={16} />}
                     tone={3}
                     trend={[21, 22, 24, 23, 26, 27, 29, 31]}
                   />

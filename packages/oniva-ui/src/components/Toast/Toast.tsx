@@ -8,7 +8,7 @@ import {
   UNSTABLE_ToastRegion as AriaToastRegion,
   type QueuedToast,
 } from 'react-aria-components';
-import { AlertTriangle, CheckCircle2, Info, Loader2, X, XCircle } from 'lucide-react';
+import { TriangleAlertIcon, CircleCheckIcon, InfoIcon, LoaderIcon, XIcon, CircleXIcon } from '../../icons/IconSet';
 import {
   useCallback,
   useEffect,
@@ -290,11 +290,11 @@ export type ToastPlacement =
 
 const variantIcon = {
   default: null,
-  success: <CheckCircle2 size={20} />,
-  warning: <AlertTriangle size={20} />,
-  danger: <XCircle size={20} />,
-  info: <Info size={20} />,
-  loading: <Loader2 size={20} />,
+  success: <CircleCheckIcon size={20} />,
+  warning: <TriangleAlertIcon size={20} />,
+  danger: <CircleXIcon size={20} />,
+  info: <InfoIcon size={20} />,
+  loading: <LoaderIcon size={20} />,
 } as const;
 const variantTone = {
   default: undefined,
@@ -507,7 +507,7 @@ function ToastItem({
           aria-label="Dismiss notification"
           {...stylex.props(styles.close, styles.fadeable, layout.peek && styles.fadedOut)}
         >
-          <X size={14} aria-hidden="true" />
+          <XIcon size={14} aria-hidden="true" />
         </AriaButton>
       </AriaToast>
     </div>

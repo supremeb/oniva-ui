@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { ArrowDown } from 'lucide-react';
+import { ArrowDownIcon } from '../../icons/IconSet';
 import {
   useCallback,
   useEffect,
@@ -11,9 +11,16 @@ import {
 } from 'react';
 import { colors } from '../../tokens/colors.stylex';
 import { motion } from '../../tokens/motion.stylex';
+import { media } from '../../tokens/media.stylex';
 import { shadow } from '../../tokens/shadow.stylex';
 import { IconButton } from '../../components/IconButton';
+import { focus } from '../../internal/focus';
 import { mergeSx } from '../../internal/sx';
+
+const riseIn = stylex.keyframes({
+  from: { opacity: 0, transform: 'translateY(8px)' },
+  to: { opacity: 1, transform: 'translateY(0)' },
+});
 
 const styles = stylex.create({
   root: { boxSizing: 'border-box', height: '100%', position: 'relative' },
@@ -21,17 +28,24 @@ const styles = stylex.create({
     boxSizing: 'border-box',
     height: '100%',
     overflowY: 'auto',
+    overscrollBehaviorY: 'contain',
     paddingBlock: 16,
     paddingInline: 16,
   },
   inner: { display: 'flex', flexDirection: 'column', gap: 24, marginInline: 'auto', maxWidth: 760 },
   float: {
+    animationDuration: motion['--oniva-motion-dur-enter'],
+    animationFillMode: 'backwards',
+    animationName: { default: riseIn, [media.reducedMotion]: 'none' },
+    animationTimingFunction: motion['--oniva-motion-ease-out'],
+    display: 'flex',
     insetBlockEnd: 12,
-    insetInlineStart: '50%',
+    insetInline: 0,
+    justifyContent: 'center',
+    pointerEvents: 'none',
     position: 'absolute',
-    transform: 'translateX(-50%)',
-    transitionDuration: motion['--oniva-motion-dur-base'],
   },
+  floatBtn: { pointerEvents: 'auto' },
   btn: { backgroundColor: colors['--oniva-color-surface'], boxShadow: shadow['--oniva-elevation-floating'] },
 });
 
@@ -49,9 +63,9 @@ export function ScrollToBottomButton({ onPress, xstyle }: ScrollToBottomButtonPr
         size="sm"
         aria-label="Scroll to bottom"
         onPress={onPress}
-        xstyle={[styles.btn, xstyle]}
+        xstyle={[styles.floatBtn, styles.btn, xstyle]}
       >
-        <ArrowDown size={16} aria-hidden="true" />
+        <ArrowDownIcon size={16} aria-hidden="true" />
       </IconButton>
     </div>
   );
@@ -93,21 +107,27 @@ export function ChatContainer({
     else el.scrollTop = el.scrollHeight;
   }, []);
 
-  const onScroll = () => {
+  const measure = () => {
     const el = scroller.current;
     if (!el) return;
     const near = el.scrollHeight - el.scrollTop - el.clientHeight <= threshold;
     stuck.current = near;
     setAway(!near);
   };
+  const measureRef = useRef(measure);
+  measureRef.current = measure;
 
   useEffect(() => {
     const target = content.current;
+    const box = scroller.current;
     if (!target || typeof ResizeObserver === 'undefined') return;
     const ro = new ResizeObserver(() => {
       if (stuck.current) toBottom(false);
+      // Content shrank or the viewport grew until nothing overflows: drop a stale jump button.
+      else measureRef.current();
     });
     ro.observe(target);
+    if (box) ro.observe(box);
     return () => ro.disconnect();
   }, [toBottom]);
 
@@ -120,8 +140,8 @@ export function ChatContainer({
         aria-label="Conversation"
         aria-live="polite"
         tabIndex={0}
-        onScroll={onScroll}
-        {...stylex.props(styles.scroll)}
+        onScroll={measure}
+        {...stylex.props(styles.scroll, focus.inset)}
       >
         <div ref={content} {...stylex.props(styles.inner)}>
           {children}

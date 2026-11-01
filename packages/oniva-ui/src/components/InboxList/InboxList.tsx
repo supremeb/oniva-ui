@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { Archive, Mail, MailOpen } from 'lucide-react';
+import { ArchiveIcon, MailIcon, MailOpenIcon } from '../../icons/IconSet';
 import { useRef, useState } from 'react';
 import type { PointerEvent, ReactNode, Ref } from 'react';
 import { Button as AriaButton, GridList, GridListItem, type GridListProps } from 'react-aria-components';
@@ -166,11 +166,11 @@ function Row({ item, hovered, focusVisible, onArchive, onToggleRead }: { item: I
         <span aria-hidden="true" {...stylex.props(styles.swipeBg, dx < 0 ? styles.bgArchive : styles.bgRead)}>
           {dx < 0 ? (
             <>
-              Archive <Archive size={16} />
+              Archive <ArchiveIcon size={16} />
             </>
           ) : (
             <>
-              <MailOpen size={16} /> {item.unread ? 'Mark read' : 'Mark unread'}
+              <MailOpenIcon size={16} /> {item.unread ? 'Mark read' : 'Mark unread'}
             </>
           )}
         </span>
@@ -200,10 +200,10 @@ function Row({ item, hovered, focusVisible, onArchive, onToggleRead }: { item: I
         </span>
         <span {...stylex.props(styles.actions)}>
           <AriaButton aria-label={item.unread ? `Mark ${item.from} as read` : `Mark ${item.from} as unread`} onPress={() => onToggleRead?.(item.id)} {...stylex.props(styles.act, focus.ring, show && styles.actShown)}>
-            {item.unread ? <MailOpen size={16} aria-hidden="true" /> : <Mail size={16} aria-hidden="true" />}
+            {item.unread ? <MailOpenIcon size={16} aria-hidden="true" /> : <MailIcon size={16} aria-hidden="true" />}
           </AriaButton>
           <AriaButton aria-label={`Archive ${item.from}`} onPress={() => onArchive?.(item.id)} {...stylex.props(styles.act, focus.ring, show && styles.actShown)}>
-            <Archive size={16} aria-hidden="true" />
+            <ArchiveIcon size={16} aria-hidden="true" />
           </AriaButton>
         </span>
       </div>

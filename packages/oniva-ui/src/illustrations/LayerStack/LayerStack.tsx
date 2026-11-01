@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { Activity, Database, Plug, Sparkles, Zap } from 'lucide-react';
+import { ActivityIcon, DatabaseIcon, PlugIcon, SparklesIcon, ZapIcon } from '../../icons/IconSet';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { ListBox, ListBoxItem, type Selection } from 'react-aria-components';
 import { accent } from '../../tokens/accent.stylex';
@@ -165,13 +165,13 @@ export interface LayerStackProps extends IllustrationProps {
   onChange?: (index: number) => void;
 }
 
-const g = (I: typeof Zap) => <I {...stylex.props(styles.glyph, fillSvg.svg)} />;
+const g = (I: typeof ZapIcon) => <I {...stylex.props(styles.glyph, fillSvg.svg)} />;
 const DEFAULT: LayerStackItem[] = [
-  { title: 'Interface', hint: 'What your team and customers see', icon: g(Sparkles) },
-  { title: 'Automations', hint: 'Rules that run without a click', icon: g(Zap) },
-  { title: 'Integrations', hint: 'Two-way sync with your tools', icon: g(Plug) },
-  { title: 'Data', hint: 'One governed source of truth', icon: g(Database) },
-  { title: 'Monitoring', hint: 'Health checks and alerts', icon: g(Activity) },
+  { title: 'Interface', hint: 'What your team and customers see', icon: g(SparklesIcon) },
+  { title: 'Automations', hint: 'Rules that run without a click', icon: g(ZapIcon) },
+  { title: 'Integrations', hint: 'Two-way sync with your tools', icon: g(PlugIcon) },
+  { title: 'Data', hint: 'One governed source of truth', icon: g(DatabaseIcon) },
+  { title: 'Monitoring', hint: 'Health checks and alerts', icon: g(ActivityIcon) },
 ];
 
 function StackBody({
@@ -251,7 +251,7 @@ function StackBody({
                   <span {...stylex.props(styles.glow, on && styles.glowOn)} />
                   <span {...stylex.props(styles.faceOn, on && styles.faceOnShown)}>
                     <span data-on={on ? '' : undefined} {...stylex.props(styles.layerIcon, on && styles.layerIconOn)}>
-                      {list[i]!.icon ?? g(Sparkles)}
+                      {list[i]!.icon ?? g(SparklesIcon)}
                     </span>
                   </span>
                 </span>
@@ -285,7 +285,7 @@ function StackBody({
             >
               {({ isSelected }) => (
                 <>
-                  <span {...stylex.props(styles.icon, isSelected && styles.iconOn)}>{it.icon ?? g(Sparkles)}</span>
+                  <span {...stylex.props(styles.icon, isSelected && styles.iconOn)}>{it.icon ?? g(SparklesIcon)}</span>
                   <span>
                     <span {...stylex.props(styles.title, isSelected && styles.titleOn)}>{it.title}</span>
                     {it.hint && <span {...stylex.props(styles.hint)}>{it.hint}</span>}

@@ -13,7 +13,7 @@ import {
   type RowSelectionState,
   type SortingState,
 } from '@tanstack/react-table';
-import { ArrowLeft, ArrowRight, Copy, Plus, Search, X } from 'lucide-react';
+import { ArrowLeftIcon, ArrowRightIcon, CopyIcon, PlusIcon, SearchIcon, XIcon } from '../../icons/IconSet';
 import { useCallback, useLayoutEffect, useMemo, useRef, useState, type ClipboardEvent, type KeyboardEvent, type ReactNode, type Ref } from 'react';
 import { createFormatters, useFormatters } from '../../internal/format';
 import {
@@ -441,7 +441,7 @@ function BlockTable<TData extends object>({
             onChange={(v) => table.setGlobalFilter(v)}
             {...stylex.props(styles.search)}
           >
-            <Search size={16} aria-hidden="true" />
+            <SearchIcon size={16} aria-hidden="true" />
             <AriaInput placeholder="Search" {...stylex.props(styles.searchInput)} />
           </SearchField>
         )}
@@ -455,7 +455,7 @@ function BlockTable<TData extends object>({
             <Button
               variant="ghost"
               size="sm"
-              startIcon={<Copy size={14} />}
+              startIcon={<CopyIcon size={14} />}
               onPress={() => {
                 const text = selectionToTsv();
                 const done = () => setStatus(`Copied ${fmts.plural(selectedIds.length, { one: '# row', other: '# rows' })}`);
@@ -466,7 +466,7 @@ function BlockTable<TData extends object>({
               Copy
             </Button>
           )}
-          <Button variant="ghost" size="sm" startIcon={<X size={14} />} onPress={() => table.resetRowSelection()}>
+          <Button variant="ghost" size="sm" startIcon={<XIcon size={14} />} onPress={() => table.resetRowSelection()}>
             Clear
           </Button>
         </div>
@@ -540,7 +540,7 @@ function BlockTable<TData extends object>({
           {first}–{last} of {total}
         </span>
         {onAddRow && (
-          <Button variant="ghost" size="sm" startIcon={<Plus size={14} />} onPress={addRow}>
+          <Button variant="ghost" size="sm" startIcon={<PlusIcon size={14} />} onPress={addRow}>
             {addRowLabel}
           </Button>
         )}
@@ -548,7 +548,7 @@ function BlockTable<TData extends object>({
           <Button
             variant="ghost"
             size="sm"
-            startIcon={<ArrowLeft size={14} />}
+            startIcon={<ArrowLeftIcon size={14} />}
             isDisabled={!table.getCanPreviousPage()}
             onPress={() => table.previousPage()}
           >
@@ -576,7 +576,7 @@ function BlockTable<TData extends object>({
           <Button
             variant="ghost"
             size="sm"
-            endIcon={<ArrowRight size={14} />}
+            endIcon={<ArrowRightIcon size={14} />}
             isDisabled={!table.getCanNextPage()}
             onPress={() => table.nextPage()}
           >

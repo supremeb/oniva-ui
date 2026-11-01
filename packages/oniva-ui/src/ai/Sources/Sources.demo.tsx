@@ -2,12 +2,12 @@ import type { DemoModule } from '../../internal/demo';
 import { Sources, type SourceItem } from './Sources';
 
 const sources: SourceItem[] = [
-  { title: 'SaaS retention benchmarks 2026', url: 'https://www.bvp.com/atlas/retention' },
-  { title: 'Q3 earnings roundup', url: 'https://www.reuters.com/markets/q3' },
-  { title: 'Net revenue retention explained', url: 'https://www.saastr.com/nrr' },
-  { title: 'Cohort analysis in SQL', url: 'https://mode.com/sql-tutorial/cohorts' },
-  { title: 'Churn in B2B SaaS', url: 'https://www.profitwell.com/churn' },
-  { title: 'Expansion revenue playbook', url: 'https://openviewpartners.com/expansion' },
+  { title: 'SaaS retention benchmarks 2026', url: 'https://www.northwind.example/research/retention' },
+  { title: 'Q3 earnings roundup', url: 'https://markets.example/reports/q3' },
+  { title: 'Net revenue retention explained', url: 'https://blog.ledgerly.example/nrr' },
+  { title: 'Cohort analysis in SQL', url: 'https://docs.querybench.example/tutorials/cohorts' },
+  { title: 'Churn in B2B SaaS', url: 'https://www.pricewise.example/churn' },
+  { title: 'Expansion revenue playbook', url: 'https://growthnotes.example/expansion' },
 ];
 
 const demo: DemoModule = {

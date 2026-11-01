@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRightIcon } from '../../icons/IconSet';
 import type { HTMLAttributes, ReactNode, Ref } from 'react';
 import { bs } from '../../internal/blocks-styles';
 import { mergeSx } from '../../internal/sx';
@@ -55,7 +55,7 @@ export function CTA({
             <h2 {...stylex.props(bs.h2, styles.narrow)}>{title}</h2>
             <p {...stylex.props(bs.lead, styles.narrow)}>{description}</p>
             <div {...stylex.props(bs.row, bs.rowCenter)}>
-              <Button size="lg" endIcon={<ArrowRight size={16} />}>{primaryLabel}</Button>
+              <Button size="lg" endIcon={<ArrowRightIcon size={16} />}>{primaryLabel}</Button>
               <Button size="lg" variant="secondary">{secondaryLabel}</Button>
             </div>
           </div>

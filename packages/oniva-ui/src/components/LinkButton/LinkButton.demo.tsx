@@ -1,4 +1,4 @@
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRightIcon } from '../../icons/IconSet';
 import type { DemoModule } from '../../internal/demo';
 import { LinkButton } from './LinkButton';
 
@@ -35,14 +35,14 @@ const demo: DemoModule = {
     },
     {
       name: 'Sizes and icon',
-      code: `<LinkButton href="#" size="sm" endIcon={<ArrowUpRight size={14} />}>Open dashboard</LinkButton>
+      code: `<LinkButton href="#" size="sm" endIcon={<ArrowUpRightIcon size={14} />}>Open dashboard</LinkButton>
 <LinkButton href="#" size="lg">Get started</LinkButton>`,
       Component: () => (
         <div style={row}>
           <LinkButton
             href="#/components/link-button"
             size="sm"
-            endIcon={<ArrowUpRight size={14} />}
+            endIcon={<ArrowUpRightIcon size={14} />}
           >
             Open dashboard
           </LinkButton>

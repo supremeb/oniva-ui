@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { ChevronRight, CircleDot, Clock, Eye, Inbox, ListFilter, Plus, Square, SquareCheck, Star, X } from 'lucide-react';
+import { ChevronRightIcon, CircleDotIcon, ClockIcon, EyeIcon, InboxIcon, ListFilterIcon, PlusIcon, SquareIcon, SquareCheckIcon, StarIcon, XIcon } from '../../icons/IconSet';
 import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import type { HTMLAttributes, ReactNode, Ref } from 'react';
 import { Avatar } from '../../components/Avatar/Avatar';
@@ -152,15 +152,15 @@ function statusIcon(s: TaskStatus | undefined, size = 12): ReactNode {
   const p = { size, 'aria-hidden': true } as const;
   switch (s?.id) {
     case 'review':
-      return <Eye {...p} />;
+      return <EyeIcon {...p} />;
     case 'next':
-      return <Inbox {...p} />;
+      return <InboxIcon {...p} />;
     case 'doing':
-      return <CircleDot {...p} />;
+      return <CircleDotIcon {...p} />;
     case 'done':
-      return <SquareCheck {...p} />;
+      return <SquareCheckIcon {...p} />;
     default:
-      return <Square {...p} />;
+      return <SquareIcon {...p} />;
   }
 }
 
@@ -307,19 +307,19 @@ export function TaskBoard({
             {breadcrumb.map((c) => (
               <span key={c} {...stylex.props(styles.crumb)}>
                 {c}
-                <ChevronRight size={12} aria-hidden="true" />
+                <ChevronRightIcon size={12} aria-hidden="true" />
               </span>
             ))}
             <h2 {...stylex.props(styles.heading, styles.crumbNow)}>
               {title}
             </h2>
-            <Star size={12} aria-hidden="true" />
+            <StarIcon size={12} aria-hidden="true" />
           </nav>
         </div>
         <div {...stylex.props(styles.sub)}>
           <span {...stylex.props(styles.count, styles.grow)}>{pluralize(visible.length, { one: '# task', other: '# tasks' })}</span>
           <div role="group" aria-label="Filter by label" {...stylex.props(w8.row)}>
-            <ListFilter size={14} aria-hidden="true" />
+            <ListFilterIcon size={14} aria-hidden="true" />
             {labels.map((l) => (
               <ToggleButton key={l.id} size="xs" variant="secondary" isSelected={active.includes(l.id)} onChange={(on) => setActive((a) => (on ? [...a, l.id] : a.filter((x) => x !== l.id)))}>
                 {l.label}
@@ -360,7 +360,7 @@ export function TaskBoard({
                         {s.label} <span {...stylex.props(styles.count)}>{col.length}</span>
                       </h3>
                       <Button size="xs" variant="ghost" isIconOnly aria-label={`Add task to ${s.label}`} onPress={() => setAdding(s.id)}>
-                        <Plus size={14} aria-hidden="true" />
+                        <PlusIcon size={14} aria-hidden="true" />
                       </Button>
                     </div>
                     {adding === s.id && (
@@ -429,7 +429,7 @@ export function TaskBoard({
                               </span>
                               {t.due && (
                                 <span {...stylex.props(styles.chip, t.due < nowIso && s.id !== statuses[statuses.length - 1]?.id && styles.chipLate)}>
-                                  <Clock size={10} aria-hidden="true" />
+                                  <ClockIcon size={10} aria-hidden="true" />
                                   {t.due < nowIso && s.id !== statuses[statuses.length - 1]?.id ? 'Overdue ' : 'Due '}
                                   {date(new Date(`${t.due}T00:00:00`), { month: 'short', day: 'numeric' })}
                                 </span>
@@ -461,7 +461,7 @@ export function TaskBoard({
               <div {...stylex.props(w8.row, w8.between, styles.noWrap)}>
                 <span {...stylex.props(styles.key)}>{open.id}</span>
                 <Button size="xs" variant="ghost" isIconOnly aria-label="Close task" onPress={closePanel}>
-                  <X size={14} aria-hidden="true" />
+                  <XIcon size={14} aria-hidden="true" />
                 </Button>
               </div>
               <h3 ref={panelHead} tabIndex={-1} {...stylex.props(w8.title)}>

@@ -14,3 +14,10 @@ describe('TextShimmer', () => {
     expect(el).toBe(screen.getByText('Thinking…'));
   });
 });
+
+describe('TextShimmer layout', () => {
+  it('is an inline box so tight line-heights do not clip the clipped-to-text gradient', () => {
+    render(<TextShimmer>Drafting the reply…</TextShimmer>);
+    expect(getComputedStyle(screen.getByText('Drafting the reply…')).display).toBe('inline');
+  });
+});

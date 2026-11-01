@@ -1,5 +1,4 @@
 import * as stylex from '@stylexjs/stylex';
-import { ArrowRight, Minus, Moon, Plus, Star, Sun } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button as RacButton } from 'react-aria-components';
@@ -20,7 +19,7 @@ import {
   accentNames,
   accentSwatches,
   type AccentName,
-  type ThemeMode,
+  type ThemeMode, ArrowRightIcon, MinusIcon, MoonIcon, PlusIcon, StarIcon, SunIcon,
 } from 'oniva-ui';
 import { accent } from '@oniva-tokens/accent.stylex';
 import { colors } from '@oniva-tokens/colors.stylex';
@@ -382,13 +381,13 @@ export function MotionStrip() {
         <div {...stylex.props(s.microCard)}>
           <div {...stylex.props(s.microStage)}>
             <Button isIconOnly size="sm" variant="secondary" aria-label="Decrease" onPress={() => setN((v) => v - 137)}>
-              <Minus size={14} />
+              <MinusIcon size={14} />
             </Button>
             <span {...stylex.props(s.bigNum)}>
               <AnimatedNumber value={n} />
             </span>
             <Button isIconOnly size="sm" variant="secondary" aria-label="Increase" onPress={() => setN((v) => v + 137)}>
-              <Plus size={14} />
+              <PlusIcon size={14} />
             </Button>
           </div>
           <div>
@@ -449,7 +448,7 @@ export function Theming({ accent: current, onAccentChange, isDark, onThemeChange
             <Button
               variant="secondary"
               size="sm"
-              startIcon={isDark ? <Sun size={14} /> : <Moon size={14} />}
+              startIcon={isDark ? <SunIcon size={14} /> : <MoonIcon size={14} />}
               onPress={() => onThemeChange(isDark ? 'light' : 'dark')}
             >
               {isDark ? 'Light mode' : 'Dark mode'}
@@ -538,7 +537,7 @@ export function Agents() {
             server lists.
           </p>
           <div {...stylex.props(s.agentCode)}>
-            <LinkButton href="#/components/mcp-server-list" variant="secondary" endIcon={<ArrowRight size={14} />}>
+            <LinkButton href="#/components/mcp-server-list" variant="secondary" endIcon={<ArrowRightIcon size={14} />}>
               See the agent kit
             </LinkButton>
           </div>
@@ -557,14 +556,14 @@ export function Cta() {
           Build the interface. Ship it today.
         </h2>
         <div {...stylex.props(s.ctaActions)}>
-          <LinkButton href="#/components" size="lg" variant="primary" endIcon={<ArrowRight size={16} />}>
+          <LinkButton href="#/components" size="lg" variant="primary" endIcon={<ArrowRightIcon size={16} />}>
             Browse components
           </LinkButton>
           <LinkButton
             href={SITE.github}
             size="lg"
             variant="secondary"
-            startIcon={<Star size={16} />}
+            startIcon={<StarIcon size={16} />}
             target="_blank"
             rel="noreferrer"
           >

@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { Map as MapIcon } from 'lucide-react';
+import { MapIcon } from '../../icons/IconSet';
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type HTMLAttributes, type KeyboardEvent, type ReactNode, type Ref } from 'react';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
@@ -89,7 +89,7 @@ const styles = stylex.create({
     gap: 1,
     height: '100%',
     justifyContent: 'flex-start',
-    opacity: { default: 1, ':hover': 0.92 },
+    opacity: { default: 1, ':hover': { default: null, [media.hover]: 0.92 } },
     overflow: 'hidden',
     padding: 6,
     textAlign: 'start',
@@ -104,6 +104,9 @@ const styles = stylex.create({
   well: { backgroundColor: colors['--oniva-color-surface-inset'], borderColor: colors['--oniva-color-border'], borderRadius: radius['--oniva-radius-lg'], borderStyle: 'solid', borderWidth: 1, padding: 3 },
   pct: { backgroundColor: colors['--oniva-color-surface-inner'], borderRadius: radius['--oniva-radius-md'], color: colors['--oniva-color-text'], fontSize: font['--oniva-font-size-12'], marginInlineStart: 6, paddingBlock: 1, paddingInline: 6 },
   limitChip: { color: colors['--oniva-color-text-muted'], fontVariantNumeric: 'tabular-nums' },
+  tSubOnTint: { color: colors['--oniva-color-text'] },
+  pctOver: { backgroundColor: colors['--oniva-color-danger-bg'], color: colors['--oniva-color-danger-fg'] },
+  empty: { alignItems: 'center', color: colors['--oniva-color-text-muted'], display: 'flex', fontSize: font['--oniva-font-size-13'], inset: 0, justifyContent: 'center', listStyle: 'none', position: 'absolute' },
   tLabel: { fontWeight: font['--oniva-font-weight-medium'], lineHeight: font['--oniva-font-lh-14'], overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', width: '100%' },
   system: { backgroundColor: `color-mix(in srgb, ${colors['--oniva-color-chart-10']} 24%, transparent)`, borderColor: `color-mix(in srgb, ${colors['--oniva-color-chart-10']} 55%, transparent)` },
   tools: { backgroundColor: `color-mix(in srgb, ${colors['--oniva-color-chart-9']} 24%, transparent)`, borderColor: `color-mix(in srgb, ${colors['--oniva-color-chart-9']} 55%, transparent)` },
@@ -283,7 +286,7 @@ export function ContextMap({ blocks, limit, model, modelIcon, compaction, view: 
           {limit ? (
             <>
               <span aria-label={`of ${f.compact(limit)} tokens`}>/ {f.compact(limit)}</span>
-              <span {...stylex.props(styles.pct)}>{f.percent(used / limit)}</span>
+              <span {...stylex.props(styles.pct, used > limit && styles.pctOver)}>{f.percent(used / limit)}</span>
             </>
           ) : (
             <span>tokens</span>
@@ -299,15 +302,20 @@ export function ContextMap({ blocks, limit, model, modelIcon, compaction, view: 
             </div>
           </li>
         ))}
+        {!shown.length && !free && (
+          <li {...stylex.props(styles.empty)}>Nothing in context yet</li>
+        )}
         {rects.map((r) => {
           const b = byId.get(r.id);
           const isFree = r.id === FREE;
           const wPx = r.w;
           const hPx = r.h;
-          const roomy = wPx > 78 && hPx > 46;
-          const tight = wPx > 52 && hPx > 30;
+          const roomy = wPx > 78 && hPx > 52;
+          const tight = wPx > 52 && hPx > 44;
+          const labelOnly = !tight && wPx > 40 && hPx > 24;
           const tokens = isFree ? free : (b?.tokens ?? 0);
           const name = isFree ? 'Free space' : b!.label;
+          if (isFree && !free) return null;
           return (
             <li key={r.id} data-flip-id={r.id} style={{ left: `${(r.x / size.w) * 100}%`, top: `${(r.y / size.h) * 100}%`, width: `${(r.w / size.w) * 100}%`, height: `${(r.h / size.h) * 100}%` }} {...stylex.props(styles.tileBox)}>
               <button
@@ -322,10 +330,10 @@ export function ContextMap({ blocks, limit, model, modelIcon, compaction, view: 
                 onClick={() => pin(r.id)}
                 {...stylex.props(styles.tile, focus.ring, isFree ? styles.free : kindStyle[b!.kind], !!activeId && activeId !== r.id && styles.dim, pinned === r.id && styles.pinned)}
               >
+                {(tight || labelOnly) && <span aria-hidden="true" {...stylex.props(styles.tLabel)}>{b?.icon}{name}</span>}
                 {tight && (
                   <>
-                    <span aria-hidden="true" {...stylex.props(styles.tLabel)}>{b?.icon}{name}</span>
-                    {tight && <span aria-hidden="true" {...stylex.props(styles.tSub)}><Roll text={f.compact(tokens)} />{roomy && b && (b.kind === 'system' || b.kind === 'tools' || b.kind === 'file') ? ` · ${kindLabel[b.kind]}` : ''}</span>}
+                    {tight && <span aria-hidden="true" {...stylex.props(styles.tSub, !isFree && styles.tSubOnTint)}><Roll text={f.compact(tokens)} />{roomy && b && (b.kind === 'system' || b.kind === 'tools' || b.kind === 'file') ? ` · ${kindLabel[b.kind]}` : ''}</span>}
                   </>
                 )}
               </button>

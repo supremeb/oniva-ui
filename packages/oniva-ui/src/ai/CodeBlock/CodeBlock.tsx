@@ -1,12 +1,15 @@
 import * as stylex from '@stylexjs/stylex';
-import { Check, Copy } from 'lucide-react';
+import { CheckIcon, CopyIcon } from '../../icons/IconSet';
 import { useEffect, useRef, useState, type HTMLAttributes, type Ref } from 'react';
 import { Button as AriaButton } from 'react-aria-components';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 import { motion } from '../../tokens/motion.stylex';
 import { radius } from '../../tokens/radius.stylex';
+import { focus } from '../../internal/focus';
 import { mergeSx } from '../../internal/sx';
+import { LiveRegion } from '../../internal/w1-agent-ui';
+import { media } from '../../tokens/media.stylex';
 
 const styles = stylex.create({
   root: {
@@ -19,6 +22,7 @@ const styles = stylex.create({
     boxSizing: 'border-box',
     fontFamily: font['--oniva-font-sans'],
     overflow: 'hidden',
+    position: 'relative',
   },
   header: {
     alignItems: 'center',
@@ -33,6 +37,10 @@ const styles = stylex.create({
   },
   filename: {
     color: colors['--oniva-color-text'],
+    flexBasis: 0,
+    flexGrow: 1,
+    flexShrink: 1,
+    minWidth: 0,
     fontSize: font['--oniva-font-size-12'],
     fontWeight: font['--oniva-font-weight-medium'],
     overflow: 'hidden',
@@ -43,14 +51,18 @@ const styles = stylex.create({
     color: colors['--oniva-color-text-muted'],
     fontFamily: font['--oniva-font-mono'],
     fontSize: font['--oniva-font-size-11'],
+    flexShrink: 0,
     letterSpacing: font['--oniva-font-track-label'],
-    marginInlineStart: 'auto',
     textTransform: 'uppercase',
   },
+  langAlone: { marginInlineStart: 'auto' },
   copy: {
     alignItems: 'center',
     appearance: 'none',
-    backgroundColor: { default: 'transparent', ':hover': colors['--oniva-color-surface-tertiary'] },
+    backgroundColor: {
+      default: 'transparent',
+      ':hover': { default: null, [media.hover]: colors['--oniva-color-surface-tertiary'] },
+    },
     borderRadius: radius['--oniva-radius-sm'],
     borderWidth: 0,
     color: colors['--oniva-color-icon-muted'],
@@ -59,10 +71,6 @@ const styles = stylex.create({
     flexShrink: 0,
     height: 24,
     justifyContent: 'center',
-    outlineColor: colors['--oniva-color-focus-ring'],
-    outlineOffset: 1,
-    outlineStyle: { default: 'none', ':focus-visible': 'solid' },
-    outlineWidth: 2,
     transitionDuration: motion['--oniva-motion-dur-base'],
     transitionProperty: 'background-color, color',
     width: 24,
@@ -81,8 +89,16 @@ const styles = stylex.create({
     paddingInline: 14,
     tabSize: 2,
   },
-  floatingCopy: { position: 'absolute', insetBlockStart: 6, insetInlineEnd: 6 },
-  wrap: { position: 'relative' },
+  /** Bare panel: the button sits over the code, so it gets an opaque inset fill to stay legible. */
+  floatingCopy: {
+    backgroundColor: {
+      default: colors['--oniva-color-surface-inset'],
+      ':hover': { default: null, [media.hover]: colors['--oniva-color-surface-tertiary'] },
+    },
+    insetBlockStart: 6,
+    insetInlineEnd: 6,
+    position: 'absolute',
+  },
 });
 
 export interface CodeBlockProps extends Omit<HTMLAttributes<HTMLDivElement>, 'style' | 'children'> {
@@ -111,8 +127,12 @@ export function CodeBlock({
     },
     [],
   );
-  const copy = () => {
-    void navigator.clipboard?.writeText(code);
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(code);
+    } catch {
+      return; // Clipboard unavailable or denied: do not claim success.
+    }
     setCopied(true);
     clearTimeout(timer.current);
     timer.current = setTimeout(() => setCopied(false), 1600);
@@ -121,30 +141,42 @@ export function CodeBlock({
   const button = (
     <AriaButton
       aria-label={copied ? 'Copied' : 'Copy code'}
-      onPress={copy}
+      onPress={() => void copy()}
       className={() =>
-        stylex.props(styles.copy, copied && styles.copied, !hasHeader && styles.floatingCopy)
+        stylex.props(styles.copy, focus.ring, copied && styles.copied, !hasHeader && styles.floatingCopy)
           .className ?? ''
       }
     >
-      {copied ? <Check size={14} aria-hidden="true" /> : <Copy size={14} aria-hidden="true" />}
+      {copied ? <CheckIcon size={14} aria-hidden="true" /> : <CopyIcon size={14} aria-hidden="true" />}
     </AriaButton>
   );
-  const sx = stylex.props(styles.root, !hasHeader && styles.wrap, xstyle);
+  const sx = stylex.props(styles.root, xstyle);
   return (
     <div {...rest} ref={ref} {...mergeSx(sx, className)}>
       {hasHeader ? (
         <div {...stylex.props(styles.header)}>
-          {filename && <span {...stylex.props(styles.filename)}>{filename}</span>}
-          {language && <span {...stylex.props(styles.lang)}>{language}</span>}
+          {filename && (
+            <span title={filename} {...stylex.props(styles.filename)}>
+              {filename}
+            </span>
+          )}
+          {language && (
+            <span {...stylex.props(styles.lang, !filename && styles.langAlone)}>{language}</span>
+          )}
           {button}
         </div>
       ) : (
         button
       )}
-      <pre {...stylex.props(styles.pre)} tabIndex={0}>
+      <pre
+        role="group"
+        aria-label={filename ?? language ?? 'Code'}
+        tabIndex={0}
+        {...stylex.props(styles.pre, focus.inset)}
+      >
         <code>{code}</code>
       </pre>
+      <LiveRegion message={copied ? 'Copied to clipboard' : ''} />
     </div>
   );
 }

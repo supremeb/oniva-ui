@@ -2,8 +2,11 @@ import * as stylex from '@stylexjs/stylex';
 import type { HTMLAttributes, Ref } from 'react';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
+import { useFormatters } from '../../internal/format';
 import { mergeSx } from '../../internal/sx';
 import { AnimatedNumber } from '../../motion/AnimatedNumber';
+
+const COST_FORMAT: Intl.NumberFormatOptions = { style: 'currency', currency: 'USD', minimumFractionDigits: 3, maximumFractionDigits: 3 };
 
 const styles = stylex.create({
   root: {
@@ -14,7 +17,8 @@ const styles = stylex.create({
     fontSize: font['--oniva-font-size-13'],
     fontVariantNumeric: 'tabular-nums',
     fontWeight: font['--oniva-font-weight-medium'],
-    gap: 6,
+    columnGap: 6,
+    flexWrap: 'wrap',
   },
   muted: { color: colors['--oniva-color-text-muted'], fontWeight: font['--oniva-font-weight-regular'] },
 });
@@ -31,16 +35,17 @@ export interface TokenCounterProps extends Omit<HTMLAttributes<HTMLSpanElement>,
 
 /** Live token / cost readout with rolling digits. */
 export function TokenCounter({ tokens, max, cost, className, xstyle, ref, ...rest }: TokenCounterProps) {
+  const { locale, number } = useFormatters();
   const sx = stylex.props(styles.root, xstyle);
   return (
     <span {...rest} ref={ref} {...mergeSx(sx, className)}>
-      <AnimatedNumber value={tokens} />
-      {max !== undefined && <span {...stylex.props(styles.muted)}>/ {new Intl.NumberFormat().format(max)}</span>}
+      <AnimatedNumber value={tokens} locale={locale} />
+      {max !== undefined && <span {...stylex.props(styles.muted)}>/ {number(max)}</span>}
       <span {...stylex.props(styles.muted)}>tokens</span>
       {cost !== undefined && (
         <span {...stylex.props(styles.muted)}>
           ·{' '}
-          <AnimatedNumber value={cost} format={{ style: 'currency', currency: 'USD', minimumFractionDigits: 3, maximumFractionDigits: 3 }} />
+          <AnimatedNumber value={cost} locale={locale} format={COST_FORMAT} />
         </span>
       )}
     </span>

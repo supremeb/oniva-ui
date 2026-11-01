@@ -1,6 +1,6 @@
 import * as stylex from '@stylexjs/stylex';
 import { useState, type Ref } from 'react';
-import { BadgeCheck, Check, Plus } from 'lucide-react';
+import { BadgeCheckIcon, CheckIcon, PlusIcon } from '../../icons/IconSet';
 import { Badge } from '../../components/Badge';
 import { Button } from '../../components/Button';
 import { SearchField } from '../../components/SearchField';
@@ -302,7 +302,7 @@ export function IntegrationsScreen({
                 onChange={setQuery}
                 xstyle={styles.search}
               />
-              <Button size="sm" variant="secondary" startIcon={<Plus size={14} />}>
+              <Button size="sm" variant="secondary" startIcon={<PlusIcon size={14} />}>
                 Request
               </Button>
             </div>
@@ -330,7 +330,7 @@ export function IntegrationsScreen({
                               <Text xstyle={styles.appName}>
                                 {a.name}
                               </Text>
-                              <BadgeCheck size={13} aria-hidden="true" {...stylex.props(styles.verified)} />
+                              <BadgeCheckIcon size={13} aria-hidden="true" {...stylex.props(styles.verified)} />
                             </span>
                             <Text tone="muted" variant="caption" xstyle={styles.desc}>
                               {a.description}
@@ -350,7 +350,7 @@ export function IntegrationsScreen({
                               blur={2}
                               morph="both"
                             >
-                              {connected[a.id] ? <Check size={14} aria-hidden="true" /> : <Plus size={14} aria-hidden="true" />}
+                              {connected[a.id] ? <CheckIcon size={14} aria-hidden="true" /> : <PlusIcon size={14} aria-hidden="true" />}
                             </CrossFade>
                           </Button>
                         </li>

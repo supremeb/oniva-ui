@@ -1,6 +1,6 @@
 import * as stylex from '@stylexjs/stylex';
 import { useEffect, useId, useRef, useState, type ReactNode, type Ref } from 'react';
-import { BarChart3, TrendingUp } from 'lucide-react';
+import { BarChartIcon, TrendingUpIcon } from '../../icons/IconSet';
 import {
   Button as AriaButton,
   ToggleButton as AriaToggleButton,
@@ -438,7 +438,7 @@ export function ExperimentCard({
         className={() => sxClass(stylex.props(styles.head, focus.inset))}
       >
         <span aria-hidden="true" {...stylex.props(styles.icon)}>
-          <BarChart3 size={20} />
+          <BarChartIcon size={20} />
         </span>
         <span {...stylex.props(styles.main)}>
           <span title={title} {...stylex.props(styles.title, w4.clamp1)}>
@@ -459,7 +459,7 @@ export function ExperimentCard({
         {best && (
           <span aria-hidden="true" {...stylex.props(styles.leader)}>
             {best.v.key}
-            <TrendingUp size={14} />
+            <TrendingUpIcon size={14} />
             {signed(best.delta)}
           </span>
         )}

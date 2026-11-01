@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { Check } from 'lucide-react';
+import { CheckIcon } from '../../icons/IconSet';
 import { useState, type ReactNode, type Ref } from 'react';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
@@ -198,7 +198,7 @@ export function TipsPanel({
               {tip.description && <p {...stylex.props(styles.muted, styles.desc)}>{tip.description}</p>}
               {isDone ? (
                 <span role="status" {...stylex.props(styles.done)}>
-                  <Check size={14} aria-hidden="true" />
+                  <CheckIcon size={14} aria-hidden="true" />
                   {tip.doneLabel ?? 'Done'}
                 </span>
               ) : (

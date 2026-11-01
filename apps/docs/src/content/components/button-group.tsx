@@ -1,5 +1,4 @@
-import { ChevronDown } from 'lucide-react';
-import { Button, ButtonGroup, IconButton } from 'oniva-ui';
+import { Button, ButtonGroup, IconButton, ChevronDownIcon } from 'oniva-ui';
 import type { DocPage } from '../types';
 
 const Cluster = ({ orientation }: { orientation?: 'horizontal' | 'vertical' }) => (
@@ -14,7 +13,7 @@ const Split = () => (
   <ButtonGroup aria-label="Publish">
     <Button>Publish report</Button>
     <IconButton aria-label="More publish options" variant="primary">
-      <ChevronDown size={16} />
+      <ChevronDownIcon size={16} />
     </IconButton>
   </ButtonGroup>
 );

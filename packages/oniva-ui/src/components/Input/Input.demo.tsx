@@ -1,4 +1,4 @@
-import { Mail, Search } from 'lucide-react';
+import { MailIcon, SearchIcon } from '../../icons/IconSet';
 import type { DemoModule } from '../../internal/demo';
 import { Input } from './Input';
 
@@ -15,19 +15,19 @@ const demo: DemoModule = {
   demos: [
     {
       name: 'Basic',
-      code: `<Input label="Email" placeholder="you@company.com" description="We never share it." prefix={<Mail size={16} />} />`,
+      code: `<Input label="Email" placeholder="you@company.com" description="We never share it." prefix={<MailIcon size={16} />} />`,
       Component: () => (
         <div style={col}>
           <Input
             label="Email"
             placeholder="you@company.com"
             description="We never share it."
-            prefix={<Mail size={16} />}
+            prefix={<MailIcon size={16} />}
           />
           <Input
             label="Search"
             placeholder="Search…"
-            prefix={<Search size={16} />}
+            prefix={<SearchIcon size={16} />}
             suffix={<kbd>⌘K</kbd>}
           />
         </div>

@@ -1,12 +1,12 @@
-import { FileText, LayoutGrid, LogOut, Settings } from 'lucide-react';
+import { FileTextIcon, LayoutGridIcon, LogOutIcon, SettingsIcon } from '../../icons/IconSet';
 import type { DemoModule } from '../../internal/demo';
 import { ProfileMenu } from './ProfileMenu';
 
 const items = [
-  { id: 'settings', label: 'Settings', icon: <Settings size={16} /> },
-  { id: 'docs', label: 'Docs', icon: <FileText size={16} /> },
-  { id: 'apps', label: 'Apps', icon: <LayoutGrid size={16} />, badge: 'New' },
-  { id: 'logout', label: 'Log out', icon: <LogOut size={16} /> },
+  { id: 'settings', label: 'Settings', icon: <SettingsIcon size={16} /> },
+  { id: 'docs', label: 'Docs', icon: <FileTextIcon size={16} /> },
+  { id: 'apps', label: 'Apps', icon: <LayoutGridIcon size={16} />, badge: 'New' },
+  { id: 'logout', label: 'Log out', icon: <LogOutIcon size={16} /> },
 ];
 
 const demo: DemoModule = {
@@ -23,8 +23,8 @@ const demo: DemoModule = {
   name="Lena Hartmann"
   email="lena.hartmann@fastmail.example"
   items={[
-    { id: 'settings', label: 'Settings', icon: <Settings size={16} />, onSelect: openSettings },
-    { id: 'logout', label: 'Log out', icon: <LogOut size={16} />, danger: true, onSelect: signOut },
+    { id: 'settings', label: 'Settings', icon: <SettingsIcon size={16} />, onSelect: openSettings },
+    { id: 'logout', label: 'Log out', icon: <LogOutIcon size={16} />, danger: true, onSelect: signOut },
   ]}
   setup={{ done: 3, total: 5, next: 'Add a profile photo', onContinue: openProfile }}
 />`,

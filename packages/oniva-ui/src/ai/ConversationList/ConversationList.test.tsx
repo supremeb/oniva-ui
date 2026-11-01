@@ -23,4 +23,18 @@ describe('ConversationList', () => {
     fireEvent.change(screen.getByRole('searchbox', { name: 'Search conversations' }), { target: { value: 'zzz' } });
     expect(screen.getByText('No conversations found.')).toBeInTheDocument();
   });
+
+  it('shows a distinct empty message when there are no threads at all', () => {
+    render(<ConversationList threads={[]} />);
+    expect(screen.getByText('No conversations yet.')).toBeInTheDocument();
+    expect(screen.getByRole('status')).toHaveTextContent('No conversations yet.');
+  });
+
+  it('returns focus to the rename button after Enter or Escape, and exposes full text as a tooltip', () => {
+    render(<ConversationList threads={[{ id: 'a', title: 'A very long thread title', preview: 'A long preview' }]} />);
+    expect(screen.getByText('A very long thread title')).toHaveAttribute('title', 'A very long thread title');
+    fireEvent.click(screen.getByRole('button', { name: 'Rename A very long thread title' }));
+    fireEvent.keyDown(screen.getByRole('textbox', { name: 'Rename conversation' }), { key: 'Escape' });
+    expect(screen.getByRole('button', { name: 'Rename A very long thread title' })).toHaveFocus();
+  });
 });

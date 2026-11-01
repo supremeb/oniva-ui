@@ -21,7 +21,7 @@ const demo: DemoModule = {
             height: 320,
             width: '100%',
             maxWidth: 640,
-            border: '1px solid #ebebeb',
+            border: '1px solid var(--oniva-color-border)',
             borderRadius: 16,
           }}
         >

@@ -7,7 +7,7 @@ import {
   type TreeItemProps as AriaTreeItemProps,
   type TreeProps as AriaTreeProps,
 } from 'react-aria-components';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRightIcon } from '../../icons/IconSet';
 import type { ReactNode, Ref } from 'react';
 import { listStyles as s } from '../../internal/data-list-styles';
 import { media } from '../../tokens/media.stylex';
@@ -94,7 +94,7 @@ export function TreeViewItem({ title, icon, children, xstyle, ...rest }: TreeVie
           <>
             {hasChildItems ? (
               <AriaButton slot="chevron" {...stylex.props(styles.chevron)}>
-                <ChevronRight
+                <ChevronRightIcon
                   size={14}
                   aria-hidden="true"
                   {...stylex.props(styles.chevronIcon, isExpanded && styles.chevronOpen)}

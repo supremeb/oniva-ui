@@ -6,7 +6,7 @@ import {
   Popover,
   Select as AriaSelect,
 } from 'react-aria-components';
-import { Check, ChevronDown } from 'lucide-react';
+import { CheckIcon, ChevronDownIcon } from '../icons/IconSet';
 import { colors } from '../tokens/colors.stylex';
 import { tableStyles as s } from './data-table-styles';
 
@@ -64,7 +64,7 @@ export function InlineSelect({
           {current?.tone && <span {...stylex.props(s.statusDot, dots[current.tone])} />}
           {current?.label ?? ''}
         </span>
-        <ChevronDown size={16} aria-hidden="true" {...stylex.props(s.selectChevron)} />
+        <ChevronDownIcon size={16} aria-hidden="true" {...stylex.props(s.selectChevron)} />
       </AriaButton>
       <Popover placement="bottom start" className={() => stylex.props(s.popover).className ?? ''}>
         <ListBox>
@@ -83,7 +83,7 @@ export function InlineSelect({
                   {o.tone && <span {...stylex.props(s.statusDot, dots[o.tone])} />}
                   {o.label}
                   {isSelected && (
-                    <Check size={14} aria-hidden="true" {...stylex.props(s.optionCheck)} />
+                    <CheckIcon size={14} aria-hidden="true" {...stylex.props(s.optionCheck)} />
                   )}
                 </>
               )}

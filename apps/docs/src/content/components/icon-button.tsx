@@ -1,5 +1,4 @@
-import { Bell, Download, MoreHorizontal, Plus, Trash2 } from 'lucide-react';
-import { IconButton } from 'oniva-ui';
+import { IconButton, BellIcon, DownloadIcon, MoreIcon, PlusIcon, TrashIcon } from 'oniva-ui';
 import type { DocPage } from '../types';
 
 const page: DocPage = {
@@ -14,12 +13,12 @@ const page: DocPage = {
     intro: 'Two parts. The icon is required and the accessible name is required. There is no visible label.',
     Render: () => (
       <IconButton aria-label="Download invoice" variant="secondary">
-        <Download size={16} />
+        <DownloadIcon size={16} />
       </IconButton>
     ),
     parts: [
       { name: 'Container', description: 'Native button, square: 24, 32, 36 or 40px for xs, sm, md, lg. Radius 4, 8, 10, 10px. 1px border on secondary, none on ghost and soft.', selector: 'button' },
-      { name: 'Icon', description: '16px lucide icon (12px at xs, 18px at lg by convention). Centred. Pass it as a child; the button never adds its own.', selector: 'button svg' },
+      { name: 'Icon', description: '16px icon (12px at xs, 18px at lg by convention). Centred. Pass it as a child; the button never adds its own.', selector: 'button svg' },
     ],
   },
   usage: {
@@ -42,32 +41,32 @@ const page: DocPage = {
     initial: { variant: 'secondary', size: 'md', label: 'Download invoice', isLoading: false, isDisabled: false },
     render: (p, ev) => (
       <IconButton variant={p.variant as 'secondary'} size={p.size as 'md'} aria-label={String(p.label)} isLoading={Boolean(p.isLoading)} isDisabled={Boolean(p.isDisabled)} onPress={() => ev('onPress')}>
-        <Download size={p.size === 'xs' ? 12 : p.size === 'lg' ? 18 : 16} />
+        <DownloadIcon size={p.size === 'xs' ? 12 : p.size === 'lg' ? 18 : 16} />
       </IconButton>
     ),
     code: (p) => {
       const sz = p.size === 'xs' ? 12 : p.size === 'lg' ? 18 : 16;
       const attrs = [p.variant !== 'secondary' && `variant="${p.variant}"`, p.size !== 'md' && `size="${p.size}"`, p.isLoading && 'isLoading', p.isDisabled && 'isDisabled'].filter(Boolean).join(' ');
-      return `<IconButton aria-label="${p.label}"${attrs ? ' ' + attrs : ''} onPress={download}>\n  <Download size={${sz}} />\n</IconButton>`;
+      return `<IconButton aria-label="${p.label}"${attrs ? ' ' + attrs : ''} onPress={download}>\n  <DownloadIcon size={${sz}} />\n</IconButton>`;
     },
   },
   states: [
-    { name: 'Default', description: 'Secondary, 36px square.', Render: () => <IconButton aria-label="Download invoice"><Download size={16} /></IconButton> },
-    { name: 'Primary', description: 'One per surface, for the main icon action.', Render: () => <IconButton aria-label="Add" variant="primary"><Plus size={16} /></IconButton> },
-    { name: 'Ghost', description: 'Lowest emphasis, for dense rows.', Render: () => <IconButton aria-label="More" variant="ghost"><MoreHorizontal size={16} /></IconButton> },
-    { name: 'Soft', description: 'Accent-tinted fill.', Render: () => <IconButton aria-label="Notifications" variant="soft"><Bell size={16} /></IconButton> },
-    { name: 'Danger', description: 'Destructive. Pair with a confirmation.', Render: () => <IconButton aria-label="Delete invoice" variant="danger"><Trash2 size={16} /></IconButton> },
-    { name: 'Disabled', description: '50% opacity, not focusable by pointer.', Render: () => <IconButton aria-label="Download invoice" isDisabled><Download size={16} /></IconButton> },
-    { name: 'Loading', description: 'Spinner replaces the icon in place. Size does not change.', Render: () => <IconButton aria-label="Downloading" isLoading><Download size={16} /></IconButton> },
+    { name: 'Default', description: 'Secondary, 36px square.', Render: () => <IconButton aria-label="Download invoice"><DownloadIcon size={16} /></IconButton> },
+    { name: 'Primary', description: 'One per surface, for the main icon action.', Render: () => <IconButton aria-label="Add" variant="primary"><PlusIcon size={16} /></IconButton> },
+    { name: 'Ghost', description: 'Lowest emphasis, for dense rows.', Render: () => <IconButton aria-label="More" variant="ghost"><MoreIcon size={16} /></IconButton> },
+    { name: 'Soft', description: 'Accent-tinted fill.', Render: () => <IconButton aria-label="Notifications" variant="soft"><BellIcon size={16} /></IconButton> },
+    { name: 'Danger', description: 'Destructive. Pair with a confirmation.', Render: () => <IconButton aria-label="Delete invoice" variant="danger"><TrashIcon size={16} /></IconButton> },
+    { name: 'Disabled', description: '50% opacity, not focusable by pointer.', Render: () => <IconButton aria-label="Download invoice" isDisabled><DownloadIcon size={16} /></IconButton> },
+    { name: 'Loading', description: 'Spinner replaces the icon in place. Size does not change.', Render: () => <IconButton aria-label="Downloading" isLoading><DownloadIcon size={16} /></IconButton> },
   ],
   sections: [
     {
       type: 'itemTypes', id: 'sizes', title: 'Sizes', intro: 'Four squares. Pick the size that matches the surrounding text row.',
       items: [
-        { name: 'xs, 24px', description: 'Inside tags and dense tables. 12px icon.', Render: () => <IconButton aria-label="Add" size="xs"><Plus size={12} /></IconButton> },
-        { name: 'sm, 32px', description: 'Toolbars and card headers. 16px icon.', Render: () => <IconButton aria-label="Add" size="sm"><Plus size={16} /></IconButton> },
-        { name: 'md, 36px', description: 'Default. Sits beside a md Button.', Render: () => <IconButton aria-label="Add" size="md"><Plus size={16} /></IconButton> },
-        { name: 'lg, 40px', description: 'Touch-first layouts. 18px icon.', Render: () => <IconButton aria-label="Add" size="lg"><Plus size={18} /></IconButton> },
+        { name: 'xs, 24px', description: 'Inside tags and dense tables. 12px icon.', Render: () => <IconButton aria-label="Add" size="xs"><PlusIcon size={12} /></IconButton> },
+        { name: 'sm, 32px', description: 'Toolbars and card headers. 16px icon.', Render: () => <IconButton aria-label="Add" size="sm"><PlusIcon size={16} /></IconButton> },
+        { name: 'md, 36px', description: 'Default. Sits beside a md Button.', Render: () => <IconButton aria-label="Add" size="md"><PlusIcon size={16} /></IconButton> },
+        { name: 'lg, 40px', description: 'Touch-first layouts. 18px icon.', Render: () => <IconButton aria-label="Add" size="lg"><PlusIcon size={18} /></IconButton> },
       ],
     },
     {

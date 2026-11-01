@@ -46,6 +46,28 @@ describe('AgentLedger', () => {
     expect(screen.getByText("Can't undo")).toBeInTheDocument();
   });
 
+  it('shows an empty message with a zero count', () => {
+    render(<AgentLedger entries={[]} now={NOW} />);
+    expect(screen.getByText('No changes yet.')).toBeInTheDocument();
+    expect(screen.getByText('0 changes')).toBeInTheDocument();
+  });
+
+  it('announces undo and redo, and flags consequences when pointed at', () => {
+    render(<AgentLedger entries={entries} now={NOW} pointAt="price" />);
+    expect(screen.getByText('Also undone')).toBeInTheDocument();
+    expect(screen.getByText("Can't undo")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: /^Undo Changed price/ }));
+    expect(screen.getByRole('status')).toHaveTextContent('Undid Changed price and 1 dependent change.');
+    fireEvent.click(screen.getByRole('button', { name: 'Redo Changed price' }));
+    expect(screen.getByRole('status')).toHaveTextContent('Redid Changed price.');
+  });
+
+  it('marks irreversible changes as permanent without an Undo button', () => {
+    render(<AgentLedger entries={entries.slice(2)} now={NOW} />);
+    expect(screen.getByText('Permanent')).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /^Undo/ })).toBeNull();
+  });
+
   it('forwards ref/className and passes axe', async () => {
     const ref = createRef<HTMLDivElement>();
     const { container } = render(<AgentLedger ref={ref} className="x" entries={entries} now={NOW} />);

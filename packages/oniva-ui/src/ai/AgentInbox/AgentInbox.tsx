@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { AlertTriangle, Check, Clock, Columns3, List as ListIcon, Loader2, Search, Sparkles, Wrench } from 'lucide-react';
+import { TriangleAlertIcon, CheckIcon, ClockIcon, ColumnsIcon, ListIcon, LoaderIcon, SearchIcon, SparklesIcon, WrenchIcon } from '../../icons/IconSet';
 import { useEffect, useMemo, useRef, useState, type Ref } from 'react';
 import { Button, Disclosure, DisclosurePanel, Heading, Radio, RadioGroup } from 'react-aria-components';
 import { accent } from '../../tokens/accent.stylex';
@@ -114,7 +114,8 @@ const styles = stylex.create({
   tone_running: { color: colors['--oniva-color-info-solid'] },
   tone_done: { color: colors['--oniva-color-success-solid'] },
   tone_failed: { color: colors['--oniva-color-danger-solid'] },
-  titleRow: { alignItems: 'center', display: 'flex', gap: 8, width: '100%' },
+  titleRow: { alignItems: 'flex-start', display: 'flex', gap: 8, minWidth: 0, width: '100%' },
+  titleIcon: { flexShrink: 0, marginBlockStart: 3 },
   sep: { alignSelf: 'stretch', backgroundColor: colors['--oniva-color-separator'], width: 1 },
   pair: { alignItems: 'center', display: 'inline-flex', gap: 5 },
   pairs: { alignItems: 'center', display: 'inline-flex', gap: 8, marginInlineStart: 'auto' },
@@ -135,19 +136,23 @@ const styles = stylex.create({
     font: 'inherit',
     gap: 6,
     minHeight: { default: 44, '@media (pointer: coarse)': 56 },
+    minWidth: 0,
     padding: 12,
     textAlign: 'start',
     width: '100%',
   },
   topRow: { alignItems: 'center', display: 'flex', gap: 6, width: '100%' },
-  title: { fontSize: font['--oniva-font-size-14'], fontWeight: font['--oniva-font-weight-medium'], minWidth: 0 },
+  title: { fontSize: font['--oniva-font-size-14'], fontWeight: font['--oniva-font-weight-medium'], minWidth: 0, overflowWrap: 'anywhere' },
   desc: {
     color: colors['--oniva-color-text-muted'],
     display: '-webkit-box',
     fontSize: font['--oniva-font-size-13'],
     fontWeight: font['--oniva-font-weight-regular'],
     lineHeight: 1.45,
+    maxWidth: '100%',
+    minWidth: 0,
     overflow: 'hidden',
+    overflowWrap: 'anywhere',
     WebkitBoxOrient: 'vertical',
     WebkitLineClamp: 2,
   },
@@ -171,6 +176,7 @@ const styles = stylex.create({
   },
   steps: { display: 'flex', flexDirection: 'column', gap: 6 },
   step: { alignItems: 'baseline', display: 'flex', gap: 8 },
+  stepLabel: { minWidth: 0, overflowWrap: 'anywhere' },
   dot: {
     backgroundColor: colors['--oniva-color-icon-subtle'],
     borderRadius: radius['--oniva-radius-full'],
@@ -194,10 +200,10 @@ const styles = stylex.create({
 });
 
 function StatusIcon({ status }: { status: InboxStatus }) {
-  if (status === 'running') return <Loader2 size={14} aria-hidden="true" {...stylex.props(w1.spin)} />;
-  if (status === 'done') return <Check size={14} aria-hidden="true" />;
-  if (status === 'failed') return <AlertTriangle size={14} aria-hidden="true" />;
-  return <Clock size={14} aria-hidden="true" />;
+  if (status === 'running') return <LoaderIcon size={14} aria-hidden="true" {...stylex.props(w1.spin)} />;
+  if (status === 'done') return <CheckIcon size={14} aria-hidden="true" />;
+  if (status === 'failed') return <TriangleAlertIcon size={14} aria-hidden="true" />;
+  return <ClockIcon size={14} aria-hidden="true" />;
 }
 
 export interface AgentInboxProps {
@@ -293,6 +299,7 @@ export function AgentInbox({
     const meta = META[task.status];
     const clock = task.status === 'done' || task.status === 'failed' ? task.elapsed : task.startedAt != null ? t - task.startedAt : undefined;
     const isOpen = open.has(task.id);
+    const hasActions = task.status === 'waiting' || task.status === 'failed' || !!onOpen;
     return (
       <div
         key={task.id}
@@ -313,7 +320,7 @@ export function AgentInbox({
         <Heading level={4} {...stylex.props(styles.head)}>
           <Button slot="trigger" className={() => sxClass(stylex.props(styles.trigger, focus.inset))}>
             <span {...stylex.props(styles.titleRow)}>
-              <Sparkles size={14} aria-hidden="true" {...stylex.props(styles.colIcon, styles[`tone_${task.status}` as const])} />
+              <SparklesIcon size={14} aria-hidden="true" {...stylex.props(styles.colIcon, styles.titleIcon, styles[`tone_${task.status}` as const])} />
               <span {...stylex.props(styles.title)}>{task.title}</span>
             </span>
             {task.description && <span {...stylex.props(styles.desc)}>{task.description}</span>}
@@ -326,14 +333,18 @@ export function AgentInbox({
               {(task.sources != null || task.tools != null) && (
                 <span {...stylex.props(styles.pairs)}>
                   {task.sources != null && (
-                    <span {...stylex.props(styles.pair)} aria-label={f.plural(task.sources, { one: '# source', other: '# sources' })}>
-                      <Search size={13} aria-hidden="true" />{task.sources}
+                    <span {...stylex.props(styles.pair)}>
+                      <SearchIcon size={13} aria-hidden="true" />
+                      <span aria-hidden="true">{f.number(task.sources)}</span>
+                      <span {...stylex.props(w1.srOnly)}>{f.plural(task.sources, { one: '# source', other: '# sources' })}</span>
                     </span>
                   )}
                   {task.sources != null && task.tools != null && <span aria-hidden="true" {...stylex.props(styles.sep)} />}
                   {task.tools != null && (
-                    <span {...stylex.props(styles.pair)} aria-label={f.plural(task.tools, { one: '# tool call', other: '# tool calls' })}>
-                      <Wrench size={13} aria-hidden="true" />{task.tools}
+                    <span {...stylex.props(styles.pair)}>
+                      <WrenchIcon size={13} aria-hidden="true" />
+                      <span aria-hidden="true">{f.number(task.tools)}</span>
+                      <span {...stylex.props(w1.srOnly)}>{f.plural(task.tools, { one: '# tool call', other: '# tool calls' })}</span>
                     </span>
                   )}
                 </span>
@@ -349,13 +360,13 @@ export function AgentInbox({
                 {task.steps.map((s, i) => (
                   <li key={i} style={{ animationDelay: `${Math.min(i, 5) * 40}ms` }} {...stylex.props(styles.step, w1.rise)}>
                     <span aria-hidden="true" {...stylex.props(styles.dot)} />
-                    <span>{s.label}</span>
+                    <span {...stylex.props(styles.stepLabel)}>{s.label}</span>
                     {s.time && <span {...stylex.props(styles.stepTime)}>{s.time}</span>}
                   </li>
                 ))}
               </ol>
             )}
-            <div {...stylex.props(styles.btns)}>
+            {hasActions && <div {...stylex.props(styles.btns)}>
               {task.status === 'waiting' && (
                 <>
                   <Button className={() => sxClass(stylex.props(styles.ghost, focus.ring))} onPress={() => (onReject ? onReject(task) : set(task, 'failed'))}>Reject</Button>
@@ -368,7 +379,7 @@ export function AgentInbox({
               {onOpen && (task.status === 'running' || task.status === 'done') && (
                 <Button className={() => sxClass(stylex.props(styles.ghost, focus.ring))} onPress={() => onOpen(task)}>Open</Button>
               )}
-            </div>
+            </div>}
           </div>
         </DisclosurePanel>
       </Disclosure>
@@ -394,7 +405,7 @@ export function AgentInbox({
           <RadioGroup aria-label="Layout" orientation="horizontal" value={v} onChange={(x) => setV(x as AgentInboxView)}>
             <div {...stylex.props(styles.switch)}>
               <Radio value="board" className={() => sxClass(stylex.props(styles.opt, focus.ring))}>
-                <Columns3 size={14} aria-hidden="true" {...stylex.props(styles.pair)} />Board
+                <ColumnsIcon size={14} aria-hidden="true" {...stylex.props(styles.pair)} />Board
               </Radio>
               <Radio value="list" className={() => sxClass(stylex.props(styles.opt, focus.ring))}>
                 <ListIcon size={14} aria-hidden="true" {...stylex.props(styles.pair)} />List
@@ -409,7 +420,7 @@ export function AgentInbox({
           return (
             <section key={c.key} aria-label={c.label} {...stylex.props(styles.col)}>
               <div {...stylex.props(styles.colHead)}>
-                <Sparkles size={14} aria-hidden="true" {...stylex.props(styles.colIcon, styles[`tone_${c.key === 'needs' ? 'waiting' : c.key as 'running' | 'done'}` as const])} />
+                <SparklesIcon size={14} aria-hidden="true" {...stylex.props(styles.colIcon, styles[`tone_${c.key === 'needs' ? 'waiting' : c.key as 'running' | 'done'}` as const])} />
                 <span {...stylex.props(w1.label, styles.colLabel)}>{c.label}</span>
                 <span {...stylex.props(styles.count, w1.num)}><AnimatedNumber value={list.length} /></span>
               </div>

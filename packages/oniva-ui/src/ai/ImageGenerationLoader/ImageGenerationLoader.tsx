@@ -1,6 +1,6 @@
 import * as stylex from '@stylexjs/stylex';
 import { media } from '../../tokens/media.stylex';
-import { ImageIcon } from 'lucide-react';
+import { ImageIcon } from '../../icons/IconSet';
 import type { HTMLAttributes, Ref } from 'react';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
@@ -44,17 +44,30 @@ const styles = stylex.create({
     flexDirection: 'column',
     fontSize: font['--oniva-font-size-13'],
     fontWeight: font['--oniva-font-weight-medium'],
+    boxSizing: 'border-box',
     gap: 6,
     inset: 0,
     justifyContent: 'center',
+    minWidth: 0,
+    overflow: 'hidden',
+    padding: 12,
     position: 'absolute',
   },
+  heading: { flexShrink: 0 },
+  icon: { flexShrink: 0 },
   prompt: {
     color: colors['--oniva-color-text-muted'],
     fontSize: font['--oniva-font-size-12'],
     fontWeight: font['--oniva-font-weight-regular'],
+    display: '-webkit-box',
+    lineHeight: 1.4,
     maxWidth: '80%',
+    minHeight: 0,
+    overflow: 'hidden',
+    overflowWrap: 'anywhere',
     textAlign: 'center',
+    WebkitBoxOrient: 'vertical',
+    WebkitLineClamp: 3,
   },
 });
 
@@ -84,8 +97,8 @@ export function ImageGenerationLoader({
       <div {...stylex.props(styles.frame)} />
       <div aria-hidden="true" {...stylex.props(styles.canvas)} />
       <div {...stylex.props(styles.label)}>
-        <ImageIcon size={20} aria-hidden="true" />
-        <span aria-hidden="true"><TextShimmer>Generating image…</TextShimmer></span>
+        <ImageIcon size={20} aria-hidden="true" {...stylex.props(styles.icon)} />
+        <span aria-hidden="true" {...stylex.props(styles.heading)}><TextShimmer>Generating image…</TextShimmer></span>
         {prompt && <span {...stylex.props(styles.prompt)}>{prompt}</span>}
       </div>
     </div>

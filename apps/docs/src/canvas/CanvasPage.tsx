@@ -1,9 +1,8 @@
 import * as stylex from '@stylexjs/stylex';
-import { ArrowLeft, Moon, Sun } from 'lucide-react';
 import { useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
-import { IconButton, type ThemeMode } from 'oniva-ui';
+import { IconButton, type ThemeMode, ArrowLeftIcon, MoonIcon, SunIcon } from 'oniva-ui';
 import { colors } from '@oniva-tokens/colors.stylex';
 import { font } from '@oniva-tokens/font.stylex';
 import {
@@ -585,7 +584,7 @@ export function CanvasPage({ theme, onThemeChange }: CanvasPageProps) {
       </div>
       <div data-canvas-ui {...stylex.props(styles.corner, styles.left)}>
         <IconButton aria-label="Back to docs" variant="secondary" size="sm" onPress={() => navigate('/components')}>
-          <ArrowLeft size={16} />
+          <ArrowLeftIcon size={16} />
         </IconButton>
       </div>
       <div data-canvas-ui {...stylex.props(styles.corner, styles.right)}>
@@ -596,7 +595,7 @@ export function CanvasPage({ theme, onThemeChange }: CanvasPageProps) {
           data-testid="theme-toggle"
           onPress={() => onThemeChange(isDark ? 'light' : 'dark')}
         >
-          {isDark ? <Sun size={16} /> : <Moon size={16} />}
+          {isDark ? <SunIcon size={16} /> : <MoonIcon size={16} />}
         </IconButton>
       </div>
       <SearchBar

@@ -6,6 +6,7 @@ import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 import { radius } from '../../tokens/radius.stylex';
 import { Spinner } from '../../components/Spinner';
+import { VisuallyHidden } from '../../components/VisuallyHidden';
 import { mergeSx } from '../../internal/sx';
 
 const swapIn = stylex.keyframes({
@@ -72,9 +73,11 @@ const styles = stylex.create({
   },
   // line-through is always on; its colour fades in so completion "strikes" smoothly instead of popping.
   label: {
+    minWidth: 0,
+    overflowWrap: 'anywhere',
     textDecorationColor: 'transparent',
     textDecorationLine: 'line-through',
-    transitionDuration: '160ms',
+    transitionDuration: motion['--oniva-motion-dur-base'],
     transitionProperty: 'color, text-decoration-color',
     transitionTimingFunction: motion['--oniva-motion-ease-out'],
   },
@@ -152,17 +155,7 @@ export function TaskList({ items, className, xstyle, ref, ...rest }: TaskListPro
             )}
           >
             {it.label}
-            {it.status !== 'running' && (
-              <span
-                style={{
-                  position: 'absolute',
-                  width: 1,
-                  height: 1,
-                  overflow: 'hidden',
-                  clip: 'rect(0 0 0 0)',
-                }}
-              >{` (${statusLabel[it.status]})`}</span>
-            )}
+            {it.status !== 'running' && <VisuallyHidden>{` (${statusLabel[it.status]})`}</VisuallyHidden>}
           </span>
         </li>
       ))}

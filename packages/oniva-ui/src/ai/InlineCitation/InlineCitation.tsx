@@ -1,12 +1,15 @@
 import * as stylex from '@stylexjs/stylex';
-import { ExternalLink } from 'lucide-react';
+import { ExternalLinkIcon } from '../../icons/IconSet';
 import type { ReactNode, Ref } from 'react';
 import { Link } from 'react-aria-components';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
+import { media } from '../../tokens/media.stylex';
+import { motion } from '../../tokens/motion.stylex';
 import { radius } from '../../tokens/radius.stylex';
 import { hostOf, safeUrl } from '../../internal/ai-motion';
 import { aib } from '../../internal/aib-styles';
+import { focus } from '../../internal/focus';
 import { sxClass } from '../../internal/sx';
 import { HoverCard, HoverCardContent } from '../../components/HoverCard';
 
@@ -15,7 +18,7 @@ const styles = stylex.create({
     alignItems: 'center',
     backgroundColor: {
       default: colors['--oniva-color-accent-soft'],
-      ':hover': colors['--oniva-color-accent-soft-hover'],
+      ':hover': { default: null, [media.hover]: colors['--oniva-color-accent-soft-hover'] },
     },
     borderRadius: radius['--oniva-radius-full'],
     color: colors['--oniva-color-accent-soft-fg'],
@@ -27,19 +30,31 @@ const styles = stylex.create({
     fontWeight: font['--oniva-font-weight-medium'],
     height: 18,
     justifyContent: 'center',
-    marginInline: 2,
+    marginInlineEnd: 0,
+    marginInlineStart: 3,
     minWidth: 18,
-    outlineColor: colors['--oniva-color-focus-ring'],
-    outlineOffset: 1,
-    outlineStyle: { default: 'none', ':focus-visible': 'solid' },
-    outlineWidth: 2,
     paddingInline: 5,
     textDecoration: 'none',
+    transitionDuration: motion['--oniva-motion-dur-base'],
+    transitionProperty: 'background-color',
+    transitionTimingFunction: motion['--oniva-motion-ease-out'],
     verticalAlign: 'baseline',
   },
-  card: { display: 'flex', flexDirection: 'column', gap: 6, maxWidth: 300 },
+  inert: { cursor: 'default' },
+  card: { display: 'flex', flexDirection: 'column', gap: 6, maxWidth: 300, overflowWrap: 'anywhere' },
   snippet: { margin: 0 },
-  open: { alignItems: 'center', color: colors['--oniva-color-accent-fg'], display: 'inline-flex', fontSize: font['--oniva-font-size-12'], fontWeight: font['--oniva-font-weight-medium'], gap: 4, textDecoration: 'none' },
+  open: {
+    alignItems: 'center',
+    color: {
+      default: colors['--oniva-color-accent-fg'],
+      ':hover': { default: null, [media.hover]: colors['--oniva-color-text'] },
+    },
+    display: 'inline-flex',
+    fontSize: font['--oniva-font-size-12'],
+    fontWeight: font['--oniva-font-weight-medium'],
+    gap: 4,
+    textDecoration: { default: 'none', ':hover': { default: null, [media.hover]: 'underline' } },
+  },
 });
 
 export interface InlineCitationProps {
@@ -59,19 +74,20 @@ export interface InlineCitationProps {
 /** Numbered footnote pill. Hover or focus opens a preview card with the source title, host and excerpt. */
 export function InlineCitation({ index, title, url, snippet, date, xstyle, ref }: InlineCitationProps) {
   const href = safeUrl(url);
+  const source = [href && /^https?:/i.test(href) ? hostOf(href) : '', date ?? ''].filter(Boolean).join(' · ');
   return (
     <HoverCard delay={150}>
-      <Link ref={ref} href={href} target="_blank" rel="noreferrer" aria-label={`Source ${index}: ${title}`} className={() => sxClass(stylex.props(styles.cite, xstyle))}>
+      <Link ref={ref} href={href} target="_blank" rel="noopener noreferrer" aria-label={`Source ${index}: ${title}`} className={() => sxClass(stylex.props(styles.cite, focus.ring, !href && styles.inert, xstyle))}>
         {index}
       </Link>
-      <HoverCardContent>
+      <HoverCardContent aria-label={`Source ${index} preview`}>
         <div {...stylex.props(styles.card)}>
           <p {...stylex.props(aib.name)}>{title}</p>
-          <p {...stylex.props(aib.meta)}>{hostOf(url)}{date ? ` · ${date}` : ''}</p>
+          {source && <p {...stylex.props(aib.meta)}>{source}</p>}
           {snippet && <p {...stylex.props(aib.meta, styles.snippet)}>{snippet}</p>}
           {href && (
-            <a href={href} target="_blank" rel="noreferrer" {...stylex.props(styles.open)}>
-              Open source <ExternalLink size={12} />
+            <a href={href} target="_blank" rel="noopener noreferrer" {...stylex.props(styles.open, focus.ring)}>
+              Open source <ExternalLinkIcon size={12} aria-hidden />
             </a>
           )}
         </div>

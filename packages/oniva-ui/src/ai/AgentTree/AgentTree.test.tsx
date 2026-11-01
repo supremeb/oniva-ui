@@ -44,7 +44,7 @@ describe('AgentTree', () => {
   it('resolves a waiting agent from its dialog with the keyboard-reachable button', () => {
     const onResolve = vi.fn();
     render(<AgentTree root={root} now={NOW} onResolve={onResolve} />);
-    fireEvent.click(screen.getByRole('button', { name: 'Needs you' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Needs you: Coder' }));
     expect(screen.getByRole('dialog', { name: 'Coder needs you' })).toHaveTextContent('Publish to production?');
     fireEvent.click(screen.getByRole('button', { name: 'Approve' }));
     expect(onResolve).toHaveBeenCalledWith(expect.objectContaining({ id: 'c' }), 'approve');
@@ -55,6 +55,26 @@ describe('AgentTree', () => {
     render(<AgentTree root={root} now={NOW} onSelect={onSelect} />);
     fireEvent.click(screen.getByRole('button', { name: 'Researcher' }));
     expect(onSelect).toHaveBeenCalledWith(expect.objectContaining({ id: 'r' }));
+  });
+
+  it('names the Needs you and Failed chips after their agent', () => {
+    render(<AgentTree root={root} now={NOW} />);
+    expect(screen.getByRole('button', { name: 'Needs you: Coder' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Failed: Reviewer' })).toBeInTheDocument();
+  });
+
+  it('shows no duration for a finished agent without an end time, and a fixed one with it', () => {
+    const tree: TreeAgent = {
+      id: 'a',
+      name: 'Lead',
+      task: 'Plan',
+      status: 'done',
+      started: NOW - 90_000,
+      children: [{ id: 'b', name: 'Helper', task: 'Help', status: 'done', started: NOW - 90_000, ended: NOW - 30_000 }],
+    };
+    render(<AgentTree root={tree} now={NOW} />);
+    expect(screen.queryByText('1m 30s')).not.toBeInTheDocument();
+    expect(screen.getByText('1m 00s')).toBeInTheDocument();
   });
 
   it('forwards ref/className and passes axe', async () => {

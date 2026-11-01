@@ -56,6 +56,17 @@ describe('DecisionTree', () => {
     expect(screen.getByText(/Which region/)).toBeInTheDocument();
   });
 
+  it('options sharing a label stay distinct: no key warning, the click reports its own index', async () => {
+    const err = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const onChoose = vi.fn();
+    const dup: Decision = { id: 'dup', question: 'Which environment?', agent: 'Ops agent', options: [{ label: 'Retry' }, { label: 'Retry' }] };
+    render(<DecisionTree decisions={[dup]} onChoose={onChoose} settleMs={10} />);
+    fireEvent.click(screen.getAllByRole('button', { name: 'Retry' })[1]!);
+    await waitFor(() => expect(onChoose).toHaveBeenCalledWith(dup, { index: 1, option: dup.options[1] }));
+    expect(err).not.toHaveBeenCalled();
+    err.mockRestore();
+  });
+
   it('forwards ref and className', () => {
     const ref = createRef<HTMLDivElement>();
     render(<DecisionTree decisions={decisions} ref={ref} className="x" />);

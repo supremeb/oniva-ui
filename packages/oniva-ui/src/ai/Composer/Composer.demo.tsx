@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { DemoModule } from '../../internal/demo';
-import { Mail, MessageSquare, CalendarDays } from 'lucide-react';
+import { MailIcon, MessageSquareIcon, CalendarDaysIcon } from '../../icons/IconSet';
 import { Composer, type ComposerEffort } from './Composer';
 import type { AttachmentFile } from '../ComposerAttachments';
 
@@ -28,7 +28,7 @@ const demo: DemoModule = {
   showMic
   hideEffort={false}
   permissionModes={[{ id: 'approval', label: 'Request approval' }, { id: 'auto', label: 'Run freely' }]}
-  footer={<><Mail /> <MessageSquare /> <CalendarDays /> Connect apps</>}
+  footer={<><MailIcon /> <MessageSquareIcon /> <CalendarDaysIcon /> Connect apps</>}
 />`,
       Component: () => (
         <div style={{ maxWidth: 640, width: '100%' }}>
@@ -40,9 +40,9 @@ const demo: DemoModule = {
             permissionModes={[{ id: 'approval', label: 'Request approval' }, { id: 'auto', label: 'Run freely' }]}
             footer={
               <>
-                <Mail size={16} aria-hidden="true" />
-                <MessageSquare size={16} aria-hidden="true" />
-                <CalendarDays size={16} aria-hidden="true" />
+                <MailIcon size={16} aria-hidden="true" />
+                <MessageSquareIcon size={16} aria-hidden="true" />
+                <CalendarDaysIcon size={16} aria-hidden="true" />
                 <span>Connect apps</span>
               </>
             }

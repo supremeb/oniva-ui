@@ -13,7 +13,7 @@ const context = {
 const limits = [
   { id: '5h', label: '5-hour limit', resetsIn: 'Resets in 2 hr 46 min', percent: 38 },
   { id: 'wk', label: 'Weekly limit', resetsIn: 'Resets Fri 9:00 AM', percent: 74 },
-  { id: 'opus', label: 'Opus weekly limit', resetsIn: 'Resets Fri 9:00 AM', percent: 93 },
+  { id: 'reasoner', label: 'Quill Reasoner weekly limit', resetsIn: 'Resets Fri 9:00 AM', percent: 93 },
 ];
 
 const demo: DemoModule = {

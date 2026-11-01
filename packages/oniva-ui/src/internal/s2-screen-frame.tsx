@@ -1,5 +1,5 @@
 import type * as stylex from '@stylexjs/stylex';
-import { BarChart3, Bot, Building2, Plug, Settings } from 'lucide-react';
+import { BarChartIcon, BotIcon, BuildingIcon, PlugIcon, SettingsIcon } from '../icons/IconSet';
 import type { ReactNode, Ref } from 'react';
 import { AppShell, type ShellNavItem } from '../screens/AppShell';
 
@@ -10,11 +10,11 @@ export interface ScreenUser {
 
 /** Sidebar entries shared by the Northwind Labs demo screens. */
 export const NORTHWIND_NAV: ShellNavItem[] = [
-  { label: 'Agents', icon: <Bot size={18} aria-hidden="true" /> },
-  { label: 'Integrations', icon: <Plug size={18} aria-hidden="true" /> },
-  { label: 'CRM', icon: <Building2 size={18} aria-hidden="true" /> },
-  { label: 'Analytics', icon: <BarChart3 size={18} aria-hidden="true" /> },
-  { label: 'Settings', icon: <Settings size={18} aria-hidden="true" /> },
+  { label: 'Agents', icon: <BotIcon size={18} aria-hidden="true" /> },
+  { label: 'Integrations', icon: <PlugIcon size={18} aria-hidden="true" /> },
+  { label: 'CRM', icon: <BuildingIcon size={18} aria-hidden="true" /> },
+  { label: 'Analytics', icon: <BarChartIcon size={18} aria-hidden="true" /> },
+  { label: 'Settings', icon: <SettingsIcon size={18} aria-hidden="true" /> },
 ];
 
 export interface ScreenFrameProps {

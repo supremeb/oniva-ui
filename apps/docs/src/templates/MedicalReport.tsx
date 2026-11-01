@@ -1,5 +1,4 @@
 import * as stylex from '@stylexjs/stylex';
-import { Activity, Droplet, HeartPulse, Pill, Stethoscope, Thermometer } from 'lucide-react';
 import {
   ActivityWidget,
   Badge,
@@ -16,7 +15,7 @@ import {
   StatCard,
   StepsWidget,
   type SleepNight,
-  type StepsWeek,
+  type StepsWeek, ActivityIcon, DropletIcon, HeartPulseIcon, PillIcon, StethoscopeIcon, ThermometerIcon,
 } from 'oniva-ui';
 import { PageTitle, TemplateSidebar } from './shared';
 
@@ -105,7 +104,7 @@ export function MedicalReport() {
           delta={-2.1}
           invertDelta
           deltaLabel="vs last week"
-          icon={<HeartPulse size={16} />}
+          icon={<HeartPulseIcon size={16} />}
           tone={3}
           trend={[66, 64, 65, 63, 62, 62, 61]}
         />
@@ -115,7 +114,7 @@ export function MedicalReport() {
           delta={-1.4}
           invertDelta
           deltaLabel="vs last week"
-          icon={<Activity size={16} />}
+          icon={<ActivityIcon size={16} />}
           tone={6}
           trend={[124, 121, 122, 119, 120, 118, 118]}
         />
@@ -124,7 +123,7 @@ export function MedicalReport() {
           value="36.7 C"
           delta={0}
           deltaLabel="stable"
-          icon={<Thermometer size={16} />}
+          icon={<ThermometerIcon size={16} />}
           tone={4}
         />
         <StatCard
@@ -133,7 +132,7 @@ export function MedicalReport() {
           delta={-0.2}
           invertDelta
           deltaLabel="vs last test"
-          icon={<Droplet size={16} />}
+          icon={<DropletIcon size={16} />}
           tone={5}
         />
       </div>
@@ -155,16 +154,16 @@ export function MedicalReport() {
         <StepsWidget weeks={weeks} defaultIndex={1} height={180} />
         <div {...stylex.props(styles.stack, styles.span2)}>
           <DescriptionList title="Care summary" columns={2}>
-            <DescriptionItem icon={<Stethoscope size={16} />} label="Next appointment">
+            <DescriptionItem icon={<StethoscopeIcon size={16} />} label="Next appointment">
               Oct 28, 9:30 AM
             </DescriptionItem>
-            <DescriptionItem icon={<Pill size={16} />} label="Medication">
+            <DescriptionItem icon={<PillIcon size={16} />} label="Medication">
               Levothyroxine 25 mcg daily
             </DescriptionItem>
-            <DescriptionItem icon={<Activity size={16} />} label="Diagnosis">
+            <DescriptionItem icon={<ActivityIcon size={16} />} label="Diagnosis">
               Hypothyroidism, well controlled
             </DescriptionItem>
-            <DescriptionItem icon={<HeartPulse size={16} />} label="Risk level">
+            <DescriptionItem icon={<HeartPulseIcon size={16} />} label="Risk level">
               <Badge variant="success" dot>
                 Low
               </Badge>

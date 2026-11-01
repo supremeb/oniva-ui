@@ -1,4 +1,4 @@
-import { File, Folder, FolderOpen } from 'lucide-react';
+import { FileIcon, FolderIcon, FolderOpenIcon } from '../../icons/IconSet';
 import type { DemoModule } from '../../internal/demo';
 import { TreeView, TreeViewItem } from './TreeView';
 
@@ -14,14 +14,14 @@ const demo: DemoModule = {
     {
       name: 'File explorer',
       code: `<TreeView aria-label="Project files" selectionMode="single" defaultExpandedKeys={['src', 'components']}>
-  <TreeViewItem id="src" title="src" icon={<FolderOpen size={16} />}>
-    <TreeViewItem id="components" title="components" icon={<Folder size={16} />}>
-      <TreeViewItem id="button" title="Button.tsx" icon={<File size={16} />} />
-      <TreeViewItem id="table" title="Table.tsx" icon={<File size={16} />} />
+  <TreeViewItem id="src" title="src" icon={<FolderOpenIcon size={16} />}>
+    <TreeViewItem id="components" title="components" icon={<FolderIcon size={16} />}>
+      <TreeViewItem id="button" title="Button.tsx" icon={<FileIcon size={16} />} />
+      <TreeViewItem id="table" title="Table.tsx" icon={<FileIcon size={16} />} />
     </TreeViewItem>
-    <TreeViewItem id="index" title="index.ts" icon={<File size={16} />} />
+    <TreeViewItem id="index" title="index.ts" icon={<FileIcon size={16} />} />
   </TreeViewItem>
-  <TreeViewItem id="pkg" title="package.json" icon={<File size={16} />} />
+  <TreeViewItem id="pkg" title="package.json" icon={<FileIcon size={16} />} />
 </TreeView>`,
       Component: () => (
         <div style={{ maxWidth: 320 }}>
@@ -31,18 +31,18 @@ const demo: DemoModule = {
             defaultExpandedKeys={['src', 'components']}
             defaultSelectedKeys={['table']}
           >
-            <TreeViewItem id="src" title="src" icon={<FolderOpen size={16} />}>
-              <TreeViewItem id="components" title="components" icon={<Folder size={16} />}>
-                <TreeViewItem id="button" title="Button.tsx" icon={<File size={16} />} />
-                <TreeViewItem id="table" title="Table.tsx" icon={<File size={16} />} />
-                <TreeViewItem id="badge" title="Badge.tsx" icon={<File size={16} />} />
+            <TreeViewItem id="src" title="src" icon={<FolderOpenIcon size={16} />}>
+              <TreeViewItem id="components" title="components" icon={<FolderIcon size={16} />}>
+                <TreeViewItem id="button" title="Button.tsx" icon={<FileIcon size={16} />} />
+                <TreeViewItem id="table" title="Table.tsx" icon={<FileIcon size={16} />} />
+                <TreeViewItem id="badge" title="Badge.tsx" icon={<FileIcon size={16} />} />
               </TreeViewItem>
-              <TreeViewItem id="tokens" title="tokens" icon={<Folder size={16} />}>
-                <TreeViewItem id="colors" title="colors.stylex.ts" icon={<File size={16} />} />
+              <TreeViewItem id="tokens" title="tokens" icon={<FolderIcon size={16} />}>
+                <TreeViewItem id="colors" title="colors.stylex.ts" icon={<FileIcon size={16} />} />
               </TreeViewItem>
-              <TreeViewItem id="index" title="index.ts" icon={<File size={16} />} />
+              <TreeViewItem id="index" title="index.ts" icon={<FileIcon size={16} />} />
             </TreeViewItem>
-            <TreeViewItem id="pkg" title="package.json" icon={<File size={16} />} />
+            <TreeViewItem id="pkg" title="package.json" icon={<FileIcon size={16} />} />
           </TreeView>
         </div>
       ),

@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { Check, ChevronDown, X } from 'lucide-react';
+import { CheckIcon, ChevronDownIcon, XIcon } from '../../icons/IconSet';
 import { useEffect, useId, useMemo, useRef, useState, type KeyboardEvent, type ReactNode, type Ref } from 'react';
 import { Button as AriaButton, Keyboard as AriaKeyboard } from 'react-aria-components';
 import { useFlip } from '../../internal/w1-flip';
@@ -430,7 +430,7 @@ export function FilterMenu({
                 onPress={() => toggle(g, o)}
                 {...stylex.props(styles.chipX, focus.ring)}
               >
-                <X size={12} aria-hidden="true" />
+                <XIcon size={12} aria-hidden="true" />
               </AriaButton>
             </li>
           ))}
@@ -455,7 +455,7 @@ export function FilterMenu({
                 onClick={() => toggleGroup(g.id)}
                 {...stylex.props(styles.groupHead, focus.inset)}
               >
-                <ChevronDown size={16} aria-hidden="true" data-open={isOpen ? '' : undefined} {...stylex.props(styles.chevron)} />
+                <ChevronDownIcon size={16} aria-hidden="true" data-open={isOpen ? '' : undefined} {...stylex.props(styles.chevron)} />
                 <span {...stylex.props(styles.grow)}>
                   {g.label}
                   <span {...stylex.props(styles.groupCount)}>{fmt.number(g.options.length)}</span>
@@ -480,7 +480,7 @@ export function FilterMenu({
                       {...stylex.props(styles.option, focus.inset)}
                     >
                       <span aria-hidden="true" data-checked={checked ? '' : undefined} {...stylex.props(styles.box)}>
-                        <Check size={12} strokeWidth={3} data-checked={checked ? '' : undefined} {...stylex.props(styles.tick)} />
+                        <CheckIcon size={12} strokeWidth={2.25} data-checked={checked ? '' : undefined} {...stylex.props(styles.tick)} />
                       </span>
                       <span {...stylex.props(styles.grow)}>{o.label}</span>
                       {o.count != null && <span {...stylex.props(styles.count)}>{fmt.number(o.count)}</span>}

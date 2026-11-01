@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { Sparkles } from 'lucide-react';
+import { SparklesIcon } from '../../icons/IconSet';
 import { colors } from '../../tokens/colors.stylex';
 import { media } from '../../tokens/media.stylex';
 import { motion } from '../../tokens/motion.stylex';
@@ -110,7 +110,7 @@ export function LogoCluster({ logos = DEFAULT_LOGOS, mark, label, ...rest }: Log
         {mark ? (
           mark.icon ?? mark.name
         ) : (
-          <Sparkles {...stylex.props(styles.discIcon)} />
+          <SparklesIcon {...stylex.props(styles.discIcon)} />
         )}
       </span>
       <span aria-hidden="true" {...stylex.props(styles.orbit, loop.run, loop.delay(settle))}>

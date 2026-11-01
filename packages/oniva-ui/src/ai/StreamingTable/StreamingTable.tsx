@@ -20,8 +20,10 @@ const styles = stylex.create({
     whiteSpace: 'nowrap',
   },
   thRight: { textAlign: 'end' },
-  td: { color: colors['--oniva-color-text'], paddingBlock: 9, paddingInline: 12, borderTopColor: colors['--oniva-color-separator'], borderTopStyle: 'solid', borderTopWidth: 1 },
-  right: { textAlign: 'end' },
+  td: { color: colors['--oniva-color-text'], minWidth: 72, overflowWrap: 'anywhere', paddingBlock: 9, paddingInline: 12, borderTopColor: colors['--oniva-color-separator'], borderTopStyle: 'solid', borderTopWidth: 1 },
+  right: { textAlign: 'end', whiteSpace: 'nowrap' },
+  empty: { color: colors['--oniva-color-text-muted'], paddingBlock: 12, paddingInline: 12, textAlign: 'center', borderTopColor: colors['--oniva-color-separator'], borderTopStyle: 'solid', borderTopWidth: 1 },
+  srOnly: { borderWidth: 0, clip: 'rect(0 0 0 0)', height: 1, margin: -1, overflow: 'hidden', padding: 0, position: 'absolute', whiteSpace: 'nowrap', width: 1 },
   foot: { alignItems: 'center', display: 'flex', gap: 8, padding: 10 },
 });
 
@@ -49,7 +51,7 @@ export function StreamingTable<T extends Record<string, unknown>>({ columns, row
     <div {...rest} ref={ref} {...mergeSx(stylex.props(aiStyles.tile, xstyle), className)}>
       <div {...stylex.props(styles.wrap)}>
         <table {...stylex.props(styles.table)} aria-busy={isStreaming}>
-          <caption style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', clip: 'rect(0 0 0 0)' }}>{caption}</caption>
+          <caption {...stylex.props(styles.srOnly)}>{caption}</caption>
           <thead>
             <tr>
               {columns.map((c) => (
@@ -58,6 +60,11 @@ export function StreamingTable<T extends Record<string, unknown>>({ columns, row
             </tr>
           </thead>
           <tbody>
+            {rows.length === 0 && !isStreaming && (
+              <tr>
+                <td colSpan={columns.length} {...stylex.props(styles.empty)}>No rows</td>
+              </tr>
+            )}
             {rows.map((r) => (
               <tr key={getKey(r)} {...stylex.props(aib.rowIn)}>
                 {columns.map((c) => (
@@ -70,11 +77,10 @@ export function StreamingTable<T extends Record<string, unknown>>({ columns, row
           </tbody>
         </table>
       </div>
-      {isStreaming && (
-        <div {...stylex.props(styles.foot)} role="status">
-          <Shimmer>Adding rows… {rows.length} so far</Shimmer>
-        </div>
-      )}
+      {/* Always mounted so assistive tech announces both progress and completion. */}
+      <div {...stylex.props(isStreaming ? styles.foot : styles.srOnly, isStreaming && aiStyles.num)} role="status">
+        {isStreaming ? <Shimmer>Adding rows… {rows.length} so far</Shimmer> : `Complete, ${rows.length} ${rows.length === 1 ? 'row' : 'rows'}`}
+      </div>
     </div>
   );
 }

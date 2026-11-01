@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { Database, LayoutGrid, Link2, Mail, Megaphone, Star, Wallet } from 'lucide-react';
+import { DatabaseIcon, LayoutGridIcon, LinkIcon, MailIcon, MegaphoneIcon, StarIcon, WalletIcon } from '../../icons/IconSet';
 import { useState } from 'react';
 import type { HTMLAttributes, ReactNode, Ref } from 'react';
 import { Button } from '../../components/Button/Button';
@@ -102,10 +102,10 @@ export interface DirectoryCategory {
 }
 
 const defaultCategories: DirectoryCategory[] = [
-  { id: 'data', label: 'Data', icon: <Database size={16} aria-hidden="true" /> },
-  { id: 'comms', label: 'Communication', icon: <Mail size={16} aria-hidden="true" /> },
-  { id: 'finance', label: 'Finance', icon: <Wallet size={16} aria-hidden="true" /> },
-  { id: 'marketing', label: 'Marketing', icon: <Megaphone size={16} aria-hidden="true" /> },
+  { id: 'data', label: 'Data', icon: <DatabaseIcon size={16} aria-hidden="true" /> },
+  { id: 'comms', label: 'Communication', icon: <MailIcon size={16} aria-hidden="true" /> },
+  { id: 'finance', label: 'Finance', icon: <WalletIcon size={16} aria-hidden="true" /> },
+  { id: 'marketing', label: 'Marketing', icon: <MegaphoneIcon size={16} aria-hidden="true" /> },
 ];
 const defaultApps: DirectoryApp[] = [
   { id: 'warehouse', name: 'Warehouse', vendor: 'Oniva', description: 'Sync tables from your data warehouse for agents to query.', categories: ['data'], essential: true, connected: true },
@@ -142,7 +142,7 @@ export function AppDirectory({ apps: appsProp = defaultApps, categories = defaul
   const [status, setStatus] = useState('all');
   const [busy, setBusy] = useState<string | null>(null);
   const [live, setLive] = useState('');
-  const cats: DirectoryCategory[] = [{ id: 'all', label: 'All apps', icon: <LayoutGrid size={16} aria-hidden="true" /> }, { id: 'essentials', label: 'Essentials', icon: <Star size={16} aria-hidden="true" /> }, ...categories];
+  const cats: DirectoryCategory[] = [{ id: 'all', label: 'All apps', icon: <LayoutGridIcon size={16} aria-hidden="true" /> }, { id: 'essentials', label: 'Essentials', icon: <StarIcon size={16} aria-hidden="true" /> }, ...categories];
   const inCat = (a: DirectoryApp, id: string) => (id === 'all' ? true : id === 'essentials' ? !!a.essential : a.categories.includes(id));
   const shown = apps.filter((a) => inCat(a, cat) && (status === 'all' || (status === 'connected') === !!a.connected) && (!query || `${a.name} ${a.description}`.toLowerCase().includes(query.toLowerCase())));
   const toggle = (a: DirectoryApp) => {
@@ -222,7 +222,7 @@ export function AppDirectory({ apps: appsProp = defaultApps, categories = defaul
                           size="sm"
                           variant="secondary"
                           isLoading={busy === a.id}
-                          startIcon={a.connected && busy !== a.id ? <Link2 size={14} aria-hidden="true" /> : undefined}
+                          startIcon={a.connected && busy !== a.id ? <LinkIcon size={14} aria-hidden="true" /> : undefined}
                           aria-label={`${a.connected ? 'Disconnect' : 'Connect'} ${a.name}`}
                           onPress={() => toggle(a)}
                         >

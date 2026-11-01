@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { Download, Undo2 } from 'lucide-react';
+import { DownloadIcon, UndoIcon } from '../../icons/IconSet';
 import { useState } from 'react';
 import type { HTMLAttributes, Ref } from 'react';
 import { Button } from '../../components/Button/Button';
@@ -204,10 +204,10 @@ export function InvoiceCredit({
           <SegmentedControlItem value="credit">Credit note</SegmentedControlItem>
         </SegmentedControl>
         <div {...stylex.props(styles.toolRight)}>
-          <Button size="sm" variant="secondary" startIcon={<Download size={14} aria-hidden="true" />} onPress={() => (onDownload ? onDownload() : typeof window !== 'undefined' && window.print?.())}>
+          <Button size="sm" variant="secondary" startIcon={<DownloadIcon size={14} aria-hidden="true" />} onPress={() => (onDownload ? onDownload() : typeof window !== 'undefined' && window.print?.())}>
             PDF
           </Button>
-          <Button size="sm" variant="secondary" startIcon={<Undo2 size={14} aria-hidden="true" />} isDisabled={view === 'credit'} onPress={() => setView('credit')}>
+          <Button size="sm" variant="secondary" startIcon={<UndoIcon size={14} aria-hidden="true" />} isDisabled={view === 'credit'} onPress={() => setView('credit')}>
             Credit invoice
           </Button>
         </div>

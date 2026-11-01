@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from 'react';
-import { Database, FileText, GitBranch, Globe, Palette, Search } from 'lucide-react';
+import { DatabaseIcon, FileTextIcon, BranchIcon, GlobeIcon, PaletteIcon, SearchIcon } from '../../icons/IconSet';
 import type { DemoModule } from '../../internal/demo';
 import { AgentTree, type TreeAction, type TreeAgent } from './AgentTree';
 
@@ -13,7 +13,7 @@ const base: TreeAgent = {
   status: 'running',
   cost: 0.04,
   started: t0 - 32_000,
-  tools: [ic(<FileText key="a" size={11} />), ic(<Palette key="b" size={11} />), ic(<GitBranch key="c" size={11} />)],
+  tools: [ic(<FileTextIcon key="a" size={11} />), ic(<PaletteIcon key="b" size={11} />), ic(<BranchIcon key="c" size={11} />)],
   children: [
     {
       id: 'research',
@@ -23,13 +23,13 @@ const base: TreeAgent = {
       status: 'running',
       cost: 0.05,
       started: t0 - 26_000,
-      tools: [<Search key="s" size={11} />, <Globe key="g" size={11} />],
+      tools: [<SearchIcon key="s" size={11} />, <GlobeIcon key="g" size={11} />],
       children: [
-        { id: 'scrape', name: 'Scraper', model: 'Lumen Fast', task: 'Read the pricing pages of the five sites', status: 'running', cost: 0.02, started: t0 - 18_000, tools: [<Globe key="g" size={11} />] },
-        { id: 'analyst', name: 'Analyst', model: 'Nova Pro', task: 'Summarize 120 reviews that mention price', status: 'running', cost: 0.03, started: t0 - 12_000, tools: [<FileText key="f" size={11} />] },
+        { id: 'scrape', name: 'Scraper', model: 'Lumen Fast', task: 'Read the pricing pages of the five sites', status: 'running', cost: 0.02, started: t0 - 18_000, tools: [<GlobeIcon key="g" size={11} />] },
+        { id: 'analyst', name: 'Analyst', model: 'Nova Pro', task: 'Summarize 120 reviews that mention price', status: 'running', cost: 0.03, started: t0 - 12_000, tools: [<FileTextIcon key="f" size={11} />] },
       ],
     },
-    { id: 'writer', name: 'Writer', model: 'Nova Pro', task: 'Write the copy for the three plans', status: 'running', cost: 0.07, started: t0 - 21_000, tools: [<FileText key="f" size={11} />] },
+    { id: 'writer', name: 'Writer', model: 'Nova Pro', task: 'Write the copy for the three plans', status: 'running', cost: 0.07, started: t0 - 21_000, tools: [<FileTextIcon key="f" size={11} />] },
     {
       id: 'build',
       name: 'Coder',
@@ -38,9 +38,9 @@ const base: TreeAgent = {
       status: 'running',
       cost: 0.09,
       started: t0 - 16_000,
-      tools: [<GitBranch key="g" size={11} />, <Database key="d" size={11} />],
+      tools: [<BranchIcon key="g" size={11} />, <DatabaseIcon key="d" size={11} />],
       children: [
-        { id: 'tester', name: 'Tester', model: 'Lumen Fast', task: 'Write and run the checkout tests', status: 'waiting', ask: 'Run the tests against the live checkout?', cost: 0.01, started: t0 - 4_000, tools: [<GitBranch key="g" size={11} />] },
+        { id: 'tester', name: 'Tester', model: 'Lumen Fast', task: 'Write and run the checkout tests', status: 'waiting', ask: 'Run the tests against the live checkout?', cost: 0.01, started: t0 - 4_000, tools: [<BranchIcon key="g" size={11} />] },
       ],
     },
   ],

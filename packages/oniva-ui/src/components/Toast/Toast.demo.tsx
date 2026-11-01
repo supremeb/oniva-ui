@@ -2,7 +2,7 @@ import { Button } from '../Button';
 import type { DemoModule } from '../../internal/demo';
 import { useRef, useState } from 'react';
 import * as stylex from '@stylexjs/stylex';
-import { FileText, RefreshCw, Save, Trash2, Upload } from 'lucide-react';
+import { FileTextIcon, RefreshIcon, SaveIcon, TrashIcon, UploadIcon } from '../../icons/IconSet';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 import { radius } from '../../tokens/radius.stylex';
@@ -140,7 +140,7 @@ function DocumentActions() {
       <div {...stylex.props(doc.card)}>
         <div {...stylex.props(doc.head)}>
           <span aria-hidden="true" {...stylex.props(doc.tile)}>
-            <FileText size={18} />
+            <FileTextIcon size={18} />
           </span>
           <div>
             <div {...stylex.props(doc.title)}>Quarterly report</div>
@@ -148,15 +148,15 @@ function DocumentActions() {
           </div>
         </div>
         <div {...stylex.props(doc.grid)}>
-          <Button variant="secondary" startIcon={<Save size={16} />} onPress={() => toast.success('Draft saved', { description: 'Quarterly report · just now' })}>
+          <Button variant="secondary" startIcon={<SaveIcon size={16} />} onPress={() => toast.success('Draft saved', { description: 'Quarterly report · just now' })}>
             Save draft
           </Button>
-          <Button variant="secondary" startIcon={<Trash2 size={16} />} onPress={() => toast.danger('File deleted', { description: 'Quarterly report moved to trash.', action: { label: 'Undo', onPress: () => toast.success('Restored') } })}>
+          <Button variant="secondary" startIcon={<TrashIcon size={16} />} onPress={() => toast.danger('File deleted', { description: 'Quarterly report moved to trash.', action: { label: 'Undo', onPress: () => toast.success('Restored') } })}>
             Delete file
           </Button>
           <Button
             variant="secondary"
-            startIcon={<Upload size={16} />}
+            startIcon={<UploadIcon size={16} />}
             onPress={() =>
               toast.promise(new Promise<void>((res) => setTimeout(res, 2200)), {
                 loading: { title: 'Uploading report…', description: 'Quarterly-Report.pdf · 4.2 MB' },
@@ -167,7 +167,7 @@ function DocumentActions() {
           >
             Upload report
           </Button>
-          <Button variant="secondary" startIcon={<RefreshCw size={16} />} onPress={() => toast.info('Sync running', { description: '1,204 items so far.' })}>
+          <Button variant="secondary" startIcon={<RefreshIcon size={16} />} onPress={() => toast.info('Sync running', { description: '1,204 items so far.' })}>
             Sync
           </Button>
         </div>

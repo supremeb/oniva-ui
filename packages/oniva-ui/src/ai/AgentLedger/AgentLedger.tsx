@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { ArrowRight, Lock, NotebookText, Redo2, Undo2 } from 'lucide-react';
+import { ArrowRightIcon, LockIcon, NotebookIcon, RedoIcon, UndoIcon } from '../../icons/IconSet';
 import { useEffect, useMemo, useRef, useState, type ReactNode, type Ref } from 'react';
 import { AnimatedHeight } from '../../motion/AnimatedHeight';
 import { useFlip } from '../../internal/w1-flip';
@@ -127,9 +127,12 @@ const styles = stylex.create({
     transitionTimingFunction: motion['--oniva-motion-ease-out'],
   },
   narrow: { gridTemplateColumns: 'auto minmax(0, 1fr) auto' },
-  self: { borderColor: colors['--oniva-color-border-active'] },
-  also: { backgroundColor: colors['--oniva-color-info-bg'] },
-  kept: { backgroundColor: colors['--oniva-color-warning-bg'] },
+  self: {
+    backgroundColor: colors['--oniva-color-surface-inset'],
+    boxShadow: `inset 0 0 0 1px ${colors['--oniva-color-border-active']}`,
+  },
+  also: { backgroundColor: 'color-mix(in srgb, var(--oniva-color-info-bg) 55%, transparent)' },
+  kept: { backgroundColor: 'color-mix(in srgb, var(--oniva-color-warning-bg) 55%, transparent)' },
   undone: { backgroundColor: colors['--oniva-color-surface-inset'] },
   tile: {
     alignItems: 'center',
@@ -168,6 +171,7 @@ const styles = stylex.create({
     flexWrap: 'wrap',
     fontSize: font['--oniva-font-size-13'],
     gap: 6,
+    overflowWrap: 'anywhere',
   },
   before: { textDecoration: 'line-through' },
   after: { color: colors['--oniva-color-text'] },
@@ -176,7 +180,6 @@ const styles = stylex.create({
   time: {
     color: colors['--oniva-color-text-muted'],
     fontSize: font['--oniva-font-size-12'],
-    opacity: { default: 1, ':is([data-row]:hover *)': 0, ':is([data-row]:focus-within *)': 0 },
   },
   actions: {
     alignItems: 'center',
@@ -184,9 +187,9 @@ const styles = stylex.create({
     gap: 4,
     opacity: {
       default: 0,
-      ':is([data-row]:hover *)': 1,
       ':is([data-row]:focus-within *)': 1,
       '@media (hover: none)': 1,
+      [media.hover]: { default: null, ':is([data-row]:hover *)': 1 },
     },
     transitionDuration: motion['--oniva-motion-dur-base'],
     transitionProperty: 'opacity',
@@ -194,10 +197,12 @@ const styles = stylex.create({
   hideTime: {
     opacity: {
       default: 1,
-      ':is([data-row]:hover *)': 0,
       ':is([data-row]:focus-within *)': 0,
       '@media (hover: none)': 0,
+      [media.hover]: { default: null, ':is([data-row]:hover *)': 0 },
     },
+    transitionDuration: motion['--oniva-motion-dur-base'],
+    transitionProperty: 'opacity',
   },
   btn: {
     alignItems: 'center',
@@ -224,7 +229,7 @@ const styles = stylex.create({
     animationTimingFunction: motion['--oniva-motion-ease-out'],
     gridArea: '1 / 1',
   },
-  empty: { color: colors['--oniva-color-text-muted'], padding: 12, textAlign: 'center' },
+  empty: { color: colors['--oniva-color-text-muted'], padding: 16, textAlign: 'center' },
 });
 
 export interface AgentLedgerProps {
@@ -304,15 +309,15 @@ export function AgentLedger({
     >
       <div {...stylex.props(w1.bar)}>
         <h3 {...stylex.props(w1.title, styles.titleRow)}>
-          <span aria-hidden="true" {...stylex.props(styles.titleIcon)}><NotebookText size={16} /></span>{' '}{title} {agent && <span {...stylex.props(styles.agent)}>· {agent}</span>}
+          <span aria-hidden="true" {...stylex.props(styles.titleIcon)}><NotebookIcon size={16} /></span>{' '}{title} {agent && <span {...stylex.props(styles.agent)}>· {agent}</span>}
         </h3>
         <span {...stylex.props(w1.grow)} />
         <span {...stylex.props(w1.muted, w1.num)}>
           {f.plural(entries.length, { one: '# change', other: '# changes' })}
         </span>
       </div>
-      {sorted.length === 0 && <div {...stylex.props(styles.empty)}>No changes yet.</div>}
       <div {...stylex.props(w1.tile, styles.card)}>
+      {sorted.length === 0 && <div {...stylex.props(styles.empty)}>No changes yet.</div>}
       <ol ref={listRef} aria-label={title} {...stylex.props(w1.list, styles.list)}>
         {sorted.map((e) => {
           const isGone = gone.includes(e.id);
@@ -366,7 +371,7 @@ export function AgentLedger({
                       {e.change ? (
                         <div {...stylex.props(styles.change, w1.num)}>
                           <span {...stylex.props(styles.before)}>{e.change[0]}</span>
-                          <ArrowRight size={12} aria-hidden="true" />
+                          <ArrowRightIcon size={12} aria-hidden="true" />
                           <span className="sr-only" {...stylex.props(w1.srOnly)}>
                             to
                           </span>
@@ -382,7 +387,7 @@ export function AgentLedger({
                           {role === 'also' ? (
                             <Tag tone="info">Also undone</Tag>
                           ) : (
-                            <Tag tone="warning" icon={<Lock size={10} aria-hidden="true" />}>
+                            <Tag tone="warning" icon={<LockIcon size={10} aria-hidden="true" />}>
                               Can't undo
                             </Tag>
                           )}
@@ -393,7 +398,11 @@ export function AgentLedger({
                             {...stylex.props(styles.stack, styles.time, w1.num, styles.hideTime)}
                           >
                             {formatAgo(t - e.at, f.locale)}
-                            {narrow ? '' : ` · ${e.system}`}
+                            {narrow ? (
+                              <span {...stylex.props(w1.srOnly)}>{`, ${e.system}`}</span>
+                            ) : (
+                              ` · ${e.system}`
+                            )}
                           </span>
                           <span {...stylex.props(styles.stack, styles.actions)}>
                             {isGone ? (
@@ -406,7 +415,7 @@ export function AgentLedger({
                                   )
                                 }
                               >
-                                <Redo2 size={13} aria-hidden="true" />
+                                <RedoIcon size={13} aria-hidden="true" />
                                 {!narrow && 'Redo'}
                               </Button>
                             ) : reversible ? (
@@ -422,11 +431,11 @@ export function AgentLedger({
                                   )
                                 }
                               >
-                                <Undo2 size={13} aria-hidden="true" />
+                                <UndoIcon size={13} aria-hidden="true" />
                                 {!narrow && 'Undo'}
                               </Button>
                             ) : (
-                              <Tag icon={<Lock size={10} aria-hidden="true" />}>Permanent</Tag>
+                              <Tag icon={<LockIcon size={10} aria-hidden="true" />}>Permanent</Tag>
                             )}
                           </span>
                         </>

@@ -18,4 +18,15 @@ describe('FeedbackBar', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Too long' }));
     expect(onSubmit).toHaveBeenCalledWith({ rating: 'down', reason: 'Too long' });
   });
+
+  it('renders a custom question and custom reasons', () => {
+    const onSubmit = vi.fn();
+    render(<FeedbackBar question="Did Atlas 2 help?" reasons={['Outdated', 'Off topic']} onSubmit={onSubmit} />);
+    expect(screen.getByText('Did Atlas 2 help?')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'No' }));
+    expect(screen.getByRole('group', { name: 'Reasons' })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Off topic' }));
+    expect(onSubmit).toHaveBeenCalledWith({ rating: 'down', reason: 'Off topic' });
+    expect(screen.getByRole('status')).toHaveTextContent('Thanks');
+  });
 });

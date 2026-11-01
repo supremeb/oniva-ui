@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Archive, Inbox, Send, Star, Trash2 } from 'lucide-react';
+import { ArchiveIcon, InboxIcon, SendIcon, StarIcon, TrashIcon } from '../../icons/IconSet';
 import type { Selection } from 'react-aria-components';
 import type { DemoModule } from '../../internal/demo';
 import { ListBox, ListBoxItem, ListBoxSection } from './ListBox';
@@ -15,19 +15,19 @@ function Single() {
         onSelectionChange={setSel}
         disallowEmptySelection
       >
-        <ListBoxItem id="inbox" icon={<Inbox size={16} />} trailing="12">
+        <ListBoxItem id="inbox" icon={<InboxIcon size={16} />} trailing="12">
           Inbox
         </ListBoxItem>
-        <ListBoxItem id="starred" icon={<Star size={16} />} trailing="3">
+        <ListBoxItem id="starred" icon={<StarIcon size={16} />} trailing="3">
           Starred
         </ListBoxItem>
-        <ListBoxItem id="sent" icon={<Send size={16} />}>
+        <ListBoxItem id="sent" icon={<SendIcon size={16} />}>
           Sent
         </ListBoxItem>
-        <ListBoxItem id="archive" icon={<Archive size={16} />}>
+        <ListBoxItem id="archive" icon={<ArchiveIcon size={16} />}>
           Archive
         </ListBoxItem>
-        <ListBoxItem id="trash" icon={<Trash2 size={16} />} isDisabled>
+        <ListBoxItem id="trash" icon={<TrashIcon size={16} />} isDisabled>
           Trash
         </ListBoxItem>
       </ListBox>
@@ -47,10 +47,10 @@ const demo: DemoModule = {
     {
       name: 'Single selection',
       code: `<ListBox aria-label="Mailbox" selectionMode="single" defaultSelectedKeys={['inbox']} disallowEmptySelection>
-  <ListBoxItem id="inbox" icon={<Inbox size={16} />} trailing="12">Inbox</ListBoxItem>
-  <ListBoxItem id="starred" icon={<Star size={16} />} trailing="3">Starred</ListBoxItem>
-  <ListBoxItem id="sent" icon={<Send size={16} />}>Sent</ListBoxItem>
-  <ListBoxItem id="trash" icon={<Trash2 size={16} />} isDisabled>Trash</ListBoxItem>
+  <ListBoxItem id="inbox" icon={<InboxIcon size={16} />} trailing="12">Inbox</ListBoxItem>
+  <ListBoxItem id="starred" icon={<StarIcon size={16} />} trailing="3">Starred</ListBoxItem>
+  <ListBoxItem id="sent" icon={<SendIcon size={16} />}>Sent</ListBoxItem>
+  <ListBoxItem id="trash" icon={<TrashIcon size={16} />} isDisabled>Trash</ListBoxItem>
 </ListBox>`,
       Component: Single,
     },

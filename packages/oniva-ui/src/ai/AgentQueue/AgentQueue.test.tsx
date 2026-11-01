@@ -9,7 +9,7 @@ const workers: QueueWorker[] = [{ id: 'w1', name: 'Worker 1' }, { id: 'w2', name
 const jobs: QueueJob[] = [
   { id: 'j1', name: 'Summarize ticket 4821', kind: 'llm', status: 'running', worker: 'w1', enqueuedAt: 80_000, startedAt: 82_000, progress: 0.4 },
   { id: 'j2', name: 'Embed 240 docs', kind: 'tool', status: 'queued', enqueuedAt: 90_000 },
-  { id: 'j3', name: 'Draft reply for Acme', kind: 'llm', status: 'queued', priority: 'high', enqueuedAt: 95_000 },
+  { id: 'j3', name: 'Draft reply for Northwind Labs', kind: 'llm', status: 'queued', priority: 'high', enqueuedAt: 95_000 },
   { id: 'j4', name: 'Sync CRM', kind: 'agent', status: 'done', enqueuedAt: 50_000, startedAt: 52_000, endedAt: 70_000 },
   { id: 'j5', name: 'Fetch invoices', kind: 'tool', status: 'failed', enqueuedAt: 50_000, startedAt: 52_000, endedAt: 60_000, error: 'HTTP 502' },
 ];
@@ -17,9 +17,9 @@ const jobs: QueueJob[] = [
 describe('AgentQueue', () => {
   it('shows stats and puts high priority first in line', () => {
     render(<AgentQueue jobs={jobs} workers={workers} now={NOW} />);
-    expect(screen.getByRole('region', { name: 'Waiting' })).toHaveTextContent('Draft reply for Acme');
+    expect(screen.getByRole('region', { name: 'Waiting' })).toHaveTextContent('Draft reply for Northwind Labs');
     const queued = screen.getAllByRole('button', { name: /waiting/ });
-    expect(queued[0]).toHaveAccessibleName(/Draft reply for Acme.*place 1 in line.*high priority/);
+    expect(queued[0]).toHaveAccessibleName(/Draft reply for Northwind Labs.*place 1 in line.*high priority/);
     expect(screen.getByText('/2')).toBeInTheDocument();
   });
 
@@ -64,6 +64,18 @@ describe('AgentQueue', () => {
     expect(onPausedChange).toHaveBeenCalledWith(true);
     fireEvent.click(screen.getByRole('button', { name: 'More workers' }));
     expect(onConcurrencyChange).toHaveBeenCalledWith(3);
+  });
+
+  it('says Paused on running jobs after a manual pause', () => {
+    render(<AgentQueue jobs={jobs} workers={workers} now={NOW} paused onPausedChange={() => {}} />);
+    expect(screen.getByText('Paused')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Summarize ticket.*paused/ })).toBeInTheDocument();
+  });
+
+  it('shows a note when there are no workers and titles truncated names', () => {
+    render(<AgentQueue jobs={jobs} workers={[]} now={NOW} />);
+    expect(screen.getByText('No workers.')).toBeInTheDocument();
+    expect(screen.getByText('Embed 240 docs')).toHaveAttribute('title', 'Embed 240 docs');
   });
 
   it('describes the chart as an image and passes axe', async () => {

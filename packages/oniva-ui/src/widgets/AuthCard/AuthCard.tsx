@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { GitBranch, Globe } from 'lucide-react';
+import { BranchIcon, GlobeIcon } from '../../icons/IconSet';
 import { useState, type FormEvent, type Ref } from 'react';
 import { Button } from '../../components/Button';
 import { Card, Tile } from '../../components/Card';
@@ -136,14 +136,14 @@ export function AuthCard({
           <div {...stylex.props(styles.socials)}>
             <Button
               variant="secondary"
-              startIcon={<GitBranch size={16} />}
+              startIcon={<BranchIcon size={16} />}
               onPress={() => onSocial?.('github')}
             >
               GitHub
             </Button>
             <Button
               variant="secondary"
-              startIcon={<Globe size={16} />}
+              startIcon={<GlobeIcon size={16} />}
               onPress={() => onSocial?.('google')}
             >
               Google

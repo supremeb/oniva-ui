@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { Message } from './Message';
 
@@ -42,5 +42,34 @@ describe('Message', () => {
     );
     fireEvent.click(screen.getByRole('button', { name: 'Mark response as bad' }));
     expect(onFeedback).toHaveBeenCalledWith('down');
+  });
+
+  it('groups assistant actions and announces a successful copy', async () => {
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    Object.defineProperty(navigator, 'clipboard', { value: { writeText }, configurable: true });
+    render(
+      <Message role="assistant" copyText="hello" onFeedback={() => {}}>
+        hello
+      </Message>,
+    );
+    expect(screen.getByRole('group', { name: 'Message actions' })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Copy message' }));
+    await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent('Copied to clipboard'));
+    expect(screen.getByRole('button', { name: 'Copied' })).toBeInTheDocument();
+  });
+
+  it('does not confirm a copy when the clipboard write is rejected', async () => {
+    const writeText = vi.fn().mockRejectedValue(new Error('denied'));
+    Object.defineProperty(navigator, 'clipboard', { value: { writeText }, configurable: true });
+    render(
+      <Message role="assistant" copyText="hello">
+        hello
+      </Message>,
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'Copy message' }));
+    await waitFor(() => expect(writeText).toHaveBeenCalled());
+    await Promise.resolve();
+    expect(screen.getByRole('status')).toHaveTextContent('');
+    expect(screen.getByRole('button', { name: 'Copy message' })).toBeInTheDocument();
   });
 });

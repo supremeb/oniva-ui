@@ -64,6 +64,20 @@ describe('AgentLanes', () => {
     expect(onOpen).toHaveBeenCalled();
   });
 
+  it('shows a message instead of a blank panel without agents', () => {
+    render(<AgentLanes agents={[]} tasks={[]} now={NOW} />);
+    expect(screen.getByText('No agents to show yet.')).toBeInTheDocument();
+  });
+
+  it('puts axis labels on the grid lines and reports long windows in hours', () => {
+    const { container } = render(<AgentLanes agents={agents} tasks={tasks} now={NOW} span={120 * MIN} />);
+    expect(screen.getByText('Last 2h')).toBeInTheDocument();
+    const ticks = Array.from(container.querySelectorAll<HTMLElement>('[aria-hidden="true"] span[style*="left"]'));
+    expect(ticks.map((t) => t.textContent)).toEqual(['\u2212100m', '\u221280m', '\u221260m', '\u221240m', '\u221220m']);
+    const lines = Array.from(container.querySelectorAll<HTMLElement>('span[style*="left"]')).filter((el) => !el.textContent);
+    expect(lines.map((l) => l.style.left)).toEqual(ticks.map((t) => t.style.left));
+  });
+
   it('forwards ref/className and passes axe', async () => {
     const ref = createRef<HTMLDivElement>();
     const { container } = render(<AgentLanes ref={ref} className="x" agents={agents} tasks={tasks} now={NOW} />);

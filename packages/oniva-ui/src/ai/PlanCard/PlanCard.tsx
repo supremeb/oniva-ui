@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { ArrowDown, ArrowUp, Check, CircleAlert, ListChecks, Pencil, Plus, RotateCcw, Trash2 } from 'lucide-react';
+import { ArrowDownIcon, ArrowUpIcon, CheckIcon, CircleAlertIcon, ListChecksIcon, PencilIcon, PlusIcon, RotateCcwIcon, TrashIcon } from '../../icons/IconSet';
 import { useEffect, useRef, useState, type HTMLAttributes, type KeyboardEvent, type Ref } from 'react';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
@@ -48,12 +48,14 @@ const styles = stylex.create({
   seg: {
     backgroundColor: colors['--oniva-color-success-solid'],
     borderRadius: radius['--oniva-radius-full'],
+    display: 'block',
     height: '100%',
     transformOrigin: 'left center',
     transform: { default: 'scaleX(0)', '[data-fill="1"]': 'scaleX(1)', '[data-fill="half"]': 'scaleX(0.5)' },
     transitionDuration: motion['--oniva-motion-dur-deliberate'],
     transitionProperty: 'transform',
     transitionTimingFunction: motion['--oniva-motion-ease-out'],
+    width: '100%',
   },
   segTrack: { backgroundColor: colors['--oniva-color-chart-track'], borderRadius: radius['--oniva-radius-full'], flexBasis: 0, flexGrow: 1, height: 3, overflow: 'hidden' },
   progress: { display: 'flex', gap: 3, marginBlockStart: -4 },
@@ -62,14 +64,14 @@ const styles = stylex.create({
   tlTitle: { fontSize: font['--oniva-font-size-14'], fontWeight: font['--oniva-font-weight-medium'] },
   tlRoot: { gap: 14 },
   tlItem: { position: 'relative' },
-  tlLine: { backgroundColor: colors['--oniva-color-border'], bottom: -6, insetInlineStart: 14, position: 'absolute', top: 28, width: 1 },
+  tlLine: { backgroundColor: colors['--oniva-color-border'], bottom: -6, insetInlineStart: 10, position: 'absolute', top: 28, width: 1 },
   tlDetailRow: { alignItems: 'center', display: 'flex', flexWrap: 'wrap', gap: 8 },
   tlFoot: { borderTopColor: colors['--oniva-color-border'], borderTopStyle: 'solid', borderTopWidth: 1, marginBlockEnd: -14, marginInline: -14, paddingBlock: 12, paddingInline: 14 },
   swap: { alignItems: 'center', display: 'inline-flex', gap: 8 },
   root: { display: 'flex', flexDirection: 'column', gap: 12, padding: 14 },
   head: { alignItems: 'center', color: colors['--oniva-color-text'], display: 'flex', gap: 8 },
-  title: { flexGrow: 1, fontSize: font['--oniva-font-size-14'], fontWeight: font['--oniva-font-weight-semibold'], margin: 0 },
-  estimate: { color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-12'] },
+  title: { flexGrow: 1, minWidth: 0, overflowWrap: 'anywhere', fontSize: font['--oniva-font-size-14'], fontWeight: font['--oniva-font-weight-semibold'], margin: 0 },
+  estimate: { color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-12'], fontVariantNumeric: 'tabular-nums', whiteSpace: 'nowrap' },
   list: { display: 'flex', flexDirection: 'column', listStyle: 'none', marginBlockEnd: -8, marginBlockStart: 0, marginInline: 0, padding: 0 },
   itemPad: { marginInline: 0, paddingBlockEnd: 8, paddingInline: 0 },
   item: {
@@ -105,16 +107,17 @@ const styles = stylex.create({
   numDone: { backgroundColor: colors['--oniva-color-surface-inset'], color: colors['--oniva-color-success-fg'] },
   numFailed: { backgroundColor: colors['--oniva-color-danger-bg'], color: colors['--oniva-color-danger-fg'] },
   numActive: { backgroundColor: 'transparent' },
-  stepTitle: { color: colors['--oniva-color-text'], fontSize: font['--oniva-font-size-13'], fontWeight: font['--oniva-font-weight-medium'], lineHeight: font['--oniva-font-lh-18'] },
+  stepTitle: { overflowWrap: 'anywhere', color: colors['--oniva-color-text'], fontSize: font['--oniva-font-size-13'], fontWeight: font['--oniva-font-weight-medium'], lineHeight: font['--oniva-font-lh-18'] },
   stepPending: { color: colors['--oniva-color-text-muted'] },
-  detail: { color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-12'], lineHeight: font['--oniva-font-lh-16'], margin: 0 },
-  err: { color: colors['--oniva-color-danger-fg'], fontSize: font['--oniva-font-size-12'], lineHeight: font['--oniva-font-lh-16'], margin: 0 },
+  detail: { color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-12'], lineHeight: font['--oniva-font-lh-16'], margin: 0, overflowWrap: 'anywhere' },
+  err: { color: colors['--oniva-color-danger-fg'], fontSize: font['--oniva-font-size-12'], lineHeight: font['--oniva-font-lh-16'], margin: 0, overflowWrap: 'anywhere' },
   time: { color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-12'], fontVariantNumeric: 'tabular-nums', paddingBlockStart: 2 },
   tool: { marginInlineStart: 6 },
   tools: { alignItems: 'center', display: 'flex', gap: 2 },
   add: { alignItems: 'center', display: 'flex', gap: 8 },
   foot: { alignItems: 'center', display: 'flex', flexWrap: 'wrap', gap: 8 },
   runState: { color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-13'], fontVariantNumeric: 'tabular-nums' },
+  runStopped: { color: colors['--oniva-color-danger-fg'] },
   approved: { alignItems: 'center', color: colors['--oniva-color-success-fg'], display: 'inline-flex', fontSize: font['--oniva-font-size-13'], fontWeight: font['--oniva-font-weight-medium'], gap: 6 },
 });
 
@@ -159,8 +162,8 @@ function Marker({ step, index }: { step: PlanStep; index: number }) {
   const s = step.status ?? 'pending';
   const lead = { 'data-state': 'entering' as const };
   if (s === 'active') return <span {...lead} {...stylex.props(styles.num, styles.numActive, enterExit.blur)}><Spinner size="xs" label="Running" /></span>;
-  if (s === 'done') return <span {...lead} {...stylex.props(styles.num, styles.numDone, enterExit.blur)}><Check size={13} aria-label="Done" {...stylex.props(styles.draw)} /></span>;
-  if (s === 'failed') return <span {...lead} {...stylex.props(styles.num, styles.numFailed, enterExit.blur)}><CircleAlert size={13} aria-label="Failed" /></span>;
+  if (s === 'done') return <span {...lead} {...stylex.props(styles.num, styles.numDone, enterExit.blur)}><CheckIcon size={13} aria-label="Done" {...stylex.props(styles.draw)} /></span>;
+  if (s === 'failed') return <span {...lead} {...stylex.props(styles.num, styles.numFailed, enterExit.blur)}><CircleAlertIcon size={13} aria-label="Failed" /></span>;
   return <span aria-hidden="true" {...stylex.props(styles.num, styles.numRing)}>{index + 1}</span>;
 }
 
@@ -284,7 +287,23 @@ export function PlanCard({ title = 'Proposed plan', steps, status = 'draft', est
     }
     knownIds.current = new Set(ids);
   }, [items]);
+  // Announce step progress to screen readers (not the initial render).
+  const prevStatuses = useRef<Map<string, PlanStepStatus | undefined> | null>(null);
+  useEffect(() => {
+    const prev = prevStatuses.current;
+    if (prev && !draft) {
+      for (const s of items) {
+        if (prev.get(s.id) === s.status) continue;
+        if (s.status === 'active') announce(`Started "${s.title}"`);
+        else if (s.status === 'done') announce(`Finished "${s.title}"`);
+        else if (s.status === 'failed') announce(`Failed "${s.title}"${s.error ? `: ${s.error}` : ''}`);
+      }
+    }
+    prevStatuses.current = new Map(items.map((s) => [s.id, s.status]));
+  }, [items, draft, announce]);
   const doneCount = items.filter((s) => s.status === 'done').length;
+  const failedIndex = items.findIndex((s) => s.status === 'failed');
+  const stopped = status === 'running' && failedIndex >= 0 && !items.some((s) => s.status === 'active');
   const tl = layout === 'timeline';
   const sx = stylex.props(aiStyles.panel, styles.root, tl && styles.tlRoot, xstyle);
   const total = items.reduce((n, s) => n + (s.duration ?? (s.status === 'active' ? 0 : 0)), 0);
@@ -294,7 +313,7 @@ export function PlanCard({ title = 'Proposed plan', steps, status = 'draft', est
       {tl ? (
         <div {...stylex.props(styles.head, styles.headStack)}>
           <span {...stylex.props(styles.eyebrow)}>
-            <ListChecks size={14} aria-hidden="true" />
+            <ListChecksIcon size={14} aria-hidden="true" />
             Plan · {f.number(items.length)} {items.length === 1 ? 'step' : 'steps'}
             {draft && estimate && <span {...stylex.props(styles.estimate)}>· {estimate}</span>}
           </span>
@@ -302,7 +321,7 @@ export function PlanCard({ title = 'Proposed plan', steps, status = 'draft', est
         </div>
       ) : (
         <div {...stylex.props(styles.head)}>
-          <ListChecks size={16} aria-hidden="true" />
+          <ListChecksIcon size={16} aria-hidden="true" />
           <h4 {...stylex.props(styles.title)}>{title}</h4>
           {draft && estimate && <span {...stylex.props(styles.estimate)}>{estimate}</span>}
         </div>
@@ -366,7 +385,7 @@ export function PlanCard({ title = 'Proposed plan', steps, status = 'draft', est
                   <p {...stylex.props(styles.err)}>{s.error ?? 'This step failed.'}</p>
                   {onRetry && (
                     <Button size="xs" variant="secondary" onPress={() => onRetry(s.id)}>
-                      <RotateCcw size={12} aria-hidden="true" /> Retry from here
+                      <RotateCcwIcon size={12} aria-hidden="true" /> Retry from here
                     </Button>
                   )}
                 </>
@@ -374,9 +393,9 @@ export function PlanCard({ title = 'Proposed plan', steps, status = 'draft', est
             </div>
             {editing && draft ? (
               <span {...stylex.props(styles.tools)}>
-                <Button size="xs" variant="ghost" isIconOnly aria-label={`Move step ${i + 1} up`} isDisabled={i === 0} onPress={() => move(i, -1)}><ArrowUp size={12} aria-hidden="true" /></Button>
-                <Button size="xs" variant="ghost" isIconOnly aria-label={`Move step ${i + 1} down`} isDisabled={i === items.length - 1} onPress={() => move(i, 1)}><ArrowDown size={12} aria-hidden="true" /></Button>
-                <Button size="xs" variant="ghost" isIconOnly aria-label={`Remove step ${i + 1}`} onPress={() => remove(i)}><Trash2 size={12} aria-hidden="true" /></Button>
+                <Button size="xs" variant="ghost" isIconOnly aria-label={`Move step ${i + 1} up`} isDisabled={i === 0} onPress={() => move(i, -1)}><ArrowUpIcon size={12} aria-hidden="true" /></Button>
+                <Button size="xs" variant="ghost" isIconOnly aria-label={`Move step ${i + 1} down`} isDisabled={i === items.length - 1} onPress={() => move(i, 1)}><ArrowDownIcon size={12} aria-hidden="true" /></Button>
+                <Button size="xs" variant="ghost" isIconOnly aria-label={`Remove step ${i + 1}`} onPress={() => remove(i)}><TrashIcon size={12} aria-hidden="true" /></Button>
               </span>
             ) : (
               !draft && <StepTime step={s} nowMs={now} since={activeSince.current.get(s.id)} />
@@ -391,7 +410,7 @@ export function PlanCard({ title = 'Proposed plan', steps, status = 'draft', est
         <AnimatedHeight isOpen={addRow.shown}>
           <div {...stylex.props(styles.add)}>
             <Input size="sm" aria-label="Add a step" placeholder="Add a step" value={draftTitle} onChange={setDraftTitle} onKeyDown={(e) => e.key === 'Enter' && add()} />
-            <Button size="sm" variant="secondary" isDisabled={!draftTitle.trim()} onPress={add}><Plus size={14} aria-hidden="true" /> Add</Button>
+            <Button size="sm" variant="secondary" isDisabled={!draftTitle.trim()} onPress={add}><PlusIcon size={14} aria-hidden="true" /> Add</Button>
           </div>
         </AnimatedHeight>
       )}
@@ -399,18 +418,24 @@ export function PlanCard({ title = 'Proposed plan', steps, status = 'draft', est
         <span key={status === 'draft' ? (approved ? 'approved' : editing ? 'edit' : 'draft') : status} data-state="entering" {...stylex.props(styles.swap, enterExit.blur)}>
         {status === 'running' ? (
           <>
-            <span {...stylex.props(styles.runState)}>
-              Running · {f.number(doneCount)} of {f.number(items.length)}{runStart.current ? ` · ${formatDuration(Math.max(0, now - runStart.current), true)}` : ''}
+            <span role={stopped ? 'status' : undefined} {...stylex.props(styles.runState, stopped && styles.runStopped)}>
+              {stopped ? (
+                `Stopped at step ${f.number(failedIndex + 1)} · ${f.number(doneCount)} of ${f.number(items.length)} done`
+              ) : (
+                <>
+                  Running · {f.number(doneCount)} of {f.number(items.length)}{runStart.current ? ` · ${formatDuration(Math.max(0, now - runStart.current), true)}` : ''}
+                </>
+              )}
             </span>
             {onCancel && <Button size="sm" variant="ghost" onPress={onCancel}>Cancel</Button>}
           </>
         ) : status === 'done' ? (
           <span role="status" data-state="entering" {...stylex.props(styles.approved, enterExit.blur)}>
-            <Check size={14} aria-hidden="true" /> {doneIn !== undefined ? `Done in ${formatDuration(doneIn)}` : total ? `Done in ${formatDuration(total)}` : 'Done'}
+            <CheckIcon size={14} aria-hidden="true" /> {doneIn !== undefined ? `Done in ${formatDuration(doneIn)}` : total ? `Done in ${formatDuration(total)}` : 'Done'}
           </span>
         ) : approved ? (
           <span role="status" data-state="entering" {...stylex.props(styles.approved, enterExit.blur)}>
-            <Check size={14} aria-hidden="true" /> Plan approved
+            <CheckIcon size={14} aria-hidden="true" /> Plan approved
           </span>
         ) : editing ? (
           <Button size="sm" onPress={() => { setEditing(false); onChange?.(local); }}>Save changes</Button>
@@ -418,6 +443,7 @@ export function PlanCard({ title = 'Proposed plan', steps, status = 'draft', est
           <>
             <Button
               size="sm"
+              isDisabled={local.length === 0}
               onPress={() => {
                 if (onRun) onRun(local);
                 else {
@@ -429,7 +455,7 @@ export function PlanCard({ title = 'Proposed plan', steps, status = 'draft', est
               {onRun ? 'Run plan' : 'Approve plan'}
             </Button>
             <Button size="sm" variant="secondary" onPress={() => setEditing(true)}>
-              <Pencil size={14} aria-hidden="true" /> Edit
+              <PencilIcon size={14} aria-hidden="true" /> Edit
             </Button>
             {onCancel && <Button size="sm" variant="ghost" onPress={onCancel}>Cancel</Button>}
           </>

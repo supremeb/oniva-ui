@@ -1,4 +1,4 @@
-import { FileText, FolderOpen, Image } from 'lucide-react';
+import { FileTextIcon, FolderOpenIcon, ImageIcon } from '../../icons/IconSet';
 import type { DemoModule } from '../../internal/demo';
 import { Badge } from '../Badge';
 import { List, ListItem } from './List';
@@ -15,16 +15,16 @@ const demo: DemoModule = {
     {
       name: 'With checkbox selection',
       code: `<List aria-label="Recent files" selectionMode="multiple" defaultSelectedKeys={['q3']}>
-  <ListItem id="q3" icon={<FileText size={16} />} description="Edited 2h ago" trailing="2.4 MB">Q3 revenue report.pdf</ListItem>
-  <ListItem id="brand" icon={<Image size={16} />} description="Edited yesterday" trailing="8.1 MB">Brand assets.zip</ListItem>
-  <ListItem id="contracts" icon={<FolderOpen size={16} />} description="12 items" trailing="Shared">Contracts</ListItem>
+  <ListItem id="q3" icon={<FileTextIcon size={16} />} description="Edited 2h ago" trailing="2.4 MB">Q3 revenue report.pdf</ListItem>
+  <ListItem id="brand" icon={<ImageIcon size={16} />} description="Edited yesterday" trailing="8.1 MB">Brand assets.zip</ListItem>
+  <ListItem id="contracts" icon={<FolderOpenIcon size={16} />} description="12 items" trailing="Shared">Contracts</ListItem>
 </List>`,
       Component: () => (
         <div style={{ maxWidth: 420 }}>
           <List aria-label="Recent files" selectionMode="multiple" defaultSelectedKeys={['q3']}>
             <ListItem
               id="q3"
-              icon={<FileText size={16} />}
+              icon={<FileTextIcon size={16} />}
               description="Edited 2h ago"
               trailing="2.4 MB"
             >
@@ -32,7 +32,7 @@ const demo: DemoModule = {
             </ListItem>
             <ListItem
               id="brand"
-              icon={<Image size={16} />}
+              icon={<ImageIcon size={16} />}
               description="Edited yesterday"
               trailing="8.1 MB"
             >
@@ -40,7 +40,7 @@ const demo: DemoModule = {
             </ListItem>
             <ListItem
               id="contracts"
-              icon={<FolderOpen size={16} />}
+              icon={<FolderOpenIcon size={16} />}
               description="12 items"
               trailing="Shared"
             >

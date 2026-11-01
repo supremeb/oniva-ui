@@ -55,6 +55,25 @@ describe('DelegateBoard', () => {
     expect(onModeChange).toHaveBeenCalledWith('auto');
   });
 
+  it('says so when there are no tasks or no agents', () => {
+    render(<DelegateBoard agents={[]} tasks={[]} now={NOW} />);
+    expect(screen.getByRole('region', { name: 'Unassigned' })).toHaveTextContent('No tasks yet.');
+    expect(screen.getByRole('region', { name: 'Agents' })).toHaveTextContent('No agents yet.');
+  });
+
+  it('treats a task pointing at an unknown agent as unassigned', () => {
+    render(<DelegateBoard agents={agents} tasks={[{ id: 'z', title: 'Archive runbooks', estimate: 14, agentId: 'gone' }]} now={NOW} />);
+    expect(screen.getByRole('button', { name: 'Archive runbooks, 14 min, unassigned' })).toBeInTheDocument();
+  });
+
+  it('describes the number-key shortcut for the agents it has', () => {
+    const { rerender } = render(<DelegateBoard agents={agents.slice(0, 1)} tasks={tasks} now={NOW} />);
+    expect(screen.getAllByText(/Or press 1 to hand it over/).length).toBeGreaterThan(0);
+    rerender(<DelegateBoard agents={[]} tasks={tasks} now={NOW} />);
+    expect(screen.queryAllByText(/press 1 to 0/)).toHaveLength(0);
+    expect(screen.getAllByText('No agents to hand this to yet.').length).toBeGreaterThan(0);
+  });
+
   it('forwards ref/className and passes axe', async () => {
     const ref = createRef<HTMLDivElement>();
     const { container } = render(<DelegateBoard ref={ref} className="x" agents={agents} tasks={tasks} now={NOW} />);

@@ -28,7 +28,6 @@ export default defineConfig({
         'react/jsx-runtime',
         'react-aria',
         'react-aria-components',
-        'lucide-react',
         /^@stylexjs\/stylex/,
         /^d3-/,
         /^@tanstack\//,

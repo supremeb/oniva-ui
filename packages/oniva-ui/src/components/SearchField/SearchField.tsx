@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { Search, X } from 'lucide-react';
+import { SearchIcon, XIcon } from '../../icons/IconSet';
 import {
   Button,
   FieldError,
@@ -73,7 +73,7 @@ export function SearchField({
               isDisabled && ff.disabled,
             )}
           >
-            <Search size={16} aria-hidden="true" {...stylex.props(ff.adornment)} />
+            <SearchIcon size={16} aria-hidden="true" {...stylex.props(ff.adornment)} />
             <Input
               ref={ref}
               placeholder={placeholder}
@@ -88,7 +88,7 @@ export function SearchField({
               )
             ) : (
               <Button {...stylex.props(fp.iconButton)}>
-                <X size={14} aria-hidden="true" />
+                <XIcon size={14} aria-hidden="true" />
               </Button>
             )}
           </div>

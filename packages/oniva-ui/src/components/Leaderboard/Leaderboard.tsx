@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { ArrowDown, ArrowUp, Minus } from 'lucide-react';
+import { ArrowDownIcon, ArrowUpIcon, MinusIcon } from '../../icons/IconSet';
 import { useLayoutEffect, useRef } from 'react';
 import type { HTMLAttributes, Ref } from 'react';
 import { Avatar } from '../Avatar';
@@ -104,7 +104,7 @@ export function Leaderboard({ entries, scoreLabel = 'points', scoreFormat, class
               {e.subtitle && <span {...stylex.props(styles.sub)}>{e.subtitle}</span>}
             </span>
             <span {...stylex.props(styles.change, dash.num, diff > 0 ? styles.up : diff < 0 ? styles.down : styles.same)}>
-              {diff > 0 ? <ArrowUp size={12} aria-hidden="true" /> : diff < 0 ? <ArrowDown size={12} aria-hidden="true" /> : <Minus size={12} aria-hidden="true" />}
+              {diff > 0 ? <ArrowUpIcon size={12} aria-hidden="true" /> : diff < 0 ? <ArrowDownIcon size={12} aria-hidden="true" /> : <MinusIcon size={12} aria-hidden="true" />}
               <span {...stylex.props(dash.sr)}>{diff > 0 ? 'Up' : diff < 0 ? 'Down' : 'No change'}</span>
               {diff !== 0 && Math.abs(diff)}
             </span>

@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { Bot, GitMerge, Radar } from 'lucide-react';
+import { BotIcon, MergeIcon, RadarIcon } from '../../icons/IconSet';
 import { useMemo, useState, type HTMLAttributes, type ReactNode, type Ref } from 'react';
 import { Radio, RadioGroup } from 'react-aria-components';
 import { colors } from '../../tokens/colors.stylex';
@@ -32,7 +32,7 @@ const styles = stylex.create({
   row: { alignItems: 'stretch', display: 'grid', gridTemplateColumns: 'var(--cr-cols)', minWidth: 0 },
   rowConflict: { backgroundColor: `color-mix(in srgb, ${colors['--oniva-color-warning-solid']} 12%, transparent)` },
   cellBase: { ...hair, borderBlockStartWidth: 1, borderInlineStartWidth: { default: 0, ':not(:first-child)': 1 }, minWidth: 0 },
-  head: { alignItems: 'center', color: colors['--oniva-color-text-muted'], display: 'flex', fontSize: font['--oniva-font-size-12'], gap: 10, minHeight: 44, paddingInline: 12 },
+  head: { alignItems: 'center', color: colors['--oniva-color-text-muted'], display: 'flex', fontSize: font['--oniva-font-size-12'], gap: 10, minHeight: 44, paddingInline: { default: 12, [NARROW]: 8 } },
   legend: { alignItems: 'center', display: 'inline-flex', gap: 5, whiteSpace: 'nowrap' },
   legendWrap: { flexWrap: 'wrap', gap: 6, columnGap: 10 },
   swatch: { borderRadius: radius['--oniva-radius-full'], flexShrink: 0, height: 6, width: 14 },
@@ -40,7 +40,7 @@ const styles = stylex.create({
   swConflict: { backgroundColor: colors['--oniva-color-warning-solid'] },
   swKept: { backgroundColor: colors['--oniva-color-success-solid'] },
   agentName: { alignItems: 'center', color: colors['--oniva-color-text'], display: 'inline-flex', fontSize: font['--oniva-font-size-13'], fontWeight: font['--oniva-font-weight-medium'], gap: 6, minWidth: 0 },
-  agentIcon: { alignItems: 'center', backgroundColor: colors['--oniva-color-surface-inner'], borderColor: colors['--oniva-color-border'], borderRadius: radius['--oniva-radius-md'], borderStyle: 'solid', borderWidth: 1, color: colors['--oniva-color-text-muted'], display: 'inline-flex', flexShrink: 0, height: 24, justifyContent: 'center', width: 24 },
+  agentIcon: { alignItems: 'center', backgroundColor: colors['--oniva-color-surface-inner'], borderColor: colors['--oniva-color-border'], borderRadius: radius['--oniva-radius-md'], borderStyle: 'solid', borderWidth: 1, color: colors['--oniva-color-text-muted'], display: { default: 'inline-flex', [NARROW]: 'none' }, flexShrink: 0, height: 24, justifyContent: 'center', width: 24 },
   agentNameText: { overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
   fileCell: { alignItems: 'center', display: 'flex', minHeight: 50, minWidth: 0 },
   file: {
@@ -61,13 +61,18 @@ const styles = stylex.create({
     textAlign: 'start',
     width: '100%',
   },
-  fileBtn: { cursor: 'pointer', backgroundColor: { default: 'transparent', ':hover': colors['--oniva-color-surface-hover'] } },
+  fileBtn: { cursor: 'pointer', backgroundColor: { default: 'transparent', ':hover': { default: null, [media.hover]: colors['--oniva-color-surface-hover'] } } },
+  fileCurrent: {
+    position: 'relative',
+    '::before': { backgroundColor: colors['--oniva-color-text'], bottom: 0, content: '""', insetInlineStart: 0, position: 'absolute', top: 0, width: 2 },
+  },
+  empty: { ...hair, borderBlockStartWidth: 1, color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-13'], padding: 14 },
   fileDot: { backgroundColor: colors['--oniva-color-border-control'], borderRadius: radius['--oniva-radius-full'], flexShrink: 0, height: 6, width: 6 },
   fileDotConflict: { backgroundColor: colors['--oniva-color-warning-solid'] },
   fileDotKept: { backgroundColor: colors['--oniva-color-success-solid'] },
-  filePath: { minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
-  dir: { color: colors['--oniva-color-text-muted'], display: { default: 'inline', [NARROW]: 'none' } },
-  base: { fontWeight: font['--oniva-font-weight-medium'] },
+  filePath: { display: 'flex', minWidth: 0, overflow: 'hidden', whiteSpace: 'nowrap' },
+  dir: { color: colors['--oniva-color-text-muted'], display: { default: 'block', [NARROW]: 'none' }, flexShrink: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis' },
+  base: { flexShrink: 0, fontWeight: font['--oniva-font-weight-medium'], maxWidth: '100%', minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis' },
   cell: { alignItems: 'center', display: 'flex', justifyContent: 'center', minHeight: 50, minWidth: 0, paddingInline: 8 },
   pill: {
     animationDuration: motion['--oniva-motion-dur-deliberate'],
@@ -94,7 +99,7 @@ const styles = stylex.create({
   pick: { ...hair, borderBlockStartWidth: 1, display: 'flex', flexDirection: 'column', gap: 10, padding: 14 },
   pickHead: { alignItems: 'baseline', display: 'flex', flexWrap: 'wrap', gap: 8 },
   pickTitle: { color: colors['--oniva-color-text'], fontSize: font['--oniva-font-size-13'], fontWeight: font['--oniva-font-weight-semibold'], margin: 0 },
-  pickFor: { color: colors['--oniva-color-text-muted'], fontFamily: font['--oniva-font-mono'], fontSize: font['--oniva-font-size-12'], overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
+  pickFor: { color: colors['--oniva-color-text-muted'], fontFamily: font['--oniva-font-mono'], fontSize: font['--oniva-font-size-12'], minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
   ways: { display: 'grid', gap: 8, gridTemplateColumns: { default: 'repeat(var(--cr-ways), minmax(0, 1fr))', [NARROW]: '1fr' } },
   way: {
     backgroundColor: { default: colors['--oniva-color-surface-inner'], '[data-hovered]': colors['--oniva-color-surface-hover'] },
@@ -118,7 +123,7 @@ const styles = stylex.create({
   },
   wayWho: { color: colors['--oniva-color-text'], fontWeight: font['--oniva-font-weight-semibold'] },
   wayWhat: { color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-12'], lineHeight: 1.45 },
-  wayLines: { color: colors['--oniva-color-text-subtle'], fontFamily: font['--oniva-font-mono'], fontSize: font['--oniva-font-size-12'], marginBlockStart: 'auto', paddingBlockStart: 4 },
+  wayLines: { color: colors['--oniva-color-text-muted'], fontFamily: font['--oniva-font-mono'], fontSize: font['--oniva-font-size-12'], fontVariantNumeric: 'tabular-nums', marginBlockStart: 'auto', paddingBlockStart: 4 },
   foot: { alignItems: 'center', display: 'flex', justifyContent: 'flex-end', padding: 14, paddingBlockStart: 0 },
 });
 
@@ -156,6 +161,7 @@ export interface ConflictRadarProps extends Omit<HTMLAttributes<HTMLDivElement>,
   ref?: Ref<HTMLDivElement>;
 }
 
+const span = (lines: [number, number]) => (lines[0] === lines[1] ? `line ${lines[0]}` : `lines ${lines[0]}–${lines[1]}`);
 const overlaps = (a: [number, number], b: [number, number]) => a[0] <= b[1] && b[0] <= a[1];
 
 /** Agent ids of a file's edits that touch the same lines as another agent's edit (empty if the file is clean). */
@@ -184,7 +190,8 @@ export function ConflictRadar({ agents, files, title = 'Parallel work', resolved
   const conflicts = info.filter((i) => i.conflict.length > 0);
   const open = conflicts.filter((c) => !resolved[c.file.path]);
   const allDone = agents.every((a) => a.status !== 'running');
-  const canMerge = open.length === 0 && allDone;
+  const hasEdits = files.some((fl) => fl.edits.length > 0);
+  const canMerge = open.length === 0 && allDone && hasEdits;
   const cols = `minmax(0, 1.6fr) repeat(${agents.length}, minmax(0, 1fr))`;
   const colsVar = { '--cr-cols': cols } as React.CSSProperties;
   const nameOf = (id: string) => agents.find((a) => a.id === id)?.name ?? id;
@@ -195,7 +202,9 @@ export function ConflictRadar({ agents, files, title = 'Parallel work', resolved
       ? f.plural(open.length, { one: '# conflict to settle', other: '# conflicts to settle' })
       : conflicts.length
         ? 'Ready to merge'
-        : 'No overlaps';
+        : hasEdits
+          ? 'No overlaps'
+          : 'No changes yet';
   const current = conflicts.find((c) => c.file.path === (openPath ?? open[0]?.file.path ?? conflicts[0]?.file.path)) ?? null;
   const currentPick = current ? resolved[current.file.path] : undefined;
   const currentEdits = current ? current.file.edits.filter((e) => current.conflict.includes(e.agentId)) : [];
@@ -210,9 +219,9 @@ export function ConflictRadar({ agents, files, title = 'Parallel work', resolved
   return (
     <div {...rest} ref={ref} {...mergeSx(sx, className)}>
       <div {...stylex.props(styles.bar)}>
-        <span aria-hidden="true" {...stylex.props(styles.barIcon)}><Radar size={16} /></span>
+        <span aria-hidden="true" {...stylex.props(styles.barIcon)}><RadarIcon size={16} /></span>
         <h4 {...stylex.props(styles.title)}>{title}</h4>
-        <span {...stylex.props(styles.chip)}>{status}</span>
+        <span role="status" {...stylex.props(styles.chip)}>{status}</span>
       </div>
       <div role="table" aria-label={`${title}: files by agent`} {...stylex.props(styles.grid)}>
         <div role="row" style={colsVar} {...stylex.props(styles.row)}>
@@ -227,15 +236,20 @@ export function ConflictRadar({ agents, files, title = 'Parallel work', resolved
             const kept = conflicts.filter((c) => resolved[c.file.path] === a.id).length;
             return (
               <div key={a.id} role="columnheader" onMouseEnter={() => setHotAgent(a.id)} onMouseLeave={() => setHotAgent(null)} title={`${a.name}${a.model ? ` (${a.model})` : ''}: ${f.plural(touched.length, { one: '# file', other: '# files' })}, ${f.plural(nConf, { one: '# open conflict', other: '# open conflicts' })}, ${kept} kept`} {...stylex.props(styles.cellBase, styles.head)}>
-                <span {...stylex.props(styles.agentName)}>
-                  <span aria-hidden="true" {...stylex.props(styles.agentIcon, a.status === 'running' && w2s.pulse)}>{a.avatar ?? <Bot size={14} />}</span>
+                <span {...stylex.props(styles.agentName, a.status === 'running' && w2s.pulse)}>
+                  <span aria-hidden="true" {...stylex.props(styles.agentIcon)}>{a.avatar ?? <BotIcon size={14} />}</span>
                   <span {...stylex.props(styles.agentNameText)}>{a.name}</span>
                 </span>
-                <VisuallyHidden>{a.status === 'running' ? ', still working' : ', done'}</VisuallyHidden>
+                {a.status && <VisuallyHidden>{a.status === 'running' ? ', still working' : ', done'}</VisuallyHidden>}
               </div>
             );
           })}
         </div>
+        {files.length === 0 && (
+          <div role="row">
+            <div role="cell" {...stylex.props(styles.empty)}>No files changed yet</div>
+          </div>
+        )}
         {info.map(({ file, conflict }) => {
           const isConflict = conflict.length > 0;
           const pickedId = resolved[file.path];
@@ -255,7 +269,7 @@ export function ConflictRadar({ agents, files, title = 'Parallel work', resolved
           );
           return (
             <div key={file.path} role="row" style={colsVar} {...stylex.props(styles.row, isConflict && !pickedId && styles.rowConflict)}>
-              <div role="rowheader" {...stylex.props(styles.cellBase, styles.fileCell)}>
+              <div role="rowheader" title={file.path} {...stylex.props(styles.cellBase, styles.fileCell)}>
                 {isConflict ? (
                   <button
                     type="button"
@@ -264,7 +278,7 @@ export function ConflictRadar({ agents, files, title = 'Parallel work', resolved
                       setOpenPath(file.path);
                       announce(`${file.path}: ${conflict.length} ways to settle. ${conflict.map((id) => `${nameOf(id)} ${file.edits.find((e) => e.agentId === id)?.summary ?? ''}`).join('. ')}`);
                     }}
-                    {...stylex.props(styles.file, styles.fileBtn, focus.inset)}
+                    {...stylex.props(styles.file, styles.fileBtn, isCurrent && styles.fileCurrent, focus.inset)}
                   >
                     {label}
                   </button>
@@ -286,11 +300,11 @@ export function ConflictRadar({ agents, files, title = 'Parallel work', resolved
                 const [from, to] = edit.lines;
                 const state = !inConflict ? 'changed' : pickedId ? (pickedId === a.id ? 'kept' : 'dropped') : 'conflicts';
                 return (
-                  <div key={a.id} role="cell" title={`${a.name}: lines ${from}–${to}${edit.summary ? ` · ${edit.summary}` : ''}`} {...stylex.props(styles.cellBase, styles.cell)}>
+                  <div key={a.id} role="cell" title={`${a.name}: ${span(edit.lines)}${edit.summary ? ` · ${edit.summary}` : ''}`} {...stylex.props(styles.cellBase, styles.cell)}>
                     <span aria-hidden="true" style={{ animationDelay: `${ai * 60}ms` }} {...stylex.props(styles.pill, !!hotAgent && hotAgent !== a.id && styles.pillDim, inConflict && !pickedId && styles.pillConflict, state === 'kept' && styles.pillKept, state === 'dropped' && styles.pillDropped)}>
                       {edit.active && <span {...stylex.props(styles.shine)} />}
                     </span>
-                    <VisuallyHidden>{`${a.name}: ${f.plural(to - from + 1, { one: '# line', other: '# lines' })} changed, ${from} to ${to}, ${state}${edit.active ? ', still writing' : ''}`}</VisuallyHidden>
+                    <VisuallyHidden>{`${a.name}: ${f.plural(to - from + 1, { one: '# line', other: '# lines' })} changed, ${from === to ? `line ${from}` : `${from} to ${to}`}, ${state}${edit.active ? ', still writing' : ''}`}</VisuallyHidden>
                   </div>
                 );
               })}
@@ -308,8 +322,8 @@ export function ConflictRadar({ agents, files, title = 'Parallel work', resolved
             {currentEdits.map((e) => (
               <Radio key={e.agentId} value={e.agentId} className={() => sxClass(stylex.props(styles.way))}>
                 <span {...stylex.props(styles.wayWho)}>{nameOf(e.agentId)}</span>
-                <span {...stylex.props(styles.wayWhat)}>{e.summary ?? `Changes lines ${e.lines[0]}–${e.lines[1]}`}</span>
-                <span {...stylex.props(styles.wayLines)}>Lines {e.lines[0]}–{e.lines[1]}</span>
+                <span {...stylex.props(styles.wayWhat)}>{e.summary ?? `Changes ${span(e.lines)}`}</span>
+                <span {...stylex.props(styles.wayLines)}>{span(e.lines).replace(/^l/, 'L')}</span>
               </Radio>
             ))}
           </RadioGroup>
@@ -317,7 +331,7 @@ export function ConflictRadar({ agents, files, title = 'Parallel work', resolved
       )}
       <div {...stylex.props(styles.foot)}>
         <Button size="sm" isDisabled={!canMerge} onPress={() => onMerge?.()}>
-          <GitMerge size={14} aria-hidden="true" /> Merge
+          <MergeIcon size={14} aria-hidden="true" /> Merge
         </Button>
       </div>
       <Announcer message={message} />

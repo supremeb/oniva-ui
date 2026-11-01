@@ -1,12 +1,13 @@
 import * as stylex from '@stylexjs/stylex';
-import { AlertTriangle, ChevronRight, Sparkles, Wrench, X } from 'lucide-react';
-import { useEffect, useLayoutEffect, useMemo, useRef, useState, type HTMLAttributes, type KeyboardEvent, type ReactNode, type Ref } from 'react';
+import { TriangleAlertIcon, ChevronRightIcon, SparklesIcon, WrenchIcon, XIcon } from '../../icons/IconSet';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type HTMLAttributes, type KeyboardEvent, type ReactNode, type Ref } from 'react';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 import { media } from '../../tokens/media.stylex';
 import { motion } from '../../tokens/motion.stylex';
 import { radius } from '../../tokens/radius.stylex';
 import { aiStyles } from '../../internal/ai-styles';
+import { focus } from '../../internal/focus';
 import { useFormatters } from '../../internal/format';
 import { enterExit } from '../../internal/motion-styles';
 import { usePresence } from '../../motion/Presence';
@@ -50,7 +51,7 @@ const styles = stylex.create({
   root: { containerType: 'inline-size', fontFamily: font['--oniva-font-sans'], overflow: 'hidden', width: '100%' },
   bar: { alignItems: 'center', borderBottomColor: colors['--oniva-color-border'], borderBottomStyle: 'solid', borderBottomWidth: 1, display: 'flex', flexWrap: 'wrap', gap: 8, paddingBlock: 10, paddingInline: 14 },
   title: { color: colors['--oniva-color-text'], fontSize: font['--oniva-font-size-14'], fontWeight: font['--oniva-font-weight-semibold'], margin: 0 },
-  input: { color: colors['--oniva-color-text-muted'], flexGrow: 1, fontSize: font['--oniva-font-size-13'], minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
+  input: { color: colors['--oniva-color-text-muted'], flexBasis: 0, flexGrow: 1, flexShrink: 1, fontSize: font['--oniva-font-size-13'], minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
   stats: { borderBottomColor: colors['--oniva-color-border'], borderBottomStyle: 'solid', borderBottomWidth: 1, display: 'grid', gridTemplateColumns: { default: 'repeat(6, minmax(0, 1fr))', [NARROW]: 'repeat(3, minmax(0, 1fr))' } },
   stat: { borderInlineStartColor: colors['--oniva-color-border'], borderInlineStartStyle: 'solid', borderInlineStartWidth: { default: 1, ':first-child': 0 }, display: 'flex', flexDirection: 'column', gap: 4, minWidth: 0, paddingBlock: 12, paddingInline: 16 },
   statLabel: { color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-11'], fontWeight: font['--oniva-font-weight-medium'], letterSpacing: font['--oniva-font-track-label'], textTransform: 'uppercase' },
@@ -61,14 +62,15 @@ const styles = stylex.create({
   ticks: { borderInlineStartColor: colors['--oniva-color-border'], borderInlineStartStyle: 'solid', borderInlineStartWidth: 1, color: colors['--oniva-color-text-muted'], display: 'flex', fontSize: font['--oniva-font-size-12'], fontVariantNumeric: 'tabular-nums', justifyContent: 'space-between', paddingBlock: 10, paddingInlineEnd: 2, paddingInlineStart: 8 },
   tree: { display: 'flex', flexDirection: 'column', paddingBlock: 0, paddingInline: 0 },
   avatar: { alignItems: 'center', backgroundColor: colors['--oniva-color-surface-inset'], borderColor: colors['--oniva-color-border'], borderRadius: radius['--oniva-radius-sm'], borderStyle: 'solid', borderWidth: 1, boxSizing: 'border-box', color: colors['--oniva-color-text-muted'], display: 'inline-flex', flexShrink: 0, height: 22, justifyContent: 'center', width: 22 },
-  value: { alignItems: 'center', color: colors['--oniva-color-text'], display: 'flex', fontSize: font['--oniva-font-size-12'], fontVariantNumeric: 'tabular-nums', gap: 6, position: 'absolute', top: '50%', transform: 'translateY(-50%)', whiteSpace: 'nowrap' },
+  // Wide: the label sits after the bar, or before it when the bar runs to the right edge. Narrow: the track leaves room on the right, so it always sits after the bar.
+  value: { alignItems: 'center', color: colors['--oniva-color-text'], display: 'flex', fontSize: font['--oniva-font-size-12'], fontVariantNumeric: 'tabular-nums', gap: 6, left: { default: 'var(--tw-l)', [NARROW]: 'var(--tw-nl)' }, position: 'absolute', right: { default: 'var(--tw-r)', [NARROW]: 'auto' }, top: '50%', transform: 'translateY(-50%)', whiteSpace: 'nowrap' },
   row: {
     alignItems: 'center',
     animationDuration: motion['--oniva-motion-dur-slow'],
     animationFillMode: 'backwards',
     animationName: { default: slideIn, [media.reducedMotion]: 'none' },
     animationTimingFunction: motion['--oniva-motion-ease-out'],
-    backgroundColor: { default: 'transparent', ':hover': colors['--oniva-color-surface-hover'] },
+    backgroundColor: { default: 'transparent', ':hover': { default: null, [media.hover]: colors['--oniva-color-surface-hover'] } },
     borderRadius: 0,
     columnGap: 0,
     cursor: 'pointer',
@@ -76,7 +78,6 @@ const styles = stylex.create({
     gridTemplateAreas: { default: '"name line"', [NARROW]: '"name" "line"' },
     gridTemplateColumns: { default: 'minmax(160px, 36%) minmax(0, 1fr)', [NARROW]: 'minmax(0, 1fr)' },
     minHeight: 38,
-    outlineStyle: 'none',
     paddingBlock: 0,
     paddingInline: 0,
     rowGap: 0,
@@ -96,7 +97,6 @@ const styles = stylex.create({
     animationName: { default: tickIn, [media.reducedMotion]: 'none' },
     animationTimingFunction: motion['--oniva-motion-ease-out'],
   },
-  rowFocus: { boxShadow: { default: 'none', ':focus-visible': `inset 0 0 0 2px ${colors['--oniva-color-focus-ring']}` } },
   rowOpen: { backgroundColor: colors['--oniva-color-accent-soft'] },
   name: { alignItems: 'center', display: 'flex', gap: 6, gridArea: 'name', minWidth: 0, paddingInlineStart: 8 },
   chev: { alignItems: 'center', color: colors['--oniva-color-icon-muted'], display: 'inline-flex', flexShrink: 0, height: 16, justifyContent: 'center', transitionDuration: motion['--oniva-motion-dur-base'], transitionProperty: 'transform', transitionTimingFunction: motion['--oniva-motion-ease-out'], width: 16 },
@@ -105,7 +105,6 @@ const styles = stylex.create({
   label: { color: colors['--oniva-color-text'], flexShrink: 1, fontSize: font['--oniva-font-size-13'], fontWeight: font['--oniva-font-weight-medium'], minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
   detail: { color: colors['--oniva-color-text-muted'], display: { default: 'inline', [TINY]: 'none' }, fontSize: font['--oniva-font-size-12'], minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
   line: {
-    backgroundImage: `repeating-linear-gradient(to right, ${colors['--oniva-color-separator']} 0, ${colors['--oniva-color-separator']} 1px, transparent 1px, transparent 25%)`,
     alignSelf: 'stretch',
     borderInlineStartColor: { default: colors['--oniva-color-border'], [NARROW]: 'transparent' },
     borderInlineStartStyle: 'solid',
@@ -114,16 +113,24 @@ const styles = stylex.create({
     minHeight: 38,
     position: 'relative',
   },
+  track: {
+    backgroundImage: `repeating-linear-gradient(to right, ${colors['--oniva-color-separator']} 0, ${colors['--oniva-color-separator']} 1px, transparent 1px, transparent 25%)`,
+    bottom: 0,
+    left: 0,
+    position: 'absolute',
+    right: { default: 0, [NARROW]: 150, [TINY]: 110 },
+    top: 0,
+  },
   span: { borderRadius: radius['--oniva-radius-sm'], height: 10, minWidth: 3, overflow: 'hidden', position: 'absolute', top: 'calc(50% - 5px)' },
   kAgent: { backgroundColor: colors['--oniva-color-icon-muted'] },
   kSub: { backgroundColor: colors['--oniva-color-text-muted'] },
   kLlm: { backgroundColor: colors['--oniva-color-chart-3'] },
   kTool: { backgroundColor: colors['--oniva-color-chart-2'] },
   kFailed: { backgroundColor: colors['--oniva-color-danger-solid'] },
-  shine: { animationDuration: '1.6s', animationIterationCount: 'infinite', animationName: { default: sheen, [media.reducedMotion]: 'none' }, animationTimingFunction: 'linear', backgroundImage: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.45), transparent)', inset: 0, position: 'absolute' },
+  shine: { animationDuration: '1.6s', animationIterationCount: 'infinite', animationName: { default: sheen, [media.reducedMotion]: 'none' }, animationTimingFunction: 'linear', backgroundImage: `linear-gradient(90deg, transparent, color-mix(in srgb, ${colors['--oniva-color-on-chart']} 45%, transparent), transparent)`, inset: 0, position: 'absolute' },
   mark: { backgroundColor: colors['--oniva-color-surface-inner'], borderRadius: 1, height: 6, opacity: 0.8, position: 'absolute', top: 'calc(50% - 3px)', width: 2 },
   nowLine: { backgroundColor: colors['--oniva-color-accent-text'], bottom: 0, position: 'absolute', top: 0, width: 1 },
-  cost: { color: colors['--oniva-color-text-muted'] },
+  cost: { color: colors['--oniva-color-text-muted'], display: { default: 'inline', [TINY]: 'none' } },
   dialog: {
     backgroundColor: colors['--oniva-color-surface-inner'],
     borderColor: colors['--oniva-color-border'],
@@ -374,11 +381,16 @@ export function TraceWaterfall({
   const shownOpen = canAnimate ? (open ?? (dlg.mounted ? lastOpen.current : undefined)) : open;
   const tickCount = 4;
   const pct = (ms: number) => `${Math.min(100, Math.max(0, (ms / range) * 100))}%`;
+  const valuePlace = (r: Flat) => {
+    const after = `calc(${pct(r.end)} + 8px)`;
+    const flip = r.end / range > 0.78;
+    return { '--tw-l': flip ? 'auto' : after, '--tw-r': flip ? `calc(100% - ${pct(r.start)} + 8px)` : 'auto', '--tw-nl': after } as CSSProperties;
+  };
 
   return (
     <div {...rest} ref={ref} {...mergeSx(sx, className)}>
       <div {...stylex.props(styles.bar)}>
-        <Sparkles size={14} aria-hidden="true" {...stylex.props(styles.headIcon)} />
+        <SparklesIcon size={14} aria-hidden="true" {...stylex.props(styles.headIcon)} />
         <h4 {...stylex.props(styles.title)}>{title}</h4>
         <span {...stylex.props(styles.input)}>{root.input ?? root.name}</span>
         <span {...stylex.props(w2s.tag, state === 'Live' ? w2s.tagInfo : state === 'Failed' ? w2s.tagDanger : w2s.tagSuccess)}>
@@ -387,7 +399,7 @@ export function TraceWaterfall({
       </div>
       <div {...stylex.props(styles.stats)}>
         {([
-          ['Duration', <Shimmer key="d" isActive={anyRunning}>{formatDuration(rootFlat.end - rootFlat.start, anyRunning)}</Shimmer>],
+          ['Duration', anyRunning ? <Shimmer key="d">{formatDuration(rootFlat.end - rootFlat.start, true)}</Shimmer> : formatDuration(rootFlat.end - rootFlat.start)],
           ['Cost', money(rootFlat.cost)],
           ['Tokens', f.compact(rootFlat.tokensIn + rootFlat.tokensOut)],
           ['LLM calls', all.filter((x) => x.span.kind === 'llm').length],
@@ -443,7 +455,7 @@ export function TraceWaterfall({
               data-flip-id={`row-${s.id}`}
               data-flip-noenter=""
               style={{ animationDelay: r.leaving ? `${Math.min(rows.filter((x) => x.leaving).length - 1 - rows.filter((x) => x.leaving).indexOf(r), 6) * 30}ms` : `${(ghostRows.length ? 160 : 0) + Math.min(i, 8) * 30}ms` }}
-              {...stylex.props(styles.row, styles.rowFocus, isOpen && styles.rowOpen, r.leaving && styles.rowLeaving)}
+              {...stylex.props(styles.row, focus.inset, isOpen && styles.rowOpen, r.leaving && styles.rowLeaving)}
             >
               <div style={{ paddingInlineStart: r.level * 14 }} {...stylex.props(styles.name)}>
                 <span
@@ -456,28 +468,30 @@ export function TraceWaterfall({
                   }}
                   {...stylex.props(styles.chev, r.hasKids && !folded && styles.chevOpen)}
                 >
-                  {r.hasKids && <ChevronRight size={12} />}
+                  {r.hasKids && <ChevronRightIcon size={12} />}
                 </span>
-                <span aria-hidden="true" {...stylex.props(styles.avatar)}>{s.icon ?? (s.kind === 'tool' ? <Wrench size={12} /> : <Sparkles size={12} />)}</span>
+                <span aria-hidden="true" {...stylex.props(styles.avatar)}>{s.icon ?? (s.kind === 'tool' ? <WrenchIcon size={12} /> : <SparklesIcon size={12} />)}</span>
                 <span {...stylex.props(styles.label)} title={s.name}>{s.name}</span>
                 {s.detail && <span {...stylex.props(styles.detail)}>{s.detail}</span>}
-                {s.status === 'failed' && <AlertTriangle size={12} aria-hidden="true" {...stylex.props(styles.err)} />}
+                {s.status === 'failed' && <TriangleAlertIcon size={12} aria-hidden="true" {...stylex.props(styles.err)} />}
               </div>
               <div aria-hidden="true" {...stylex.props(styles.line)}>
-                <span data-flip-id={`bar-${s.id}`} style={{ left: pct(r.start), width: `calc(${pct(r.end)} - ${pct(r.start)})` }} {...stylex.props(styles.span, s.status === 'failed' ? styles.kFailed : kindStyle[s.kind], folded && r.hasKids && styles.kAgent)}>
-                  {live && <span {...stylex.props(styles.shine)} />}
-                </span>
-                {folded &&
-                  s.children?.map((c) => {
-                    const cf = all.find((x) => x.span.id === c.id)!;
-                    return <span key={c.id} data-flip-id={`mark-${c.id}`} style={{ left: pct(cf.start) }} {...stylex.props(styles.mark)} />;
-                  })}
-                <span style={r.end / range > 0.78 ? { right: `calc(100% - ${pct(r.start)} + 8px)` } : { left: `calc(${pct(r.end)} + 8px)` }} {...stylex.props(styles.value)}>
-                  <span><Shimmer isActive={live}>{formatDuration(dur, live)}</Shimmer></span>
-                  {r.cost ? <span {...stylex.props(styles.cost)}>· {money(r.cost)}</span> : null}
-                  {markSlowest && slowest === s.id && <span {...stylex.props(w2s.tag, w2s.tagWarning)}>Slowest</span>}
-                </span>
-                {anyRunning && nowMs !== undefined && <span data-flip-id={`now-${s.id}`} style={{ left: pct(nowMs) }} {...stylex.props(styles.nowLine)} />}
+                <div {...stylex.props(styles.track)}>
+                  <span data-flip-id={`bar-${s.id}`} style={{ left: pct(r.start), width: `calc(${pct(r.end)} - ${pct(r.start)})` }} {...stylex.props(styles.span, s.status === 'failed' ? styles.kFailed : kindStyle[s.kind], folded && r.hasKids && styles.kAgent)}>
+                    {live && <span {...stylex.props(styles.shine)} />}
+                  </span>
+                  {folded &&
+                    s.children?.map((c) => {
+                      const cf = all.find((x) => x.span.id === c.id)!;
+                      return <span key={c.id} data-flip-id={`mark-${c.id}`} style={{ left: pct(cf.start) }} {...stylex.props(styles.mark)} />;
+                    })}
+                  <span style={valuePlace(r)} {...stylex.props(styles.value)}>
+                    <span><Shimmer isActive={live}>{formatDuration(dur, live)}</Shimmer></span>
+                    {r.cost ? <span {...stylex.props(styles.cost)}>· {money(r.cost)}</span> : null}
+                    {markSlowest && slowest === s.id && <span {...stylex.props(w2s.tag, w2s.tagWarning)}>Slowest</span>}
+                  </span>
+                  {anyRunning && nowMs !== undefined && <span data-flip-id={`now-${s.id}`} style={{ left: pct(nowMs) }} {...stylex.props(styles.nowLine)} />}
+                </div>
               </div>
             </div>
           );
@@ -511,7 +525,7 @@ export function TraceWaterfall({
                 rowRefs.current.get(shownOpen.span.id)?.focus();
               }}
             >
-              <X size={12} aria-hidden="true" />
+              <XIcon size={12} aria-hidden="true" />
             </IconButton>
           </div>
           <dl {...stylex.props(styles.dl)}>

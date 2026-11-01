@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { ArrowUp, Sparkles } from 'lucide-react';
+import { ArrowUpIcon, SparklesIcon } from '../../icons/IconSet';
 import { useEffect, useId, useState } from 'react';
 import { Avatar } from '../../components/Avatar/Avatar';
 import { accent } from '../../tokens/accent.stylex';
@@ -256,13 +256,13 @@ function Stage({ prompt, members }: { prompt: string; members: AgentTeamMember[]
         ))}
       </svg>
       <div aria-hidden="true" {...stylex.props(surface.pill, styles.prompt)}>
-        <Sparkles {...stylex.props(styles.promptIcon)} />
+        <SparklesIcon {...stylex.props(styles.promptIcon)} />
         <span {...stylex.props(styles.typed, fading && styles.typedOff)}>
           {prompt.slice(0, chars)}
           {step === 0 && <span {...stylex.props(styles.caret)} />}
         </span>
         <span {...stylex.props(styles.send, step === 1 && styles.pressed)}>
-          <ArrowUp size={16} />
+          <ArrowUpIcon size={16} />
         </span>
       </div>
       {members.slice(0, 3).map((m, i) => {

@@ -3,9 +3,9 @@ import type { DemoModule } from '../../internal/demo';
 import { ApprovalQueue, type PendingToolCall } from './ApprovalQueue';
 
 const initial: PendingToolCall[] = [
-  { id: '1', agent: 'Billing Specialist', tool: 'stripe.refund', summary: 'Refund $740.00 to Acme Corp (INV-20418)', risk: 'high', requestedAt: '2 min ago', args: '{ "charge": "ch_3PqX2", "amount": 74000, "reason": "duplicate" }' },
-  { id: '2', agent: 'Deploy Bot', tool: 'github.merge_pull_request', summary: 'Merge #482 "Fix webhook retries" into main', risk: 'medium', requestedAt: '6 min ago' },
-  { id: '3', agent: 'Research Scout', tool: 'gmail.send', summary: 'Send follow-up to maria@northwind.example', risk: 'low', requestedAt: '11 min ago' },
+  { id: '1', agent: 'Billing Specialist', tool: 'payments.refund', summary: 'Refund $740.00 to Northwind Labs (INV-20418)', risk: 'high', requestedAt: '2 min ago', args: '{ "charge": "ch_3PqX2", "amount": 74000, "reason": "duplicate" }' },
+  { id: '2', agent: 'Deploy Bot', tool: 'repo.merge_pull_request', summary: 'Merge #482 "Fix webhook retries" into main', risk: 'medium', requestedAt: '6 min ago' },
+  { id: '3', agent: 'Research Scout', tool: 'mail.send', summary: 'Send follow-up to maria@northwind.example', risk: 'low', requestedAt: '11 min ago' },
 ];
 
 function Live() {

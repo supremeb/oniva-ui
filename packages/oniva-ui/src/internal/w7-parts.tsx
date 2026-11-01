@@ -98,7 +98,7 @@ const iconBox = stylex.create({
   },
 });
 
-/** Makes an svg/lucide child fill an `iconBox`-sized parent. */
+/** Makes an svg icon child fill an `iconBox`-sized parent. */
 export const fillSvg = stylex.create({
   svg: { display: 'block', height: '100%', strokeWidth: 1.7, width: '100%' },
 });

@@ -1,5 +1,4 @@
-import { InputGroup } from 'oniva-ui';
-import { Mail } from 'lucide-react';
+import { InputGroup, MailIcon } from 'oniva-ui';
 import type { DocPage } from '../types';
 
 type P = { start?: boolean; end?: boolean; isInvalid?: boolean; isDisabled?: boolean; size?: 'sm' | 'md' | 'lg'; value?: string; label?: string; icon?: boolean; onChange?: (v: string) => void };
@@ -9,7 +8,7 @@ const Basic = (p: P) => (
     <InputGroup
       label={p.label ?? 'Website'}
       size={p.size}
-      startAddon={p.icon ? <Mail size={16} /> : p.start === false ? undefined : 'https://'}
+      startAddon={p.icon ? <MailIcon size={16} /> : p.start === false ? undefined : 'https://'}
       endAddon={p.end === false ? undefined : '.com'}
       defaultValue={p.value}
       placeholder="acme"

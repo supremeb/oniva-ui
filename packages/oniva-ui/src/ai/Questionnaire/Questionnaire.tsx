@@ -7,12 +7,14 @@ import {
   Radio as AriaRadio,
   RadioGroup as AriaRadioGroup,
 } from 'react-aria-components';
-import { Check } from 'lucide-react';
+import { CheckIcon } from '../../icons/IconSet';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 import { motion } from '../../tokens/motion.stylex';
+import { media } from '../../tokens/media.stylex';
 import { radius } from '../../tokens/radius.stylex';
 import { aiStyles } from '../../internal/ai-styles';
+import { ff } from '../../internal/forms-field';
 import { Button } from '../../components/Button';
 
 const styles = stylex.create({
@@ -36,8 +38,14 @@ const styles = stylex.create({
   options: { display: 'flex', flexDirection: 'column', gap: 6 },
   option: {
     alignItems: 'center',
-    backgroundColor: colors['--oniva-color-surface'],
-    borderColor: colors['--oniva-color-border'],
+    backgroundColor: {
+      default: colors['--oniva-color-surface'],
+      ':hover': { default: null, [media.hover]: colors['--oniva-color-surface-hover'] },
+    },
+    borderColor: {
+      default: colors['--oniva-color-border'],
+      ':hover': { default: null, [media.hover]: colors['--oniva-color-border-hover'] },
+    },
     borderRadius: radius['--oniva-radius-lg'],
     borderStyle: 'solid',
     borderWidth: 1,
@@ -51,19 +59,15 @@ const styles = stylex.create({
     transitionDuration: motion['--oniva-motion-dur-base'],
     transitionProperty: 'background-color, border-color',
   },
-  hovered: {
-    borderColor: colors['--oniva-color-border-hover'],
-    backgroundColor: colors['--oniva-color-surface-hover'],
-  },
   selected: {
-    backgroundColor: colors['--oniva-color-accent-soft'],
-    borderColor: colors['--oniva-color-focus-ring'],
-  },
-  focus: {
-    outlineColor: colors['--oniva-color-focus-ring'],
-    outlineOffset: 2,
-    outlineStyle: 'solid',
-    outlineWidth: 2,
+    backgroundColor: {
+      default: colors['--oniva-color-accent-soft'],
+      ':hover': { default: null, [media.hover]: colors['--oniva-color-accent-soft'] },
+    },
+    borderColor: {
+      default: colors['--oniva-color-focus-ring'],
+      ':hover': { default: null, [media.hover]: colors['--oniva-color-focus-ring'] },
+    },
   },
   mark: {
     alignItems: 'center',
@@ -90,7 +94,7 @@ const styles = stylex.create({
     height: 6,
     width: 6,
   },
-  text: { display: 'flex', flexDirection: 'column', gap: 1 },
+  text: { display: 'flex', flexDirection: 'column', gap: 1, minWidth: 0, overflowWrap: 'anywhere' },
   optLabel: {
     color: colors['--oniva-color-text'],
     fontSize: font['--oniva-font-size-14'],
@@ -98,6 +102,7 @@ const styles = stylex.create({
   },
   optDesc: { color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-12'] },
   footer: { alignItems: 'center', display: 'flex', gap: 12, justifyContent: 'space-between' },
+  footerEnd: { justifyContent: 'flex-end' },
   count: {
     color: colors['--oniva-color-text-muted'],
     fontSize: font['--oniva-font-size-12'],
@@ -133,12 +138,11 @@ function Option({ o, multiple }: { o: QuestionOption; multiple: boolean }) {
   return (
     <Comp
       value={o.id}
-      className={(s: { isSelected: boolean; isHovered: boolean; isFocusVisible: boolean }) =>
+      className={(s: { isSelected: boolean; isFocusVisible: boolean }) =>
         stylex.props(
           styles.option,
-          s.isHovered && styles.hovered,
           s.isSelected && styles.selected,
-          s.isFocusVisible && styles.focus,
+          s.isFocusVisible && ff.focusRing,
         ).className ?? ''
       }
     >
@@ -153,7 +157,7 @@ function Option({ o, multiple }: { o: QuestionOption; multiple: boolean }) {
           >
             {s.isSelected &&
               (multiple ? (
-                <Check size={12} strokeWidth={3} aria-hidden="true" />
+                <CheckIcon size={12} strokeWidth={2.25} aria-hidden="true" />
               ) : (
                 <span {...stylex.props(styles.dot)} />
               ))}
@@ -219,10 +223,12 @@ export function Questionnaire({
           </AriaRadioGroup>
         );
       })}
-      <div {...stylex.props(styles.footer)}>
-        <span {...stylex.props(styles.count)}>
-          {answered} of {questions.length} answered
-        </span>
+      <div {...stylex.props(styles.footer, questions.length === 0 && styles.footerEnd)}>
+        {questions.length > 0 && (
+          <span role="status" {...stylex.props(styles.count)}>
+            {answered} of {questions.length} answered
+          </span>
+        )}
         <Button isDisabled={answered < questions.length} onPress={() => onSubmit?.(answers)}>
           {submitLabel}
         </Button>

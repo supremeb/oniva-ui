@@ -1,4 +1,4 @@
-import { CalendarDays, MapPin } from 'lucide-react';
+import { CalendarDaysIcon, MapPinIcon } from '../../icons/IconSet';
 import { Link } from 'react-aria-components';
 import { Avatar } from '../Avatar';
 import type { DemoModule } from '../../internal/demo';
@@ -49,10 +49,10 @@ const demo: DemoModule = {
                     Controller at Northwind Traders. Approves invoices over $2,500.
                   </div>
                   <div style={meta}>
-                    <MapPin size={14} /> Austin, TX
+                    <MapPinIcon size={14} /> Austin, TX
                   </div>
                   <div style={meta}>
-                    <CalendarDays size={14} /> Customer since Mar 2024
+                    <CalendarDaysIcon size={14} /> Customer since Mar 2024
                   </div>
                 </div>
               </div>

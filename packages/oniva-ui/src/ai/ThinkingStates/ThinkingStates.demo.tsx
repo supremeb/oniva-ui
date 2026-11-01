@@ -1,4 +1,4 @@
-import { AtSign, FileText, Globe, Hash } from 'lucide-react';
+import { AtIcon, FileTextIcon, GlobeIcon, HashIcon } from '../../icons/IconSet';
 import type { DemoModule } from '../../internal/demo';
 import { ThinkingStates } from './ThinkingStates';
 
@@ -15,7 +15,7 @@ const demo: DemoModule = {
       code: `<ThinkingStates
   variant="card"
   steps={[
-    { kind: 'search', label: 'Searched', sources: [{ label: 'Chat · #team-offsite', icon: <Hash size={12} /> }, …] },
+    { kind: 'search', label: 'Searched', sources: [{ label: 'Chat · #team-offsite', icon: <HashIcon size={12} /> }, …] },
     { label: 'Reading 7 sources about the trip' },
     { label: 'Comparing flights and hotels' },
   ]}
@@ -29,10 +29,10 @@ const demo: DemoModule = {
               kind: 'search',
               label: 'Searched',
               sources: [
-                { label: 'Chat · #team-offsite', icon: <Hash size={12} /> },
-                { label: 'Feed · @harborguide', icon: <AtSign size={12} /> },
-                { label: 'Notes · Offsite plan', icon: <FileText size={12} /> },
-                { label: 'Wiki · Harbor City', icon: <Globe size={12} /> },
+                { label: 'Chat · #team-offsite', icon: <HashIcon size={12} /> },
+                { label: 'Feed · @harborguide', icon: <AtIcon size={12} /> },
+                { label: 'Notes · Offsite plan', icon: <FileTextIcon size={12} /> },
+                { label: 'Wiki · Harbor City', icon: <GlobeIcon size={12} /> },
                 { label: 'Calendar · Q4' },
                 { label: 'Maps · Venues' },
                 { label: 'Mail · Quotes' },

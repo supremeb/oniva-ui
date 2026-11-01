@@ -14,7 +14,7 @@ const page: DocPage = {
     Render: () => <CloseButton size="md" aria-label="Close panel" />,
     parts: [
       { name: 'Hit area', description: 'Native button, 32px square at md (24px at sm), 8px radius at md (6px at sm). No border, transparent until hovered.', selector: 'button' },
-      { name: 'X icon', description: 'Lucide X, 16px at md and 14px at sm, muted icon colour that moves to full text colour on hover. aria-hidden.', selector: 'button svg' },
+      { name: 'X icon', description: 'XIcon, 16px at md and 14px at sm, muted icon colour that moves to full text colour on hover. aria-hidden.', selector: 'button svg' },
     ],
   },
   usage: {

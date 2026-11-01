@@ -1,10 +1,12 @@
 import * as stylex from '@stylexjs/stylex';
-import { Check, ShieldAlert, X } from 'lucide-react';
+import { CheckIcon, ShieldAlertIcon, XIcon } from '../../icons/IconSet';
 import type { HTMLAttributes, Ref } from 'react';
 import { colors } from '../../tokens/colors.stylex';
 import { aiStyles } from '../../internal/ai-styles';
 import { aib } from '../../internal/aib-styles';
 import { useLeaving } from '../../internal/aib-leave';
+import { useFormatters } from '../../internal/format';
+import { focus } from '../../internal/focus';
 import { mergeSx } from '../../internal/sx';
 import { Badge } from '../../components/Badge';
 import { Button } from '../../components/Button';
@@ -14,7 +16,18 @@ const styles = stylex.create({
   list: { display: 'flex', flexDirection: 'column', gap: 6, listStyle: 'none', margin: 0, padding: 0 },
   item: { display: 'flex', flexDirection: 'column', gap: 10, padding: 12 },
   top: { alignItems: 'flex-start', display: 'flex', gap: 10 },
-  args: { backgroundColor: colors['--oniva-color-surface-inset'], borderRadius: 8, margin: 0, overflow: 'auto', padding: 8, whiteSpace: 'pre-wrap' },
+  wrap: { overflowWrap: 'anywhere' },
+  badge: { flexShrink: 0, fontVariantNumeric: 'tabular-nums' },
+  args: {
+    backgroundColor: colors['--oniva-color-surface-inset'],
+    borderRadius: 8,
+    margin: 0,
+    maxHeight: 168,
+    overflow: 'auto',
+    overflowWrap: 'anywhere',
+    padding: 8,
+    whiteSpace: 'pre-wrap',
+  },
   foot: { display: 'flex', gap: 8, justifyContent: 'flex-end' },
   empty: { padding: 20, textAlign: 'center' },
 });
@@ -45,32 +58,43 @@ const riskTone = { low: 'neutral', medium: 'warning', high: 'danger' } as const;
 export function ApprovalQueue({ items, title = 'Needs approval', onApprove, onDeny, className, xstyle, ref, ...rest }: ApprovalQueueProps) {
   const approve = useLeaving(onApprove);
   const deny = useLeaving(onDeny);
+  const { number } = useFormatters();
   const gone = (id: string) => approve.leaving.has(id) || deny.leaving.has(id);
   return (
     <div {...rest} ref={ref} {...mergeSx(stylex.props(aiStyles.panel, aib.pad, xstyle), className)}>
       <div {...stylex.props(aib.head)}>
         <h3 {...stylex.props(aib.title)}>{title}</h3>
-        <Badge variant={items.length ? 'warning' : 'success'}>{items.length} pending</Badge>
+        <span aria-live="polite" aria-atomic="true" {...stylex.props(styles.badge)}>
+          <Badge variant={items.length ? 'warning' : 'success'}>{number(items.length)} pending</Badge>
+        </span>
       </div>
       <ul {...stylex.props(styles.list)}>
         {items.map((it) => (
           <li key={it.id} style={{ display: 'contents' }}>
             <Presence isPresent={!gone(it.id)} preset="slide" xstyle={[aiStyles.tile, styles.item]}>
               <div {...stylex.props(styles.top)}>
-                <span {...stylex.props(aib.iconBox)}><ShieldAlert size={16} /></span>
+                <span {...stylex.props(aib.iconBox)}><ShieldAlertIcon size={16} /></span>
                 <div {...stylex.props(aib.grow)}>
-                  <p {...stylex.props(aib.name)}>{it.summary}</p>
-                  <p {...stylex.props(aib.meta)}>
+                  <p {...stylex.props(aib.name, styles.wrap)}>{it.summary}</p>
+                  <p {...stylex.props(aib.meta, styles.wrap)}>
                     {it.agent} · <code {...stylex.props(aib.mono)}>{it.tool}</code>
                     {it.requestedAt ? ` · ${it.requestedAt}` : ''}
                   </p>
                 </div>
-                {it.risk && <Badge variant={riskTone[it.risk]}>{it.risk} risk</Badge>}
+                {it.risk && (
+                  <span {...stylex.props(styles.badge)}>
+                    <Badge variant={riskTone[it.risk]}>{it.risk} risk</Badge>
+                  </span>
+                )}
               </div>
-              {it.args && <pre {...stylex.props(aib.meta, aib.mono, styles.args)}>{it.args}</pre>}
+              {it.args && (
+                <pre tabIndex={0} role="group" aria-label={`Arguments: ${it.summary}`} {...stylex.props(aib.meta, aib.mono, styles.args, focus.ring)}>
+                  {it.args}
+                </pre>
+              )}
               <div {...stylex.props(styles.foot)}>
-                <Button size="sm" variant="secondary" startIcon={<X size={14} />} aria-label={`Deny: ${it.summary}`} onPress={() => deny.leave(it.id)}>Deny</Button>
-                <Button size="sm" startIcon={<Check size={14} />} aria-label={`Approve: ${it.summary}`} onPress={() => approve.leave(it.id)}>Approve</Button>
+                <Button size="sm" variant="secondary" startIcon={<XIcon size={14} />} aria-label={`Deny: ${it.summary}`} onPress={() => deny.leave(it.id)}>Deny</Button>
+                <Button size="sm" startIcon={<CheckIcon size={14} />} aria-label={`Approve: ${it.summary}`} onPress={() => approve.leave(it.id)}>Approve</Button>
               </div>
             </Presence>
           </li>

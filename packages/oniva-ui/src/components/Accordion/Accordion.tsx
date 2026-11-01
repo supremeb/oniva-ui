@@ -9,7 +9,7 @@ import {
   type DisclosureGroupProps,
   type DisclosureProps,
 } from 'react-aria-components';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDownIcon } from '../../icons/IconSet';
 import { createContext, useContext, type ReactNode, type Ref } from 'react';
 import { AnimatedHeight } from '../../motion/AnimatedHeight';
 import { media } from '../../tokens/media.stylex';
@@ -181,7 +181,7 @@ export function AccordionItem({ title, icon, children, xstyle, ...rest }: Accord
                 </span>
               )}
               <span {...stylex.props(styles.title)}>{title}</span>
-              <ChevronDown
+              <ChevronDownIcon
                 size={16}
                 aria-hidden="true"
                 {...stylex.props(styles.chevron, isExpanded && styles.chevronOpen)}

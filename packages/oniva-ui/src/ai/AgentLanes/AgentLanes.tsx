@@ -1,10 +1,11 @@
 import * as stylex from '@stylexjs/stylex';
-import { Sparkles } from 'lucide-react';
+import { SparklesIcon } from '../../icons/IconSet';
 import { useRef, useState, type ReactNode, type Ref } from 'react';
 import { Button, Dialog, DialogTrigger, Popover } from 'react-aria-components';
 import { accent } from '../../tokens/accent.stylex';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
+import { media } from '../../tokens/media.stylex';
 import { motion } from '../../tokens/motion.stylex';
 import { radius } from '../../tokens/radius.stylex';
 import { focus } from '../../internal/focus';
@@ -47,7 +48,7 @@ const LABEL: Record<LaneStatus, string> = { done: 'done', running: 'running', wa
 
 const styles = stylex.create({
   root: { containerType: 'inline-size', maxWidth: 760 },
-  grid: { display: 'grid', gridTemplateColumns: 'var(--lane-label, 180px) minmax(0, 1fr)' },
+  grid: { display: 'grid', gridTemplateColumns: 'var(--lane-label, 200px) minmax(0, 1fr)' },
   names: { display: 'flex', flexDirection: 'column' },
   nameRow: { alignItems: 'center', display: 'flex', gap: 10, paddingInlineStart: 16, height: LANE_H, minWidth: 0, paddingInlineEnd: 8 },
   nameText: { display: 'flex', flexDirection: 'column', minWidth: 0 },
@@ -57,16 +58,20 @@ const styles = stylex.create({
   gridLine: { backgroundColor: colors['--oniva-color-border'], bottom: 0, opacity: 0.6, position: 'absolute', top: 0, width: 1 },
   svg: { height: '100%', inset: 0, pointerEvents: 'none', position: 'absolute', width: '100%' },
   curve: { fill: 'none', stroke: colors['--oniva-color-info-solid'], strokeWidth: 1.5, opacity: 0.7, strokeDasharray: '3 3' },
-  axis: { color: colors['--oniva-color-text-muted'], display: 'flex', fontSize: font['--oniva-font-size-12'], height: 30, alignItems: 'center', justifyContent: 'space-between', paddingInlineEnd: 4 },
+  axis: { color: colors['--oniva-color-text-muted'], display: 'grid', fontSize: font['--oniva-font-size-12'], gridTemplateColumns: 'var(--lane-label, 200px) minmax(0, 1fr)', height: 30 },
+  ticks: { alignItems: 'center', display: 'flex', position: 'relative' },
+  tick: { position: 'absolute', transform: 'translateX(-50%)', whiteSpace: 'nowrap' },
+  tickNow: { insetInlineEnd: 4, position: 'absolute' },
+  empty: { color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-13'], paddingBlock: 24, paddingInline: 16, textAlign: 'center' },
   panel: { backgroundColor: colors['--oniva-color-surface-inner'], borderColor: colors['--oniva-color-border'], borderRadius: radius['--oniva-radius-lg'], borderStyle: 'solid', borderWidth: 1, overflow: 'hidden' },
   head: { alignItems: 'center', borderBottomColor: colors['--oniva-color-border'], borderBottomStyle: 'solid', borderBottomWidth: 1, display: 'flex', flexWrap: 'wrap', gap: 10, paddingBlock: 12, paddingInline: 16 },
   headTitle: { fontSize: font['--oniva-font-size-14'], fontWeight: font['--oniva-font-weight-medium'], margin: 0 },
-  stat: { alignItems: 'center', color: colors['--oniva-color-text-muted'], display: 'inline-flex', fontSize: font['--oniva-font-size-13'], gap: 6 },
+  stat: { alignItems: 'center', fontVariantNumeric: 'tabular-nums', color: colors['--oniva-color-text-muted'], display: 'inline-flex', fontSize: font['--oniva-font-size-13'], gap: 6 },
   dot: { borderRadius: radius['--oniva-radius-full'], height: 6, width: 6 },
   dotRun: { backgroundColor: colors['--oniva-color-info-solid'] },
   dotWait: { backgroundColor: colors['--oniva-color-warning-solid'] },
   statWait: { color: colors['--oniva-color-warning-fg'] },
-  chip: { backgroundColor: colors['--oniva-color-surface-tertiary'], borderRadius: radius['--oniva-radius-md'], color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-12'], paddingBlock: 3, paddingInline: 8 },
+  chip: { backgroundColor: colors['--oniva-color-surface-tertiary'], fontVariantNumeric: 'tabular-nums', borderRadius: radius['--oniva-radius-md'], color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-12'], paddingBlock: 3, paddingInline: 8 },
   inline: { alignItems: 'center', display: 'flex', gap: 6, minWidth: 0 },
   miniTag: { backgroundColor: colors['--oniva-color-surface-tertiary'], borderRadius: radius['--oniva-radius-sm'], color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-11'], paddingBlock: 1, paddingInline: 6, whiteSpace: 'nowrap' },
   miniWait: { backgroundColor: colors['--oniva-color-warning-bg'], color: colors['--oniva-color-warning-fg'] },
@@ -93,12 +98,13 @@ const styles = stylex.create({
     position: 'absolute',
     textAlign: 'start',
     transitionDuration: motion['--oniva-motion-dur-base'],
-    transform: 'translateX(calc(var(--x) * var(--pw, 0) * 0.01px))',
+    // Keep short blocks near "now" inside the plane instead of clipping them at the right edge.
+    transform: 'translateX(min(calc(var(--x) * var(--pw, 0) * 0.01px), calc(var(--pw, 0) * 1px - 28px)))',
     transitionProperty: 'background-color, border-color, color',
     transitionTimingFunction: motion['--oniva-motion-ease-out'],
     animationDuration: motion['--oniva-motion-dur-slow'],
     animationFillMode: 'backwards',
-    animationName: fadeIn,
+    animationName: { default: fadeIn, [media.reducedMotion]: 'none' },
     animationTimingFunction: motion['--oniva-motion-ease-out'],
     whiteSpace: 'nowrap',
     width: 'var(--w)',
@@ -188,21 +194,26 @@ export function AgentLanes({
 
   return (
     <div
-      {...mergeSx(stylex.props(w1.root, styles.root, xstyle), className, { ['--lane-label' as string]: narrow ? '40px' : '180px' })}
+      {...mergeSx(stylex.props(w1.root, styles.root, xstyle), className, { ['--lane-label' as string]: narrow ? '40px' : '200px' })}
       ref={(el) => { rootRef.current = el; if (typeof ref === 'function') ref(el); else if (ref) ref.current = el; }}
     >
       <div {...stylex.props(styles.panel)}>
       <div {...stylex.props(styles.head)}>
-        <Sparkles size={14} aria-hidden="true" />
+        <SparklesIcon size={14} aria-hidden="true" />
         <h3 {...stylex.props(styles.headTitle)}>{title}</h3>
         {running > 0 && <span {...stylex.props(styles.stat)}><span aria-hidden="true" {...stylex.props(styles.dot, styles.dotRun)} />{running} running</span>}
         {waiting > 0 && <span {...stylex.props(styles.stat, styles.statWait)}><span aria-hidden="true" {...stylex.props(styles.dot, styles.dotWait)} />{waiting} needs you</span>}
         <span {...stylex.props(w1.grow)} />
-        <span {...stylex.props(styles.chip)}>Last {Math.round(span / 60_000)}m</span>
+        <span {...stylex.props(styles.chip)}>Last {span >= 3_600_000 ? `${f.number(span / 3_600_000, { maximumFractionDigits: 1 })}h` : `${f.number(span / 60_000, { maximumFractionDigits: 1 })}m`}</span>
       </div>
-      <div aria-hidden="true" {...stylex.props(styles.axis, w1.num)} style={{ marginInlineStart: narrow ? 40 : 180 }}>
-        {[5, 4, 3, 2, 1].map((k) => <span key={k}>{'\u2212'}{Math.round((span * k) / 6 / 60_000)}m</span>)}
-        <span {...stylex.props(styles.nowChip)}>now</span>
+      <div aria-hidden="true" {...stylex.props(styles.axis, w1.num)}>
+        <span />
+        <div {...stylex.props(styles.ticks)}>
+          {[1, 2, 3, 4, 5].map((k) => (
+            <span key={k} {...stylex.props(styles.tick)} style={{ left: `${(k * 100) / 6}%` }}>{'\u2212'}{f.number((span * (6 - k)) / 6 / 60_000, { maximumFractionDigits: 1 })}m</span>
+          ))}
+          <span {...stylex.props(styles.nowChip, styles.tickNow)}>now</span>
+        </div>
       </div>
       <div {...stylex.props(styles.grid)}>
         <div {...stylex.props(styles.names)}>
@@ -226,14 +237,15 @@ export function AgentLanes({
           })}
         </div>
         <div ref={planeRef} {...stylex.props(styles.plane)}>
-          {[25, 50, 75].map((p) => (
-            <span key={p} aria-hidden="true" {...stylex.props(styles.gridLine)} style={{ left: `${p}%` }} />
+          {[1, 2, 3, 4, 5].map((k) => (
+            <span key={k} aria-hidden="true" {...stylex.props(styles.gridLine)} style={{ left: `${(k * 100) / 6}%` }} />
           ))}
           <svg aria-hidden="true" viewBox={`0 0 100 ${agents.length * LANE_H}`} preserveAspectRatio="none" {...stylex.props(styles.svg)}>
             {curves.map((c) => (
               <path key={c.id} d={c.d} vectorEffect="non-scaling-stroke" {...stylex.props(styles.curve)} />
             ))}
           </svg>
+          {agents.length === 0 && <p {...stylex.props(styles.empty)}>No agents to show yet.</p>}
           {agents.map((a) => (
             <ul key={a.id} aria-label={a.name} {...stylex.props(styles.lane)}>
               {items

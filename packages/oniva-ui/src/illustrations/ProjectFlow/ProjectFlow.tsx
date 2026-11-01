@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { Check, FileText, Users } from 'lucide-react';
+import { CheckIcon, FileTextIcon, UsersIcon } from '../../icons/IconSet';
 import { Avatar } from '../../components/Avatar/Avatar';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
@@ -156,7 +156,7 @@ function FlowBody({
       </div>
       <div aria-hidden="true" {...stylex.props(...card(step >= 3), styles.at(5, 32, 28))}>
         <div {...stylex.props(styles.row)}>
-          <FileText size={14} />
+          <FileTextIcon size={14} />
           <span {...stylex.props(styles.cap)}>Notes</span>
         </div>
         <div {...stylex.props(styles.stack)}>
@@ -173,7 +173,7 @@ function FlowBody({
         >
           <div {...stylex.props(styles.row)}>
             <span {...stylex.props(styles.tick, step >= 5 + i && styles.tickOn)}>
-              <Check {...stylex.props(styles.tickIcon)} />
+              <CheckIcon {...stylex.props(styles.tickIcon)} />
             </span>
             <span {...stylex.props(styles.title)}>{s}</span>
           </div>
@@ -181,7 +181,7 @@ function FlowBody({
       ))}
       <div aria-hidden="true" {...stylex.props(...card(step >= 4), styles.at(44, 60, 51))}>
         <div {...stylex.props(styles.row)}>
-          <Users size={14} />
+          <UsersIcon size={14} />
           <span {...stylex.props(styles.cap)}>Team</span>
         </div>
         <div {...stylex.props(styles.chips)}>

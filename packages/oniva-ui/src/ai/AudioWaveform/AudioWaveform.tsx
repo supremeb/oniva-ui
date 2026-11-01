@@ -1,23 +1,25 @@
 import * as stylex from '@stylexjs/stylex';
 import { useEffect, useRef } from 'react';
 import type { HTMLAttributes, Ref } from 'react';
+import { accent } from '../../tokens/accent.stylex';
 import { colors } from '../../tokens/colors.stylex';
+import { media } from '../../tokens/media.stylex';
 import { motion } from '../../tokens/motion.stylex';
 import { radius } from '../../tokens/radius.stylex';
 import { useReducedMotion } from '../../internal/motion-hooks';
 import { mergeSx } from '../../internal/sx';
 
 const styles = stylex.create({
-  root: { alignItems: 'center', display: 'flex', gap: 3, height: 32 },
+  root: { alignItems: 'center', display: 'flex', gap: 3, height: 32, maxWidth: '100%', overflow: 'hidden' },
   bar: {
-    backgroundColor: colors['--oniva-color-accent-fg'],
+    backgroundColor: accent['--oniva-accent-solid'],
     borderRadius: radius['--oniva-radius-full'],
     flexShrink: 0,
     height: '100%',
     opacity: 0.85,
     transform: 'scaleY(0.12)',
     transformOrigin: 'center',
-    transitionDuration: motion['--oniva-motion-dur-fast'],
+    transitionDuration: { default: motion['--oniva-motion-dur-fast'], [media.reducedMotion]: '0ms' },
     transitionProperty: 'transform',
     transitionTimingFunction: motion['--oniva-motion-ease-out'],
     width: 3,
@@ -40,12 +42,13 @@ export interface AudioWaveformProps extends Omit<HTMLAttributes<HTMLDivElement>,
 export function AudioWaveform({
   analyser,
   active = true,
-  bars = 24,
+  bars: barsProp = 24,
   className,
   xstyle,
   ref,
   ...rest
 }: AudioWaveformProps) {
+  const bars = Number.isFinite(barsProp) ? Math.max(0, Math.floor(barsProp)) : 24;
   const els = useRef<(HTMLSpanElement | null)[]>([]);
   const reduced = useReducedMotion();
 

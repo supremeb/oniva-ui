@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { Bell, CheckCheck } from 'lucide-react';
+import { BellIcon, CheckDoubleIcon } from '../../icons/IconSet';
 import { useState, type ReactNode, type Ref } from 'react';
 import { Avatar } from '../../components/Avatar';
 import { Button } from '../../components/Button';
@@ -149,7 +149,7 @@ export function NotificationCenter({
                 <Avatar name={n.actor} size="lg" />
               ) : (
                 <span aria-hidden="true" {...stylex.props(styles.icon)}>
-                  {n.icon ?? <Bell size={16} />}
+                  {n.icon ?? <BellIcon size={16} />}
                 </span>
               )}
               <span {...stylex.props(styles.text)}>
@@ -176,7 +176,7 @@ export function NotificationCenter({
         <Button
           size="sm"
           variant="ghost"
-          startIcon={<CheckCheck size={14} />}
+          startIcon={<CheckDoubleIcon size={14} />}
           isDisabled={unread.length === 0}
           onPress={() => update(items.map((n) => ({ ...n, read: true })))}
         >

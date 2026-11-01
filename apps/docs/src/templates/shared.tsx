@@ -1,15 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
 import {
-  Bot,
-  Columns3,
-  Home,
-  Landmark,
-  Settings as SettingsIcon,
-  HeartPulse,
-  LifeBuoy,
-  type LucideIcon,
-} from 'lucide-react';
-import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
@@ -17,7 +7,7 @@ import {
   SidebarItem,
   SidebarMenu,
   SidebarSection,
-  SidebarAccount,
+  SidebarAccount, BotIcon, ColumnsIcon, HomeIcon, LandmarkIcon, SettingsIcon, HeartPulseIcon, LifeBuoyIcon, type IconGlyph,
 } from 'oniva-ui';
 import { colors } from '@oniva-tokens/colors.stylex';
 import { font } from '@oniva-tokens/font.stylex';
@@ -40,11 +30,11 @@ const styles = stylex.create({
   },
 });
 
-const icons: Record<string, LucideIcon> = {
-  dashboard: Landmark,
-  'ai-chat': Bot,
-  'project-board': Columns3,
-  'medical-report': HeartPulse,
+const icons: Record<string, IconGlyph> = {
+  dashboard: LandmarkIcon,
+  'ai-chat': BotIcon,
+  'project-board': ColumnsIcon,
+  'medical-report': HeartPulseIcon,
   settings: SettingsIcon,
 };
 
@@ -64,7 +54,7 @@ export function TemplateSidebar({
       <SidebarContent>
         <SidebarSection>
           {templates.map((t) => {
-            const I = icons[t.slug] ?? Home;
+            const I = icons[t.slug] ?? HomeIcon;
             return (
               <SidebarItem
                 key={t.slug}
@@ -80,7 +70,7 @@ export function TemplateSidebar({
       </SidebarContent>
       <SidebarFooter>
         <SidebarMenu>
-          <SidebarItem href="#/components" icon={<LifeBuoy size={18} />}>
+          <SidebarItem href="#/components" icon={<LifeBuoyIcon size={18} />}>
             Components
           </SidebarItem>
         </SidebarMenu>

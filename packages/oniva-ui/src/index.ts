@@ -2,6 +2,9 @@
 export * from './tokens';
 export * from './themes';
 
+// icons
+export * from './icons/IconSet';
+
 // components
 export * from './components/Accordion';
 export * from './components/Alert';
@@ -180,6 +183,7 @@ export * from './ai/EmailDraft';
 export * from './ai/FanOutGrid';
 export * from './ai/FeedbackBar';
 export * from './ai/FileDiff';
+export * from './ai/Flowchart';
 export * from './ai/ImageGenGrid';
 export * from './ai/ImageGenerationLoader';
 export * from './ai/InlineCitation';
@@ -200,6 +204,7 @@ export * from './ai/Reasoning';
 export * from './ai/ResponseStream';
 export * from './ai/ReviewCenter';
 export * from './ai/RunLog';
+export * from './ai/SelectionActions';
 export * from './ai/SmartRecommendation';
 export * from './ai/SourceChip';
 export * from './ai/Sources';
@@ -211,9 +216,11 @@ export * from './ai/TaskList';
 export * from './ai/TextShimmer';
 export * from './ai/ThinkingLoader';
 export * from './ai/ThinkingStates';
+export * from './ai/ThinkingTrace';
 export * from './ai/TokenCounter';
 export * from './ai/ToolApproval';
 export * from './ai/ToolCallCard';
+export * from './ai/ToolChips';
 export * from './ai/TraceWaterfall';
 export * from './ai/TypingIndicator';
 export * from './ai/VoiceOrb';

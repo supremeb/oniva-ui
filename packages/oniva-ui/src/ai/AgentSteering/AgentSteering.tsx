@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { ArrowUp, Check, CornerDownLeft, Command, Loader2, Pause, Play, Sparkles, X, Zap } from 'lucide-react';
+import { ArrowUpIcon, CheckIcon, CornerDownLeftIcon, CommandIcon, LoaderIcon, PauseIcon, PlayIcon, SparklesIcon, XIcon, ZapIcon } from '../../icons/IconSet';
 import { useEffect, useId, useRef, type Ref } from 'react';
 import { Button, TextArea, TextField } from 'react-aria-components';
 import { accent } from '../../tokens/accent.stylex';
@@ -41,25 +41,28 @@ const styles = stylex.create({
   root: { containerType: 'inline-size', gap: 0, maxWidth: 520, overflow: 'hidden', padding: 0 },
   head: { alignItems: 'center', display: 'flex', gap: 10, padding: 14 },
   headIcon: { color: colors['--oniva-color-accent-text'], display: 'inline-flex', flexShrink: 0 },
-  running: { alignItems: 'center', color: colors['--oniva-color-text-muted'], display: 'inline-flex', fontSize: font['--oniva-font-size-13'], gap: 6 },
-  dot: { backgroundColor: colors['--oniva-color-accent-text'], borderRadius: radius['--oniva-radius-full'], display: 'inline-block', height: 8, width: 8 },
+  running: { alignItems: 'center', color: colors['--oniva-color-text-muted'], display: 'inline-flex', flexShrink: 0, fontSize: font['--oniva-font-size-13'], gap: 6, whiteSpace: 'nowrap' },
+  noWrap: { flexShrink: 0, whiteSpace: 'nowrap' },
+  wrapText: { overflowWrap: 'anywhere' },
+  stepTitle: { flexGrow: 1, lineHeight: '18px', minWidth: 0, overflowWrap: 'anywhere', paddingBlock: 3 },
+  dot: { backgroundColor: colors['--oniva-color-accent-text'], borderRadius: radius['--oniva-radius-full'], display: 'inline-block', flexShrink: 0, height: 8, width: 8 },
   section: { borderTopColor: colors['--oniva-color-border'], borderTopStyle: 'solid', borderTopWidth: 1, display: 'flex', flexDirection: 'column', gap: 8, padding: 14 },
   secLabel: { alignItems: 'center', display: 'flex', gap: 6 },
   chip: { backgroundColor: colors['--oniva-color-surface-tertiary'], borderRadius: radius['--oniva-radius-sm'], color: colors['--oniva-color-text'], fontSize: font['--oniva-font-size-11'], fontVariantNumeric: 'tabular-nums', paddingBlock: 1, paddingInline: 6 },
   keys: { alignItems: 'center', color: colors['--oniva-color-text-muted'], display: 'flex', flexWrap: 'wrap', fontSize: font['--oniva-font-size-12'], gap: 12 },
   keyGroup: { alignItems: 'center', display: 'inline-flex', gap: 4 },
   kbd: { alignItems: 'center', borderColor: colors['--oniva-color-border'], borderRadius: radius['--oniva-radius-sm'], borderStyle: 'solid', borderWidth: 1, display: 'inline-flex', height: 18, justifyContent: 'center', minWidth: 18, paddingInline: 3 },
-  nowBtn: { color: colors['--oniva-color-text'], gap: 4 },
-  agent: { color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-12'] },
+  nowBtn: { color: colors['--oniva-color-text'], flexShrink: 0, gap: 4, whiteSpace: 'nowrap' },
+  agent: { color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-12'], overflowWrap: 'anywhere' },
   steps: { borderTopColor: colors['--oniva-color-border'], borderTopStyle: 'solid', borderTopWidth: 1, display: 'flex', flexDirection: 'column', gap: 2, paddingBlock: 8, paddingInline: 14 },
   step: { display: 'flex', flexDirection: 'column', gap: 4, paddingBlock: 6 },
-  stepRow: { alignItems: 'center', display: 'flex', gap: 8, minHeight: 24 },
-  mark: { alignItems: 'center', borderRadius: radius['--oniva-radius-full'], display: 'inline-flex', flexShrink: 0, height: 18, justifyContent: 'center', width: 18 },
+  stepRow: { alignItems: 'flex-start', display: 'flex', gap: 8, minHeight: 24 },
+  mark: { alignItems: 'center', borderRadius: radius['--oniva-radius-full'], display: 'inline-flex', flexShrink: 0, height: 18, justifyContent: 'center', marginBlockStart: 3, width: 18 },
   markDone: { backgroundColor: accent['--oniva-accent-solid'], color: colors['--oniva-color-accent-fg'] },
   markActive: { color: colors['--oniva-color-accent-text'] },
   markPending: { borderColor: colors['--oniva-color-border-control'], borderStyle: 'dashed', borderWidth: 1, boxSizing: 'border-box' },
   mutedText: { color: colors['--oniva-color-text-muted'] },
-  time: { color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-12'], marginInlineStart: 'auto' },
+  time: { color: colors['--oniva-color-text-muted'], flexShrink: 0, fontSize: font['--oniva-font-size-12'], lineHeight: '18px', marginInlineStart: 'auto', paddingBlock: 3, whiteSpace: 'nowrap' },
   notes: { display: 'flex', flexDirection: 'column', gap: 4, marginInlineStart: 26 },
   note: {
     alignItems: 'center',
@@ -106,6 +109,7 @@ const styles = stylex.create({
     fontSize: font['--oniva-font-size-12'],
     fontWeight: font['--oniva-font-weight-medium'],
     gap: 3,
+    flexShrink: 0,
     height: { default: 24, '@media (pointer: coarse)': 32 },
     minWidth: 24,
     paddingInline: 4,
@@ -232,7 +236,7 @@ export function AgentSteering({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pickedKey]);
 
-  const canQueue = text.trim().length > 0 && status !== 'done';
+  const canQueue = text.trim().length > 0 && status !== 'done' && !!onQueue;
   const submit = (immediate: boolean) => {
     const v = text.trim();
     if (!v || status === 'done') return;
@@ -256,9 +260,9 @@ export function AgentSteering({
       }}
     >
       <div {...stylex.props(styles.head)}>
-        <span aria-hidden="true" {...stylex.props(styles.headIcon)}><Sparkles size={16} /></span>
+        <span aria-hidden="true" {...stylex.props(styles.headIcon)}><SparklesIcon size={16} /></span>
         <div {...stylex.props(w1.grow)}>
-          <h3 {...stylex.props(w1.title)}>{title}</h3>
+          <h3 {...stylex.props(w1.title, styles.wrapText)}>{title}</h3>
           {(agent || stepNo > 0) && (
             <div {...stylex.props(styles.agent)}>
               {agent}
@@ -273,20 +277,21 @@ export function AgentSteering({
             Running{start != null && ` \u00b7 ${formatDuration(t - start)}`}
           </span>
         )}
-        {status !== 'running' && start != null && <span {...stylex.props(w1.muted, w1.num)}>{formatDuration(t - start)}</span>}
-        {status === 'paused' && <Tag tone="warning">Paused</Tag>}
-        {status === 'done' && <Tag tone="success">Done</Tag>}
+        {status !== 'running' && start != null && <span {...stylex.props(w1.muted, w1.num, styles.noWrap)}>{formatDuration(t - start)}</span>}
+        {status === 'paused' && <span {...stylex.props(styles.noWrap)}><Tag tone="warning">Paused</Tag></span>}
+        {status === 'done' && <span {...stylex.props(styles.noWrap)}><Tag tone="success">Done</Tag></span>}
         {status === 'running' && onPause && (
           <Button onPress={onPause} className={() => sxClass(stylex.props(w1.iconBtn, focus.ring))} aria-label="Pause">
-            <Pause size={14} aria-hidden="true" />
+            <PauseIcon size={14} aria-hidden="true" />
           </Button>
         )}
         {status === 'paused' && onResume && (
           <Button onPress={onResume} className={() => sxClass(stylex.props(w1.iconBtn, focus.ring))} aria-label="Resume">
-            <Play size={14} aria-hidden="true" />
+            <PlayIcon size={14} aria-hidden="true" />
           </Button>
         )}
       </div>
+      {steps.length > 0 && (
       <ol aria-label="Plan" {...stylex.props(w1.list, styles.steps)}>
         {steps.map((s) => {
           const st = s.status ?? 'pending';
@@ -294,10 +299,10 @@ export function AgentSteering({
             <li key={s.id} aria-current={st === 'active' ? 'step' : undefined} {...stylex.props(styles.step)}>
               <div {...stylex.props(styles.stepRow)}>
                 <span aria-hidden="true" {...stylex.props(styles.mark, st === 'done' && styles.markDone, st === 'active' && styles.markActive, st === 'pending' && styles.markPending)}>
-                  {st === 'done' && <span {...stylex.props(checkAnim.pop)}><Check size={11} /></span>}
-                  {st === 'active' && <Loader2 size={14} {...stylex.props(status === 'running' && w1.spin)} />}
+                  {st === 'done' && <span {...stylex.props(checkAnim.pop)}><CheckIcon size={11} /></span>}
+                  {st === 'active' && <LoaderIcon size={14} {...stylex.props(status === 'running' && w1.spin)} />}
                 </span>
-                <span {...stylex.props(st === 'pending' && styles.mutedText)}>{st === 'active' && status === 'running' ? <Shimmer>{s.title}</Shimmer> : s.title}</span>
+                <span {...stylex.props(styles.stepTitle, st === 'pending' && styles.mutedText)}>{st === 'active' && status === 'running' ? <Shimmer>{s.title}</Shimmer> : s.title}</span>
                 <span {...stylex.props(w1.srOnly)}>{st === 'done' ? ', done' : st === 'active' ? ', in progress' : ', pending'}</span>
                 {st === 'done' && s.duration && <span {...stylex.props(styles.time, w1.num)}>{s.duration}</span>}
                 {st === 'active' && s.startedAt != null && <span {...stylex.props(styles.time, w1.num)}>{formatDuration(t - s.startedAt)}</span>}
@@ -306,9 +311,9 @@ export function AgentSteering({
                 <ul {...stylex.props(w1.list, styles.notes)}>
                   {(s.notes ?? []).map((n) => (
                     <li key={n.id} data-flip-id={n.id} data-glide-land="" data-glide-flash={n.picked === 'now' ? '' : undefined} data-glide-enter="" {...stylex.props(styles.note)}>
-                      <Zap size={12} aria-hidden="true" />
+                      <ZapIcon size={12} aria-hidden="true" {...stylex.props(styles.noWrap)} />
                       <span {...stylex.props(styles.noteText)}>{n.text}</span>
-                      <span {...stylex.props(w1.num)}>{n.picked === 'now' ? 'Applied now' : 'Next step'}</span>
+                      <span {...stylex.props(w1.num, styles.noWrap)}>{n.picked === 'now' ? 'Applied now' : 'Next step'}</span>
                     </li>
                   ))}
                 </ul>
@@ -317,6 +322,7 @@ export function AgentSteering({
           );
         })}
       </ol>
+      )}
       <AnimatedHeight isOpen={queue.length > 0}>
         <div {...stylex.props(styles.section)}>
         <div {...stylex.props(styles.secLabel)}>
@@ -335,13 +341,13 @@ export function AgentSteering({
                   }}
                   className={() => sxClass(stylex.props(styles.small, styles.nowBtn, focus.ring))}
                 >
-                  <Zap size={12} aria-hidden="true" />
+                  <ZapIcon size={12} aria-hidden="true" />
                   Now
                 </Button>
               )}
               {onRemove && !leaving && (
                 <Button aria-label={`Remove “${n.text}”`} onPress={() => onRemove(n.id)} className={() => sxClass(stylex.props(styles.small, focus.ring))}>
-                  <X size={13} aria-hidden="true" />
+                  <XIcon size={13} aria-hidden="true" />
                 </Button>
               )}
             </li>
@@ -365,16 +371,19 @@ export function AgentSteering({
                 }}
               />
               <Button aria-label="Queue for the next step" isDisabled={!canQueue} onPress={() => submit(false)} className={() => sxClass(stylex.props(styles.send, focus.ring))}>
-                <ArrowUp size={14} aria-hidden="true" />
+                <ArrowUpIcon size={14} aria-hidden="true" />
               </Button>
             </div>
           </TextField>
           <p id={hintId} {...stylex.props(styles.hint)}>
-            Enter queues for the next step{onInterrupt ? ', ⌘/Ctrl Enter applies it now' : ''}. Shift Enter adds a line.
+            {onQueue ? 'Enter queues for the next step' : ''}
+            {onQueue && onInterrupt ? ', ' : ''}
+            {onInterrupt ? `${onQueue ? '⌘/Ctrl Enter' : 'Press ⌘/Ctrl Enter'} applies it now` : ''}
+            {onQueue || onInterrupt ? '. ' : ''}Shift Enter adds a line.
           </p>
           <div aria-hidden="true" {...stylex.props(styles.keys)}>
-            <span {...stylex.props(styles.keyGroup)}><kbd {...stylex.props(styles.kbd)}><CornerDownLeft size={11} /></kbd> next step</span>
-            {onInterrupt && <span {...stylex.props(styles.keyGroup)}><kbd {...stylex.props(styles.kbd)}><Command size={11} /></kbd><kbd {...stylex.props(styles.kbd)}><CornerDownLeft size={11} /></kbd> interrupt now</span>}
+            {onQueue && <span {...stylex.props(styles.keyGroup)}><kbd {...stylex.props(styles.kbd)}><CornerDownLeftIcon size={11} /></kbd> next step</span>}
+            {onInterrupt && <span {...stylex.props(styles.keyGroup)}><kbd {...stylex.props(styles.kbd)}><CommandIcon size={11} /></kbd><kbd {...stylex.props(styles.kbd)}><CornerDownLeftIcon size={11} /></kbd> interrupt now</span>}
           </div>
         </div>
       )}

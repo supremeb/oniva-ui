@@ -44,4 +44,17 @@ describe('ThinkingStates panel', () => {
     fireEvent.click(screen.getByRole('button', { name: '+2 more' }));
     expect(screen.getByText('e.example')).toBeInTheDocument();
   });
+  it('renders repeated source labels without key warnings and titles each chip', () => {
+    const err = vi.spyOn(console, 'error').mockImplementation(() => {});
+    render(
+      <ThinkingStates
+        steps={[{ kind: 'search', label: 'Searched', sources: [{ label: 'a.example' }, { label: 'a.example' }, { label: 'b.example', href: 'https://b.example/path' }] }]}
+      />,
+    );
+    expect(screen.getAllByText('a.example')).toHaveLength(2);
+    expect(screen.getAllByTitle('a.example')).toHaveLength(2);
+    expect(screen.getByRole('link', { name: 'b.example' })).toHaveAttribute('title', 'https://b.example/path');
+    expect(err.mock.calls.filter((c) => String(c[0]).includes('key'))).toHaveLength(0);
+    err.mockRestore();
+  });
 });

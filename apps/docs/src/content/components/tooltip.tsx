@@ -1,5 +1,4 @@
-import { Plus } from 'lucide-react';
-import { IconButton } from 'oniva-ui';
+import { IconButton, PlusIcon } from 'oniva-ui';
 import type { DocPage } from '../types';
 
 // The real Tooltip only mounts while hovered. The stage draws the same inverted surface
@@ -8,7 +7,7 @@ const Tip = ({ text = 'New invoice', arrow = true, width }: { text?: string; arr
   <div style={{ alignItems: 'center', display: 'flex', flexDirection: 'column', gap: 4 }}>
     <div role="tooltip" style={{ background: 'var(--oniva-color-text)', borderRadius: 8, boxShadow: 'var(--oniva-elevation-floating)', color: 'var(--oniva-color-bg)', fontSize: 12, fontWeight: 500, lineHeight: '16px', maxWidth: 260, padding: '6px 10px', width }}>{text}</div>
     {arrow && <svg data-part="arrow" aria-hidden="true" width="8" height="8" viewBox="0 0 8 8" style={{ fill: 'var(--oniva-color-text)', transform: 'rotate(180deg)' }}><path d="M0 0 L4 4 L8 0" /></svg>}
-    <IconButton aria-label={text}><Plus size={16} /></IconButton>
+    <IconButton aria-label={text}><PlusIcon size={16} /></IconButton>
   </div>
 );
 
@@ -50,7 +49,7 @@ const page: DocPage = {
         <Tip text={String(p.content)} arrow={Boolean(p.showArrow)} />
       </div>
     ),
-    code: (p) => `<Tooltip content="${p.content}"${p.placement !== 'top' ? ` placement="${p.placement}"` : ''}${p.showArrow ? '' : ' showArrow={false}'}${Number(p.delay) !== 300 ? ` delay={${p.delay}}` : ''}>\n  <IconButton aria-label="New invoice"><Plus /></IconButton>\n</Tooltip>`,
+    code: (p) => `<Tooltip content="${p.content}"${p.placement !== 'top' ? ` placement="${p.placement}"` : ''}${p.showArrow ? '' : ' showArrow={false}'}${Number(p.delay) !== 300 ? ` delay={${p.delay}}` : ''}>\n  <IconButton aria-label="New invoice"><PlusIcon /></IconButton>\n</Tooltip>`,
   },
   states: [
     { name: 'Default', description: 'Short label with arrow.', Render: () => <Tip /> },

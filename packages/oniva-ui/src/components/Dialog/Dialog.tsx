@@ -10,7 +10,7 @@ import {
   type DialogProps as AriaDialogProps,
   type ModalOverlayProps as AriaModalOverlayProps,
 } from 'react-aria-components';
-import { X } from 'lucide-react';
+import { XIcon } from '../../icons/IconSet';
 import type { HTMLAttributes, ReactNode, Ref } from 'react';
 import { mergeSx } from '../../internal/sx';
 import { colors } from '../../tokens/colors.stylex';
@@ -294,7 +294,7 @@ export function DialogCloseButton({ 'aria-label': label = 'Close' }: { 'aria-lab
 function CloseSlotButton({ label }: { label: string }) {
   return (
     <AriaButton slot="close" aria-label={label} {...stylex.props(styles.close)}>
-      <X size={16} aria-hidden="true" />
+      <XIcon size={16} aria-hidden="true" />
     </AriaButton>
   );
 }

@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { Maximize2, RefreshCw } from 'lucide-react';
+import { ExpandIcon, RefreshIcon } from '../../icons/IconSet';
 import type { HTMLAttributes, Ref } from 'react';
 import { accent } from '../../tokens/accent.stylex';
 import { colors } from '../../tokens/colors.stylex';
@@ -17,6 +17,7 @@ const drift = stylex.keyframes({
 });
 
 const styles = stylex.create({
+  root: { position: 'relative' },
   grid: { display: 'grid', gap: 8, gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', padding: 8 },
   tile: {
     aspectRatio: '1 / 1',
@@ -84,15 +85,31 @@ const styles = stylex.create({
     top: 8,
   },
   action: {
-    backgroundColor: colors['--oniva-color-surface'],
+    backgroundColor: {
+      default: colors['--oniva-color-surface'],
+      ':hover': { default: null, [media.hover]: colors['--oniva-color-surface-hover'] },
+    },
     boxShadow: 'none',
     color: colors['--oniva-color-text'],
+  },
+  srOnly: {
+    borderWidth: 0,
+    clipPath: 'inset(50%)',
+    height: 1,
+    margin: -1,
+    overflow: 'hidden',
+    padding: 0,
+    position: 'absolute',
+    whiteSpace: 'nowrap',
+    width: 1,
   },
   caption: {
     color: colors['--oniva-color-text-muted'],
     fontFamily: font['--oniva-font-sans'],
     fontSize: font['--oniva-font-size-12'],
-    paddingBlock: 0,
+    margin: 0,
+    overflowWrap: 'anywhere',
+    paddingBlock: 12,
     paddingInline: 12,
   },
 });
@@ -129,10 +146,18 @@ export function ImageGenGrid({
   ref,
   ...rest
 }: ImageGenGridProps) {
+  const shown = tiles.slice(0, 4);
+  const ready = shown.filter((t) => (t.progress ?? 100) >= 100).length;
   return (
-    <div {...rest} ref={ref} {...mergeSx(stylex.props(aiStyles.panel, xstyle), className)}>
+    <div {...rest} ref={ref} {...mergeSx(stylex.props(aiStyles.panel, styles.root, xstyle), className)}>
+      {shown.length > 0 && (
+        <span role="status" {...stylex.props(styles.srOnly)}>
+          {ready} of {shown.length} images ready
+        </span>
+      )}
+      {shown.length > 0 && (
       <div {...stylex.props(styles.grid)}>
-        {tiles.slice(0, 4).map((t) => {
+        {shown.map((t) => {
           const p = Math.max(0, Math.min(100, t.progress ?? 100));
           const done = p >= 100;
           const stage = done ? styles.imgSharp : p >= 35 ? styles.imgBlur : styles.imgPending;
@@ -151,10 +176,10 @@ export function ImageGenGrid({
               {done && (
                 <div {...stylex.props(styles.actions)}>
                   <button type="button" aria-label={`Regenerate ${t.alt}`} onClick={() => onRegenerate?.(t.id)} {...stylex.props(aib.mini, styles.action)}>
-                    <RefreshCw size={14} />
+                    <RefreshIcon size={14} />
                   </button>
                   <button type="button" aria-label={`Upscale ${t.alt}`} onClick={() => onUpscale?.(t.id)} {...stylex.props(aib.mini, styles.action)}>
-                    <Maximize2 size={14} />
+                    <ExpandIcon size={14} />
                   </button>
                 </div>
               )}
@@ -162,6 +187,7 @@ export function ImageGenGrid({
           );
         })}
       </div>
+      )}
       {prompt && <p {...stylex.props(styles.caption)}>{prompt}</p>}
     </div>
   );

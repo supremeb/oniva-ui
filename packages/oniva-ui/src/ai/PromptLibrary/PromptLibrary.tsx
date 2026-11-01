@@ -1,10 +1,12 @@
 import * as stylex from '@stylexjs/stylex';
-import { ArrowRight, Check, Copy, Search, Sparkles } from 'lucide-react';
+import { ArrowRightIcon, CheckIcon, CopyIcon, SearchIcon, SparklesIcon } from '../../icons/IconSet';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { CSSProperties, HTMLAttributes, Ref } from 'react';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
+import { media } from '../../tokens/media.stylex';
 import { radius } from '../../tokens/radius.stylex';
+import { focus } from '../../internal/focus';
 import { aiStyles } from '../../internal/ai-styles';
 import { aib } from '../../internal/aib-styles';
 import { mergeSx } from '../../internal/sx';
@@ -24,6 +26,9 @@ const styles = stylex.create({
   },
   sSide: {
     borderInlineEndColor: { default: colors['--oniva-color-separator'], '@container (max-width: 480px)': 'transparent' },
+    borderBlockEndColor: colors['--oniva-color-separator'],
+    borderBlockEndStyle: 'solid',
+    borderBlockEndWidth: { default: 0, '@container (max-width: 480px)': 1 },
     borderInlineEndStyle: 'solid',
     borderInlineEndWidth: 1,
     minWidth: 0,
@@ -31,13 +36,20 @@ const styles = stylex.create({
   },
   sHead: { alignItems: 'center', display: 'flex', gap: 8, minHeight: 28, paddingBlockEnd: 8, paddingInline: 4 },
   sCount: { color: colors['--oniva-color-text-subtle'], fontSize: font['--oniva-font-size-13'], fontVariantNumeric: 'tabular-nums' },
-  sList: { display: 'flex', flexDirection: 'column', gap: 2, listStyle: 'none', margin: 0, padding: 0 },
+  sList: { display: 'flex', flexDirection: 'column', gap: 2, listStyle: 'none', margin: 0, maxHeight: 336, overflowY: 'auto', padding: 0 },
+  sSearch: { marginBlockEnd: 8 },
+  sSearchInput: { paddingInlineStart: 30 },
+  sEmpty: { padding: 16, textAlign: 'center' },
+  blockText: { display: 'block' },
+  tagFit: { flexShrink: 1, maxWidth: '45%', minWidth: 0 },
+  unmet: { cursor: 'not-allowed', opacity: 0.5 },
+  vTight: { paddingBlockEnd: 12, paddingBlockStart: 0, paddingInline: 12 },
   sRow: {
     alignItems: 'center',
     appearance: 'none',
     backgroundColor: {
       default: 'transparent',
-      ':hover': colors['--oniva-color-surface-hover'],
+      ':hover': { default: null, [media.hover]: colors['--oniva-color-surface-hover'] },
       ':is([aria-current="true"])': colors['--oniva-color-surface-inset'],
     },
     borderRadius: radius['--oniva-radius-md'],
@@ -49,10 +61,6 @@ const styles = stylex.create({
     fontSize: font['--oniva-font-size-14'],
     gap: 8,
     justifyContent: 'space-between',
-    outlineColor: colors['--oniva-color-focus-ring'],
-    outlineOffset: -2,
-    outlineStyle: { default: 'none', ':focus-visible': 'solid' },
-    outlineWidth: 2,
     paddingBlock: 8,
     paddingInline: 8,
     textAlign: 'start',
@@ -63,21 +71,21 @@ const styles = stylex.create({
   sDots: { alignItems: 'center', display: 'inline-flex', gap: 3 },
   sDot: { backgroundColor: colors['--oniva-color-border-control'], borderRadius: radius['--oniva-radius-full'], height: 6, width: 6 },
   sDotOn: { backgroundColor: colors['--oniva-color-accent-text'] },
-  sTemplate: { fontSize: font['--oniva-font-size-14'], lineHeight: 2, margin: 0 },
+  sTemplate: { fontSize: font['--oniva-font-size-14'], lineHeight: 2, margin: 0, overflowWrap: 'anywhere' },
   sInput: {
     backgroundColor: { default: colors['--oniva-color-surface'], ':focus': colors['--oniva-color-surface'] },
     borderColor: { default: colors['--oniva-color-border-control'], ':focus': colors['--oniva-color-focus-ring'] },
     borderRadius: radius['--oniva-radius-md'],
     borderStyle: 'solid',
     borderWidth: 1,
-    boxSizing: 'content-box',
+    boxSizing: 'border-box',
     color: colors['--oniva-color-text'],
     fontFamily: 'inherit',
     fontSize: font['--oniva-font-size-13'],
-    height: 22,
+    height: 24,
     margin: 0,
     marginInline: 2,
-    maxWidth: '100%',
+    maxWidth: 'calc(100% - 4px)',
     outlineStyle: 'none',
     paddingInline: 6,
     verticalAlign: 'baseline',
@@ -94,6 +102,7 @@ const styles = stylex.create({
     fontSize: font['--oniva-font-size-13'],
     lineHeight: 1.6,
     margin: 0,
+    overflowWrap: 'anywhere',
     padding: 12,
     whiteSpace: 'pre-wrap',
   },
@@ -115,7 +124,7 @@ const styles = stylex.create({
   pick: {
     alignItems: 'flex-start',
     appearance: 'none',
-    backgroundColor: { default: 'transparent', ':hover': colors['--oniva-color-surface-hover'] },
+    backgroundColor: { default: 'transparent', ':hover': { default: null, [media.hover]: colors['--oniva-color-surface-hover'] } },
     borderRadius: radius['--oniva-radius-lg'],
     borderWidth: 0,
     color: 'inherit',
@@ -123,19 +132,15 @@ const styles = stylex.create({
     display: 'flex',
     fontFamily: font['--oniva-font-sans'],
     gap: 10,
-    outlineColor: colors['--oniva-color-focus-ring'],
-    outlineOffset: -2,
-    outlineStyle: { default: 'none', ':focus-visible': 'solid' },
-    outlineWidth: 2,
     padding: 12,
     textAlign: 'start',
     width: '100%',
   },
-  mark: { backgroundColor: colors['--oniva-color-accent-soft'], borderRadius: 3, color: colors['--oniva-color-accent-soft-fg'] },
+  mark: { backgroundColor: colors['--oniva-color-accent-soft'], borderRadius: radius['--oniva-radius-xs'], color: colors['--oniva-color-accent-soft-fg'] },
   gap: { color: colors['--oniva-color-text-subtle'] },
   tray: { alignItems: 'center', color: colors['--oniva-color-text-muted'], display: 'flex', flexGrow: 1, fontSize: font['--oniva-font-size-12'], fontVariantNumeric: 'tabular-nums', gap: 4 },
   sr: { borderWidth: 0, clip: 'rect(0 0 0 0)', height: 1, margin: -1, overflow: 'hidden', padding: 0, position: 'absolute', whiteSpace: 'nowrap', width: 1 },
-  tmpl: { color: colors['--oniva-color-text-muted'], fontFamily: font['--oniva-font-mono'], fontSize: font['--oniva-font-size-12'], lineHeight: 1.6, margin: 0, whiteSpace: 'pre-wrap' },
+  tmpl: { color: colors['--oniva-color-text-muted'], fontFamily: font['--oniva-font-mono'], fontSize: font['--oniva-font-size-12'], lineHeight: 1.6, margin: 0, overflowWrap: 'anywhere', whiteSpace: 'pre-wrap' },
   vars: { display: 'grid', gap: 8, gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', padding: 12 },
   label: { display: 'flex', flexDirection: 'column', gap: 4 },
   foot: { display: 'flex', gap: 8, justifyContent: 'flex-end', padding: 12, paddingTop: 0 },
@@ -229,6 +234,7 @@ export function PromptLibrary({ prompts, title = 'Prompt library', onUse, onCopy
     return prompts.filter((p) => !n || p.name.toLowerCase().includes(n) || p.tags?.some((t) => t.toLowerCase().includes(n)));
   }, [prompts, q]);
   const sel = shown.find((p) => p.id === open) ?? shown[0];
+  const emptyText = prompts.length === 0 ? 'No saved prompts yet.' : `No prompts match “${q.trim()}”.`;
   const copyOf = (p: SavedPrompt) => {
     const filled = fillTemplate(p.template, valuesOf(p));
     void Promise.resolve(navigator.clipboard?.writeText(filled)).catch(() => {});
@@ -261,9 +267,9 @@ export function PromptLibrary({ prompts, title = 'Prompt library', onUse, onCopy
               <h3 {...stylex.props(aib.title)}>{title}</h3>
               <span {...stylex.props(styles.sCount)}><AnimatedNumber value={shown.length} /></span>
             </div>
-            <div {...stylex.props(styles.search)} style={{ marginBottom: 8 }}>
-              <Search size={14} aria-hidden="true" {...stylex.props(styles.searchIcon)} />
-              <input type="search" aria-label="Search prompts" placeholder="Search templates" value={q} onChange={(e) => setQ(e.target.value)} onKeyDown={(e) => { if (e.key === 'Escape' && q) { e.preventDefault(); setQ(''); } }} {...stylex.props(aib.field)} style={{ paddingInlineStart: 30 }} />
+            <div {...stylex.props(styles.search, styles.sSearch)}>
+              <SearchIcon size={14} aria-hidden="true" {...stylex.props(styles.searchIcon)} />
+              <input type="search" aria-label="Search prompts" placeholder="Search templates" value={q} onChange={(e) => setQ(e.target.value)} onKeyDown={(e) => { if (e.key === 'Escape' && q) { e.preventDefault(); setQ(''); } }} {...stylex.props(aib.field, styles.sSearchInput)} />
             </div>
             <ul ref={listRef} {...stylex.props(styles.sList)}>
               {shown.map((p) => (
@@ -273,22 +279,22 @@ export function PromptLibrary({ prompts, title = 'Prompt library', onUse, onCopy
                     aria-current={sel?.id === p.id ? 'true' : undefined}
                     onClick={() => setOpen(p.id)}
                     onKeyDown={(e) => { const btns = [...(listRef.current?.querySelectorAll<HTMLButtonElement>('button') ?? [])]; const i = btns.indexOf(e.currentTarget); const to = e.key === 'ArrowDown' ? btns[i + 1] : e.key === 'ArrowUp' ? btns[i - 1] : undefined; if (to) { e.preventDefault(); to.focus(); } }}
-                    {...stylex.props(styles.sRow)}
+                    {...stylex.props(styles.sRow, focus.inset)}
                   >
                     <span {...stylex.props(aib.grow, aib.clamp)}>{p.name}</span>
-                    {p.tags?.[0] && <Badge variant="neutral" size="sm">{p.tags[0]}</Badge>}
+                    {p.tags?.[0] && <Badge variant="neutral" size="sm" xstyle={styles.tagFit}><span {...stylex.props(aib.clamp)}>{p.tags[0]}</span></Badge>}
                   </button>
                 </li>
               ))}
             </ul>
-            {shown.length === 0 && <p {...stylex.props(aib.meta)} style={{ padding: 16, textAlign: 'center' }}>No prompts match “{q}”.</p>}
+            {shown.length === 0 && <p {...stylex.props(aib.meta, styles.sEmpty)}>{emptyText}</p>}
           </div>
           {sel && (
             <div {...stylex.props(styles.sMain)}>
               <div {...stylex.props(styles.sTitle)}>
                 <h4 {...stylex.props(aib.title)}>{sel.name}</h4>
                 <span {...stylex.props(aib.grow)} />
-                {sel.tags?.[0] && <Badge variant="accent" size="sm">{sel.tags[0]}</Badge>}
+                {sel.tags?.[0] && <Badge variant="accent" size="sm" xstyle={styles.tagFit}><span {...stylex.props(aib.clamp)}>{sel.tags[0]}</span></Badge>}
                 {vars.length > 0 && (
                   <>
                     <span aria-hidden="true" {...stylex.props(styles.sDots)}>
@@ -308,7 +314,7 @@ export function PromptLibrary({ prompts, title = 'Prompt library', onUse, onCopy
                       placeholder={sel.variables?.[g.v]?.description ?? g.v}
                       value={vals[`${sel.id}.${g.v}`] ?? sel.variables?.[g.v]?.default ?? ''}
                       size={1}
-                      style={{ width: `${Math.max((vals[`${sel.id}.${g.v}`] ?? sel.variables?.[g.v]?.default ?? '').length, (sel.variables?.[g.v]?.description ?? g.v).length, 4) + 1}ch` }}
+                      style={{ width: `calc(${Math.max((vals[`${sel.id}.${g.v}`] ?? sel.variables?.[g.v]?.default ?? '').length, (sel.variables?.[g.v]?.description ?? g.v).length, 4)}ch + 18px)` }}
                       onChange={(e) => { const next = e.target.value; setVals((x) => ({ ...x, [`${sel.id}.${g.v}`]: next })); }}
                       onKeyDown={(e) => {
                         if (e.key !== 'Enter') return;
@@ -345,14 +351,14 @@ export function PromptLibrary({ prompts, title = 'Prompt library', onUse, onCopy
                 variant="secondary"
                 startIcon={
                   <CrossFade as="span" contentKey={copied === sel.id ? 'check' : 'copy'} duration={200}>
-                    {copied === sel.id ? <Check size={14} aria-hidden="true" /> : <Copy size={14} aria-hidden="true" />}
+                    {copied === sel.id ? <CheckIcon size={14} aria-hidden="true" /> : <CopyIcon size={14} aria-hidden="true" />}
                   </CrossFade>
                 }
                 onPress={() => copyOf(sel)}
               >
                 {copied === sel.id ? 'Copied' : 'Copy'}
               </Button>
-              <Button size="sm" endIcon={<ArrowRight size={14} aria-hidden="true" />} aria-disabled={requireAll && missingOf(sel) > 0 ? true : undefined} onPress={() => use(sel)}>
+              <Button size="sm" endIcon={<ArrowRightIcon size={14} aria-hidden="true" />} aria-disabled={requireAll && missingOf(sel) > 0 ? true : undefined} xstyle={requireAll && missingOf(sel) > 0 && styles.unmet} onPress={() => use(sel)}>
                 {useLabel}
               </Button>
             </span>
@@ -368,9 +374,9 @@ export function PromptLibrary({ prompts, title = 'Prompt library', onUse, onCopy
         <h3 {...stylex.props(aib.title)}>{title}</h3>
         <span {...stylex.props(aib.meta, aiStyles.num)}><AnimatedNumber value={shown.length} /> of {prompts.length}</span>
       </div>
-      <div {...stylex.props(styles.search)} style={{ marginBottom: 8 }}>
-        <Search size={14} aria-hidden="true" {...stylex.props(styles.searchIcon)} />
-        <input type="search" aria-label="Search prompts" placeholder="Search prompts or tags" value={q} onChange={(e) => setQ(e.target.value)} onKeyDown={(e) => { if (e.key === 'ArrowDown') { e.preventDefault(); listRef.current?.querySelector<HTMLButtonElement>('button')?.focus(); } if (e.key === 'Escape' && q) { e.preventDefault(); setQ(''); } }} {...stylex.props(aib.field)} style={{ paddingInlineStart: 30 }} />
+      <div {...stylex.props(styles.search, styles.sSearch)}>
+        <SearchIcon size={14} aria-hidden="true" {...stylex.props(styles.searchIcon)} />
+        <input type="search" aria-label="Search prompts" placeholder="Search prompts or tags" value={q} onChange={(e) => setQ(e.target.value)} onKeyDown={(e) => { if (e.key === 'ArrowDown') { e.preventDefault(); listRef.current?.querySelector<HTMLButtonElement>('button')?.focus(); } if (e.key === 'Escape' && q) { e.preventDefault(); setQ(''); } }} {...stylex.props(aib.field, styles.sSearchInput)} />
       </div>
       <ul ref={listRef} {...stylex.props(styles.list)}>
         {shown.map((p, pi) => {
@@ -378,13 +384,13 @@ export function PromptLibrary({ prompts, title = 'Prompt library', onUse, onCopy
           const vars = variablesOf(p.template);
           return (
             <li key={p.id} style={{ '--oniva-i': Math.min(pi, 6) } as CSSProperties} {...stylex.props(aiStyles.tile, styles.item, m3.rise)}>
-              <button type="button" aria-expanded={isOpen} onClick={() => setOpen(isOpen ? null : p.id)} onKeyDown={(e) => { const btns = [...(listRef.current?.querySelectorAll<HTMLButtonElement>('button[aria-expanded]') ?? [])]; const i = btns.indexOf(e.currentTarget); const to = e.key === 'ArrowDown' ? btns[i + 1] : e.key === 'ArrowUp' ? btns[i - 1] : e.key === 'Home' ? btns[0] : e.key === 'End' ? btns[btns.length - 1] : undefined; if (to) { e.preventDefault(); to.focus(); } }} {...stylex.props(styles.pick)}>
-                <span {...stylex.props(aib.iconBox)}><Sparkles size={16} /></span>
+              <button type="button" aria-expanded={isOpen} onClick={() => setOpen(isOpen ? null : p.id)} onKeyDown={(e) => { const btns = [...(listRef.current?.querySelectorAll<HTMLButtonElement>('button[aria-expanded]') ?? [])]; const i = btns.indexOf(e.currentTarget); const to = e.key === 'ArrowDown' ? btns[i + 1] : e.key === 'ArrowUp' ? btns[i - 1] : e.key === 'Home' ? btns[0] : e.key === 'End' ? btns[btns.length - 1] : undefined; if (to) { e.preventDefault(); to.focus(); } }} {...stylex.props(styles.pick, focus.inset)}>
+                <span {...stylex.props(aib.iconBox)}><SparklesIcon size={16} /></span>
                 <span {...stylex.props(aib.grow)}>
-                  <span {...stylex.props(aib.name)} style={{ display: 'block' }}>{p.name}</span>
-                  <span {...stylex.props(aib.meta)} style={{ display: 'block' }}>{fmt.plural(vars.length, { one: '# variable', other: '# variables' })}</span>
+                  <span {...stylex.props(aib.name, styles.blockText)}>{p.name}</span>
+                  <span {...stylex.props(aib.meta, styles.blockText)}>{fmt.plural(vars.length, { one: '# variable', other: '# variables' })}</span>
                 </span>
-                {p.tags?.slice(0, 2).map((t) => <Badge key={t} variant="neutral">{t}</Badge>)}
+                {p.tags?.slice(0, 2).map((t) => <Badge key={t} variant="neutral" xstyle={styles.tagFit}><span {...stylex.props(aib.clamp)}>{t}</span></Badge>)}
               </button>
               <AnimatedHeight isOpen={isOpen}>
                 <div {...stylex.props(aib.divider)}>
@@ -414,7 +420,7 @@ export function PromptLibrary({ prompts, title = 'Prompt library', onUse, onCopy
                       </label>
                     ))}
                   </div>
-                  <p {...stylex.props(styles.tmpl)} style={{ padding: '0 12px 12px' }}>
+                  <p {...stylex.props(styles.tmpl, styles.vTight)}>
                     {piecesOf(p.template, valuesOf(p)).map((pc, i) =>
                       pc.kind === 'filled' ? <mark key={i} {...stylex.props(styles.mark, m3.pop)}>{pc.text}</mark> : pc.kind === 'empty' ? <span key={i} {...stylex.props(styles.gap)}>{pc.text}</span> : pc.text,
                     )}
@@ -429,7 +435,7 @@ export function PromptLibrary({ prompts, title = 'Prompt library', onUse, onCopy
                       variant="secondary"
                       startIcon={
                         <CrossFade as="span" contentKey={copied === p.id ? 'check' : 'copy'} duration={200}>
-                          {copied === p.id ? <Check size={14} aria-hidden="true" /> : <Copy size={14} aria-hidden="true" />}
+                          {copied === p.id ? <CheckIcon size={14} aria-hidden="true" /> : <CopyIcon size={14} aria-hidden="true" />}
                         </CrossFade>
                       }
                       onPress={() => {
@@ -445,7 +451,7 @@ export function PromptLibrary({ prompts, title = 'Prompt library', onUse, onCopy
                       {copied === p.id ? 'Copied' : 'Copy'}
                     </Button>
                     <span key={pulse} {...stylex.props(styles.inl, pulse > 0 && m3.thumbPop)}>
-                      <Button size="sm" aria-disabled={requireAll && missingOf(p) > 0 ? true : undefined} onPress={() => use(p)}>
+                      <Button size="sm" aria-disabled={requireAll && missingOf(p) > 0 ? true : undefined} xstyle={requireAll && missingOf(p) > 0 && styles.unmet} onPress={() => use(p)}>
                         {useLabel}
                       </Button>
                     </span>
@@ -457,7 +463,7 @@ export function PromptLibrary({ prompts, title = 'Prompt library', onUse, onCopy
         })}
       </ul>
       <span role="status" aria-live="polite" {...stylex.props(styles.sr)}>{live}</span>
-      {shown.length === 0 && <p {...stylex.props(aib.meta)} style={{ padding: 16, textAlign: 'center' }}>No prompts match “{q}”.</p>}
+      {shown.length === 0 && <p {...stylex.props(aib.meta, styles.sEmpty)}>{emptyText}</p>}
     </div>
   );
 }

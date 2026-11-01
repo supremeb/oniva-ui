@@ -1,8 +1,7 @@
 import * as stylex from '@stylexjs/stylex';
-import { ArrowRight, Star } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button as RacButton } from 'react-aria-components';
-import { CopyButton, LinkButton, accentNames, accentSwatches, type AccentName } from 'oniva-ui';
+import { CopyButton, LinkButton, accentNames, accentSwatches, type AccentName, ArrowRightIcon, StarIcon } from 'oniva-ui';
 import { accent } from '@oniva-tokens/accent.stylex';
 import { colors } from '@oniva-tokens/colors.stylex';
 import { font } from '@oniva-tokens/font.stylex';
@@ -196,7 +195,7 @@ export function Hero({ accent: current, onAccentChange, hex }: HeroProps) {
           <span>
             v{VERSION} · {counts.total} components · MIT
           </span>
-          <ArrowRight size={12} aria-hidden="true" />
+          <ArrowRightIcon size={12} aria-hidden="true" />
         </Link>
         <h1 id="hero-title" {...stylex.props(s.h1)}>
           <span {...stylex.props(s.sr)}>React design system for dashboards &amp; agent interfaces</span>
@@ -216,14 +215,14 @@ export function Hero({ accent: current, onAccentChange, hex }: HeroProps) {
           React Aria.
         </p>
         <div {...stylex.props(s.actions)}>
-          <LinkButton href="#/components" size="lg" variant="primary" endIcon={<ArrowRight size={16} />}>
+          <LinkButton href="#/components" size="lg" variant="primary" endIcon={<ArrowRightIcon size={16} />}>
             Browse components
           </LinkButton>
           <LinkButton
             href={SITE.github}
             size="lg"
             variant="secondary"
-            startIcon={<Star size={16} />}
+            startIcon={<StarIcon size={16} />}
             target="_blank"
             rel="noreferrer"
           >

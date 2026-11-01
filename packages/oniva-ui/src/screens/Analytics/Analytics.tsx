@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { CreditCard, RefreshCw, TrendingUp, Users } from 'lucide-react';
+import { CreditCardIcon, RefreshIcon, TrendingUpIcon, UsersIcon } from '../../icons/IconSet';
 import { useState, type CSSProperties, type Ref } from 'react';
 import { AreaChart } from '../../charts/AreaChart';
 import { BarList } from '../../charts/BarList';
@@ -125,7 +125,7 @@ export function AnalyticsScreen({
       headingLevel={headingLevel}
       onNavigate={onNavigate}
       actions={
-        <Button size="sm" variant="secondary" startIcon={<RefreshCw size={14} aria-hidden="true" {...stylex.props(styles.spin)} style={{ '--oniva-spin': `${run * 360}deg` } as CSSProperties} />} onPress={() => {
+        <Button size="sm" variant="secondary" startIcon={<RefreshIcon size={14} aria-hidden="true" {...stylex.props(styles.spin)} style={{ '--oniva-spin': `${run * 360}deg` } as CSSProperties} />} onPress={() => {
             setRun((n) => n + 1);
             onRefresh?.();
           }}>
@@ -135,10 +135,10 @@ export function AnalyticsScreen({
     >
       <div {...stylex.props(styles.wrap)}>
         <section aria-label="Key figures" {...stylex.props(styles.stats)}>
-          <div {...stylex.props(styles.cell, m8.rise)} style={step(0)}><StatCard key={run} label="Revenue" value={count(96400, money)} delta={8.4} deltaLabel="vs last period" icon={<TrendingUp size={16} />} trend={ORGANIC} /></div>
-          <div {...stylex.props(styles.cell, m8.rise)} style={step(1)}><StatCard key={run} label="Orders" value={count(2184)} delta={3.1} deltaLabel="vs last period" icon={<CreditCard size={16} />} trend={PAID} tone={2} /></div>
-          <div {...stylex.props(styles.cell, m8.rise)} style={step(2)}><StatCard key={run} label="New customers" value={count(612)} delta={12.7} deltaLabel="vs last period" icon={<Users size={16} />} trend={REFERRAL} tone={3} /></div>
-          <div {...stylex.props(styles.cell, m8.rise)} style={step(3)}><StatCard key={run} label="Refund rate" value={count(0.018, { style: 'percent', minimumFractionDigits: 1, maximumFractionDigits: 1 })} delta={-0.4} invertDelta deltaLabel="vs last period" icon={<RefreshCw size={16} />} trend={PAID.map((n) => 5000 - n)} tone={4} /></div>
+          <div {...stylex.props(styles.cell, m8.rise)} style={step(0)}><StatCard key={run} label="Revenue" value={count(96400, money)} delta={8.4} deltaLabel="vs last period" icon={<TrendingUpIcon size={16} />} trend={ORGANIC} /></div>
+          <div {...stylex.props(styles.cell, m8.rise)} style={step(1)}><StatCard key={run} label="Orders" value={count(2184)} delta={3.1} deltaLabel="vs last period" icon={<CreditCardIcon size={16} />} trend={PAID} tone={2} /></div>
+          <div {...stylex.props(styles.cell, m8.rise)} style={step(2)}><StatCard key={run} label="New customers" value={count(612)} delta={12.7} deltaLabel="vs last period" icon={<UsersIcon size={16} />} trend={REFERRAL} tone={3} /></div>
+          <div {...stylex.props(styles.cell, m8.rise)} style={step(3)}><StatCard key={run} label="Refund rate" value={count(0.018, { style: 'percent', minimumFractionDigits: 1, maximumFractionDigits: 1 })} delta={-0.4} invertDelta deltaLabel="vs last period" icon={<RefreshIcon size={16} />} trend={PAID.map((n) => 5000 - n)} tone={4} /></div>
         </section>
         <div key={`a${run}`} {...stylex.props(styles.row, m8.rise)} style={step(4)}>
           <KpiChart

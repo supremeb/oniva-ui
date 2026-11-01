@@ -1,6 +1,6 @@
 import * as stylex from '@stylexjs/stylex';
 import { CalendarDate, getLocalTimeZone } from '@internationalized/date';
-import { ArrowDownToLine, ArrowRight, BadgePercent, Plus, Repeat, X } from 'lucide-react';
+import { ArrowDownToLineIcon, ArrowRightIcon, BadgePercentIcon, PlusIcon, RepeatIcon, XIcon } from '../../icons/IconSet';
 import { useId, useMemo, useRef, useState, type ReactNode, type Ref } from 'react';
 import { Button as AriaButton } from 'react-aria-components';
 import { focus } from '../../internal/focus';
@@ -328,7 +328,7 @@ export function BillingSchedule({
           <span {...stylex.props(styles.subName)}>{value.phase || 'Phase'}</span>
           <span aria-hidden="true">·</span>
           <span>{fmt.date(new CalendarDate(sy, sm, sd).toDate(getLocalTimeZone()))}</span>
-          <ArrowRight size={14} aria-hidden="true" />
+          <ArrowRightIcon size={14} aria-hidden="true" />
           <span key={totals.endDate} {...stylex.props(styles.endDate)}>
             {endLabel}
           </span>
@@ -390,7 +390,7 @@ export function BillingSchedule({
                   </td>
                   <td {...stylex.props(styles.td)}>
                     <span {...stylex.props(styles.repeatCell)}>
-                      <Repeat size={16} aria-hidden="true" {...stylex.props(styles.repeatIcon)} />
+                      <RepeatIcon size={16} aria-hidden="true" {...stylex.props(styles.repeatIcon)} />
                       {l.repeat === 'once' ? 'Once' : `${REPEAT_LABEL[l.repeat]} × ${fmt.number(totals.occurrences[l.id] ?? 0)}`}
                     </span>
                   </td>
@@ -433,7 +433,7 @@ export function BillingSchedule({
                       onPress={() => update({ lines: value.lines.filter((x) => x.id !== l.id) })}
                       {...stylex.props(styles.remove, focus.ring)}
                     >
-                      <X size={14} aria-hidden="true" />
+                      <XIcon size={14} aria-hidden="true" />
                     </AriaButton>
                   </td>
                 </tr>
@@ -446,7 +446,7 @@ export function BillingSchedule({
       <div {...stylex.props(styles.bar)}>
         {catalog.length > 0 ? (
           <DropdownMenu>
-            <Button variant="secondary" size="sm" startIcon={<Plus size={14} aria-hidden="true" />}>
+            <Button variant="secondary" size="sm" startIcon={<PlusIcon size={14} aria-hidden="true" />}>
               Add product
             </Button>
             <DropdownMenuContent
@@ -468,12 +468,12 @@ export function BillingSchedule({
         )}
         <div {...stylex.props(styles.barEnd)}>
           {!showDiscount && (
-            <Button variant="secondary" size="sm" startIcon={<BadgePercent size={14} aria-hidden="true" />} onPress={() => setShowDiscount(true)}>
+            <Button variant="secondary" size="sm" startIcon={<BadgePercentIcon size={14} aria-hidden="true" />} onPress={() => setShowDiscount(true)}>
               Add discount
             </Button>
           )}
           {!showMinimum && (
-            <Button variant="secondary" size="sm" startIcon={<ArrowDownToLine size={14} aria-hidden="true" />} onPress={() => setShowMinimum(true)}>
+            <Button variant="secondary" size="sm" startIcon={<ArrowDownToLineIcon size={14} aria-hidden="true" />} onPress={() => setShowMinimum(true)}>
               Add minimum
             </Button>
           )}

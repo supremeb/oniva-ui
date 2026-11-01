@@ -1,5 +1,4 @@
-import { FileText, FolderOpen, Image } from 'lucide-react';
-import { Badge, List, ListItem } from 'oniva-ui';
+import { Badge, List, ListItem, FileTextIcon, FolderOpenIcon, ImageIcon } from 'oniva-ui';
 import type { DocPage } from '../types';
 
 type Mode = 'none' | 'single' | 'multiple';
@@ -15,11 +14,11 @@ const Demo = (p: { mode?: Mode; icons?: boolean; disabled?: boolean; empty?: boo
       renderEmptyState={() => <div style={{ padding: 20, textAlign: 'center', fontSize: 14, color: 'var(--oniva-color-text-muted)' }}>No recent files. Upload one to get started.</div>}
     >
       {p.empty ? [] : [
-        <ListItem key="q3" id="q3" icon={p.icons ? <FileText size={16} /> : undefined} description="Edited 2h ago" trailing={<Badge size="sm">2.4 MB</Badge>}>
+        <ListItem key="q3" id="q3" icon={p.icons ? <FileTextIcon size={16} /> : undefined} description="Edited 2h ago" trailing={<Badge size="sm">2.4 MB</Badge>}>
           {p.long ? 'Q3 revenue report with regional breakdown and forecast (final v7).pdf' : 'Q3 revenue report.pdf'}
         </ListItem>,
-        <ListItem key="brand" id="brand" icon={p.icons ? <Image size={16} /> : undefined} description="Edited yesterday" trailing="8.1 MB">Brand assets.zip</ListItem>,
-        <ListItem key="contracts" id="contracts" icon={p.icons ? <FolderOpen size={16} /> : undefined} description="12 items">Contracts</ListItem>,
+        <ListItem key="brand" id="brand" icon={p.icons ? <ImageIcon size={16} /> : undefined} description="Edited yesterday" trailing="8.1 MB">Brand assets.zip</ListItem>,
+        <ListItem key="contracts" id="contracts" icon={p.icons ? <FolderOpenIcon size={16} /> : undefined} description="12 items">Contracts</ListItem>,
       ]}
     </List>
   </div>
@@ -62,7 +61,7 @@ const page: DocPage = {
     ],
     initial: { mode: 'none', icons: true, disabled: false, empty: false },
     render: (p, onEvent) => <Demo key={`${p.mode}${p.empty}`} mode={p.mode as Mode} icons={Boolean(p.icons)} disabled={Boolean(p.disabled)} empty={Boolean(p.empty)} onEvent={onEvent} />,
-    code: (p) => `<List aria-label="Recent files"${p.mode !== 'none' ? ` selectionMode="${p.mode}"` : ''} onAction={(key) => open(key)}>\n  <ListItem id="q3"${p.icons ? ' icon={<FileText size={16} />}' : ''} description="Edited 2h ago" trailing="2.4 MB">Q3 revenue report.pdf</ListItem>${p.disabled ? '\n  <ListItem id="brand" isDisabled>Brand assets.zip</ListItem>' : ''}\n</List>`,
+    code: (p) => `<List aria-label="Recent files"${p.mode !== 'none' ? ` selectionMode="${p.mode}"` : ''} onAction={(key) => open(key)}>\n  <ListItem id="q3"${p.icons ? ' icon={<FileTextIcon size={16} />}' : ''} description="Edited 2h ago" trailing="2.4 MB">Q3 revenue report.pdf</ListItem>${p.disabled ? '\n  <ListItem id="brand" isDisabled>Brand assets.zip</ListItem>' : ''}\n</List>`,
   },
   states: [
     { name: 'Default', description: 'Plain rows with description and trailing text.', Render: () => <Demo icons /> },

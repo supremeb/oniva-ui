@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { ArrowUpDown, Filter, LayoutGrid, List, Lock, Plus, Users } from 'lucide-react';
+import { ArrowUpDownIcon, FilterIcon, LayoutGridIcon, ListIcon, LockIcon, PlusIcon, UsersIcon } from '../../icons/IconSet';
 import { useMemo, useRef, useState, type Ref } from 'react';
 import {
   FOLDERS,
@@ -172,7 +172,7 @@ export function Folders({
             <div {...stylex.props(styles.tools)}>
               <DropdownMenu>
                 <Button variant="secondary" size="sm" isIconOnly aria-label="Sort folders">
-                  <ArrowUpDown size={14} />
+                  <ArrowUpDownIcon size={14} />
                 </Button>
                 <DropdownMenuContent
                   aria-label="Sort folders"
@@ -200,10 +200,10 @@ export function Folders({
                 }}
               >
                 <ToggleButton id="grid" aria-label="Grid view">
-                  <LayoutGrid size={14} />
+                  <LayoutGridIcon size={14} />
                 </ToggleButton>
                 <ToggleButton id="list" aria-label="List view">
-                  <List size={14} />
+                  <ListIcon size={14} />
                 </ToggleButton>
               </ToggleButtonGroup>
               <SearchField
@@ -217,7 +217,7 @@ export function Folders({
               />
               <Button
                 size="sm"
-                startIcon={<Plus size={14} />}
+                startIcon={<PlusIcon size={14} />}
                 onPress={onCreateFolder}
               >
                 Create folder
@@ -274,7 +274,7 @@ export function Folders({
             </SegmentedControl>
             <div {...stylex.props(styles.tools)}>
               <DropdownMenu>
-                <Button variant="secondary" size="sm" startIcon={<Filter size={14} />}>
+                <Button variant="secondary" size="sm" startIcon={<FilterIcon size={14} />}>
                   {tType === 'all' ? 'Type' : KIND_LABEL[tType]}
                 </Button>
                 <DropdownMenuContent
@@ -304,7 +304,7 @@ export function Folders({
               <Button
                 size="sm"
                 variant="secondary"
-                startIcon={<Plus size={14} />}
+                startIcon={<PlusIcon size={14} />}
                 onPress={onAddTemplate}
               >
                 Add template
@@ -334,7 +334,7 @@ export function Folders({
                     extra={
                       <>
                         {' · '}
-                        {t.shared ? <Users size={11} aria-hidden="true" /> : <Lock size={11} aria-hidden="true" />}
+                        {t.shared ? <UsersIcon size={11} aria-hidden="true" /> : <LockIcon size={11} aria-hidden="true" />}
                         {t.shared ? 'Shared' : 'Private'}
                       </>
                     }

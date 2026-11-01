@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { Database, FileText, Kanban, Mail, MessageSquare, Layers, Contact } from 'lucide-react';
+import { DatabaseIcon, FileTextIcon, KanbanIcon, MailIcon, MessageSquareIcon, LayersIcon, ContactIcon } from '../../icons/IconSet';
 import { useId, useRef, useState } from 'react';
 import { ToggleButton } from 'react-aria-components';
 import { accent } from '../../tokens/accent.stylex';
@@ -223,16 +223,16 @@ export interface IntegrationBeamProps extends IllustrationProps {
   statusLabels?: { syncing: string; idle: string };
 }
 
-const ic = (I: typeof Mail) => <I {...stylex.props(fillSvg.svg)} />;
+const ic = (I: typeof MailIcon) => <I {...stylex.props(fillSvg.svg)} />;
 const LEFT: IllustrationItem[] = [
-  { name: 'Mail', icon: ic(Mail) },
-  { name: 'Docs', icon: ic(FileText) },
-  { name: 'Chat', icon: ic(MessageSquare) },
+  { name: 'Mail', icon: ic(MailIcon) },
+  { name: 'Docs', icon: ic(FileTextIcon) },
+  { name: 'Chat', icon: ic(MessageSquareIcon) },
 ];
 const RIGHT: IllustrationItem[] = [
-  { name: 'CRM', icon: ic(Contact) },
-  { name: 'Boards', icon: ic(Kanban) },
-  { name: 'Warehouse', icon: ic(Database) },
+  { name: 'CRM', icon: ic(ContactIcon) },
+  { name: 'Boards', icon: ic(KanbanIcon) },
+  { name: 'Warehouse', icon: ic(DatabaseIcon) },
 ];
 
 function BeamBody({
@@ -402,7 +402,7 @@ function BeamBody({
 export function IntegrationBeam({
   left = LEFT,
   right = RIGHT,
-  center = { name: 'Oniva', icon: ic(Layers) },
+  center = { name: 'Oniva', icon: ic(LayersIcon) },
   statusLabels,
   label,
   ...rest

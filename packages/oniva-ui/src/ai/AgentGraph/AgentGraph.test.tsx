@@ -50,6 +50,34 @@ describe('AgentGraph', () => {
     vi.unstubAllGlobals();
   });
 
+  it('says "1 agent" / "1 tool" and pluralises the rest', () => {
+    const { rerender } = render(<AgentGraph nodes={[nodes[0]!, nodes[2]!]} now={NOW} />);
+    expect(screen.getByText('agent')).toBeInTheDocument();
+    expect(screen.getByText('tool')).toBeInTheDocument();
+    rerender(<AgentGraph nodes={nodes} now={NOW} />);
+    expect(screen.getByText('agents')).toBeInTheDocument();
+  });
+
+  it('explains an empty graph', () => {
+    render(<AgentGraph nodes={[]} now={NOW} />);
+    expect(screen.getByText('No agents running')).toBeInTheDocument();
+  });
+
+  it('marks finished agents and gives truncated nodes a tooltip', () => {
+    render(<AgentGraph nodes={[{ id: 'a', kind: 'agent', name: 'Analyst', detail: 'Lumen Fast', status: 'done' }]} now={NOW} />);
+    const btn = screen.getByRole('button', { name: /^Analyst, agent, done/ });
+    expect(btn).toHaveTextContent('Done');
+    expect(btn).toHaveAttribute('title', 'Analyst · Lumen Fast');
+  });
+
+  it('grows taller when crowded', () => {
+    const many: GraphNode[] = Array.from({ length: 11 }, (_, i) => ({ id: `n${i}`, kind: i < 5 ? 'agent' : 'tool', name: `Node ${i}` }));
+    const { container: a } = render(<AgentGraph nodes={nodes} now={NOW} />);
+    const { container: b } = render(<AgentGraph nodes={many} now={NOW} />);
+    const h = (c: HTMLElement) => parseFloat(c.querySelector<HTMLElement>('[style*="--gh"]')!.style.getPropertyValue('--gh'));
+    expect(h(b)).toBeGreaterThan(h(a));
+  });
+
   it('forwards ref/className and passes axe', async () => {
     const ref = createRef<HTMLDivElement>();
     const { container } = render(<AgentGraph ref={ref} className="x" nodes={nodes} calls={calls} now={NOW} />);

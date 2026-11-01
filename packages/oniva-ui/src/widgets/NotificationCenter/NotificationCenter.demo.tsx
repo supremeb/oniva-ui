@@ -1,4 +1,4 @@
-import { CreditCard, ShieldCheck } from 'lucide-react';
+import { CreditCardIcon, ShieldCheckIcon } from '../../icons/IconSet';
 import type { DemoModule } from '../../internal/demo';
 import { NotificationCenter, type NotificationItem } from './NotificationCenter';
 
@@ -13,7 +13,7 @@ const items: NotificationItem[] = [
   },
   {
     id: 'n2',
-    icon: <CreditCard size={16} />,
+    icon: <CreditCardIcon size={16} />,
     title: 'Invoice INV-2041 paid',
     body: 'Northwind Traders sent $4,820.00.',
     time: '2h ago',
@@ -27,7 +27,7 @@ const items: NotificationItem[] = [
   },
   {
     id: 'n4',
-    icon: <ShieldCheck size={16} />,
+    icon: <ShieldCheckIcon size={16} />,
     title: 'Two-factor enabled',
     body: 'Your account is now protected with an authenticator app.',
     time: 'Yesterday',

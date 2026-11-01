@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { BarChart3, Check, Download, LineChart as LineIcon } from 'lucide-react';
+import { BarChartIcon, CheckIcon, DownloadIcon, LineChartIcon as LineIcon } from '../../icons/IconSet';
 import { useMemo, useState } from 'react';
 import type { HTMLAttributes, Ref } from 'react';
 import { Tab, TabList, TabPanel, Tabs } from 'react-aria-components';
@@ -170,7 +170,7 @@ export function MetricsDashboard({ title = 'Sales', site = 'Northwind Store', de
             <Button
               size="sm"
               variant="secondary"
-              startIcon={done ? <Check size={14} aria-hidden="true" /> : <Download size={14} aria-hidden="true" />}
+              startIcon={done ? <CheckIcon size={14} aria-hidden="true" /> : <DownloadIcon size={14} aria-hidden="true" />}
               onPress={() => {
                 onExport?.(range, metric);
                 setDone(true);
@@ -202,7 +202,7 @@ export function MetricsDashboard({ title = 'Sales', site = 'Northwind Store', de
               <ToggleButton size="xs" variant="secondary" isSelected={kind === 'line'} onChange={() => setKind('line')} startIcon={<LineIcon size={14} aria-hidden="true" />}>
                 Line
               </ToggleButton>
-              <ToggleButton size="xs" variant="secondary" isSelected={kind === 'bar'} onChange={() => setKind('bar')} startIcon={<BarChart3 size={14} aria-hidden="true" />}>
+              <ToggleButton size="xs" variant="secondary" isSelected={kind === 'bar'} onChange={() => setKind('bar')} startIcon={<BarChartIcon size={14} aria-hidden="true" />}>
                 Bars
               </ToggleButton>
             </div>

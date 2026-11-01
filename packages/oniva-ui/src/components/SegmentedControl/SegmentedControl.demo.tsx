@@ -1,4 +1,4 @@
-import { CalendarDays, Columns3, Inbox, LayoutGrid, List, Star } from 'lucide-react';
+import { CalendarDaysIcon, ColumnsIcon, InboxIcon, LayoutGridIcon, ListIcon, StarIcon } from '../../icons/IconSet';
 import { Badge } from '../Badge';
 import type { DemoModule } from '../../internal/demo';
 import { SegmentedControl, SegmentedControlItem } from './SegmentedControl';
@@ -61,13 +61,13 @@ const demo: DemoModule = {
           <div style={section}>
             <span style={lbl}>Layout</span>
             <SegmentedControl size="sm" aria-label="Layout" defaultValue="board">
-              <SegmentedControlItem value="list" icon={<List size={14} />}>
+              <SegmentedControlItem value="list" icon={<ListIcon size={14} />}>
                 List
               </SegmentedControlItem>
-              <SegmentedControlItem value="board" icon={<Columns3 size={14} />}>
+              <SegmentedControlItem value="board" icon={<ColumnsIcon size={14} />}>
                 Board
               </SegmentedControlItem>
-              <SegmentedControlItem value="calendar" icon={<CalendarDays size={14} />}>
+              <SegmentedControlItem value="calendar" icon={<CalendarDaysIcon size={14} />}>
                 Calendar
               </SegmentedControlItem>
             </SegmentedControl>
@@ -110,10 +110,10 @@ const demo: DemoModule = {
         <div style={{ ...col, alignItems: 'stretch' }}>
           <SegmentedControl size="sm" aria-label="Layout" defaultValue="list">
             <SegmentedControlItem value="list">
-              <List size={14} /> List
+              <ListIcon size={14} /> List
             </SegmentedControlItem>
             <SegmentedControlItem value="grid">
-              <LayoutGrid size={14} /> Grid
+              <LayoutGridIcon size={14} /> Grid
             </SegmentedControlItem>
           </SegmentedControl>
           <SegmentedControl fullWidth aria-label="Billing" defaultValue="monthly">
@@ -126,17 +126,17 @@ const demo: DemoModule = {
     {
       name: 'Underline with counts',
       code: `<SegmentedControl variant="underline" aria-label="Inbox view" defaultValue="all">
-  <SegmentedControlItem value="all" icon={<Inbox size={14} />} count={128}>All</SegmentedControlItem>
-  <SegmentedControlItem value="starred" icon={<Star size={14} />} count={9}>Starred</SegmentedControlItem>
+  <SegmentedControlItem value="all" icon={<InboxIcon size={14} />} count={128}>All</SegmentedControlItem>
+  <SegmentedControlItem value="starred" icon={<StarIcon size={14} />} count={9}>Starred</SegmentedControlItem>
   <SegmentedControlItem value="archived">Archived</SegmentedControlItem>
 </SegmentedControl>`,
       Component: () => (
         <div style={{ ...col, alignItems: 'stretch' }}>
           <SegmentedControl variant="underline" aria-label="Inbox view" defaultValue="all">
-            <SegmentedControlItem value="all" icon={<Inbox size={14} />} count={128}>
+            <SegmentedControlItem value="all" icon={<InboxIcon size={14} />} count={128}>
               All
             </SegmentedControlItem>
-            <SegmentedControlItem value="starred" icon={<Star size={14} />} count={9}>
+            <SegmentedControlItem value="starred" icon={<StarIcon size={14} />} count={9}>
               Starred
             </SegmentedControlItem>
             <SegmentedControlItem value="archived">Archived</SegmentedControlItem>

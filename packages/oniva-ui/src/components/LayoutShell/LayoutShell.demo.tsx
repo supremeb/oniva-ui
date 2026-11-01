@@ -1,4 +1,4 @@
-import { Calendar, Columns3, Home, Landmark } from 'lucide-react';
+import { CalendarIcon, ColumnsIcon, HomeIcon, LandmarkIcon } from '../../icons/IconSet';
 import * as stylex from '@stylexjs/stylex';
 import type { DemoModule } from '../../internal/demo';
 import { demoStyles } from '../../internal/nav-demo';
@@ -47,16 +47,16 @@ const demo: DemoModule = {
                 <SidebarHeader name="Acme Finance" />
                 <SidebarContent>
                   <SidebarSection>
-                    <SidebarItem href="#" icon={<Home size={18} />} isActive badge="12">
+                    <SidebarItem href="#" icon={<HomeIcon size={18} />} isActive badge="12">
                       Overview
                     </SidebarItem>
-                    <SidebarItem href="#" icon={<Landmark size={18} />}>
+                    <SidebarItem href="#" icon={<LandmarkIcon size={18} />}>
                       Accounts
                     </SidebarItem>
-                    <SidebarItem href="#" icon={<Columns3 size={18} />}>
+                    <SidebarItem href="#" icon={<ColumnsIcon size={18} />}>
                       Pipeline
                     </SidebarItem>
-                    <SidebarItem href="#" icon={<Calendar size={18} />}>
+                    <SidebarItem href="#" icon={<CalendarIcon size={18} />}>
                       Schedule
                     </SidebarItem>
                   </SidebarSection>

@@ -1,8 +1,10 @@
 import * as stylex from '@stylexjs/stylex';
-import { Check, ShieldQuestion, X } from 'lucide-react';
+import { CheckIcon, ShieldQuestionIcon, XIcon } from '../../icons/IconSet';
 import { useEffect, useId, useRef, useState, type HTMLAttributes, type KeyboardEvent, type ReactNode, type Ref } from 'react';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
+import { radius } from '../../tokens/radius.stylex';
+import { focus } from '../../internal/focus';
 import { aiStyles } from '../../internal/ai-styles';
 import { media } from '../../tokens/media.stylex';
 import { motion } from '../../tokens/motion.stylex';
@@ -32,10 +34,13 @@ const styles = stylex.create({
     transitionTimingFunction: motion['--oniva-motion-ease-out'],
   },
   root: { overflow: 'hidden' },
+  icon: { flexShrink: 0 },
+  noShrink: { flexShrink: 0, whiteSpace: 'nowrap' },
+  row: { display: 'contents' },
   head: { alignItems: 'center', display: 'flex', gap: 10, paddingBlock: 10, paddingInline: 12 },
   titles: { display: 'flex', flexDirection: 'column', flexGrow: 1, gap: 2, minWidth: 0 },
-  title: { color: colors['--oniva-color-text'], fontSize: font['--oniva-font-size-13'], fontWeight: font['--oniva-font-weight-medium'] },
-  tool: { fontFamily: font['--oniva-font-mono'] },
+  title: { color: colors['--oniva-color-text'], fontSize: font['--oniva-font-size-13'], fontWeight: font['--oniva-font-weight-medium'], overflowWrap: 'anywhere' },
+  tool: { fontFamily: font['--oniva-font-mono'], overflowWrap: 'anywhere' },
   status: { color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-12'] },
   ok: { color: colors['--oniva-color-success-fg'] },
   no: { color: colors['--oniva-color-danger-fg'] },
@@ -51,7 +56,7 @@ const styles = stylex.create({
   },
   args: {
     backgroundColor: colors['--oniva-color-surface-inset'],
-    borderRadius: 8,
+    borderRadius: radius['--oniva-radius-md'],
     color: colors['--oniva-color-text'],
     fontFamily: font['--oniva-font-mono'],
     fontSize: font['--oniva-font-size-12'],
@@ -66,7 +71,7 @@ const styles = stylex.create({
   details: { columnGap: 12, display: 'grid', fontSize: font['--oniva-font-size-12'], gridTemplateColumns: 'minmax(60px, auto) minmax(0, 1fr)', margin: 0, rowGap: 4 },
   dk: { color: colors['--oniva-color-text-muted'], margin: 0 },
   dv: { color: colors['--oniva-color-text'], margin: 0, overflowWrap: 'anywhere' },
-  rowRoot: { borderRadius: 14 },
+  rowRoot: { borderRadius: radius['--oniva-radius-xl'] },
   rowHead: { paddingBlock: 8, paddingInline: 10 },
   rowIcon: { alignItems: 'center', backgroundColor: colors['--oniva-color-surface-inset'], borderRadius: 999, color: colors['--oniva-color-text-muted'], display: 'inline-flex', flexShrink: 0, height: 28, justifyContent: 'center', width: 28 },
   rowTitle: { fontSize: font['--oniva-font-size-14'] },
@@ -243,15 +248,15 @@ export function ToolApproval({
         {...mergeSx(sx, className)}
       >
         <div {...stylex.props(styles.head, isRow && styles.rowHead)}>
-          {isRow ? <span {...stylex.props(styles.rowIcon)}>{st === 'approved' ? <Check key="ok" size={14} aria-hidden="true" {...stylex.props(styles.ok, styles.draw)} /> : st === 'denied' ? <X key="no" size={14} aria-hidden="true" {...stylex.props(styles.no, styles.draw)} /> : <ShieldQuestion size={14} aria-hidden="true" />}</span> : st === 'approved' ? <Check key="ok" size={16} aria-hidden="true" {...stylex.props(styles.ok, styles.draw)} /> : st === 'denied' ? <X key="no" size={16} aria-hidden="true" {...stylex.props(styles.no, styles.draw)} /> : <ShieldQuestion size={16} aria-hidden="true" />}
+          {isRow ? <span {...stylex.props(styles.rowIcon)}>{st === 'approved' ? <CheckIcon key="ok" size={14} aria-hidden="true" {...stylex.props(styles.icon, styles.ok, styles.draw)} /> : st === 'denied' ? <XIcon key="no" size={14} aria-hidden="true" {...stylex.props(styles.icon, styles.no, styles.draw)} /> : <ShieldQuestionIcon size={14} aria-hidden="true" {...stylex.props(styles.icon)} />}</span> : st === 'approved' ? <CheckIcon key="ok" size={16} aria-hidden="true" {...stylex.props(styles.icon, styles.ok, styles.draw)} /> : st === 'denied' ? <XIcon key="no" size={16} aria-hidden="true" {...stylex.props(styles.icon, styles.no, styles.draw)} /> : <ShieldQuestionIcon size={16} aria-hidden="true" {...stylex.props(styles.icon)} />}
           <div {...stylex.props(styles.titles)}>
             <span {...stylex.props(styles.title, isRow && styles.rowTitle)}>{description ?? 'Allow this tool to run?'}</span>
             {!isRow && <span {...stylex.props(styles.status, styles.tool)}>{toolName}</span>}
           </div>
           {risk && st === 'pending' && (
-            <span {...stylex.props(w2s.tag, risk === 'high' ? w2s.tagDanger : risk === 'medium' ? w2s.tagWarning : w2s.tagNeutral)}>{riskLabel[risk]}</span>
+            <span {...stylex.props(w2s.tag, styles.noShrink, risk === 'high' ? w2s.tagDanger : risk === 'medium' ? w2s.tagWarning : w2s.tagNeutral)}>{riskLabel[risk]}</span>
           )}
-          <span role="status" key={st} data-state="entering" {...stylex.props(styles.status, enterExit.blur, st === 'approved' && styles.ok, st === 'denied' && styles.no)}>
+          <span role="status" key={st} data-state="entering" {...stylex.props(styles.status, styles.noShrink, enterExit.blur, st === 'approved' && styles.ok, st === 'denied' && styles.no)}>
             {isRow && st !== 'pending' ? `${label} · just now` : isRow ? '' : label}
           </span>
           {isRow && st === 'pending' && (
@@ -267,14 +272,14 @@ export function ToolApproval({
             {details && details.length > 0 && (
               <dl {...stylex.props(styles.details)}>
                 {details.map((d) => (
-                  <div key={d.label} style={{ display: 'contents' }}>
+                  <div key={d.label} {...stylex.props(styles.row)}>
                     <dt {...stylex.props(styles.dk)}>{d.label}</dt>
                     <dd {...stylex.props(styles.dv)}>{d.value}</dd>
                   </div>
                 ))}
               </dl>
             )}
-            {args !== undefined && <pre tabIndex={0} aria-label="Arguments" {...stylex.props(styles.args)}>{JSON.stringify(args, null, 2)}</pre>}
+            {args !== undefined && <pre tabIndex={0} aria-label="Arguments" {...stylex.props(styles.args, focus.inset)}>{JSON.stringify(args, null, 2)}</pre>}
             {!isRow && <div {...stylex.props(styles.tray)}>
               <Button size="sm" aria-keyshortcuts="Control+Enter Meta+Enter" onPress={() => decide('approved')}>
                 Approve {shortcuts && <Kbd size="sm" aria-hidden="true" xstyle={styles.hint}>⌘↵</Kbd>}

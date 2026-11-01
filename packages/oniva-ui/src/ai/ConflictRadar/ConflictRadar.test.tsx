@@ -46,6 +46,26 @@ describe('ConflictRadar', () => {
     expect(screen.getByRole('button', { name: /Merge/ })).toBeDisabled();
   });
 
+  it('says "line" for single-line edits and marks the current conflict file', () => {
+    render(<ConflictRadar agents={agents} files={[{ path: 'src/version.ts', edits: [{ agentId: 'a', lines: [3, 3] }, { agentId: 'b', lines: [3, 3] }] }]} />);
+    expect(screen.getAllByText('Line 3')).toHaveLength(2);
+    expect(screen.getAllByText('Changes line 3')).toHaveLength(2);
+    expect(screen.getByRole('button', { name: /version\.ts/ })).toHaveAttribute('aria-pressed', 'true');
+  });
+
+  it('shows an empty row and keeps Merge disabled when no file has edits', () => {
+    render(<ConflictRadar agents={agents} files={[]} />);
+    expect(screen.getByRole('cell', { name: 'No files changed yet' })).toBeInTheDocument();
+    expect(screen.getAllByRole('status').some((el) => el.textContent === 'No changes yet')).toBe(true);
+    expect(screen.getByRole('button', { name: /Merge/ })).toBeDisabled();
+  });
+
+  it('puts the full path on the file cell and announces the status chip as a status', () => {
+    render(<ConflictRadar agents={agents} files={files} />);
+    expect(screen.getByRole('rowheader', { name: /cart\.ts/ })).toHaveAttribute('title', 'src/cart.ts');
+    expect(screen.getAllByRole('status').some((el) => /conflict to settle/.test(el.textContent ?? ''))).toBe(true);
+  });
+
   it('forwards ref and className', () => {
     const ref = createRef<HTMLDivElement>();
     render(<ConflictRadar agents={agents} files={files} ref={ref} className="x" />);

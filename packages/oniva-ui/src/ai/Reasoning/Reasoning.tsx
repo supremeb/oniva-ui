@@ -1,6 +1,6 @@
 import * as stylex from '@stylexjs/stylex';
-import { Brain, ChevronRight } from 'lucide-react';
-import { useEffect, useId, useRef, useState, type HTMLAttributes, type ReactNode, type Ref } from 'react';
+import { BrainIcon, ChevronRightIcon } from '../../icons/IconSet';
+import { Children, useEffect, useId, useRef, useState, type HTMLAttributes, type ReactNode, type Ref } from 'react';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 import { aiStyles } from '../../internal/ai-styles';
@@ -11,7 +11,7 @@ import { AnimatedHeight } from '../../motion/AnimatedHeight';
 import { TextShimmer } from '../TextShimmer';
 
 const styles = stylex.create({
-  root: { display: 'flex', flexDirection: 'column', fontFamily: font['--oniva-font-sans'] },
+  root: { display: 'flex', flexDirection: 'column', fontFamily: font['--oniva-font-sans'], position: 'relative' },
   trigger: {
     alignSelf: 'flex-start',
     color: colors['--oniva-color-text-muted'],
@@ -30,8 +30,20 @@ const styles = stylex.create({
     marginBlockStart: 4,
     marginInlineStart: 7,
     paddingBlock: 2,
+    overflowWrap: 'anywhere',
     paddingInlineStart: 14,
     whiteSpace: 'pre-wrap',
+  },
+  srOnly: {
+    borderWidth: 0,
+    clipPath: 'inset(50%)',
+    height: 1,
+    margin: -1,
+    overflow: 'hidden',
+    padding: 0,
+    position: 'absolute',
+    whiteSpace: 'nowrap',
+    width: 1,
   },
 });
 
@@ -64,12 +76,16 @@ export function Reasoning({
   const touched = useRef(false);
   const measured = useElapsed(isStreaming);
   const was = useRef(isStreaming);
+  const [streamed, setStreamed] = useState(isStreaming);
   const uid = useId();
+  const triggerId = `${uid}-trigger`;
+  const hasBody = Children.toArray(children).some((c) => c !== '');
 
   useEffect(() => {
     if (isStreaming) {
       touched.current = false;
       setOpen(true);
+      setStreamed(true);
       was.current = true;
       return;
     }
@@ -89,10 +105,12 @@ export function Reasoning({
   ) : (
     'Thought for a few seconds'
   );
+  const doneLabel = secs > 0 ? `Thought for ${formatDuration(secs)}` : 'Thought for a few seconds';
   const sx = stylex.props(styles.root, xstyle);
   return (
     <div {...rest} ref={ref} {...mergeSx(sx, className)}>
       <button
+        id={triggerId}
         type="button"
         aria-expanded={open}
         aria-controls={uid}
@@ -102,12 +120,15 @@ export function Reasoning({
         }}
         {...stylex.props(aiStyles.triggerReset, styles.trigger)}
       >
-        <Brain size={14} aria-hidden="true" />
+        <BrainIcon size={14} aria-hidden="true" />
         <span>{label}</span>
-        <ChevronRight size={14} aria-hidden="true" {...stylex.props(aiStyles.chevron, open && aiStyles.chevronOpen)} />
+        <ChevronRightIcon size={14} aria-hidden="true" {...stylex.props(aiStyles.chevron, open && aiStyles.chevronOpen)} />
       </button>
-      <AnimatedHeight isOpen={open} id={uid}>
-        <div {...stylex.props(styles.body)}>{children}</div>
+      <span role="status" {...stylex.props(styles.srOnly)}>
+        {streamed && !isStreaming ? doneLabel : ''}
+      </span>
+      <AnimatedHeight isOpen={open} id={uid} role="region" aria-labelledby={triggerId}>
+        {hasBody ? <div {...stylex.props(styles.body)}>{children}</div> : null}
       </AnimatedHeight>
     </div>
   );

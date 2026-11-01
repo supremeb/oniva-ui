@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { Check, ChevronDown } from 'lucide-react';
+import { CheckIcon, ChevronDownIcon } from '../icons/IconSet';
 import { useEffect, useId, useLayoutEffect, useRef, useState, type CSSProperties, type KeyboardEvent } from 'react';
 import { colors } from '../tokens/colors.stylex';
 import { font } from '../tokens/font.stylex';
@@ -259,7 +259,7 @@ export function RegionSwitcher({
         {...stylex.props(styles.trigger, focus.ring)}
       >
         <span>{options[selected]!.name}</span>
-        <ChevronDown aria-hidden="true" {...stylex.props(styles.chevron, open && styles.chevronOpen)} />
+        <ChevronDownIcon aria-hidden="true" {...stylex.props(styles.chevron, open && styles.chevronOpen)} />
       </button>
       <div
         style={vars}
@@ -300,7 +300,7 @@ export function RegionSwitcher({
               {...stylex.props(styles.option, !open && styles.optionClosed)}
             >
               <span {...stylex.props(styles.name)}>{o.name}</span>
-              <Check aria-hidden="true" {...stylex.props(styles.check, i === selected && styles.checkOn)} />
+              <CheckIcon aria-hidden="true" {...stylex.props(styles.check, i === selected && styles.checkOn)} />
             </div>
           ))}
         </div>

@@ -1,5 +1,5 @@
 import type * as stylex from '@stylexjs/stylex';
-import { ArrowDownRight, ArrowRight, ArrowUpRight } from 'lucide-react';
+import { ArrowDownRightIcon, ArrowRightIcon, ArrowUpRightIcon } from '../../icons/IconSet';
 import type { Ref } from 'react';
 import { Badge, type BadgeProps } from '../../components/Badge';
 
@@ -28,7 +28,7 @@ export function DeltaBadge({
   const flat = Math.abs(value) < 10 ** -digits / 2;
   const good = invert ? value < 0 : value > 0;
   const variant = flat ? 'neutral' : good ? 'success' : 'danger';
-  const Icon = flat ? ArrowRight : value > 0 ? ArrowUpRight : ArrowDownRight;
+  const Icon = flat ? ArrowRightIcon : value > 0 ? ArrowUpRightIcon : ArrowDownRightIcon;
   const text = `${value > 0 ? '+' : value < 0 ? '−' : ''}${Math.abs(value).toFixed(digits)}${suffix}`;
   return (
     <Badge variant={variant} shape="pill" xstyle={xstyle} {...rest}>

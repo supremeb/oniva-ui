@@ -1,5 +1,4 @@
-import { AlertTriangle, CheckCircle2, Info, Loader2, XCircle } from 'lucide-react';
-import { Button } from 'oniva-ui';
+import { Button, TriangleAlertIcon, CircleCheckIcon, InfoIcon, LoaderIcon, CircleXIcon } from 'oniva-ui';
 import type { DocPage } from '../types';
 
 // Toasts render in a fixed live region. The stage draws the same toast (12px radius, 12px padding, 10px gap,
@@ -7,11 +6,11 @@ import type { DocPage } from '../types';
 type V = 'default' | 'success' | 'warning' | 'danger' | 'info' | 'loading';
 const icons: Record<V, React.ReactNode> = {
   default: null,
-  success: <CheckCircle2 size={20} color="var(--oniva-color-success-solid)" />,
-  warning: <AlertTriangle size={20} color="var(--oniva-color-warning-solid)" />,
-  danger: <XCircle size={20} color="var(--oniva-color-danger-solid)" />,
-  info: <Info size={20} color="var(--oniva-color-info-fg)" />,
-  loading: <Loader2 size={20} />,
+  success: <CircleCheckIcon size={20} color="var(--oniva-color-success-solid)" />,
+  warning: <TriangleAlertIcon size={20} color="var(--oniva-color-warning-solid)" />,
+  danger: <CircleXIcon size={20} color="var(--oniva-color-danger-solid)" />,
+  info: <InfoIcon size={20} color="var(--oniva-color-info-fg)" />,
+  loading: <LoaderIcon size={20} />,
 };
 const T = ({ variant = 'success', title = 'Invoice sent', description = 'INV-1042 went to maya@northwind.co.', action }: { variant?: V; title?: string; description?: string; action?: string }) => (
   <div role="status" style={{ alignItems: 'flex-start', background: 'var(--oniva-color-surface)', border: '1px solid var(--oniva-color-border)', borderRadius: 12, boxShadow: 'var(--oniva-shadow-dropdown)', boxSizing: 'border-box', display: 'flex', gap: 10, padding: 12, width: 360 }}>

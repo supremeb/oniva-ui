@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { AlertCircle, Check, ChevronDown, Clock, RotateCcw, Wrench } from 'lucide-react';
+import { CircleAlertIcon, CheckIcon, ChevronDownIcon, ClockIcon, RotateCcwIcon, WrenchIcon } from '../../icons/IconSet';
 import { Children, isValidElement, useEffect, useRef, useState, type ReactElement, type ReactNode, type Ref } from 'react';
 import { Button as AriaButton, Disclosure, DisclosurePanel, Heading, type DisclosureProps } from 'react-aria-components';
 import { colors } from '../../tokens/colors.stylex';
@@ -46,7 +46,7 @@ const styles = stylex.create({
   },
   root: { overflow: 'hidden' },
   trigger: { paddingBlock: 12, paddingInline: 16, gap: 10 },
-  leadIcon: { alignItems: 'center', color: colors['--oniva-color-icon-muted'], display: 'inline-flex', flexShrink: 0 },
+  leadIcon: { alignItems: 'center', color: colors['--oniva-color-icon-muted'], display: 'inline-flex', flexShrink: 0, justifyContent: 'center', minWidth: 16 },
   flip: { transform: 'rotate(180deg)' },
   okDot: { alignItems: 'center', backgroundColor: colors['--oniva-color-accent-text'], borderRadius: '50%', color: colors['--oniva-color-surface-inner'], display: 'inline-flex', height: 14, justifyContent: 'center', width: 14 },
   statusText: { alignItems: 'center', color: colors['--oniva-color-text-muted'], display: 'inline-flex', fontSize: font['--oniva-font-size-12'], fontVariantNumeric: 'tabular-nums', gap: 6, flexShrink: 0 },
@@ -56,6 +56,10 @@ const styles = stylex.create({
     fontFamily: font['--oniva-font-mono'],
     fontSize: font['--oniva-font-size-13'],
     flexShrink: 0,
+    maxWidth: '60%',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
   },
   summary: {
     color: colors['--oniva-color-text-muted'],
@@ -88,6 +92,15 @@ const styles = stylex.create({
     fontSize: font['--oniva-font-size-13'],
     gap: 8,
     padding: 10,
+  },
+  errorIcon: { flexShrink: 0, marginBlockStart: 2 },
+  resultBlock: { display: 'flex', flexDirection: 'column', gap: 8 },
+  resultLabel: {
+    color: colors['--oniva-color-text-muted'],
+    fontSize: font['--oniva-font-size-11'],
+    fontWeight: font['--oniva-font-weight-medium'],
+    letterSpacing: font['--oniva-font-track-label'],
+    textTransform: 'uppercase',
   },
   errorText: { flexGrow: 1, lineHeight: font['--oniva-font-lh-18'], margin: 0, minWidth: 0, overflowWrap: 'anywhere' },
   tile: {
@@ -147,9 +160,9 @@ export interface ToolCallCardProps extends Omit<DisclosureProps, 'className' | '
 
 function StatusGlyph({ status }: { status: ToolCallStatus }) {
   if (status === 'running') return <Spinner size="xs" label="Running" />;
-  if (status === 'success') return <span {...stylex.props(styles.okDot)}><Check size={10} strokeWidth={3} aria-label="Succeeded" {...stylex.props(styles.draw)} /></span>;
-  if (status === 'error') return <AlertCircle size={14} aria-label="Failed" {...stylex.props(styles.err)} />;
-  return <Clock size={14} aria-label="Queued" />;
+  if (status === 'success') return <span {...stylex.props(styles.okDot)}><CheckIcon size={10} strokeWidth={2.25} aria-label="Succeeded" {...stylex.props(styles.draw)} /></span>;
+  if (status === 'error') return <CircleAlertIcon size={14} aria-label="Failed" {...stylex.props(styles.err)} />;
+  return <ClockIcon size={14} aria-label="Queued" />;
 }
 
 /** Status changes blur in (keyed by status); the success check draws itself. */
@@ -233,7 +246,7 @@ export function ToolCallCard({
         <>
           <Heading level={3} {...stylex.props(aiStyles.heading)}>
             <AriaButton slot="trigger" className={() => sxClass(stylex.props(aiStyles.triggerReset, styles.trigger, focus.inset))}>
-              <span aria-hidden="true" {...stylex.props(styles.leadIcon)}>{icon ?? <Wrench size={16} />}</span>
+              <span aria-hidden="true" {...stylex.props(styles.leadIcon)}>{icon ?? <WrenchIcon size={16} />}</span>
               <span {...stylex.props(styles.name)}>{name}</span>
               {summary !== undefined ? (
                 <span {...stylex.props(styles.summary, styles.human)}>{summary}</span>
@@ -254,7 +267,7 @@ export function ToolCallCard({
                   </>
                 )}
               </span>
-              <ChevronDown size={14} aria-hidden="true" {...stylex.props(aiStyles.chevron, isExpanded && styles.flip)} />
+              <ChevronDownIcon size={14} aria-hidden="true" {...stylex.props(aiStyles.chevron, isExpanded && styles.flip)} />
             </AriaButton>
           </Heading>
           <DisclosurePanel className={() => sxClass(stylex.props(styles.panelShow))}>
@@ -262,11 +275,11 @@ export function ToolCallCard({
             <div {...stylex.props(styles.body)}>
               {status === 'error' && (
                 <div {...stylex.props(styles.errorRow)}>
-                  <AlertCircle size={14} aria-hidden="true" />
+                  <CircleAlertIcon size={14} aria-hidden="true" {...stylex.props(styles.errorIcon)} />
                   <p {...stylex.props(styles.errorText)}>{error ?? 'The tool call failed.'}</p>
                   {onRetry && (
                     <Button size="xs" variant="secondary" onPress={onRetry}>
-                      <RotateCcw size={12} aria-hidden="true" /> Retry
+                      <RotateCcwIcon size={12} aria-hidden="true" /> Retry
                     </Button>
                   )}
                 </div>
@@ -276,8 +289,8 @@ export function ToolCallCard({
                 typeof children === 'string' ? (
                   <CodeSection label="Result" value={children} cap={maxCodeHeight} />
                 ) : (
-                  <div>
-                    <PendingNote>Result</PendingNote>
+                  <div role="group" aria-label="Result" {...stylex.props(styles.resultBlock)}>
+                    <span aria-hidden="true" {...stylex.props(styles.resultLabel)}>Result</span>
                     {children}
                   </div>
                 )
@@ -343,7 +356,7 @@ export function ToolCallGroup({ children, label, runningLabel = 'Using tools…'
       >
         <span aria-hidden="true" {...stylex.props(styles.stack)}>
           {calls.slice(-3).map((c, i, arr) => (
-            <span key={calls.length - arr.length + i} {...stylex.props(styles.tile, styles.tileBox, styles.pop, i > 0 && styles.stackItem)}>{c.icon ?? <Wrench size={12} />}</span>
+            <span key={calls.length - arr.length + i} {...stylex.props(styles.tile, styles.tileBox, styles.pop, i > 0 && styles.stackItem)}>{c.icon ?? <WrenchIcon size={12} />}</span>
           ))}
         </span>
         <span {...stylex.props(styles.groupTitle)}>
@@ -365,7 +378,7 @@ function AriaButtonToggle({ open, onToggle, children }: { open: boolean; onToggl
     <Heading level={3} {...stylex.props(aiStyles.heading)}>
       <AriaButton aria-expanded={open} onPress={onToggle} className={() => sxClass(stylex.props(aiStyles.triggerReset, styles.groupHead, focus.inset))}>
         {children}
-        <ChevronDown size={14} aria-hidden="true" {...stylex.props(aiStyles.chevron, open && styles.flip)} />
+        <ChevronDownIcon size={14} aria-hidden="true" {...stylex.props(aiStyles.chevron, open && styles.flip)} />
       </AriaButton>
     </Heading>
   );

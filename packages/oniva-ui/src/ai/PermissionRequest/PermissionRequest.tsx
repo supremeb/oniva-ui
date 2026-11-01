@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { Check, ChevronDown, KeyRound, ShieldAlert, X } from 'lucide-react';
+import { CheckIcon, ChevronDownIcon, KeyIcon, ShieldAlertIcon, XIcon } from '../../icons/IconSet';
 import { useEffect, useId, useState, type KeyboardEvent, type ReactNode, type Ref, type HTMLAttributes } from 'react';
 import { Radio, RadioGroup } from 'react-aria-components';
 import { VisuallyHidden } from 'react-aria';
@@ -12,7 +12,7 @@ import { aiStyles } from '../../internal/ai-styles';
 import { focus } from '../../internal/focus';
 import { enterExit } from '../../internal/motion-styles';
 import { mergeSx, sxClass } from '../../internal/sx';
-import { pluralize } from '../../internal/format';
+import { useFormatters } from '../../internal/format';
 import { prefersReducedMotion } from '../../internal/motion-hooks';
 import { Announcer, formatClock, useAnnouncer, useNow, w2s } from '../../internal/w2-parts';
 import { Button } from '../../components/Button';
@@ -57,13 +57,17 @@ const styles = stylex.create({
     width: 32,
   },
   titles: { display: 'flex', flexDirection: 'column', flexGrow: 1, gap: 2, minWidth: 0 },
-  title: { color: colors['--oniva-color-text'], fontSize: font['--oniva-font-size-14'], fontWeight: font['--oniva-font-weight-semibold'], margin: 0 },
-  target: { alignItems: 'center', color: colors['--oniva-color-text-muted'], display: 'inline-flex', fontSize: font['--oniva-font-size-12'], gap: 4, minWidth: 0 },
+  title: { color: colors['--oniva-color-text'], fontSize: font['--oniva-font-size-14'], fontWeight: font['--oniva-font-weight-semibold'], margin: 0, overflowWrap: 'anywhere' },
+  target: { alignItems: 'center', color: colors['--oniva-color-text-muted'], display: 'flex', fontSize: font['--oniva-font-size-12'], gap: 4, minWidth: 0 },
+  targetIcon: { flexShrink: 0 },
+  targetText: { minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
+  targetModel: { flexShrink: 0, whiteSpace: 'nowrap' },
   reason: {
     color: colors['--oniva-color-text-muted'],
     fontSize: font['--oniva-font-size-13'],
-    lineHeight: font['--oniva-font-lh-18'],
+    lineHeight: font['--oniva-font-lh-13'],
     margin: 0,
+    overflowWrap: 'anywhere',
     paddingInlineStart: { default: 42, [NARROW]: 0 },
   },
   preview: { backgroundColor: colors['--oniva-color-surface-inset'], borderRadius: radius['--oniva-radius-md'], display: 'flex', flexDirection: 'column', gap: 2, padding: 8 },
@@ -84,7 +88,9 @@ const styles = stylex.create({
     paddingBlock: 3,
     paddingInline: 4,
   },
-  rowLabel: { alignItems: 'center', display: 'inline-flex', gap: 6, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
+  rowLabel: { alignItems: 'center', display: 'inline-flex', gap: 6, minWidth: 0 },
+  rowIcon: { display: 'inline-flex', flexShrink: 0 },
+  rowText: { minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
   meta: { color: colors['--oniva-color-text-muted'], flexShrink: 0, fontFamily: font['--oniva-font-mono'], fontSize: font['--oniva-font-size-12'], fontVariantNumeric: 'tabular-nums' },
   more: {
     alignItems: 'center',
@@ -248,6 +254,7 @@ export function PermissionRequest({
   onKeyDown,
   ...rest
 }: PermissionRequestProps) {
+  const fmt = useFormatters();
   const uid = useId();
   const titleId = `${uid}-title`;
   const reasonId = `${uid}-reason`;
@@ -283,7 +290,7 @@ export function PermissionRequest({
     };
   }, [decision]);
 
-  const durationText = duration === 60 ? '1 hour' : duration % 60 === 0 && duration > 60 ? pluralize(duration / 60, { one: '# hour', other: '# hours' }) : pluralize(duration, { one: '# minute', other: '# minutes' });
+  const durationText = duration === 60 ? '1 hour' : duration % 60 === 0 && duration > 60 ? fmt.plural(duration / 60, { one: '# hour', other: '# hours' }) : fmt.plural(duration, { one: '# minute', other: '# minutes' });
   const scopeText = (s: PermissionScope) => (s === 'once' ? 'once' : s === 'timed' ? `for ${durationText}` : 'always');
   const scopeLabel = (s: PermissionScope) => (s === 'once' ? 'Just once' : s === 'timed' ? durationText.replace(/^1 hour$/, '1 hour') : 'Always');
 
@@ -334,7 +341,7 @@ export function PermissionRequest({
     resolvedEl = (
       <AnimatedHeight isOpen={settled || prefersReducedMotion()}>
         <div tabIndex={-1} {...stylex.props(styles.resolved)}>
-          {decision.allow && !expired ? <Check size={16} aria-hidden="true" {...stylex.props(styles.okIcon, styles.iconPop)} /> : <X size={16} aria-hidden="true" {...stylex.props(styles.noIcon, styles.iconPop)} />}
+          {decision.allow && !expired ? <CheckIcon size={16} aria-hidden="true" {...stylex.props(styles.okIcon, styles.iconPop)} /> : <XIcon size={16} aria-hidden="true" {...stylex.props(styles.noIcon, styles.iconPop)} />}
           <span {...stylex.props(styles.resolvedCol)}>
             <span role="status" {...stylex.props(styles.resolvedText)}>
               <VisuallyHidden>{agent.name}: </VisuallyHidden>
@@ -343,7 +350,7 @@ export function PermissionRequest({
             </span>
             {timed && !expired && left !== undefined && decision.until !== undefined && (
               <span {...stylex.props(styles.resolvedSub)}>
-                {formatClock(left / 1000)} left · until {new Date(decision.until).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                {formatClock(left / 1000)} left · until {fmt.date(decision.until, { hour: '2-digit', minute: '2-digit' })}
               </span>
             )}
           </span>
@@ -362,7 +369,7 @@ export function PermissionRequest({
   const hidden = preview ? preview.length - shown.length : 0;
   const riskTag = risk === 'safe' ? null : (
     <span {...stylex.props(w2s.tag, risk === 'destructive' ? w2s.tagDanger : w2s.tagWarning)}>
-      {risk === 'destructive' ? <ShieldAlert size={11} aria-hidden="true" /> : null}
+      {risk === 'destructive' ? <ShieldAlertIcon size={11} aria-hidden="true" /> : null}
       {risk === 'destructive' ? 'Destructive' : 'Risky'}
     </span>
   );
@@ -385,9 +392,9 @@ export function PermissionRequest({
             </h4>
             {(target || agent.model) && (
               <span {...stylex.props(styles.target)}>
-                {toolIcon ?? <KeyRound size={12} aria-hidden="true" />}
-                <span {...stylex.props(w2s.mono)}>{target}</span>
-                {agent.model && <span>{target ? '· ' : ''}{agent.model}</span>}
+                <span aria-hidden="true" {...stylex.props(styles.targetIcon)}>{toolIcon ?? <KeyIcon size={12} />}</span>
+                {target && <span {...stylex.props(w2s.mono, styles.targetText)}>{target}</span>}
+                {agent.model && <span {...stylex.props(styles.targetModel)}>{target ? '· ' : ''}{agent.model}</span>}
               </span>
             )}
           </div>
@@ -405,8 +412,8 @@ export function PermissionRequest({
               {shown.map((p, i) => (
                 <li key={p.id} style={{ animationDelay: `${Math.min(i, 6) * 40}ms` }} {...stylex.props(styles.row)}>
                   <span {...stylex.props(styles.rowLabel)}>
-                    {p.icon}
-                    {p.label}
+                    {p.icon && <span {...stylex.props(styles.rowIcon)}>{p.icon}</span>}
+                    <span {...stylex.props(styles.rowText)}>{p.label}</span>
                   </span>
                   {p.meta && <span {...stylex.props(styles.meta)}>{p.meta}</span>}
                 </li>
@@ -414,7 +421,7 @@ export function PermissionRequest({
             </ul>
             {hidden > 0 && (
               <button type="button" aria-expanded={showAll} onClick={() => setShowAll(true)} {...stylex.props(styles.more, focus.ring)}>
-                <ChevronDown size={12} aria-hidden="true" /> {pluralize(hidden, { one: '# more', other: '# more' })}
+                <ChevronDownIcon size={12} aria-hidden="true" /> {fmt.plural(hidden, { one: '# more', other: '# more' })}
               </button>
             )}
           </div>

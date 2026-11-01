@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { CheckCircle2 } from 'lucide-react';
+import { CircleCheckIcon } from '../../icons/IconSet';
 import type { HTMLAttributes, ReactNode, Ref } from 'react';
 import { SectionHead } from '../../internal/blocks-parts';
 import { bs } from '../../internal/blocks-styles';
@@ -86,7 +86,7 @@ export function FeatureBento({
                 {runs.map(([a, b]) => (
                   <div key={a} {...stylex.props(styles.line)}>
                     <span {...stylex.props(bs.row)}>
-                      <CheckCircle2 size={16} {...stylex.props(styles.ok)} aria-hidden="true" />
+                      <CircleCheckIcon size={16} {...stylex.props(styles.ok)} aria-hidden="true" />
                       {a}
                     </span>
                     <span {...stylex.props(bs.p)}>{b}</span>

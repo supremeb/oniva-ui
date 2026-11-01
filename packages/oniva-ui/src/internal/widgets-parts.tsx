@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeftIcon, ChevronRightIcon } from '../icons/IconSet';
 import type { ReactNode } from 'react';
 import { Button as AriaButton } from 'react-aria-components';
 import { colors } from '../tokens/colors.stylex';
@@ -135,7 +135,7 @@ export function RangeSwitcher({
         onPress={onPrev}
         {...stylex.props(wstyles.rangeBtn)}
       >
-        <ChevronLeft size={16} aria-hidden="true" />
+        <ChevronLeftIcon size={16} aria-hidden="true" />
       </AriaButton>
       <span
         aria-live="polite"
@@ -150,7 +150,7 @@ export function RangeSwitcher({
         onPress={onNext}
         {...stylex.props(wstyles.rangeBtn)}
       >
-        <ChevronRight size={16} aria-hidden="true" />
+        <ChevronRightIcon size={16} aria-hidden="true" />
       </AriaButton>
     </div>
   );

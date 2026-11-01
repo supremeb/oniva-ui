@@ -10,7 +10,7 @@ import {
   type ListBoxProps as AriaListBoxProps,
   type ListBoxSectionProps as AriaListBoxSectionProps,
 } from 'react-aria-components';
-import { Check } from 'lucide-react';
+import { CheckIcon } from '../../icons/IconSet';
 import type { ReactElement, ReactNode, Ref } from 'react';
 import { listStyles as s } from '../../internal/data-list-styles';
 
@@ -93,7 +93,7 @@ export function ListBoxItem({
           </span>
           {trailing && <span {...stylex.props(s.trail)}>{trailing}</span>}
           {isSelected && selectionMode === 'multiple' && (
-            <Check size={16} aria-hidden="true" {...stylex.props(s.iconSelected)} />
+            <CheckIcon size={16} aria-hidden="true" {...stylex.props(s.iconSelected)} />
           )}
         </>
       )}

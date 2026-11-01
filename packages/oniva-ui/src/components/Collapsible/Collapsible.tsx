@@ -7,7 +7,7 @@ import {
   Heading,
   type DisclosureProps,
 } from 'react-aria-components';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRightIcon } from '../../icons/IconSet';
 import type { ReactNode, Ref } from 'react';
 import { AnimatedHeight } from '../../motion/AnimatedHeight';
 import { media } from '../../tokens/media.stylex';
@@ -94,7 +94,7 @@ export function Collapsible({
               slot="trigger"
               className={() => stylex.props(styles.trigger, focus.ring).className ?? ''}
             >
-              <ChevronRight
+              <ChevronRightIcon
                 size={16}
                 aria-hidden="true"
                 {...stylex.props(styles.chevron, isExpanded && styles.chevronOpen)}

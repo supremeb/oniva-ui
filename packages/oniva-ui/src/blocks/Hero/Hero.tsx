@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRightIcon } from '../../icons/IconSet';
 import type { HTMLAttributes, ReactNode, Ref } from 'react';
 import { bs } from '../../internal/blocks-styles';
 import { mergeSx } from '../../internal/sx';
@@ -188,7 +188,7 @@ export function Hero({
               placeholder="you@company.com"
               isRequired
             />
-            <Button type="submit" endIcon={<ArrowRight size={16} />}>
+            <Button type="submit" endIcon={<ArrowRightIcon size={16} />}>
               {primaryLabel}
             </Button>
           </div>
@@ -196,7 +196,7 @@ export function Hero({
         </form>
       ) : (
         <div {...stylex.props(bs.row, centered && bs.rowCenter, styles.enter, styles.d3)}>
-          <Button size="lg" endIcon={<ArrowRight size={16} />}>
+          <Button size="lg" endIcon={<ArrowRightIcon size={16} />}>
             {primaryLabel}
           </Button>
           <Button size="lg" variant="secondary">

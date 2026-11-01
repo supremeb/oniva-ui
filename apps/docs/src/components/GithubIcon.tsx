@@ -1,4 +1,4 @@
-/** GitHub mark (lucide dropped brand icons). */
+/** GitHub mark (brand marks are not part of the icon set). */
 export function GithubIcon({ size = 16 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">

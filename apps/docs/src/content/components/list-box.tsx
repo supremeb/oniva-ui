@@ -1,13 +1,12 @@
-import { Bell, Globe, Lock } from 'lucide-react';
-import { ListBox, ListBoxItem, ListBoxSection } from 'oniva-ui';
+import { ListBox, ListBoxItem, ListBoxSection, BellIcon, GlobeIcon, LockIcon } from 'oniva-ui';
 import type { DocPage } from '../types';
 
 type Mode = 'single' | 'multiple';
 const Demo = (p: { mode?: Mode; icons?: boolean; sections?: boolean; disabled?: boolean; onEvent?: (n: string) => void }) => {
   const items = [
-    <ListBoxItem key="public" id="public" icon={p.icons ? <Globe size={16} /> : undefined} description="Anyone with the link">Public</ListBoxItem>,
-    <ListBoxItem key="team" id="team" icon={p.icons ? <Bell size={16} /> : undefined} description="Members of Design" trailing="24">Team</ListBoxItem>,
-    <ListBoxItem key="private" id="private" icon={p.icons ? <Lock size={16} /> : undefined} description="Only you" isDisabled={p.disabled}>Private</ListBoxItem>,
+    <ListBoxItem key="public" id="public" icon={p.icons ? <GlobeIcon size={16} /> : undefined} description="Anyone with the link">Public</ListBoxItem>,
+    <ListBoxItem key="team" id="team" icon={p.icons ? <BellIcon size={16} /> : undefined} description="Members of Design" trailing="24">Team</ListBoxItem>,
+    <ListBoxItem key="private" id="private" icon={p.icons ? <LockIcon size={16} /> : undefined} description="Only you" isDisabled={p.disabled}>Private</ListBoxItem>,
   ];
   return (
     <div style={{ width: 300 }}>

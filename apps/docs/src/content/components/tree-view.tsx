@@ -1,5 +1,4 @@
-import { File, Folder } from 'lucide-react';
-import { TreeView, TreeViewItem } from 'oniva-ui';
+import { TreeView, TreeViewItem, FileIcon, FolderIcon } from 'oniva-ui';
 import type { DocPage } from '../types';
 
 type Mode = 'none' | 'single' | 'multiple';
@@ -14,14 +13,14 @@ const Demo = (p: { mode?: Mode; open?: string[]; icons?: boolean; disabled?: boo
       onSelectionChange={() => p.onEvent?.('onSelectionChange')}
       onExpandedChange={() => p.onEvent?.('onExpandedChange')}
     >
-      <TreeViewItem id="src" title="src" icon={p.icons ? <Folder size={16} /> : undefined}>
-        <TreeViewItem id="components" title="components" icon={p.icons ? <Folder size={16} /> : undefined}>
-          <TreeViewItem id="button" title="Button.tsx" icon={p.icons ? <File size={16} /> : undefined} />
-          <TreeViewItem id="input" title="Input.tsx" icon={p.icons ? <File size={16} /> : undefined} />
+      <TreeViewItem id="src" title="src" icon={p.icons ? <FolderIcon size={16} /> : undefined}>
+        <TreeViewItem id="components" title="components" icon={p.icons ? <FolderIcon size={16} /> : undefined}>
+          <TreeViewItem id="button" title="Button.tsx" icon={p.icons ? <FileIcon size={16} /> : undefined} />
+          <TreeViewItem id="input" title="Input.tsx" icon={p.icons ? <FileIcon size={16} /> : undefined} />
         </TreeViewItem>
-        <TreeViewItem id="index" title="index.ts" icon={p.icons ? <File size={16} /> : undefined} />
+        <TreeViewItem id="index" title="index.ts" icon={p.icons ? <FileIcon size={16} /> : undefined} />
       </TreeViewItem>
-      <TreeViewItem id="readme" title="README.md" icon={p.icons ? <File size={16} /> : undefined} />
+      <TreeViewItem id="readme" title="README.md" icon={p.icons ? <FileIcon size={16} /> : undefined} />
     </TreeView>
   </div>
 );
@@ -62,7 +61,7 @@ const page: DocPage = {
     ],
     initial: { mode: 'single', icons: true, expanded: false, disabled: false },
     render: (p, onEvent) => <Demo key={`${p.mode}${p.expanded}`} mode={p.mode as Mode} icons={Boolean(p.icons)} open={p.expanded ? ['src', 'components'] : ['src']} disabled={Boolean(p.disabled)} onEvent={onEvent} />,
-    code: (p) => `<TreeView aria-label="Project files"${p.mode !== 'none' ? ` selectionMode="${p.mode}"` : ''} defaultExpandedKeys={['src']}>\n  <TreeViewItem id="src" title="src"${p.icons ? ' icon={<Folder size={16} />}' : ''}>\n    <TreeViewItem id="index" title="index.ts" />\n  </TreeViewItem>\n</TreeView>`,
+    code: (p) => `<TreeView aria-label="Project files"${p.mode !== 'none' ? ` selectionMode="${p.mode}"` : ''} defaultExpandedKeys={['src']}>\n  <TreeViewItem id="src" title="src"${p.icons ? ' icon={<FolderIcon size={16} />}' : ''}>\n    <TreeViewItem id="index" title="index.ts" />\n  </TreeViewItem>\n</TreeView>`,
   },
   states: [
     { name: 'Collapsed', description: 'Only top-level rows; chevrons point right.', Render: () => <Demo open={[]} icons /> },

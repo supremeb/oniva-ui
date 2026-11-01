@@ -13,7 +13,7 @@ import { font } from '../../tokens/font.stylex';
 import { media } from '../../tokens/media.stylex';
 import { motion } from '../../tokens/motion.stylex';
 import { radius } from '../../tokens/radius.stylex';
-import { ArrowDownRight, ArrowUpRight } from 'lucide-react';
+import { ArrowDownRightIcon, ArrowUpRightIcon } from '../../icons/IconSet';
 import { Badge } from '../../components/Badge';
 import { ChartFrame } from '../_shared/ChartFrame';
 
@@ -198,7 +198,7 @@ export function KpiChart({
             <span {...stylex.props(styles.value)}>{value}</span>
             {delta != null && (
               <Badge variant={delta >= 0 ? 'success' : 'danger'} shape="pill" size="sm">
-                {delta >= 0 ? <ArrowUpRight size={12} aria-hidden="true" /> : <ArrowDownRight size={12} aria-hidden="true" />}
+                {delta >= 0 ? <ArrowUpRightIcon size={12} aria-hidden="true" /> : <ArrowDownRightIcon size={12} aria-hidden="true" />}
                 {delta >= 0 ? '+' : '−'}
                 {f(Math.abs(delta))}
               </Badge>

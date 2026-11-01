@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { Check, Pause, Pencil, Play, Plus, Search, Trash2, Undo2 } from 'lucide-react';
+import { CheckIcon, PauseIcon, PencilIcon, PlayIcon, PlusIcon, SearchIcon, TrashIcon, UndoIcon } from '../../icons/IconSet';
 import { Fragment, useEffect, useRef, useState } from 'react';
 import type { HTMLAttributes, Ref } from 'react';
 import { Radio, RadioGroup } from 'react-aria-components';
@@ -47,8 +47,9 @@ const styles = stylex.create({
     textTransform: 'uppercase',
   },
   gItem: { alignItems: 'flex-start', display: 'flex', gap: 10, paddingBlock: 9 },
-  gText: { fontSize: font['--oniva-font-size-14'], lineHeight: font['--oniva-font-lh-20'] },
+  gText: { fontSize: font['--oniva-font-size-14'], lineHeight: font['--oniva-font-lh-14'] },
   gMeta: { alignItems: 'center', display: 'flex', flexWrap: 'wrap', gap: 6, marginBlockStart: 2 },
+  /** Hover reveal needs no `media.hover` gate: touch devices (`hover: none`) always show the actions. */
   gActions: {
     opacity: {
       default: 0,
@@ -84,10 +85,13 @@ const styles = stylex.create({
   actions: { display: 'flex', flexShrink: 0, gap: 2 },
   empty: { padding: 16, textAlign: 'center' },
   scroll: { maxHeight: 360, overflowY: 'auto' },
-  off: { opacity: 0.5, transitionDuration: motion['--oniva-motion-dur-base'], transitionProperty: 'opacity' },
+  actionsOff: { opacity: 0.5 },
+  contents: { display: 'contents' },
+  wrap: { overflowWrap: 'anywhere' },
   text: {
     fontWeight: 400,
     margin: 0,
+    overflowWrap: 'anywhere',
     transitionDuration: motion['--oniva-motion-dur-base'],
     transitionProperty: 'color',
     transitionTimingFunction: motion['--oniva-motion-ease-out'],
@@ -279,8 +283,9 @@ export function MemoryPanel({
       <AnimatedHeight isOpen={!enabled}>
         <p {...stylex.props(aib.meta, styles.note, grouped && styles.gSearch)}>Memory is off. Saved items are kept but not used in chats.</p>
       </AnimatedHeight>
-      {categories.length > 1 && (
+      {(categories.length > 1 || (grouped && memories.length >= 5)) && (
         <div {...stylex.props(grouped && styles.gChips)}>
+        {categories.length > 1 ? (
         <RadioGroup aria-label="Filter by category" orientation="horizontal" value={active} onChange={setFilter} className={() => sxClass(stylex.props(styles.chips, grouped && styles.gChipRow))}>
           {['all', ...categories].map((c) => (
             <Radio key={c} value={c} className={() => sxClass(stylex.props(styles.chip, grouped && styles.chipSq))}>
@@ -291,9 +296,12 @@ export function MemoryPanel({
             </Radio>
           ))}
         </RadioGroup>
+        ) : (
+          <span {...stylex.props(styles.gChipRow)} />
+        )}
         {grouped && (
           <button type="button" aria-label="Search memories" aria-pressed={searching} onClick={() => { setSearching((v) => !v); setQ(''); }} {...stylex.props(aib.mini)}>
-            <Search size={14} aria-hidden="true" />
+            <SearchIcon size={14} aria-hidden="true" />
           </button>
         )}
         </div>
@@ -303,21 +311,21 @@ export function MemoryPanel({
           <input autoFocus type="search" aria-label="Search memories" placeholder="Search memories" value={q} onChange={(e) => setQ(e.target.value)} onKeyDown={(e) => { if (e.key === 'Escape') { setSearching(false); setQ(''); } }} {...stylex.props(aib.field)} />
         </div>
       )}
-      <div {...stylex.props(grouped ? styles.gScroll : styles.scroll, !enabled && styles.off)}>
+      <div {...stylex.props(grouped ? styles.gScroll : styles.scroll)}>
         <ul {...stylex.props(styles.list)}>
           {sections.map((sec) => {
             const items = grouped ? memories.filter((m) => (m.category ?? '') === sec) : memories;
             const anyShown = items.some(matches);
             return (
               <Fragment key={sec || 'all'}>
-                {grouped && anyShown && (
-                  <li role="presentation"><h4 {...stylex.props(styles.gLabel)}>{sec || 'Other'}</h4></li>
+                {grouped && anyShown && (sec !== '' || sections.length > 1) && (
+                  <li {...stylex.props(styles.contents)}><h4 {...stylex.props(styles.gLabel)}>{sec || 'Other'}</h4></li>
                 )}
                 {items.map((m) => {
             const paused = isPaused(m);
             const visible = matches(m) && !leaving.has(m.id);
             return (
-              <li key={m.id} style={{ display: 'contents' }}>
+              <li key={m.id} {...stylex.props(styles.contents)}>
                 <AnimatedHeight isOpen={visible}>
                 <div {...stylex.props(styles.rowGap, grouped && styles.gRowGap, stylex.defaultMarker())}>
                 <Presence isPresent={visible} preset="blur" xstyle={grouped ? styles.gItem : [aiStyles.tile, styles.item]}>
@@ -335,23 +343,23 @@ export function MemoryPanel({
                         {...stylex.props(aib.field)}
                       />
                     ) : (
-                      <p {...stylex.props(aib.name, styles.text, grouped && styles.gText, paused && styles.textPaused)}>{m.text}</p>
+                      <p {...stylex.props(aib.name, styles.text, grouped && styles.gText, (paused || !enabled) && styles.textPaused)}>{m.text}</p>
                     )}
-                    <div {...stylex.props(aib.meta, grouped && styles.gMeta)}>
+                    <div {...stylex.props(aib.meta, styles.wrap, grouped && styles.gMeta)}>
                       {(grouped ? [m.source, m.date] : [m.category, m.source, m.date]).filter(Boolean).join(' · ')}
                       <Presence isPresent={paused} preset="blur" initial={false} xstyle={styles.inl}>
-                        {grouped ? <Badge variant="warning" size="sm">Paused</Badge> : ' · Paused'}
+                        {grouped ? <Badge variant="warning" size="sm">Paused</Badge> : '\u00a0· Paused'}
                       </Presence>
                     </div>
                   </div>
-                  <div {...stylex.props(styles.actions, grouped && styles.gActions)}>
+                  <div {...stylex.props(styles.actions, grouped && styles.gActions, !grouped && !enabled && styles.actionsOff)}>
                     {editing === m.id ? (
                       <button type="button" aria-label="Save memory" onClick={() => commit(m.id)} {...stylex.props(aib.mini)}>
-                        <Check size={14} />
+                        <CheckIcon size={14} />
                       </button>
                     ) : (
                       <button type="button" aria-label={`Edit memory: ${m.text}`} onClick={() => { setDraft(m.text); setEditing(m.id); }} {...stylex.props(aib.mini)}>
-                        <Pencil size={14} />
+                        <PencilIcon size={14} />
                       </button>
                     )}
                     <button
@@ -365,11 +373,11 @@ export function MemoryPanel({
                       {...stylex.props(aib.mini)}
                     >
                       <CrossFade as="span" contentKey={paused ? 'play' : 'pause'} duration={200}>
-                        {paused ? <Play size={14} /> : <Pause size={14} />}
+                        {paused ? <PlayIcon size={14} /> : <PauseIcon size={14} />}
                       </CrossFade>
                     </button>
                     <button type="button" aria-label={`Forget memory: ${m.text}`} onClick={() => leave(m.id)} {...stylex.props(aib.mini)}>
-                      <Trash2 size={14} />
+                      <TrashIcon size={14} />
                     </button>
                   </div>
                 </Presence>
@@ -382,7 +390,7 @@ export function MemoryPanel({
             );
           })}
         </ul>
-        {shown.length === 0 && <p {...stylex.props(aib.meta, styles.empty)}>No memories yet. They appear as you chat.</p>}
+        {shown.length === 0 && <p {...stylex.props(aib.meta, styles.empty)}>{memories.length === 0 ? 'No memories yet. They appear as you chat.' : 'No memories match.'}</p>}
       </div>
       {onAdd && (
         <div {...stylex.props(styles.adder, grouped && styles.gAdd)}>
@@ -402,12 +410,12 @@ export function MemoryPanel({
                 {...stylex.props(aib.field)}
               />
               <button type="button" aria-label="Save new memory" onClick={add} {...stylex.props(aib.mini)}>
-                <Check size={14} />
+                <CheckIcon size={14} />
               </button>
             </div>
           ) : (
             <button type="button" onClick={() => setAdding(true)} {...stylex.props(aib.mini)}>
-              <Plus size={14} aria-hidden="true" /> New memory
+              <PlusIcon size={14} aria-hidden="true" /> New memory
             </button>
           )}
           </CrossFade>
@@ -429,7 +437,7 @@ export function MemoryPanel({
             }}
             {...stylex.props(aib.mini)}
           >
-            <Undo2 size={14} aria-hidden="true" /> Undo
+            <UndoIcon size={14} aria-hidden="true" /> Undo
           </button>
         )}
         </Presence>

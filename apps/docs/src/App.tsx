@@ -13,6 +13,7 @@ import { StaticPageView } from './pages/StaticPageView';
 import { DocsShell } from './shell/DocsShell';
 import { CanvasPage } from './canvas/CanvasPage';
 import { SpecPosterPage, SpecsPage } from './specs/SpecsPage';
+import { StatesPage } from './states/StatesPage';
 
 const styles = stylex.create({
   shell: { minHeight: '100vh' },
@@ -61,7 +62,8 @@ export function App() {
 
   const isCanvas = pathname === '/canvas';
   const isSpecs = pathname === '/specs' || pathname.startsWith('/specs/');
-  const isDocsRoute = isCanvas || isSpecs || !(pathname === '/' || pathname === '/charts' || pathname.startsWith('/templates/'));
+  const isStates = pathname === '/states' || pathname.startsWith('/states/');
+  const isDocsRoute = isCanvas || isSpecs || isStates || !(pathname === '/' || pathname === '/charts' || pathname.startsWith('/templates/'));
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
@@ -91,6 +93,7 @@ export function App() {
         <Route path="/canvas" element={<CanvasPage theme={theme} onThemeChange={setTheme} />} />
         <Route path="/specs" element={<SpecsPage theme={theme} onThemeChange={setTheme} />} />
         <Route path="/specs/:slug" element={<SpecPosterPage theme={theme} />} />
+        <Route path="/states/:slug?" element={<StatesPage theme={theme} onThemeChange={setTheme} />} />
         <Route
           path="/templates/:slug"
           element={

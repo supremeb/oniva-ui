@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { AlertTriangle, Clock, User } from 'lucide-react';
+import { TriangleAlertIcon, CheckIcon, ClockIcon, UserIcon } from '../../icons/IconSet';
 import { useEffect, useMemo, useRef, useState, type ReactNode, type Ref } from 'react';
 import { Button, Dialog, Popover } from 'react-aria-components';
 import { colors } from '../../tokens/colors.stylex';
@@ -164,11 +164,15 @@ const styles = stylex.create({
   ring: { color: colors['--oniva-color-info-solid'], borderRadius: radius['--oniva-radius-full'] },
   ringWait: { animationDuration: '1.05s', color: colors['--oniva-color-warning-solid'], borderRadius: radius['--oniva-radius-full'] },
   ringErr: { color: colors['--oniva-color-danger-solid'], borderRadius: radius['--oniva-radius-full'] },
-  label: { fontSize: font['--oniva-font-size-13'], fontWeight: font['--oniva-font-weight-medium'], maxWidth: 110, textAlign: 'center' },
-  sub: { color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-11'], maxWidth: 110, textAlign: 'center' },
+  label: { backgroundColor: colors['--oniva-color-surface-inner'], borderRadius: radius['--oniva-radius-sm'], fontSize: font['--oniva-font-size-13'], fontWeight: font['--oniva-font-weight-medium'], maxWidth: 110, paddingInline: 3, textAlign: 'center' },
+  sub: { backgroundColor: colors['--oniva-color-surface-inner'], borderRadius: radius['--oniva-radius-sm'], color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-11'], maxWidth: 110, paddingInline: 3, textAlign: 'center' },
+  textNarrow: { maxWidth: 76 },
+  empty: { alignItems: 'center', color: colors['--oniva-color-text-muted'], display: 'flex', flexDirection: 'column', fontSize: font['--oniva-font-size-13'], gap: 4, inset: 0, justifyContent: 'center', padding: 24, pointerEvents: 'none', position: 'absolute', textAlign: 'center' },
+  emptyTitle: { color: colors['--oniva-color-text'], fontWeight: font['--oniva-font-weight-medium'] },
   state: { alignItems: 'center', display: 'inline-flex', fontSize: font['--oniva-font-size-11'], fontWeight: font['--oniva-font-weight-medium'], gap: 3 },
   wait: { color: colors['--oniva-color-warning-fg'] },
   err: { color: colors['--oniva-color-danger-fg'] },
+  ok: { color: colors['--oniva-color-success-fg'] },
   bar: { alignItems: 'center', display: 'flex', flexWrap: 'wrap', gap: 6 },
   cardTitle: { alignItems: 'center', display: 'flex', gap: 8, justifyContent: 'space-between' },
   kv: { color: colors['--oniva-color-text-muted'], display: 'grid', fontSize: font['--oniva-font-size-12'], gap: 2, columnGap: 10, gridTemplateColumns: 'auto 1fr', margin: '8px 0 0' },
@@ -222,7 +226,9 @@ export function AgentGraph({
   const W = measured || 640;
   const narrow = measured > 0 && measured < 520;
   const t = useNow(now, true, 1000);
-  const H = height ?? Math.round(narrow ? Math.min(W * 1.2, 640) : Math.min(660, Math.max(540, W * 0.74)));
+  // Crowded graphs get more room so labels of the inner and outer orbit stay apart.
+  const crowd = Math.max(0, nodes.length - 7) * (narrow ? 30 : 18);
+  const H = height ?? Math.round((narrow ? Math.min(W * 1.2, 640) : Math.min(660, Math.max(540, W * 0.74))) + crowd);
   const cost = formatCost ?? ((n: number) => f.currency(n, 'USD', { minimumFractionDigits: 2 }));
   const [sel, setSel] = useState<string | null>(null);
   const [hover, setHover] = useState<string | null>(null);
@@ -244,14 +250,14 @@ export function AgentGraph({
     const others = agents.filter((n) => n !== lead);
     const cx = W / 2;
     const cy = H * 0.47;
-    const r1x = W * (narrow ? 0.24 : 0.23);
+    const r1x = W * (narrow ? 0.26 : 0.23);
     const r1y = H * 0.23;
     const r2x = W * (narrow ? 0.38 : 0.4);
     const r2y = H * 0.36;
     if (lead) out.set(lead.id, { x: cx, y: cy });
     const ang = new Map<string, number>();
     others.forEach((n, i) => {
-      const a = (others.length % 2 === 1 && others.length > 1 ? -Math.PI / 2 : 0) + (i * 2 * Math.PI) / Math.max(1, others.length);
+      const a = ((others.length % 2 === 1 && others.length > 1) || (narrow && others.length > 1) ? -Math.PI / 2 : 0) + (i * 2 * Math.PI) / Math.max(1, others.length);
       ang.set(n.id, a);
       out.set(n.id, { x: cx + r1x * Math.cos(a), y: cy + r1y * Math.sin(a) });
     });
@@ -347,6 +353,8 @@ export function AgentGraph({
     });
     return m;
   };
+  const agentCount = nodes.filter((n) => n.kind === 'agent').length;
+  const toolCount = nodes.filter((n) => n.kind === 'tool').length;
   const totalCost = nodes.reduce((s, n) => s + (n.cost ?? 0), 0);
   const waiting = nodes.filter((n) => n.status === 'waiting');
   const failed = nodes.filter((n) => n.status === 'error');
@@ -382,12 +390,12 @@ export function AgentGraph({
         <h3 {...stylex.props(w1.title)}>{title}</h3>
         <span {...stylex.props(w1.grow)} />
         <div {...stylex.props(styles.bar)}>
-          {waiting.length > 0 && <Tag tone="warning" icon={<Clock size={11} aria-hidden="true" />}>{waiting.length} needs you</Tag>}
-          {failed.length > 0 && <Tag tone="danger" icon={<AlertTriangle size={11} aria-hidden="true" />}>{failed.length} failed</Tag>}
+          {waiting.length > 0 && <Tag tone="warning" icon={<ClockIcon size={11} aria-hidden="true" />}>{waiting.length} needs you</Tag>}
+          {failed.length > 0 && <Tag tone="danger" icon={<TriangleAlertIcon size={11} aria-hidden="true" />}>{failed.length} failed</Tag>}
           {!narrow && (
             <>
-              <span {...stylex.props(styles.hCount)}><span {...stylex.props(styles.hNum)}>{nodes.filter((n) => n.kind === 'agent').length}</span> agents</span>
-              <span {...stylex.props(styles.hCount)}><span {...stylex.props(styles.hNum)}>{nodes.filter((n) => n.kind === 'tool').length}</span> tools</span>
+              <span {...stylex.props(styles.hCount)}><span {...stylex.props(styles.hNum)}>{agentCount}</span> {f.plural(agentCount, { one: 'agent', other: 'agents' })}</span>
+              <span {...stylex.props(styles.hCount)}><span {...stylex.props(styles.hNum)}>{toolCount}</span> {f.plural(toolCount, { one: 'tool', other: 'tools' })}</span>
             </>
           )}
           <span {...stylex.props(styles.hCount)}>
@@ -433,12 +441,13 @@ export function AgentGraph({
               ref={(el) => { if (el) btns.current.set(n.id, el); else btns.current.delete(n.id); }}
               type="button"
               aria-label={label}
+              title={n.detail ? `${n.name} · ${n.detail}` : n.name}
               aria-haspopup="dialog"
               aria-expanded={sel === n.id}
               data-dim={focusSet && !focusSet.has(n.id) ? '' : undefined}
               onClick={() => open(sel === n.id ? null : n)}
-              onMouseEnter={() => setHover(n.id)}
-              onMouseLeave={() => setHover(null)}
+              onPointerEnter={(e) => { if (e.pointerType === 'mouse') setHover(n.id); }}
+              onPointerLeave={(e) => { if (e.pointerType === 'mouse') setHover(null); }}
               onFocus={() => setHover(n.id)}
               onBlur={() => setHover(null)}
               style={{ ['--x' as string]: Math.round(p.x * 10) / 10, ['--y' as string]: Math.round(p.y * 10) / 10, ['--d' as string]: introDelay(n, ni) }}
@@ -449,7 +458,7 @@ export function AgentGraph({
                 {n.kind === 'agent' ? (
                   <span {...stylex.props(styles.agentTile)}>{n.icon ?? <AgentAvatar name={n.name} size={ns - 14} />}</span>
                 ) : n.kind === 'user' ? (
-                  <span aria-hidden="true" {...stylex.props(styles.toolFace, styles.userFace)}>{n.icon ?? <User size={16} />}</span>
+                  <span aria-hidden="true" {...stylex.props(styles.toolFace, styles.userFace)}>{n.icon ?? <UserIcon size={16} />}</span>
                 ) : (
                   <span aria-hidden="true" {...stylex.props(styles.toolFace)}>{n.icon ?? n.name.slice(0, 2)}</span>
                 )}
@@ -457,17 +466,23 @@ export function AgentGraph({
                   <span aria-hidden="true" {...stylex.props(w1.pulseRing, st === 'working' ? styles.ring : st === 'waiting' ? styles.ringWait : styles.ringErr)} />
                 )}
               </span>
-              <span aria-hidden="true" {...stylex.props(styles.label, w1.ellipsis)}>{narrow ? (n.short ?? n.name) : n.name}</span>
+              <span aria-hidden="true" {...stylex.props(styles.label, narrow && styles.textNarrow, w1.ellipsis)}>{narrow ? (n.short ?? n.name) : n.name}</span>
               {!narrow && n.detail && <span aria-hidden="true" {...stylex.props(styles.sub, w1.ellipsis)}>{n.detail}</span>}
-              {(st === 'waiting' || st === 'error') && (
-                <span aria-hidden="true" {...stylex.props(styles.state, st === 'waiting' ? styles.wait : styles.err)}>
-                  {st === 'waiting' ? <Clock size={10} /> : <AlertTriangle size={10} />}
+              {(st === 'waiting' || st === 'error' || st === 'done') && (
+                <span aria-hidden="true" {...stylex.props(styles.state, st === 'waiting' ? styles.wait : st === 'error' ? styles.err : styles.ok)}>
+                  {st === 'waiting' ? <ClockIcon size={10} /> : st === 'error' ? <TriangleAlertIcon size={10} /> : <CheckIcon size={10} />}
                   {STATUS_TEXT[st]}
                 </span>
               )}
             </button>
           );
         })}
+        {nodes.length === 0 && (
+          <div {...stylex.props(styles.empty)}>
+            <span {...stylex.props(styles.emptyTitle)}>No agents running</span>
+            <span>Agents and the tools they call appear here.</span>
+          </div>
+        )}
         <div aria-hidden="true" {...stylex.props(styles.legend)}>
           {([['Call', 'info'], ['Answer', 'success'], ['Needs you', 'warning'], ['Failed', 'danger']] as const).map(([l, tone]) => (
             <span key={l} {...stylex.props(styles.legendItem)}>

@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { Heart, MessageCircle, Repeat2, Share } from 'lucide-react';
+import { HeartIcon, MessageCircleIcon, RepostIcon, ShareIcon } from '../../icons/IconSet';
 import { useRef, useState, type ComponentType, type HTMLAttributes, type Ref } from 'react';
 import { ToggleButton as AriaToggleButton } from 'react-aria-components';
 import { colors } from '../../tokens/colors.stylex';
@@ -118,10 +118,10 @@ interface ActionDef {
 }
 
 const ACTIONS: Record<ReactionKey, ActionDef> = {
-  like: { Icon: Heart, verb: 'Like', doneVerb: 'Unlike', noun: { one: '# like', other: '# likes' }, tone: 'like', fillable: true },
-  comment: { Icon: MessageCircle, verb: 'Comment', doneVerb: 'Comment', noun: { one: '# comment', other: '# comments' }, tone: 'accent', fillable: false },
-  repost: { Icon: Repeat2, verb: 'Repost', doneVerb: 'Undo repost', noun: { one: '# repost', other: '# reposts' }, tone: 'repost', fillable: false },
-  share: { Icon: Share, verb: 'Share', doneVerb: 'Share', noun: { one: '# share', other: '# shares' }, tone: 'accent', fillable: false },
+  like: { Icon: HeartIcon, verb: 'Like', doneVerb: 'Unlike', noun: { one: '# like', other: '# likes' }, tone: 'like', fillable: true },
+  comment: { Icon: MessageCircleIcon, verb: 'Comment', doneVerb: 'Comment', noun: { one: '# comment', other: '# comments' }, tone: 'accent', fillable: false },
+  repost: { Icon: RepostIcon, verb: 'Repost', doneVerb: 'Undo repost', noun: { one: '# repost', other: '# reposts' }, tone: 'repost', fillable: false },
+  share: { Icon: ShareIcon, verb: 'Share', doneVerb: 'Share', noun: { one: '# share', other: '# shares' }, tone: 'accent', fillable: false },
 };
 
 const DEFAULT_ACTIONS: ReactionKey[] = ['like', 'comment', 'repost', 'share'];

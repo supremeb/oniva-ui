@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { ArrowLeftRight, Check, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowLeftRightIcon, CheckIcon, ChevronLeftIcon, ChevronRightIcon } from '../../icons/IconSet';
 import { useMemo, useRef, useState, type KeyboardEvent, type ReactNode, type Ref } from 'react';
 import {
   Button as AriaButton,
@@ -360,7 +360,7 @@ export function IntegrationPicker({
       <div {...stylex.props(styles.top)}>
         {onBack && (
           <AriaButton aria-label="Back" onPress={onBack} {...stylex.props(styles.back, focus.ring)}>
-            <ChevronLeft size={18} aria-hidden="true" />
+            <ChevronLeftIcon size={18} aria-hidden="true" />
           </AriaButton>
         )}
         <span aria-hidden="true" {...stylex.props(styles.scope)}>
@@ -419,7 +419,7 @@ export function IntegrationPicker({
                     {appIcon ?? initials(appName)}
                     {isOn && <span {...stylex.props(styles.ring)} />}
                   </span>
-                  <ArrowLeftRight key={String(isOn)} size={18} aria-hidden="true" {...stylex.props(styles.arrows)} />
+                  <ArrowLeftRightIcon key={String(isOn)} size={18} aria-hidden="true" {...stylex.props(styles.arrows)} />
                   <span aria-hidden="true" {...stylex.props(styles.tile, styles.mono, styles.monoLg)}>
                     {initials(current.name)}
                     {isOn && <span {...stylex.props(styles.ring)} />}
@@ -446,14 +446,14 @@ export function IntegrationPicker({
               <ul aria-label={`${current.name} features`} {...stylex.props(styles.features)}>
                 {current.features.map((f) => (
                   <li key={f} {...stylex.props(styles.feature)}>
-                    <Check size={14} aria-hidden="true" {...stylex.props(styles.tick)} />
+                    <CheckIcon size={14} aria-hidden="true" {...stylex.props(styles.tick)} />
                     {f}
                   </li>
                 ))}
               </ul>
               {onExplore && (
                 <div {...stylex.props(styles.actions)}>
-                  <Button variant="secondary" size="sm" endIcon={<ChevronRight size={14} aria-hidden="true" />} onPress={() => onExplore(current.id)}>
+                  <Button variant="secondary" size="sm" endIcon={<ChevronRightIcon size={14} aria-hidden="true" />} onPress={() => onExplore(current.id)}>
                     Explore integration
                   </Button>
                 </div>

@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { Bookmark, ListFilter, Plus, X } from 'lucide-react';
+import { BookmarkIcon, ListFilterIcon, PlusIcon, XIcon } from '../../icons/IconSet';
 import { useState } from 'react';
 import type { HTMLAttributes, Ref } from 'react';
 import { Button } from '../Button';
@@ -241,18 +241,18 @@ export function FilterBar({ fields, filters, onFiltersChange, savedViews = [], o
               </Popover>
             </PopoverTrigger>
             <button type="button" aria-label={L.removeFilter(field.label)} onClick={() => remove(f.id)} {...stylex.props(dash.reset, styles.chipX, focus.inset)}>
-              <X size={14} aria-hidden="true" />
+              <XIcon size={14} aria-hidden="true" />
             </button>
           </span>
         );
       })}
       <DropdownMenu>
-        <Button variant="secondary" size="sm" startIcon={<Plus size={14} aria-hidden="true" />}>
+        <Button variant="secondary" size="sm" startIcon={<PlusIcon size={14} aria-hidden="true" />}>
           {L.addFilter}
         </Button>
         <DropdownMenuContent aria-label={L.addFilter} placement="bottom start" onAction={(k) => add(String(k))}>
           {fields.map((f) => (
-            <DropdownMenuItem key={f.id} id={f.id} icon={<ListFilter size={16} aria-hidden="true" />}>
+            <DropdownMenuItem key={f.id} id={f.id} icon={<ListFilterIcon size={16} aria-hidden="true" />}>
               {f.label}
             </DropdownMenuItem>
           ))}
@@ -265,7 +265,7 @@ export function FilterBar({ fields, filters, onFiltersChange, savedViews = [], o
       )}
       <span {...stylex.props(styles.spacer)} />
       <DropdownMenu>
-        <Button variant="secondary" size="sm" startIcon={<Bookmark size={14} aria-hidden="true" />}>
+        <Button variant="secondary" size="sm" startIcon={<BookmarkIcon size={14} aria-hidden="true" />}>
           {L.views}
         </Button>
         <DropdownMenuContent

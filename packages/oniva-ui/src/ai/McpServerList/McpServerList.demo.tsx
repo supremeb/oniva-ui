@@ -3,17 +3,17 @@ import type { DemoModule } from '../../internal/demo';
 import { McpServerList, type McpServer } from './McpServerList';
 
 const initial: McpServer[] = [
-  { id: 'gh', name: 'GitHub', status: 'connected', enabled: true, endpoint: 'stdio · npx @modelcontextprotocol/server-github', tools: [
+  { id: 'repos', name: 'Northwind Repos', status: 'connected', enabled: true, endpoint: 'stdio · npx @northwind/mcp-repos', tools: [
     { name: 'create_issue', description: 'Open an issue in a repo' },
     { name: 'search_code', description: 'Search code across repos' },
     { name: 'create_pull_request', description: 'Open a PR from a branch' },
   ] },
-  { id: 'slack', name: 'Slack', status: 'connected', enabled: true, endpoint: 'https://mcp.slack.com/sse', tools: [
+  { id: 'chat', name: 'Northwind Chat', status: 'connected', enabled: true, endpoint: 'https://mcp.chat.northwind.example/sse', tools: [
     { name: 'post_message', description: 'Post to a channel' },
     { name: 'search_messages', description: 'Search workspace history' },
   ] },
-  { id: 'linear', name: 'Linear', status: 'connecting', enabled: true, endpoint: 'https://mcp.linear.app/sse', tools: [{ name: 'list_issues', description: 'List issues by team' }] },
-  { id: 'pg', name: 'Postgres (prod replica)', status: 'error', enabled: false, endpoint: 'stdio · mcp-postgres', error: 'ECONNREFUSED 10.0.4.12:5432', tools: [{ name: 'query', description: 'Run read-only SQL' }] },
+  { id: 'tracker', name: 'Northwind Tracker', status: 'connecting', enabled: true, endpoint: 'https://mcp.tracker.northwind.example/sse', tools: [{ name: 'list_issues', description: 'List issues by team' }] },
+  { id: 'orders', name: 'Orders replica', status: 'error', enabled: false, endpoint: 'stdio · mcp-sql --readonly', error: 'ECONNREFUSED 10.0.4.12:5432', tools: [{ name: 'query', description: 'Run read-only SQL' }] },
 ];
 
 function Controlled() {

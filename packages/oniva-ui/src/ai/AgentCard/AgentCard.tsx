@@ -10,8 +10,11 @@ import { AgentAvatar, type AgentAvatarStatus } from '../AgentAvatar';
 const styles = stylex.create({
   root: { display: 'flex', flexDirection: 'column', gap: 12, padding: 14 },
   top: { alignItems: 'center', display: 'flex', gap: 12 },
-  desc: { margin: 0 },
+  desc: { margin: 0, overflowWrap: 'anywhere' },
+  wrap: { overflowWrap: 'anywhere' },
+  noShrink: { flexShrink: 0 },
   tags: { display: 'flex', flexWrap: 'wrap', gap: 6 },
+  tag: { maxWidth: '100%', minWidth: 0 },
   stats: {
     borderTopColor: colors['--oniva-color-separator'],
     borderTopStyle: 'solid',
@@ -21,7 +24,10 @@ const styles = stylex.create({
     gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
     paddingTop: 12,
   },
+  stat: { display: 'flex', flexDirection: 'column-reverse', minWidth: 0 },
   statVal: { margin: 0 },
+  statLabel: { margin: 0 },
+  statsList: { margin: 0 },
   foot: { display: 'flex', gap: 8, justifyContent: 'flex-end' },
 });
 
@@ -66,28 +72,34 @@ export function AgentCard({
       <div {...stylex.props(styles.top)}>
         <AgentAvatar name={name} status={status} size={44} />
         <div {...stylex.props(aib.grow)}>
-          <p {...stylex.props(aib.name)}>{name}</p>
-          <p {...stylex.props(aib.meta)}>{role}</p>
+          <p {...stylex.props(aib.name, styles.wrap)}>{name}</p>
+          <p {...stylex.props(aib.meta, styles.wrap)}>{role}</p>
         </div>
-        <Badge variant={statusBadge[status]}>{status}</Badge>
+        <Badge variant={statusBadge[status]} role="status" xstyle={styles.noShrink}>
+          {status}
+        </Badge>
       </div>
       {description && <p {...stylex.props(aib.meta, styles.desc)}>{description}</p>}
       {(model || tools.length > 0) && (
         <div {...stylex.props(styles.tags)}>
-          {model && <Badge variant="accent">{model}</Badge>}
-          {tools.map((t) => (
-            <Badge key={t} variant="neutral">
-              {t}
+          {model && (
+            <Badge variant="accent" xstyle={styles.tag} title={model}>
+              <span {...stylex.props(aib.clamp)}>{model}</span>
+            </Badge>
+          )}
+          {tools.map((t, i) => (
+            <Badge key={`${t}-${i}`} variant="neutral" xstyle={styles.tag} title={t}>
+              <span {...stylex.props(aib.clamp)}>{t}</span>
             </Badge>
           ))}
         </div>
       )}
       {stats.length > 0 && (
-        <dl {...stylex.props(styles.stats)} style={{ margin: 0 }}>
-          {stats.map((s) => (
-            <div key={s.label}>
-              <dd {...stylex.props(aib.name, aiStyles.num, styles.statVal)} style={{ margin: 0 }}>{s.value}</dd>
-              <dt {...stylex.props(aib.meta)}>{s.label}</dt>
+        <dl {...stylex.props(styles.stats, styles.statsList)}>
+          {stats.map((s, i) => (
+            <div key={`${s.label}-${i}`} {...stylex.props(styles.stat)}>
+              <dt {...stylex.props(aib.meta, styles.statLabel, styles.wrap)}>{s.label}</dt>
+              <dd {...stylex.props(aib.name, aiStyles.num, styles.statVal, styles.wrap)}>{s.value}</dd>
             </div>
           ))}
         </dl>

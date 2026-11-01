@@ -61,3 +61,32 @@ describe('MemoryPanel (loop 7)', () => {
     expect(onAdd.mock.calls[0]![0]).toMatchObject({ text: 'Likes dark mode', source: 'You added' });
   });
 });
+
+describe('MemoryPanel (states pass)', () => {
+  const two = [
+    { id: 'a', text: 'Prefers TypeScript', category: 'Preferences' },
+    { id: 'b', text: 'Product designer', category: 'Work', paused: true },
+  ];
+  it('tells an empty list apart from a search with no matches', () => {
+    const { rerender } = render(<MemoryPanel memories={[]} />);
+    expect(screen.getByText('No memories yet. They appear as you chat.')).toBeInTheDocument();
+    rerender(<MemoryPanel variant="grouped" memories={Array.from({ length: 5 }, (_, i) => ({ id: `s${i}`, text: `Note ${i}` }))} />);
+    fireEvent.click(screen.getByRole('button', { name: 'Search memories' }));
+    fireEvent.change(screen.getByRole('searchbox', { name: 'Search memories' }), { target: { value: 'zzz' } });
+    expect(screen.getByText('No memories match.')).toBeInTheDocument();
+  });
+  it('offers search in the grouped variant without categories once the list is long', () => {
+    render(<MemoryPanel variant="grouped" memories={Array.from({ length: 5 }, (_, i) => ({ id: `s${i}`, text: `Note ${i}` }))} />);
+    expect(screen.getByRole('button', { name: 'Search memories' })).toBeInTheDocument();
+    expect(screen.queryByRole('radiogroup')).toBeNull();
+    expect(screen.queryByRole('heading', { name: 'Other' })).toBeNull();
+  });
+  it('keeps list semantics valid (no presentation children in the list)', () => {
+    const { container } = render(<MemoryPanel variant="grouped" memories={two} />);
+    expect(container.querySelector('li[role]')).toBeNull();
+  });
+  it('separates the paused marker from the meta text', () => {
+    render(<MemoryPanel memories={two} />);
+    expect(screen.getByText(/Work/, { selector: 'div' }).textContent).toContain('\u00a0· Paused');
+  });
+});

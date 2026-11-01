@@ -90,3 +90,33 @@ describe('FileDiff inline mode', () => {
     expect(ref.current).toHaveClass('x');
   });
 });
+
+describe('FileDiff states', () => {
+  it('shows an empty message when the diff has no hunks', () => {
+    render(<FileDiff fileName="a.ts" diff="" reviewable />);
+    expect(screen.getByText('No changes')).toBeInTheDocument();
+    expect(screen.queryByText('All changes reviewed')).toBeNull();
+  });
+
+  it('puts the full file name in a title for truncated paths', () => {
+    render(<FileDiff fileName="packages/northwind-queue/src/workers/long-name.worker.ts" diff={diff} />);
+    expect(screen.getByTitle('packages/northwind-queue/src/workers/long-name.worker.ts')).toBeInTheDocument();
+  });
+
+  it('marks added and removed lines for screen readers', () => {
+    render(<FileDiff fileName="a.ts" diff={diff} />);
+    expect(screen.getAllByText('Added:', { exact: false }).length).toBeGreaterThan(0);
+    expect(screen.getAllByText('Removed:', { exact: false }).length).toBeGreaterThan(0);
+  });
+
+  it('prose layout: empty message, announces decisions and pluralises the count', () => {
+    const empty = render(<FileDiff layout="prose" fileName="a.md" diff="" />);
+    expect(screen.getByText('No suggestions')).toBeInTheDocument();
+    empty.unmount();
+    render(<FileDiff layout="prose" fileName="a.md" diff={prose} defaultView="inline" />);
+    expect(screen.getByText('suggestion')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Accept all' }));
+    expect(screen.getByRole('status')).toHaveTextContent('All suggestions accepted.');
+    expect(screen.getByText('suggestions')).toBeInTheDocument();
+  });
+});

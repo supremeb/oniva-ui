@@ -36,6 +36,20 @@ describe('AiAnswer', () => {
     expect(screen.queryByRole('button', { name: 'Copy' })).toBeNull();
   });
 
+  it('announces source reading and completion in a status region', () => {
+    const { rerender } = render(<AiAnswer sources={sources} answer="Partial" isStreaming animate={false} />);
+    expect(screen.getAllByRole('status').some((n) => n.textContent === 'Reading 2 sources')).toBe(true);
+    rerender(<AiAnswer sources={sources} answer="Partial" animate={false} />);
+    expect(screen.getAllByRole('status').some((n) => /^2 sources/.test(n.textContent ?? ''))).toBe(true);
+  });
+
+  it('keeps the source list free of inline styles and links only web urls', () => {
+    render(<AiAnswer sources={[...sources, { name: 'File', title: 'Local model', url: 'file:///x.xlsx' }]} answer="Hi" animate={false} />);
+    const items = screen.getByRole('list', { name: 'Sources' }).querySelectorAll('li');
+    items.forEach((li) => expect(li.getAttribute('style')).toBeNull());
+    expect(items[2]!.querySelector('a')).not.toHaveAttribute('href');
+  });
+
   it('forwards ref and className', () => {
     const ref = createRef<HTMLDivElement>();
     render(<AiAnswer ref={ref} className="extra" answer="Hi" animate={false} />);

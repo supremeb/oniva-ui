@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { AlertTriangle, Info } from 'lucide-react';
+import { TriangleAlertIcon, InfoIcon } from '../../icons/IconSet';
 import type { ReactNode, Ref } from 'react';
 import { Dialog as AriaDialog } from 'react-aria-components';
 import { mergeSx } from '../../internal/sx';
@@ -95,7 +95,7 @@ export function AlertDialog({
             )}
             aria-hidden="true"
           >
-            {icon ?? (variant === 'danger' ? <AlertTriangle size={20} /> : <Info size={20} />)}
+            {icon ?? (variant === 'danger' ? <TriangleAlertIcon size={20} /> : <InfoIcon size={20} />)}
           </span>
           <div {...stylex.props(styles.text)}>
             <DialogTitle>{title}</DialogTitle>

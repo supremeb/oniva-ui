@@ -7,7 +7,7 @@ import {
   SearchField as AriaSearchField,
   type Key,
 } from 'react-aria-components';
-import { Search } from 'lucide-react';
+import { SearchIcon } from '../../icons/IconSet';
 import { useCallback, useEffect, useState, type ReactNode, type Ref } from 'react';
 import { colors } from '../../tokens/colors.stylex';
 import { radius } from '../../tokens/radius.stylex';
@@ -265,7 +265,7 @@ export function CommandPalette({
     <>
       <Autocomplete filter={(text, input) => fuzzyMatch(text, input)}>
         <div {...stylex.props(styles.searchRow)}>
-          <Search size={18} aria-hidden="true" />
+          <SearchIcon size={18} aria-hidden="true" />
           <AriaSearchField
             aria-label="Search commands"
             autoFocus={!inline}

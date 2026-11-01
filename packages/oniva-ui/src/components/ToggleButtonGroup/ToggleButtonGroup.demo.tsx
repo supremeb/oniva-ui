@@ -1,4 +1,4 @@
-import { AlignCenter, AlignLeft, AlignRight, Bold, Italic } from 'lucide-react';
+import { AlignCenterIcon, AlignLeftIcon, AlignRightIcon, BoldIcon, ItalicIcon } from '../../icons/IconSet';
 import type { DemoModule } from '../../internal/demo';
 import { ToggleButton } from '../ToggleButton';
 import { ToggleButtonGroup } from './ToggleButtonGroup';
@@ -36,8 +36,8 @@ const demo: DemoModule = {
     {
       name: 'Multiple with icons',
       code: `<ToggleButtonGroup aria-label="Text style" selectionMode="multiple" variant="secondary" size="sm">
-  <ToggleButton id="b" isIconOnly aria-label="Bold"><Bold size={14} /></ToggleButton>
-  <ToggleButton id="i" isIconOnly aria-label="Italic"><Italic size={14} /></ToggleButton>
+  <ToggleButton id="b" isIconOnly aria-label="Bold"><BoldIcon size={14} /></ToggleButton>
+  <ToggleButton id="i" isIconOnly aria-label="Italic"><ItalicIcon size={14} /></ToggleButton>
 </ToggleButtonGroup>`,
       Component: () => (
         <div style={col}>
@@ -48,10 +48,10 @@ const demo: DemoModule = {
             size="sm"
           >
             <ToggleButton id="b" isIconOnly aria-label="Bold">
-              <Bold size={14} />
+              <BoldIcon size={14} />
             </ToggleButton>
             <ToggleButton id="i" isIconOnly aria-label="Italic">
-              <Italic size={14} />
+              <ItalicIcon size={14} />
             </ToggleButton>
           </ToggleButtonGroup>
           <ToggleButtonGroup
@@ -61,13 +61,13 @@ const demo: DemoModule = {
             size="sm"
           >
             <ToggleButton id="l" isIconOnly aria-label="Left">
-              <AlignLeft size={14} />
+              <AlignLeftIcon size={14} />
             </ToggleButton>
             <ToggleButton id="c" isIconOnly aria-label="Center">
-              <AlignCenter size={14} />
+              <AlignCenterIcon size={14} />
             </ToggleButton>
             <ToggleButton id="r" isIconOnly aria-label="Right">
-              <AlignRight size={14} />
+              <AlignRightIcon size={14} />
             </ToggleButton>
           </ToggleButtonGroup>
         </div>

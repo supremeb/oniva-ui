@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { AlertTriangle, CheckCircle2 } from 'lucide-react';
+import { TriangleAlertIcon, CircleCheckIcon } from '../../icons/IconSet';
 import { useState, type Ref } from 'react';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
@@ -34,13 +34,15 @@ const styles = stylex.create({
     fontWeight: font['--oniva-font-weight-medium'],
     gap: 8,
     margin: 0,
+    minWidth: 0,
   },
+  headText: { minWidth: 0, overflowWrap: 'anywhere' },
   iconBox: { display: 'inline-flex', flexShrink: 0 },
   warn: { color: colors['--oniva-color-warning-solid'], flexShrink: 0 },
   ok: { color: colors['--oniva-color-success-solid'], flexShrink: 0 },
   list: { overflow: 'hidden' },
   row: {
-        paddingBlockEnd: 14,
+    paddingBlockEnd: 14,
     paddingBlockStart: 12,
     paddingInline: 16,
   },
@@ -55,6 +57,7 @@ const styles = stylex.create({
     fontWeight: font['--oniva-font-weight-medium'],
     lineHeight: font['--oniva-font-lh-18'],
     margin: 0,
+    overflowWrap: 'anywhere',
   },
   folded: {
     display: 'block',
@@ -63,7 +66,7 @@ const styles = stylex.create({
     fontWeight: font['--oniva-font-weight-regular'],
   },
   pair: { alignItems: 'center', display: 'flex', flexWrap: 'wrap', gap: 8 },
-  detail: { margin: 0, marginBlockStart: 2 },
+  detail: { margin: 0, marginBlockStart: 2, overflowWrap: 'anywhere' },
   actions: { alignItems: 'center', display: 'flex', flexWrap: 'wrap', gap: 8, marginBlockStart: 12 },
   confirm: {
     alignItems: 'center',
@@ -153,23 +156,25 @@ export function DecisionInbox({
         <h3 aria-live="polite" {...stylex.props(styles.head)}>
           <CrossFade as="span" contentKey={openCount > 0 ? 'warn' : 'ok'} duration={220} xstyle={styles.iconBox}>
             {openCount > 0 ? (
-              <AlertTriangle size={16} aria-hidden="true" {...stylex.props(styles.warn)} />
+              <TriangleAlertIcon size={16} aria-hidden="true" {...stylex.props(styles.warn)} />
             ) : (
-              <CheckCircle2 size={16} aria-hidden="true" {...stylex.props(styles.ok)} />
+              <CircleCheckIcon size={16} aria-hidden="true" {...stylex.props(styles.ok)} />
             )}
           </CrossFade>
-          {title ?? (openCount > 0 ? (
+          {title != null ? (
+            <span {...stylex.props(styles.headText)}>{title}</span>
+          ) : openCount > 0 ? (
             <span>
               <AnimatedNumber value={openCount} /> {openCount === 1 ? 'needs' : 'need'} your input
             </span>
           ) : (
             <CrossFade as="span" contentKey="caught-up" duration={220}>All caught up</CrossFade>
-          ))}
+          )}
         </h3>
       </div>
       <div {...stylex.props(styles.list)}>
         {decisions.map((d, idx) => {
-          const s = state[d.id] ?? { open: true };
+          const s = state[d.id] ?? { open: !d.collapsed };
           return (
             <AnimatedHeight key={d.id} isOpen={!s.gone}>
               <div {...stylex.props(styles.row, idx > 0 && styles.divided)}>
@@ -179,6 +184,7 @@ export function DecisionInbox({
                   <button
                     type="button"
                     title={d.title}
+                    aria-expanded={false}
                     onClick={() => patch(d.id, { open: true })}
                     {...stylex.props(w4.reset, styles.title, styles.folded, w4.clamp1, focus.ring)}
                   >
@@ -191,7 +197,7 @@ export function DecisionInbox({
                     <CrossFade as="div" contentKey={s.answered ? 'done' : 'ask'} duration={220}>
                     {s.answered ? (
                       <span role="status" {...stylex.props(styles.confirm)}>
-                        <CheckCircle2 size={16} aria-hidden="true" {...stylex.props(m3.pop)} />
+                        <CircleCheckIcon size={16} aria-hidden="true" {...stylex.props(m3.pop)} />
                         {s.answered}
                       </span>
                     ) : (

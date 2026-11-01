@@ -1,15 +1,15 @@
 import { useState } from 'react';
-import { Database, FileText, Mail, Send, Trash2, Wallet } from 'lucide-react';
+import { DatabaseIcon, FileTextIcon, MailIcon, SendIcon, TrashIcon, WalletIcon } from '../../icons/IconSet';
 import type { DemoModule } from '../../internal/demo';
 import { AutonomyDial, type AgentAction, type AutonomyLevel } from './AutonomyDial';
 
 const actions: AgentAction[] = [
-  { id: 'read', label: 'Read files and docs', risk: 'safe', icon: <FileText size={18} /> },
-  { id: 'draft', label: 'Draft emails', risk: 'safe', icon: <Mail size={18} /> },
-  { id: 'crm', label: 'Update CRM records', risk: 'risky', icon: <Database size={18} /> },
-  { id: 'send', label: 'Send emails', risk: 'risky', icon: <Send size={18} /> },
-  { id: 'delete', label: 'Delete files', risk: 'destructive', icon: <Trash2 size={18} /> },
-  { id: 'spend', label: 'Spend money', risk: 'destructive', icon: <Wallet size={18} /> },
+  { id: 'read', label: 'Read files and docs', risk: 'safe', icon: <FileTextIcon size={18} /> },
+  { id: 'draft', label: 'Draft emails', risk: 'safe', icon: <MailIcon size={18} /> },
+  { id: 'crm', label: 'Update CRM records', risk: 'risky', icon: <DatabaseIcon size={18} /> },
+  { id: 'send', label: 'Send emails', risk: 'risky', icon: <SendIcon size={18} /> },
+  { id: 'delete', label: 'Delete files', risk: 'destructive', icon: <TrashIcon size={18} /> },
+  { id: 'spend', label: 'Spend money', risk: 'destructive', icon: <WalletIcon size={18} /> },
 ];
 
 function Controlled() {

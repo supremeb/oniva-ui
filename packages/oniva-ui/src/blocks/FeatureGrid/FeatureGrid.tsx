@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { Activity, Gauge, GitBranch, ShieldCheck, Workflow, Bell } from 'lucide-react';
+import { ActivityIcon, GaugeIcon, BranchIcon, ShieldCheckIcon, WorkflowIcon, BellIcon } from '../../icons/IconSet';
 import type { HTMLAttributes, ReactNode, Ref } from 'react';
 import { SectionHead } from '../../internal/blocks-parts';
 import { bs } from '../../internal/blocks-styles';
@@ -32,12 +32,12 @@ export interface Feature {
 }
 
 export const defaultFeatures: Feature[] = [
-  { icon: <Activity size={18} />, title: 'Live run traces', description: 'Follow every agent step, tool call and token as it happens, then replay any run in one click.' },
-  { icon: <Gauge size={18} />, title: 'Budgets that hold', description: 'Set spend caps per team, agent or customer. Oniva pauses runaway loops before they cost you.' },
-  { icon: <GitBranch size={18} />, title: 'Safe rollouts', description: 'Ship prompt and model changes to 5% of traffic first, and roll back automatically on regressions.' },
-  { icon: <ShieldCheck size={18} />, title: 'Guardrails built in', description: 'Redact PII, block unsafe tools and keep an audit trail that satisfies your security review.' },
-  { icon: <Workflow size={18} />, title: 'Visual workflows', description: 'Wire agents, approvals and human handoffs together without writing glue code.' },
-  { icon: <Bell size={18} />, title: 'Alerts that matter', description: 'Get one clear page when success rate drops, not forty. Routed to Slack, email or PagerDuty.' },
+  { icon: <ActivityIcon size={18} />, title: 'Live run traces', description: 'Follow every agent step, tool call and token as it happens, then replay any run in one click.' },
+  { icon: <GaugeIcon size={18} />, title: 'Budgets that hold', description: 'Set spend caps per team, agent or customer. Oniva pauses runaway loops before they cost you.' },
+  { icon: <BranchIcon size={18} />, title: 'Safe rollouts', description: 'Ship prompt and model changes to 5% of traffic first, and roll back automatically on regressions.' },
+  { icon: <ShieldCheckIcon size={18} />, title: 'Guardrails built in', description: 'Redact PII, block unsafe tools and keep an audit trail that satisfies your security review.' },
+  { icon: <WorkflowIcon size={18} />, title: 'Visual workflows', description: 'Wire agents, approvals and human handoffs together without writing glue code.' },
+  { icon: <BellIcon size={18} />, title: 'Alerts that matter', description: 'Get one clear page when success rate drops, not forty. Routed to Slack, email or PagerDuty.' },
 ];
 
 export interface FeatureGridProps extends Omit<HTMLAttributes<HTMLElement>, 'style' | 'title'> {

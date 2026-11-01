@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { Check, RotateCcw, Split, X } from 'lucide-react';
+import { CheckIcon, RotateCcwIcon, SplitIcon, XIcon } from '../../icons/IconSet';
 import { useId, useLayoutEffect, useRef, useState, type ReactNode, type Ref } from 'react';
 import { Button, ToggleButton } from 'react-aria-components';
 import { colors } from '../../tokens/colors.stylex';
@@ -95,7 +95,6 @@ const styles = stylex.create({
     fontVariantNumeric: 'tabular-nums',
     gap: 6,
     height: { default: 24, '@media (pointer: coarse)': 32 },
-    opacity: { default: 1, '[data-selected]': 1 },
     padding: 0,
     textDecorationLine: { default: 'none', '[data-selected]': 'underline' },
   },
@@ -106,8 +105,12 @@ const styles = stylex.create({
   swRetrying: { backgroundColor: colors['--oniva-color-warning-solid'] },
   swDone: { backgroundColor: colors['--oniva-color-success-solid'] },
   swFailed: { backgroundColor: colors['--oniva-color-danger-solid'] },
-  details: { paddingBlock: 6, paddingInline: 10 },
-  dTitle: { fontWeight: font['--oniva-font-weight-medium'] },
+  details: { boxSizing: 'border-box', minWidth: 0, paddingBlock: 6, paddingInline: 10 },
+  detailsTall: { minHeight: 56 },
+  hint: { color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-12'] },
+  empty: { color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-12'], margin: 0 },
+  wrap: { overflowWrap: 'anywhere' },
+  dTitle: { fontWeight: font['--oniva-font-weight-medium'], overflowWrap: 'anywhere' },
   dRow: { color: colors['--oniva-color-text-muted'], display: 'flex', flexWrap: 'wrap', fontSize: font['--oniva-font-size-12'], gap: 10, marginBlockStart: 4 },
   retry: {
     alignItems: 'center',
@@ -167,7 +170,7 @@ export function FanOutGrid({
   const [pinned, setPinned] = useState<string | null>(null);
   const [filter, setFilter] = useState<FanoutStatus | null>(null);
   const [msg, say] = useAnnouncer();
-  const lastStep = useRef(0);
+  const lastStep = useRef<number | null>(null);
   const prevStatus = useRef<Map<string, FanoutStatus> | null>(null);
   // A cell that changes state pops once (done), shakes (failed) or settles (running).
   useLayoutEffect(() => {
@@ -209,8 +212,10 @@ export function FanOutGrid({
 
   const step = Math.floor(ratio * 10);
   if (step !== lastStep.current) {
+    const first = lastStep.current === null;
     lastStep.current = step;
-    queueMicrotask(() => say(ratio >= 1 ? `Finished: ${counts.done} done, ${counts.failed} failed.` : `${f.percent(step / 10)} complete.`));
+    // The first render only records where the job is; announcing it would read out progress nobody watched change.
+    if (!first) queueMicrotask(() => say(ratio >= 1 ? `Finished: ${counts.done} done, ${counts.failed} failed.` : `${f.percent(step / 10)} complete.`));
   }
 
   const current = tasks.find((t) => t.id === (pinned ?? active)) ?? null;
@@ -249,21 +254,21 @@ export function FanOutGrid({
   return (
     <div {...mergeSx(stylex.props(w1.root, styles.root, xstyle), className)} ref={ref}>
       <div {...stylex.props(w1.bar)}>
-        {icon ?? <span aria-hidden="true" {...stylex.props(styles.headIcon)}><Split size={16} /></span>}
+        {icon ?? <span aria-hidden="true" {...stylex.props(styles.headIcon)}><SplitIcon size={16} /></span>}
         <h3 {...stylex.props(w1.title)}>
           {title} {job && <span {...stylex.props(styles.job)}>{job}</span>}
         </h3>
         <span {...stylex.props(w1.grow)} />
         {onRetry && counts.failed > 0 && (
           <Button onPress={() => onRetry(tasks.filter((t) => t.status === 'failed').map((t) => t.id))} className={() => sxClass(stylex.props(styles.retry, focus.ring))}>
-            <RotateCcw size={13} aria-hidden="true" />
+            <RotateCcwIcon size={13} aria-hidden="true" />
             Retry failed
           </Button>
         )}
         <div {...stylex.props(styles.stats)}>
           <span {...stylex.props(styles.statStrong)}>{f.number(settled)} / {f.number(total)}</span>
           <span {...stylex.props(styles.statStrong)}>{cost(spent)}</span>
-          <span>{left != null ? `~${formatDuration(left)} left` : 'Time left -'}</span>
+          {remaining > 0 && <span>{left != null ? `~${formatDuration(left)} left` : 'Time left -'}</span>}
         </div>
       </div>
       <VisuallyHidden>
@@ -279,6 +284,7 @@ export function FanOutGrid({
           onKeyDown={move}
           {...stylex.props(styles.grid)}
         >
+          {total === 0 && <p {...stylex.props(styles.empty)}>No tasks in this job yet.</p>}
           {tasks.map((t, i) => {
             const dim = filter != null && t.status !== filter;
             return (
@@ -300,7 +306,7 @@ export function FanOutGrid({
               >
                 {(t.status === 'done' || t.status === 'failed') && (
                   <span key={t.status} aria-hidden="true" {...stylex.props(styles.mark)}>
-                    {t.status === 'done' ? <Check size={11} strokeWidth={3} /> : <X size={11} strokeWidth={3} />}
+                    {t.status === 'done' ? <CheckIcon size={11} strokeWidth={2.25} /> : <XIcon size={11} strokeWidth={2.25} />}
                   </span>
                 )}
                 {t.status === 'running' && (
@@ -310,7 +316,7 @@ export function FanOutGrid({
             );
           })}
         </div>
-      <div {...stylex.props(styles.details)} id={detailId} aria-live="off">
+      <div {...stylex.props(styles.details, total > 0 && styles.detailsTall)} id={detailId} aria-live="off">
         {current ? (
           <div key={current.id} {...stylex.props(styles.detail)}>
             <div {...stylex.props(styles.dTitle)}>{current.label}</div>
@@ -321,8 +327,10 @@ export function FanOutGrid({
               {(current.attempts ?? 1) >= 2 && <span>{current.attempts} attempts</span>}
               {current.cost != null && <span>{cost(current.cost)}</span>}
             </div>
-            {(current.error ?? current.result) && <div {...stylex.props(w1.muted)}>{current.status === 'failed' ? current.error : current.result}</div>}
+            {(current.error ?? current.result) && <div {...stylex.props(w1.muted, styles.wrap)}>{current.status === 'failed' ? current.error : current.result}</div>}
           </div>
+        ) : total > 0 ? (
+          <span {...stylex.props(styles.hint)}>Hover or focus a cell for details.</span>
         ) : null}
       </div>
       <div role="group" aria-label="Filter by state" {...stylex.props(styles.tray)}>

@@ -8,7 +8,7 @@ import {
   type LinkProps as AriaLinkProps,
   type SearchFieldProps as AriaSearchFieldProps,
 } from 'react-aria-components';
-import { ChevronDown, ChevronsUpDown, PanelLeft, Search } from 'lucide-react';
+import { ChevronDownIcon, ChevronsUpDownIcon, PanelLeftIcon, SearchIcon } from '../../icons/IconSet';
 import {
   createContext,
   use,
@@ -402,7 +402,7 @@ export function SidebarHeader({
         {!collapsed && (
           <>
             <span title={typeof name === 'string' ? name : undefined} {...stylex.props(styles.switcherName)}>{name}</span>
-            <ChevronsUpDown size={16} aria-hidden="true" {...stylex.props(styles.chevrons)} />
+            <ChevronsUpDownIcon size={16} aria-hidden="true" {...stylex.props(styles.chevrons)} />
           </>
         )}
       </AriaButton>
@@ -412,7 +412,7 @@ export function SidebarHeader({
         onPress={toggle}
         {...stylex.props(styles.iconBtn)}
       >
-        <PanelLeft size={18} />
+        <PanelLeftIcon size={18} />
       </AriaButton>
     </div>
   );
@@ -445,7 +445,7 @@ export function SidebarSearch({
         aria-label={placeholder}
         {...stylex.props(styles.iconBtn, styles.searchIconBtn, xstyle)}
       >
-        <Search size={18} />
+        <SearchIcon size={18} />
       </AriaButton>
     );
   }
@@ -456,7 +456,7 @@ export function SidebarSearch({
       ref={ref}
       className={sxClass(stylex.props(styles.search, xstyle), className)}
     >
-      <Search size={16} aria-hidden="true" />
+      <SearchIcon size={16} aria-hidden="true" />
       <AriaInput placeholder={placeholder} {...stylex.props(styles.searchInput)} />
       {hint && (
         <span aria-hidden="true" {...stylex.props(styles.kbd)}>
@@ -541,7 +541,7 @@ export function SidebarSection({
             {...stylex.props(styles.sectionTitle, styles.sectionToggle)}
           >
             {title}
-            <ChevronDown
+            <ChevronDownIcon
               size={14}
               {...stylex.props(styles.chevron, !open && styles.chevronClosed)}
             />
@@ -667,7 +667,7 @@ export function SidebarAccount({ name, email, avatarSrc, onPress, xstyle }: Side
             <span {...stylex.props(styles.accountName)}>{name}</span>
             {email && <span {...stylex.props(styles.accountSub)}>{email}</span>}
           </span>
-          <ChevronsUpDown size={16} aria-hidden="true" {...stylex.props(styles.chevrons)} />
+          <ChevronsUpDownIcon size={16} aria-hidden="true" {...stylex.props(styles.chevrons)} />
         </>
       )}
     </AriaButton>

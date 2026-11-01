@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { Activity, ArrowDown, ArrowUp, Minus } from 'lucide-react';
+import { ActivityIcon, ArrowDownIcon, ArrowUpIcon, MinusIcon } from '../../icons/IconSet';
 import type { CSSProperties, ReactNode, Ref } from 'react';
 import { mergeSx } from '../../internal/sx';
 import { colors } from '../../tokens/colors.stylex';
@@ -148,7 +148,7 @@ export function ChangeSummary({ changes, title = "What's changed", period, icon,
       <header {...stylex.props(styles.head)}>
         <h3 {...stylex.props(styles.heading)}>
           <span aria-hidden="true" {...stylex.props(styles.icon)}>
-            {icon ?? <Activity size={16} />}
+            {icon ?? <ActivityIcon size={16} />}
           </span>
           <span {...stylex.props(styles.ellipsis)}>{title}</span>
         </h3>
@@ -159,7 +159,7 @@ export function ChangeSummary({ changes, title = "What's changed", period, icon,
           {changes.map((c, i) => {
             const tone: ChangeTone = c.tone === 'good' || c.tone === 'bad' ? c.tone : 'neutral';
             const dir = c.direction ?? (tone === 'bad' ? 'down' : 'up');
-            const Icon = tone === 'neutral' ? Minus : dir === 'down' ? ArrowDown : ArrowUp;
+            const Icon = tone === 'neutral' ? MinusIcon : dir === 'down' ? ArrowDownIcon : ArrowUpIcon;
             return (
               <div key={`${i}-${c.label}`} style={{ '--oniva-i': Math.min(i, 12) } as CSSProperties} {...stylex.props(styles.row)}>
                 <dt {...stylex.props(styles.label)} title={c.label}>

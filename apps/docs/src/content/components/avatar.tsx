@@ -1,5 +1,4 @@
-import { User } from 'lucide-react';
-import { Avatar, AvatarGroup } from 'oniva-ui';
+import { Avatar, AvatarGroup, UserIcon } from 'oniva-ui';
 import type { DocPage } from '../types';
 
 type S = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
@@ -52,7 +51,7 @@ const page: DocPage = {
     { name: 'Initials', description: 'No src: two letters from the name.', Render: () => <Demo size="lg" /> },
     { name: 'Single name', description: 'One word gives one letter.', Render: () => <Demo size="lg" name="Linus" /> },
     { name: 'Accent', description: 'Accent 300 background, 900 text.', Render: () => <Demo size="lg" color="accent" /> },
-    { name: 'Icon fallback', description: 'No name: the fallback node renders.', Render: () => <Avatar size="lg" name="" fallback={<User size={16} />} aria-label="Unassigned" /> },
+    { name: 'Icon fallback', description: 'No name: the fallback node renders.', Render: () => <Avatar size="lg" name="" fallback={<UserIcon size={16} />} aria-label="Unassigned" /> },
     { name: 'Image failed', description: 'A broken src falls back to initials.', Render: () => <Demo size="lg" broken /> },
     { name: 'Group with overflow', description: 'max=3 shows three and "+2".', Render: () => <Group max={3} /> },
   ],

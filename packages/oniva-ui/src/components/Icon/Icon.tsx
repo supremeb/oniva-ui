@@ -1,6 +1,6 @@
 import * as stylex from '@stylexjs/stylex';
-import type { LucideIcon } from 'lucide-react';
 import type { SVGAttributes, Ref } from 'react';
+import type { IconGlyph, IconVariant } from '../../icons/IconSet';
 import { colors } from '../../tokens/colors.stylex';
 
 const styles = stylex.create({
@@ -20,25 +20,29 @@ export type IconSize = keyof typeof iconSizes;
 export type IconTone =
   'default' | 'muted' | 'subtle' | 'accent' | 'success' | 'warning' | 'danger' | 'info';
 
-export interface IconProps extends Omit<SVGAttributes<SVGSVGElement>, 'style' | 'children'> {
-  /** A lucide-react icon component, e.g. `Bell`. */
-  icon: LucideIcon;
+export interface IconProps extends Omit<SVGAttributes<SVGSVGElement>, 'style' | 'children' | 'strokeWidth'> {
+  /** An oniva glyph component, e.g. `BellIcon`. */
+  icon: IconGlyph;
   size?: IconSize;
   tone?: IconTone;
+  /** Drawing style: outline (default), duo, fill or fill-duo. */
+  variant?: IconVariant;
   /** Accessible label. Omit for decorative icons (hidden from AT). */
   label?: string;
+  /** Stroke width in grid units (the grid is 18). */
   strokeWidth?: number;
   xstyle?: stylex.StyleXStyles;
   ref?: Ref<SVGSVGElement>;
 }
 
-/** Lucide wrapper with size + tone tokens. Decorative unless `label` is set. */
+/** Glyph wrapper with size and tone tokens. Decorative unless `label` is set. */
 export function Icon({
   icon: Glyph,
   size = 'md',
   tone = 'default',
+  variant = 'outline',
   label,
-  strokeWidth = 2,
+  strokeWidth = 1.5,
   className,
   xstyle,
   ref,
@@ -50,12 +54,13 @@ export function Icon({
       {...rest}
       ref={ref}
       size={iconSizes[size]}
+      variant={variant}
       strokeWidth={strokeWidth}
       aria-hidden={label ? undefined : true}
       aria-label={label}
       role={label ? 'img' : undefined}
-      {...sx}
       className={[sx.className, className].filter(Boolean).join(' ')}
+      style={sx.style}
     />
   );
 }

@@ -56,3 +56,33 @@ describe('PromptLibrary (loop 7)', () => {
     expect(ref.current).toHaveClass('extra');
   });
 });
+
+describe('PromptLibrary (state pass)', () => {
+  const sp = [{ id: 'p1', name: 'Release notes', tags: ['product'], template: 'Write release notes for {product} v{version}.' }];
+  it('says there are no saved prompts instead of a failed search when empty', () => {
+    const { unmount } = render(<PromptLibrary prompts={[]} />);
+    expect(screen.getByText('No saved prompts yet.')).toBeInTheDocument();
+    unmount();
+    render(<PromptLibrary variant="split" prompts={[]} />);
+    expect(screen.getByText('No saved prompts yet.')).toBeInTheDocument();
+  });
+  it('keeps the search message when a query matches nothing', () => {
+    render(<PromptLibrary prompts={sp} />);
+    fireEvent.change(screen.getByRole('searchbox', { name: 'Search prompts' }), { target: { value: 'zzz' } });
+    expect(screen.getByText('No prompts match “zzz”.')).toBeInTheDocument();
+  });
+  it('split view: requireAll keeps Use aria-disabled and announces what is missing', () => {
+    const onUse = vi.fn();
+    render(<PromptLibrary variant="split" requireAll prompts={sp} onUse={onUse} />);
+    const use = screen.getByRole('button', { name: 'Use prompt' });
+    expect(use).toHaveAttribute('aria-disabled', 'true');
+    fireEvent.click(use);
+    expect(onUse).not.toHaveBeenCalled();
+    expect(screen.getByRole('status')).toHaveTextContent('2 variables still missing');
+    fireEvent.change(screen.getByLabelText('product'), { target: { value: 'Ledger' } });
+    fireEvent.change(screen.getByLabelText('version'), { target: { value: '2.4' } });
+    expect(screen.getByRole('button', { name: 'Use prompt' })).not.toHaveAttribute('aria-disabled');
+    fireEvent.click(screen.getByRole('button', { name: 'Use prompt' }));
+    expect(onUse.mock.calls[0]![1]).toBe('Write release notes for Ledger v2.4.');
+  });
+});

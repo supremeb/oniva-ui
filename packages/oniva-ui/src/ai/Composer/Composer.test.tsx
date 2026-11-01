@@ -50,6 +50,23 @@ describe('Composer', () => {
     vi.useRealTimers();
   });
 
+  it('shows the send hint for typed text but not while disabled', () => {
+    const { unmount } = render(<Composer defaultValue="Draft the close note" />);
+    expect(screen.getByText('send')).toBeInTheDocument();
+    unmount();
+    render(<Composer defaultValue="Draft the close note" isDisabled />);
+    expect(screen.queryByText('send')).not.toBeInTheDocument();
+    expect(screen.getByRole('textbox', { name: 'Message' })).toBeDisabled();
+  });
+
+  it('sends with only an attachment and keeps the file list in its own scroll region', () => {
+    const onSubmit = vi.fn();
+    render(<Composer onSubmit={onSubmit} attachments={[{ id: 'a', name: 'q3.csv', size: 48_200 }]} />);
+    expect(screen.getByText('q3.csv')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Send message' }));
+    expect(onSubmit).toHaveBeenCalledWith('');
+  });
+
   it('forwards ref and className', () => {
     const ref = createRef<HTMLDivElement>();
     render(<Composer ref={ref} className="extra" />);

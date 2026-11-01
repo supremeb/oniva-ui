@@ -56,4 +56,16 @@ describe('AgentSteering', () => {
     rerender(<AgentSteering title="Migrate" steps={steps} status="done" now={0} />);
     expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
   });
+
+  it('hides the plan list when there are no steps', () => {
+    render(<AgentSteering title="Migrate" steps={[]} now={0} />);
+    expect(screen.queryByRole('list', { name: 'Plan' })).not.toBeInTheDocument();
+  });
+
+  it('keeps the send button disabled when nothing can queue', () => {
+    render(<AgentSteering title="Migrate" steps={steps} onInterrupt={() => {}} now={0} />);
+    fireEvent.change(screen.getByRole('textbox', { name: 'Steer the agent' }), { target: { value: 'Stop' } });
+    expect(screen.getByRole('button', { name: 'Queue for the next step' })).toBeDisabled();
+    expect(screen.queryByText('next step')).not.toBeInTheDocument();
+  });
 });

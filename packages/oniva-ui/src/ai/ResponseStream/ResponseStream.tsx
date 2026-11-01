@@ -25,7 +25,14 @@ const styles = stylex.create({
     lineHeight: font['--oniva-font-lh-16'],
     whiteSpace: 'pre-wrap',
   },
+  // While text is still arriving the block keeps one line of height, so the first words don't push the layout down.
+  reserve: { minHeight: font['--oniva-font-lh-16'] },
+  // Words are revealed as unbreakable inline-blocks; a very long token (URL, file path) would overflow the column,
+  // so text containing one is shown as plain wrapping text instead.
+  wrapAnywhere: { overflowWrap: 'anywhere' },
 });
+
+const LONG_TOKEN = /\S{32,}/;
 
 /** Progressively reveals `text`. Returns the visible prefix and whether it is complete. */
 export function useResponseStream(
@@ -96,11 +103,18 @@ export function ResponseStream({
     instant,
     onComplete,
   });
-  const sx = stylex.props(styles.root, xstyle);
+  const plain = !render && LONG_TOKEN.test(visible);
+  const sx = stylex.props(styles.root, !isComplete && styles.reserve, plain && styles.wrapAnywhere, xstyle);
   return (
     <div {...rest} ref={ref} aria-busy={!isComplete} {...mergeSx(sx, className)}>
       <div aria-hidden={isComplete ? undefined : true}>
-        {render ? render(visible, isComplete) : <TextReveal text={visible} staggerMs={30} maxDelayMs={240} />}
+        {render ? (
+          render(visible, isComplete)
+        ) : plain ? (
+          visible
+        ) : (
+          <TextReveal text={visible} staggerMs={30} maxDelayMs={240} />
+        )}
       </div>
       <span role="status" style={srOnlyStyle}>
         {isComplete ? 'Response complete' : 'Generating response…'}

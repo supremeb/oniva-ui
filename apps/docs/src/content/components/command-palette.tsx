@@ -1,18 +1,17 @@
 import { useState, type CSSProperties } from 'react';
-import { Search, FileText, Plus, Users, Moon, UserPlus, LogOut, Sparkles } from 'lucide-react';
-import { Button, CommandPalette, Kbd, fuzzyMatch, type CommandGroup } from 'oniva-ui';
+import { Button, CommandPalette, Kbd, fuzzyMatch, type CommandGroup, SearchIcon, FileTextIcon, PlusIcon, UsersIcon, MoonIcon, UserPlusIcon, LogOutIcon, SparklesIcon } from 'oniva-ui';
 import type { DocPage } from '../types';
 
 // The open palette is a modal overlay and cannot be locked inside a stage, so every stage composes the same
 // structure from real Kbd + tokens, with the measurements of CommandPalette.tsx (52px field, 8px list padding,
 // 32px rows, 8px radius). The playground also mounts the real palette behind a button.
 
-interface Row { id: string; label: string; icon: typeof Plus; shortcut?: string; danger?: boolean }
+interface Row { id: string; label: string; icon: typeof PlusIcon; shortcut?: string; danger?: boolean }
 interface Group { id: string; title: string; rows: Row[] }
 
 const GROUPS: Group[] = [
-  { id: 'go', title: 'Go to', rows: [{ id: 'invoices', label: 'Invoices', icon: FileText }, { id: 'customers', label: 'Customers', icon: Users }] },
-  { id: 'actions', title: 'Actions', rows: [{ id: 'new-invoice', label: 'Create invoice', icon: Plus, shortcut: '⌘N' }, { id: 'invite', label: 'Invite teammate', icon: UserPlus }, { id: 'theme', label: 'Toggle dark mode', icon: Moon, shortcut: '⌘D' }, { id: 'sign-out', label: 'Sign out', icon: LogOut, danger: true }] },
+  { id: 'go', title: 'Go to', rows: [{ id: 'invoices', label: 'Invoices', icon: FileTextIcon }, { id: 'customers', label: 'Customers', icon: UsersIcon }] },
+  { id: 'actions', title: 'Actions', rows: [{ id: 'new-invoice', label: 'Create invoice', icon: PlusIcon, shortcut: '⌘N' }, { id: 'invite', label: 'Invite teammate', icon: UserPlusIcon }, { id: 'theme', label: 'Toggle dark mode', icon: MoonIcon, shortcut: '⌘D' }, { id: 'sign-out', label: 'Sign out', icon: LogOutIcon, danger: true }] },
 ];
 
 const palette: CommandGroup[] = GROUPS.map((g) => ({ id: g.id, title: g.title, items: g.rows.map((r) => ({ id: r.id, label: r.label, shortcut: r.shortcut, icon: <r.icon size={16} />, variant: r.danger ? ('danger' as const) : ('default' as const) })) }));
@@ -27,13 +26,13 @@ function Panel({ query = '', width = 460, footer = true, shortcuts = true, empty
   return (
     <div role="dialog" aria-label="Command palette" style={{ background: v('color-surface'), border: `1px solid ${v('color-border')}`, borderRadius: 12, boxShadow: v('shadow-xl'), maxWidth: '100%', overflow: 'hidden', width }}>
       <div data-part="field" style={{ alignItems: 'center', borderBottom: `1px solid ${v('color-border')}`, color: v('color-icon-muted'), display: 'flex', gap: 10, padding: '0 16px' }}>
-        <Search size={18} aria-hidden="true" data-part="icon" />
+        <SearchIcon size={18} aria-hidden="true" data-part="icon" />
         <span data-part="input" style={{ color: query ? v('color-text') : v('color-text-placeholder'), flex: 1, fontSize: 16, height: 52, lineHeight: '52px', whiteSpace: 'nowrap' }}>{query || placeholder}</span>
       </div>
       <div role="listbox" aria-label="Commands" style={{ padding: 8 }}>
         {chosen ? (
           <div role="status" style={{ alignItems: 'center', color: v('color-text-muted'), display: 'flex', fontSize: 14, gap: 8, justifyContent: 'center', padding: '28px 16px' }}>
-            <Sparkles size={16} aria-hidden="true" /> {chosen}
+            <SparklesIcon size={16} aria-hidden="true" /> {chosen}
           </div>
         ) : none ? (
           <div data-part="empty" style={{ color: v('color-text-muted'), fontSize: 14, padding: '32px 16px', textAlign: 'center' }}>
@@ -94,7 +93,7 @@ const page: DocPage = {
     Render: () => <Panel query="inv" footer width={440} />,
     parts: [
       { name: 'Panel', description: '560px wide (max 100% minus 32px), surface fill, 1px border, overlay shadow. Fades in over 80ms with no scale.', selector: '[role="dialog"]' },
-      { name: 'Search icon', description: '18px lucide icon in icon-muted, 10px gap to the input. Decorative, aria-hidden.', selector: '[data-part="icon"]' },
+      { name: 'Search icon', description: '18px icon in icon-muted, 10px gap to the input. Decorative, aria-hidden.', selector: '[data-part="icon"]' },
       { name: 'Search input', description: '52px tall, 16/22 text. Placeholder uses text-placeholder. Focus lands here on open.', selector: '[data-part="input"]' },
       { name: 'Section label', description: '12px medium, text-muted, 6px by 8px padding. Names the group: Go to, Actions.', selector: '[data-part="section"]' },
       { name: 'Highlighted row', description: '32px minimum, 8px radius, surface-tertiary fill. Exactly one at a time; the highlight is instant in.', selector: '[role="option"][aria-selected="true"]' },

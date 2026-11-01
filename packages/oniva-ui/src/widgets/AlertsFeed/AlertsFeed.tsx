@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { AlertTriangle, CircleCheck, Info, ShieldAlert } from 'lucide-react';
+import { TriangleAlertIcon, CircleCheckIcon, InfoIcon, ShieldAlertIcon } from '../../icons/IconSet';
 import type { ReactNode, Ref } from 'react';
 import { Badge } from '../../components/Badge';
 import { Card, CardHeader, CardHeaderText, CardTitle, Tile } from '../../components/Card';
@@ -87,10 +87,10 @@ export interface AlertsFeedProps {
 }
 
 const ICONS = {
-  critical: <ShieldAlert size={18} />,
-  warning: <AlertTriangle size={18} />,
-  info: <Info size={18} />,
-  success: <CircleCheck size={18} />,
+  critical: <ShieldAlertIcon size={18} />,
+  warning: <TriangleAlertIcon size={18} />,
+  info: <InfoIcon size={18} />,
+  success: <CircleCheckIcon size={18} />,
 };
 
 /** "Important alerts · 12 this week": scrollable cards with icon circle, copy and date chip. */

@@ -1,5 +1,4 @@
-import { Plus, ArrowRight, Trash2, Download } from 'lucide-react';
-import { Button } from 'oniva-ui';
+import { Button, PlusIcon, ArrowRightIcon, TrashIcon, DownloadIcon } from 'oniva-ui';
 import type { DocPage } from '../types';
 
 const row = { alignItems: 'center', display: 'flex', flexWrap: 'wrap', gap: 12, justifyContent: 'center' } as const;
@@ -16,16 +15,16 @@ const page: DocPage = {
     intro: 'Six parts. The container and label are always present. Icons are optional and sit 6px from the label. The spinner replaces the label visually while keeping it in the accessible name.',
     Render: () => (
       <div style={{ alignItems: 'center', display: 'flex', flexDirection: 'column', gap: 28 }}>
-        <Button startIcon={<Plus size={16} />} endIcon={<ArrowRight size={16} />}>New invoice</Button>
+        <Button startIcon={<PlusIcon size={16} />} endIcon={<ArrowRightIcon size={16} />}>New invoice</Button>
         <div style={{ alignItems: 'center', display: 'flex', gap: 16 }}>
           <Button variant="secondary" isLoading>Saving</Button>
-          <Button variant="secondary" isIconOnly aria-label="Download"><Download size={16} /></Button>
+          <Button variant="secondary" isIconOnly aria-label="Download"><DownloadIcon size={16} /></Button>
         </div>
       </div>
     ),
     parts: [
       { name: 'Container', description: 'Native button. 36px tall at md, 10px radius, 12px horizontal padding, 14px text.', selector: 'button:not([data-pending]):not([aria-label])' },
-      { name: 'Leading icon', description: '16px lucide icon, 6px gap to the label. Decorative, so aria-hidden.', selector: 'button:not([data-pending]):not([aria-label]) svg:first-of-type' },
+      { name: 'Leading icon', description: '16px icon, 6px gap to the label. Decorative, so aria-hidden.', selector: 'button:not([data-pending]):not([aria-label]) svg:first-of-type' },
       { name: 'Label', description: '14px medium. Sentence case, verb first, two to three words.', selector: 'button:not([data-pending]):not([aria-label]) > span:first-of-type', fallback: { x: 50, y: 30 } },
       { name: 'Trailing icon', description: 'Direction (arrow) or a menu (chevron). Never decoration.', selector: 'button:not([data-pending]):not([aria-label]) svg:last-of-type' },
       { name: 'Spinner', description: 'Centred, 800ms linear rotation. Under reduced motion it pulses opacity instead.', selector: 'button[data-pending] svg' },
@@ -52,12 +51,12 @@ const page: DocPage = {
     ],
     initial: { variant: 'primary', size: 'md', label: 'Save changes', icon: false, isLoading: false, isDisabled: false },
     render: (p, ev) => (
-      <Button variant={p.variant as 'primary'} size={p.size as 'md'} startIcon={p.icon ? <Plus size={16} /> : undefined} isLoading={Boolean(p.isLoading)} isDisabled={Boolean(p.isDisabled)} onPress={() => ev('onPress')}>
+      <Button variant={p.variant as 'primary'} size={p.size as 'md'} startIcon={p.icon ? <PlusIcon size={16} /> : undefined} isLoading={Boolean(p.isLoading)} isDisabled={Boolean(p.isDisabled)} onPress={() => ev('onPress')}>
         {String(p.label)}
       </Button>
     ),
     code: (p) => {
-      const attrs = [p.variant !== 'primary' && `variant="${p.variant}"`, p.size !== 'md' && `size="${p.size}"`, p.icon && 'startIcon={<Plus size={16} />}', p.isLoading && 'isLoading', p.isDisabled && 'isDisabled'].filter(Boolean).join(' ');
+      const attrs = [p.variant !== 'primary' && `variant="${p.variant}"`, p.size !== 'md' && `size="${p.size}"`, p.icon && 'startIcon={<PlusIcon size={16} />}', p.isLoading && 'isLoading', p.isDisabled && 'isDisabled'].filter(Boolean).join(' ');
       return `<Button${attrs ? ' ' + attrs : ''} onPress={save}>${p.label}</Button>`;
     },
   },
@@ -66,10 +65,10 @@ const page: DocPage = {
     { name: 'Secondary', description: 'Surface fill, 1px border and a raised shadow. Sits next to a primary.', Render: () => <Button variant="secondary">Cancel</Button> },
     { name: 'Disabled', description: 'Opacity 0.5, not-allowed cursor, not focusable by pointer. Explain why nearby.', Render: () => <Button isDisabled>Save</Button> },
     { name: 'Loading', description: 'Spinner over the label. Width is preserved and presses are blocked.', Render: () => <Button isLoading>Saving</Button> },
-    { name: 'Danger', description: 'Flat red fill for destructive actions. Pair with a confirm step.', Render: () => <Button variant="danger" startIcon={<Trash2 size={16} />}>Delete</Button> },
+    { name: 'Danger', description: 'Flat red fill for destructive actions. Pair with a confirm step.', Render: () => <Button variant="danger" startIcon={<TrashIcon size={16} />}>Delete</Button> },
     { name: 'Ghost', description: 'No fill until hover. Lowest emphasis, for toolbars and rows.', Render: () => <Button variant="ghost">Cancel</Button> },
     { name: 'Soft', description: 'Accent-tinted fill for secondary emphasis.', Render: () => <Button variant="soft">Invite</Button> },
-    { name: 'Icon only', description: 'Square, 36px at md. aria-label is required.', Render: () => <Button variant="secondary" isIconOnly aria-label="Add"><Plus size={16} /></Button> },
+    { name: 'Icon only', description: 'Square, 36px at md. aria-label is required.', Render: () => <Button variant="secondary" isIconOnly aria-label="Add"><PlusIcon size={16} /></Button> },
   ],
   sections: [
     {

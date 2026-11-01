@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { ChevronLeft, ChevronRight, Pause, Play } from 'lucide-react';
+import { ChevronLeftIcon, ChevronRightIcon, PauseIcon, PlayIcon } from '../../icons/IconSet';
 import { Children, useCallback, useEffect, useId, useRef, useState } from 'react';
 import type { HTMLAttributes, ReactNode, Ref } from 'react';
 import { IconButton } from '../IconButton';
@@ -144,7 +144,7 @@ export function Carousel({ children, autoPlay, loop = true, onIndexChange, class
       </div>
       <div {...stylex.props(styles.controls)}>
         <IconButton variant="secondary" size="sm" aria-label="Previous slide" aria-controls={`${id}-vp`} isDisabled={!loop && index === 0} onPress={() => goTo(index - 1)}>
-          <ChevronLeft size={16} aria-hidden="true" />
+          <ChevronLeftIcon size={16} aria-hidden="true" />
         </IconButton>
         <div {...stylex.props(styles.dots)}>
           {slides.map((_, i) => (
@@ -154,11 +154,11 @@ export function Carousel({ children, autoPlay, loop = true, onIndexChange, class
           ))}
         </div>
         <IconButton variant="secondary" size="sm" aria-label="Next slide" aria-controls={`${id}-vp`} isDisabled={!loop && index === count - 1} onPress={() => goTo(index + 1)}>
-          <ChevronRight size={16} aria-hidden="true" />
+          <ChevronRightIcon size={16} aria-hidden="true" />
         </IconButton>
         {!!autoPlay && !reduce && (
           <IconButton variant="ghost" size="sm" aria-label={userPaused ? 'Start autoplay' : 'Pause autoplay'} onPress={() => setUserPaused((p) => !p)}>
-            {userPaused ? <Play size={14} aria-hidden="true" /> : <Pause size={14} aria-hidden="true" />}
+            {userPaused ? <PlayIcon size={14} aria-hidden="true" /> : <PauseIcon size={14} aria-hidden="true" />}
           </IconButton>
         )}
       </div>

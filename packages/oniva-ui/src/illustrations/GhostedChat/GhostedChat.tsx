@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { ThumbsDown } from 'lucide-react';
+import { ThumbsDownIcon } from '../../icons/IconSet';
 import { accent } from '../../tokens/accent.stylex';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
@@ -203,7 +203,7 @@ function Stage({ messages, status, hovered }: { messages: string[]; status: stri
         })}
       </div>
       <span aria-hidden="true" {...stylex.props(styles.reply, hovered && styles.show)}>
-        <ThumbsDown {...stylex.props(styles.replyIcon)} />
+        <ThumbsDownIcon {...stylex.props(styles.replyIcon)} />
       </span>
     </>
   );

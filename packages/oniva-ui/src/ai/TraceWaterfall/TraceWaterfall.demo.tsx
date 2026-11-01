@@ -1,4 +1,4 @@
-import { Database, FileText, GitBranch, Globe, Layout, Search } from 'lucide-react';
+import { DatabaseIcon, FileTextIcon, BranchIcon, GlobeIcon, LayoutIcon, SearchIcon } from '../../icons/IconSet';
 import { useMemo, useState, type ReactNode } from 'react';
 import { Button } from '../../components/Button';
 import type { DemoModule } from '../../internal/demo';
@@ -10,19 +10,19 @@ const finished: TraceSpan = {
   children: [
     { id: 'plan', name: 'Plan the launch', kind: 'llm', model: 'Atlas 2', detail: 'Atlas 2', status: 'done', start: 900, end: 7800, tokensIn: 3240, tokensOut: 880, cost: 0.115, input: 'Goal: launch the new pricing page by Friday.', output: '1. Audit current copy\n2. Draft tiers\n3. Review with legal' },
     { id: 'research', name: 'Researcher', kind: 'subagent', status: 'done', start: 8000, end: 22000, detail: 'Nova Pro', children: [
-      { id: 's1', name: 'web_search', kind: 'tool', detail: 'competitor plans', icon: ico(<Search size={12} />), status: 'done', start: 8200, end: 13600, cost: 0.005 },
-      { id: 's2', name: 'web_search', kind: 'tool', detail: 'tier benchmarks', icon: ico(<Search size={12} />), status: 'done', start: 8600, end: 15800, cost: 0.005 },
-      { id: 's3', name: 'Query plan usage', kind: 'tool', detail: 'warehouse', icon: ico(<Database size={12} />), status: 'done', start: 9000, end: 12500 },
-      { id: 's4', name: 'Read review sites', kind: 'tool', detail: '12 pages', icon: ico(<Globe size={12} />), status: 'done', start: 14400, end: 22000 },
+      { id: 's1', name: 'web_search', kind: 'tool', detail: 'competitor plans', icon: ico(<SearchIcon size={12} />), status: 'done', start: 8200, end: 13600, cost: 0.005 },
+      { id: 's2', name: 'web_search', kind: 'tool', detail: 'tier benchmarks', icon: ico(<SearchIcon size={12} />), status: 'done', start: 8600, end: 15800, cost: 0.005 },
+      { id: 's3', name: 'Query plan usage', kind: 'tool', detail: 'warehouse', icon: ico(<DatabaseIcon size={12} />), status: 'done', start: 9000, end: 12500 },
+      { id: 's4', name: 'Read review sites', kind: 'tool', detail: '12 pages', icon: ico(<GlobeIcon size={12} />), status: 'done', start: 14400, end: 22000 },
     ] },
     { id: 'copy', name: 'Writer', kind: 'subagent', status: 'done', start: 10000, end: 21000, detail: 'Nova Pro', cost: 0.04, children: [
-      { id: 'draft', name: 'Read brand voice', kind: 'tool', detail: 'Docs', icon: ico(<FileText size={12} />), status: 'done', start: 10200, end: 13800 },
-      { id: 'frames', name: 'Read pricing frames', kind: 'tool', detail: 'Design', icon: ico(<Layout size={12} />), status: 'done', start: 10900, end: 16000 },
+      { id: 'draft', name: 'Read brand voice', kind: 'tool', detail: 'Docs', icon: ico(<FileTextIcon size={12} />), status: 'done', start: 10200, end: 13800 },
+      { id: 'frames', name: 'Read pricing frames', kind: 'tool', detail: 'Design', icon: ico(<LayoutIcon size={12} />), status: 'done', start: 10900, end: 16000 },
       { id: 'check', name: 'check_claims', kind: 'tool', status: 'failed', start: 16100, end: 16900, error: '3 claims have no source' },
       { id: 'redo', name: 'Draft plan copy', kind: 'llm', model: 'Nova Pro', detail: 'Nova Pro', status: 'done', start: 17000, end: 21000, tokensIn: 5600, tokensOut: 1900, cost: 0.04 },
     ] },
     { id: 'coder', name: 'Coder', kind: 'subagent', status: 'done', start: 15500, end: 22600, detail: 'Lumen Fast', children: [
-      { id: 'branch', name: 'Create branch', kind: 'tool', detail: 'Repo', icon: ico(<GitBranch size={12} />), status: 'done', start: 15600, end: 17700 },
+      { id: 'branch', name: 'Create branch', kind: 'tool', detail: 'Repo', icon: ico(<BranchIcon size={12} />), status: 'done', start: 15600, end: 17700 },
       { id: 'page', name: 'Write pricing page', kind: 'llm', model: 'Lumen Fast', detail: 'Lumen Fast', status: 'done', start: 18000, end: 22600, tokensIn: 4100, tokensOut: 2300, cost: 0.06 },
     ] },
   ],

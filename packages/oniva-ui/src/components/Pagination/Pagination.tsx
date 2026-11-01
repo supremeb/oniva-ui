@@ -2,7 +2,7 @@ import * as stylex from '@stylexjs/stylex';
 import { media } from '../../tokens/media.stylex';
 import { focus } from '../../internal/focus';
 import { Button as AriaButton } from 'react-aria-components';
-import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowLeftIcon, ArrowRightIcon, ChevronLeftIcon, ChevronRightIcon } from '../../icons/IconSet';
 import { useState, type CSSProperties, type Ref } from 'react';
 import { mergeSx } from '../../internal/sx';
 import { accent } from '../../tokens/accent.stylex';
@@ -197,7 +197,7 @@ export function Pagination({
             onPress={() => go(page - 1)}
             {...stylex.props(styles.btn, focus.ring, styles.outline)}
           >
-            <ArrowLeft size={14} />
+            <ArrowLeftIcon size={14} />
             {labels?.previous ?? 'Previous'}
           </AriaButton>
           <AriaButton
@@ -206,7 +206,7 @@ export function Pagination({
             {...stylex.props(styles.btn, focus.ring, styles.outline)}
           >
             {labels?.next ?? 'Next'}
-            <ArrowRight size={14} />
+            <ArrowRightIcon size={14} />
           </AriaButton>
         </div>
       </nav>
@@ -224,7 +224,7 @@ export function Pagination({
             onPress={() => go(page - 1)}
             {...stylex.props(styles.btn, focus.ring)}
           >
-            <ChevronLeft size={16} />
+            <ChevronLeftIcon size={16} />
           </AriaButton>
         </li>
         {getPaginationRange(page, pageCount, siblingCount).map((item) => (
@@ -256,7 +256,7 @@ export function Pagination({
             onPress={() => go(page + 1)}
             {...stylex.props(styles.btn, focus.ring)}
           >
-            <ChevronRight size={16} />
+            <ChevronRightIcon size={16} />
           </AriaButton>
         </li>
       </ul>

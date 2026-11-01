@@ -3,6 +3,7 @@ import { focus } from '../../internal/focus';
 import type { AnchorHTMLAttributes, Ref } from 'react';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
+import { media } from '../../tokens/media.stylex';
 import { motion } from '../../tokens/motion.stylex';
 import { radius } from '../../tokens/radius.stylex';
 import { hostOf, safeUrl } from '../../internal/ai-motion';
@@ -13,11 +14,11 @@ const styles = stylex.create({
     alignItems: 'center',
     backgroundColor: {
       default: colors['--oniva-color-surface'],
-      ':hover': colors['--oniva-color-surface-hover'],
+      ':hover': { default: null, [media.hover]: colors['--oniva-color-surface-hover'] },
     },
     borderColor: {
       default: colors['--oniva-color-border'],
-      ':hover': colors['--oniva-color-border-hover'],
+      ':hover': { default: null, [media.hover]: colors['--oniva-color-border-hover'] },
     },
     borderRadius: radius['--oniva-radius-full'],
     borderStyle: 'solid',
@@ -32,7 +33,7 @@ const styles = stylex.create({
     gap: 6,
     height: 28,
     lineHeight: font['--oniva-font-lh-12'],
-    maxWidth: 240,
+    maxWidth: 280,
     paddingInlineEnd: 10,
     paddingInlineStart: 4,
     textDecoration: 'none',
@@ -54,11 +55,15 @@ const styles = stylex.create({
     textTransform: 'uppercase',
     width: 20,
   },
-  title: { overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
+  title: { minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
   host: {
     color: colors['--oniva-color-text-muted'],
-    flexShrink: 0,
+    flexShrink: 4,
     fontWeight: font['--oniva-font-weight-regular'],
+    minWidth: 0,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
   },
 });
 
@@ -72,9 +77,15 @@ export interface SourceChipProps extends Omit<
   ref?: Ref<HTMLAnchorElement>;
 }
 
-/** Compact pill linking to a web source: initial badge, title, host. */
+const firstLetter = (text: string) => text.match(/[\p{L}\p{N}]/u)?.[0] ?? '';
+
+/**
+ * Compact pill linking to a web source: initial badge, title, host. Over-long content truncates, host first.
+ * The badge falls back to the title's first letter when there is no readable host (mailto, empty, punycode).
+ */
 export function SourceChip({ title, url, className, xstyle, ref, ...rest }: SourceChipProps) {
   const host = hostOf(url);
+  const initial = (host.startsWith('xn--') ? '' : firstLetter(host)) || firstLetter(title);
   const sx = stylex.props(styles.base, focus.ring, xstyle);
   return (
     <a
@@ -86,10 +97,16 @@ export function SourceChip({ title, url, className, xstyle, ref, ...rest }: Sour
       {...mergeSx(sx, className)}
     >
       <span aria-hidden="true" {...stylex.props(styles.icon)}>
-        {host.charAt(0)}
+        {initial}
       </span>
-      <span {...stylex.props(styles.title)}>{title}</span>
-      <span {...stylex.props(styles.host)}>{host}</span>
+      <span title={title} {...stylex.props(styles.title)}>
+        {title}
+      </span>
+      {host ? (
+        <span title={host} {...stylex.props(styles.host)}>
+          {host}
+        </span>
+      ) : null}
     </a>
   );
 }

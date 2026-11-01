@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { ArrowUp, Check, CircleCheck, ListFilter, Play } from 'lucide-react';
+import { ArrowUpIcon, CheckIcon, CircleCheckIcon, ListFilterIcon, PlayIcon } from '../../icons/IconSet';
 import { useMemo, useRef, useState, type FormEvent, type KeyboardEvent, type Ref } from 'react';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
@@ -239,7 +239,7 @@ export function CommentsPanel({
           </TabList>
           <DropdownMenu>
             <IconButton variant="ghost" size="sm" aria-label="Sort comments">
-              <ListFilter size={16} />
+              <ListFilterIcon size={16} />
             </IconButton>
             <DropdownMenuContent
               placement="bottom end"
@@ -287,7 +287,7 @@ export function CommentsPanel({
                             isSelected={!!c.resolved}
                             onChange={(v) => toggleResolved(c, v)}
                           >
-                            <CircleCheck size={14} />
+                            <CircleCheckIcon size={14} />
                           </ToggleButton>
                         </span>
                       </div>
@@ -299,11 +299,11 @@ export function CommentsPanel({
                           </p>
                           {applied.has(c.id) ? (
                             <span role="status" {...stylex.props(styles.applied, styles.appliedIn)}>
-                              <Check size={14} aria-hidden="true" /> Applied
+                              <CheckIcon size={14} aria-hidden="true" /> Applied
                             </span>
                           ) : (
                             <div {...stylex.props(styles.run)}>
-                              <Button size="sm" variant="secondary" isLoading={isRunning} startIcon={<Play size={12} fill="currentColor" />} onPress={() => run(c)}>
+                              <Button size="sm" variant="secondary" isLoading={isRunning} startIcon={<PlayIcon size={12} fill="currentColor" />} onPress={() => run(c)}>
                                 {isRunning ? 'Running…' : 'Run edit'}
                               </Button>
                             </div>
@@ -332,7 +332,7 @@ export function CommentsPanel({
           {...stylex.props(styles.input, focus.ring)}
         />
         <IconButton type="submit" variant="soft" aria-label="Send comment" isDisabled={!draft.trim()}>
-          <ArrowUp size={16} />
+          <ArrowUpIcon size={16} />
         </IconButton>
       </form>
     </section>

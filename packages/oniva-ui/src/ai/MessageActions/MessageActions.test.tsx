@@ -57,3 +57,36 @@ describe('MessageActions (loop 7)', () => {
     expect(screen.getByRole('button', { name: 'Regenerate response' })).toBeInTheDocument();
   });
 });
+
+describe('MessageActions (state pass)', () => {
+  it('keeps the reason row inert until a dislike opens it', () => {
+    const { container } = render(<MessageActions text="a" />);
+    const group = container.querySelector('[aria-label="Why was this response not helpful?"]')!;
+    expect(group).toHaveAttribute('inert');
+    fireEvent.click(screen.getByRole('button', { name: 'Mark response as bad' }));
+    expect(group).not.toHaveAttribute('inert');
+  });
+
+  it('shows the version count as text outside the dimmed buttons', () => {
+    render(<MessageActions text="a" versions={12} version={9} onRegenerate={() => {}} />);
+    expect(screen.getByRole('img', { name: 'Version 10 of 12' })).toHaveTextContent('/ 12');
+  });
+
+  it('does not touch the document after unmount while the panel confirmation is pending', () => {
+    vi.useFakeTimers();
+    const onFeedback = vi.fn();
+    const { unmount } = render(<MessageActions variant="panel" text="a" defaultFeedback="dislike" defaultReasonOpen onFeedback={onFeedback} />);
+    fireEvent.click(screen.getByRole('button', { name: 'Send' }));
+    expect(onFeedback).toHaveBeenLastCalledWith('dislike', 'Too long');
+    unmount();
+    expect(() => vi.advanceTimersByTime(2000)).not.toThrow();
+    vi.useRealTimers();
+  });
+
+  it('lets reason chips take the shared focus ring', () => {
+    render(<MessageActions text="a" defaultFeedback="dislike" defaultReasonOpen />);
+    const chip = screen.getByRole('button', { name: 'Not accurate' });
+    chip.focus();
+    expect(chip).toHaveFocus();
+  });
+});

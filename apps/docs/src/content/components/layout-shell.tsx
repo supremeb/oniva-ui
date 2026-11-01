@@ -1,5 +1,4 @@
-import { Home, Receipt } from 'lucide-react';
-import { Breadcrumb, Breadcrumbs, LayoutShell, Sidebar, SidebarContent, SidebarHeader, SidebarItem, SidebarMenu, SidebarSection } from 'oniva-ui';
+import { Breadcrumb, Breadcrumbs, LayoutShell, Sidebar, SidebarContent, SidebarHeader, SidebarItem, SidebarMenu, SidebarSection, HomeIcon, ReceiptIcon } from 'oniva-ui';
 import type { DocPage } from '../types';
 
 const Demo = ({ header = true, sidebar = true, text = 'Revenue is up 8.2% vs. last month.' }: { header?: boolean; sidebar?: boolean; text?: string }) => (
@@ -9,8 +8,8 @@ const Demo = ({ header = true, sidebar = true, text = 'Revenue is up 8.2% vs. la
         <Sidebar aria-label="Main">
           <SidebarHeader name="Northwind" />
           <SidebarContent><SidebarSection><SidebarMenu>
-            <SidebarItem href="#" icon={<Home size={18} />} isActive>Home</SidebarItem>
-            <SidebarItem href="#" icon={<Receipt size={18} />}>Invoices</SidebarItem>
+            <SidebarItem href="#" icon={<HomeIcon size={18} />} isActive>Home</SidebarItem>
+            <SidebarItem href="#" icon={<ReceiptIcon size={18} />}>Invoices</SidebarItem>
           </SidebarMenu></SidebarSection></SidebarContent>
         </Sidebar>
       ) : undefined}

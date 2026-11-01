@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeftIcon, ChevronRightIcon } from '../../icons/IconSet';
 import {
   useCallback,
   useEffect,
@@ -469,7 +469,7 @@ export function CoverFlow({
           <div {...stylex.props(styles.row)}>
             {controls && (
               <Button isIconOnly size="sm" variant="ghost" aria-label="Previous cover" isDisabled={current === 0} onPress={() => go(current - 1)}>
-                <ChevronLeft size={16} />
+                <ChevronLeftIcon size={16} />
               </Button>
             )}
             <div key={current} aria-live="polite" {...stylex.props(styles.text, dir.current > 0 ? styles.textNext : styles.textPrev)} data-dir={dir.current}>
@@ -484,7 +484,7 @@ export function CoverFlow({
             </div>
             {controls && (
               <Button isIconOnly size="sm" variant="ghost" aria-label="Next cover" isDisabled={current === n - 1} onPress={() => go(current + 1)}>
-                <ChevronRight size={16} />
+                <ChevronRightIcon size={16} />
               </Button>
             )}
           </div>

@@ -1,6 +1,6 @@
 import * as stylex from '@stylexjs/stylex';
 import { media } from '../../tokens/media.stylex';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDownIcon } from '../../icons/IconSet';
 import {
   Button,
   FieldError,
@@ -109,7 +109,7 @@ export function Select<T extends object>({
                 stylex.props(fp.triggerValue, isPlaceholder && fp.placeholder).className ?? ''
               }
             />
-            <ChevronDown size={16} aria-hidden="true" {...stylex.props(fp.chevron)} />
+            <ChevronDownIcon size={16} aria-hidden="true" {...stylex.props(fp.chevron)} />
           </Button>
           {description != null && (
             <Text slot="description" {...stylex.props(ff.description)}>

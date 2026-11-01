@@ -2,7 +2,7 @@ import * as stylex from '@stylexjs/stylex';
 import { media } from '../../tokens/media.stylex';
 import { focus } from '../../internal/focus';
 import { Button as AriaButton, type ButtonProps as AriaButtonProps } from 'react-aria-components';
-import { Loader2 } from 'lucide-react';
+import { LoaderIcon } from '../../icons/IconSet';
 import { useLayoutEffect, useRef, type CSSProperties, type ReactNode, type Ref } from 'react';
 import { useObjectRef } from 'react-aria';
 import { prefersReducedMotion } from '../../internal/motion-hooks';
@@ -161,7 +161,7 @@ export function Button({
     >
       <span {...stylex.props(styles.content, isLoading && !shimmer && styles.contentHidden)}>
         {shimmer ? (
-          <Loader2 size={size === 'xs' ? 12 : 16} aria-hidden="true" {...stylex.props(styles.spinIcon)} />
+          <LoaderIcon size={size === 'xs' ? 12 : 16} aria-hidden="true" {...stylex.props(styles.spinIcon)} />
         ) : startIcon != null ? (
           <span key={shimmer ? 's' : 'i'} {...stylex.props(styles.iconSwap)}>
             {startIcon}
@@ -180,7 +180,7 @@ export function Button({
       </span>
       {isLoading && !shimmer && (
         <span {...stylex.props(styles.spinner)} aria-hidden="true">
-          <Loader2 size={size === 'xs' ? 12 : 16} {...stylex.props(styles.spinIcon)} />
+          <LoaderIcon size={size === 'xs' ? 12 : 16} {...stylex.props(styles.spinIcon)} />
         </span>
       )}
     </AriaButton>

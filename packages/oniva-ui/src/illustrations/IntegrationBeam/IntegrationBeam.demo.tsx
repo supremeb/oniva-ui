@@ -1,5 +1,5 @@
 import type { DemoModule } from '../../internal/demo';
-import { Boxes } from 'lucide-react';
+import { BoxesIcon } from '../../icons/IconSet';
 import { IntegrationBeam } from './IntegrationBeam';
 
 const demo: DemoModule = {
@@ -22,14 +22,14 @@ const demo: DemoModule = {
     {
       name: "Custom tools",
       code: `<IntegrationBeam
-  center={{ name: 'Relay', icon: <Boxes /> }}
+  center={{ name: 'Relay', icon: <BoxesIcon /> }}
   left={[{ name: 'Forms' }, { name: 'Billing' }]}
   right={[{ name: 'CRM' }, { name: 'Warehouse' }, { name: 'Alerts' }]}
 />`,
       Component: () => (
         <div style={{ margin: '0 auto', maxWidth: 1120, width: '100%' }}>
           <IntegrationBeam
-            center={{ name: 'Relay', icon: <Boxes /> }}
+            center={{ name: 'Relay', icon: <BoxesIcon /> }}
             left={[{ name: 'Forms' }, { name: 'Billing' }]}
             right={[{ name: 'CRM' }, { name: 'Warehouse' }, { name: 'Alerts' }]}
           />

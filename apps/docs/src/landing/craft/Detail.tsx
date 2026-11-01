@@ -1,6 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { ArrowRight } from 'lucide-react';
-import { InView, LinkButton } from 'oniva-ui';
+import { InView, LinkButton, ArrowRightIcon } from 'oniva-ui';
 import { colors } from '@oniva-tokens/colors.stylex';
 import { font } from '@oniva-tokens/font.stylex';
 import craft from 'virtual:oniva-craft';
@@ -90,7 +89,7 @@ export function Detail() {
           ))}
         </dl>
         <div {...stylex.props(s.links)}>
-          <LinkButton href="#/specs" endIcon={<ArrowRight size={14} />}>
+          <LinkButton href="#/specs" endIcon={<ArrowRightIcon size={14} />}>
             See the blueprints
           </LinkButton>
           <LinkButton href="#/foundations/elevation" variant="secondary">

@@ -1,4 +1,4 @@
-import { Bell, SlidersHorizontal } from 'lucide-react';
+import { BellIcon, SlidersIcon } from '../../icons/IconSet';
 import { Button } from '../Button';
 import type { DemoModule } from '../../internal/demo';
 import { Popover, PopoverTrigger } from './Popover';
@@ -18,12 +18,12 @@ const demo: DemoModule = {
     {
       name: 'Filter panel',
       code: `<PopoverTrigger>
-  <Button variant="secondary" startIcon={<SlidersHorizontal size={16} />}>Filters</Button>
+  <Button variant="secondary" startIcon={<SlidersIcon size={16} />}>Filters</Button>
   <Popover aria-label="Filters" placement="bottom start">…</Popover>
 </PopoverTrigger>`,
       Component: () => (
         <PopoverTrigger>
-          <Button variant="secondary" startIcon={<SlidersHorizontal size={16} />}>
+          <Button variant="secondary" startIcon={<SlidersIcon size={16} />}>
             Filters
           </Button>
           <Popover aria-label="Filters" placement="bottom start">
@@ -56,7 +56,7 @@ const demo: DemoModule = {
       Component: () => (
         <PopoverTrigger>
           <Button variant="secondary" isIconOnly aria-label="Notifications">
-            <Bell size={16} />
+            <BellIcon size={16} />
           </Button>
           <Popover showArrow aria-label="Notifications" placement="top">
             <div style={{ display: 'grid', gap: 4 }}>

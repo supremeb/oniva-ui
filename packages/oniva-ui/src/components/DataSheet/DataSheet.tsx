@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { ArrowDown, ArrowUp, Check, Plus, Redo2, Undo2 } from 'lucide-react';
+import { ArrowDownIcon, ArrowUpIcon, CheckIcon, PlusIcon, RedoIcon, UndoIcon } from '../../icons/IconSet';
 import { Button, ListBox, ListBoxItem } from 'react-aria-components';
 import {
   useCallback,
@@ -404,7 +404,7 @@ function TagPicker({ triggerRef, col, current, options, draft, tagTones, onDraft
                       {item.label}
                     </span>
                   </span>
-                  {item.label === current ? <Check size={16} aria-hidden="true" {...stylex.props(fp.check)} /> : null}
+                  {item.label === current ? <CheckIcon size={16} aria-hidden="true" {...stylex.props(fp.check)} /> : null}
                 </>
               )}
             </ListBoxItem>
@@ -830,12 +830,12 @@ export function DataSheet({
         <div {...stylex.props(styles.actions)}>
           <Tooltip content="Undo (⌘Z)" showArrow={false}>
             <Button aria-label="Undo" isDisabled={!canUndo(state)} onPress={doUndo} {...stylex.props(styles.iconButton)}>
-              <Undo2 size={16} aria-hidden="true" />
+              <UndoIcon size={16} aria-hidden="true" />
             </Button>
           </Tooltip>
           <Tooltip content="Redo (⌘⇧Z)" showArrow={false}>
             <Button aria-label="Redo" isDisabled={!canRedo(state)} onPress={doRedo} {...stylex.props(styles.iconButton)}>
-              <Redo2 size={16} aria-hidden="true" />
+              <RedoIcon size={16} aria-hidden="true" />
             </Button>
           </Tooltip>
         </div>
@@ -888,7 +888,7 @@ export function DataSheet({
                     ) : null}
                     {col.label}
                     <span aria-hidden="true" data-sort={dir} {...stylex.props(styles.sortArrow)}>
-                      {dir === 'desc' ? <ArrowDown size={14} /> : <ArrowUp size={14} />}
+                      {dir === 'desc' ? <ArrowDownIcon size={14} /> : <ArrowUpIcon size={14} />}
                     </span>
                   </button>
                 </div>
@@ -1015,7 +1015,7 @@ export function DataSheet({
 
       <div {...stylex.props(styles.footer)}>
         <button type="button" disabled={!editable} onClick={addRow} {...stylex.props(styles.addButton)}>
-          <Plus size={16} aria-hidden="true" />
+          <PlusIcon size={16} aria-hidden="true" />
           {addRowLabel}
         </button>
         <span role="status" aria-live="polite" {...stylex.props(styles.status)}>

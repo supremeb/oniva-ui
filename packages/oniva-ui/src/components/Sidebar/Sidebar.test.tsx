@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { Home, Settings } from 'lucide-react';
+import { HomeIcon, SettingsIcon } from '../../icons/IconSet';
 import { describe, expect, it, vi } from 'vitest';
 import {
   Sidebar,
@@ -20,10 +20,10 @@ function Example(props: { onCollapsedChange?: (c: boolean) => void; defaultColla
       <SidebarSearch />
       <SidebarContent>
         <SidebarSection title="Workspace" collapsible>
-          <SidebarItem href="#home" icon={<Home size={16} />} isActive badge="152">
+          <SidebarItem href="#home" icon={<HomeIcon size={16} />} isActive badge="152">
             Home
           </SidebarItem>
-          <SidebarItem href="#set" icon={<Settings size={16} />}>
+          <SidebarItem href="#set" icon={<SettingsIcon size={16} />}>
             Settings
           </SidebarItem>
         </SidebarSection>

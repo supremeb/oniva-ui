@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { ArrowUp, ChevronDown, Gauge, Hand, Mic, Paperclip, Plus, ShieldCheck, Square } from 'lucide-react';
+import { ArrowUpIcon, ChevronDownIcon, GaugeIcon, HandIcon, MicIcon, PaperclipIcon, PlusIcon, ShieldCheckIcon, SquareIcon } from '../../icons/IconSet';
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode, type Ref } from 'react';
 import { TextArea as AriaTextArea } from 'react-aria-components';
 import { colors } from '../../tokens/colors.stylex';
@@ -23,16 +23,32 @@ import { Presence } from '../../motion/Presence';
 const styles = stylex.create({
   root: { containerType: 'inline-size', fontFamily: font['--oniva-font-sans'], width: '100%' },
   micWrap: { display: 'inline-flex', position: 'relative' },
-  traceWrap: { alignItems: 'center', color: colors['--oniva-color-text-muted'], display: 'inline-flex', marginInlineEnd: 4 },
+  traceWrap: {
+    alignItems: 'center',
+    color: colors['--oniva-color-text-muted'],
+    display: 'inline-flex',
+    marginInlineEnd: 4,
+  },
   micOn: { backgroundColor: colors['--oniva-color-text'], color: colors['--oniva-color-bg'] },
-  sr: { borderWidth: 0, clip: 'rect(0 0 0 0)', height: 1, margin: -1, overflow: 'hidden', padding: 0, position: 'absolute', whiteSpace: 'nowrap', width: 1 },
+  sr: {
+    borderWidth: 0,
+    clip: 'rect(0 0 0 0)',
+    height: 1,
+    margin: -1,
+    overflow: 'hidden',
+    padding: 0,
+    position: 'absolute',
+    whiteSpace: 'nowrap',
+    width: 1,
+  },
   body: { boxSizing: 'border-box', display: 'flex', flexDirection: 'column', gap: 8, padding: 12 },
   area: {
     appearance: 'none',
     backgroundColor: 'transparent',
     borderWidth: 0,
     boxSizing: 'border-box',
-    color: colors['--oniva-color-text'],
+    color: { default: colors['--oniva-color-text'], ':disabled': colors['--oniva-color-text-disabled'] },
+    cursor: { default: 'text', ':disabled': 'not-allowed' },
     fontFamily: font['--oniva-font-sans'],
     fontSize: font['--oniva-font-size-14'],
     lineHeight: font['--oniva-font-lh-16'],
@@ -45,7 +61,8 @@ const styles = stylex.create({
     width: '100%',
     '::placeholder': { color: colors['--oniva-color-text-placeholder'] },
   },
-  bar: { alignItems: 'center', display: 'flex', gap: 2 },
+  bar: { alignItems: 'center', display: 'flex', flexWrap: 'wrap', gap: 2, rowGap: 6 },
+  files: { margin: -2, maxHeight: 156, overflowY: 'auto', padding: 2 },
   barTray: { gap: 6 },
   bodyTray: { gap: 6, paddingBlock: 14, paddingInline: 16 },
   areaTray: { fontSize: font['--oniva-font-size-16'], minHeight: 36, paddingInline: 0 },
@@ -61,7 +78,7 @@ const styles = stylex.create({
     paddingBlock: 10,
     paddingInline: 16,
   },
-  spacer: { flexGrow: 1 },
+  right: { alignItems: 'center', display: 'flex', gap: 2, marginInlineStart: 'auto' },
   hintWrap: { display: 'inline-flex' },
   hint: {
     alignItems: 'center',
@@ -232,16 +249,28 @@ export function Composer({
     }
     const base = value ? value.trimEnd() + ' ' : '';
     setListening(true);
-    const w = window as unknown as { SpeechRecognition?: new () => SpeechRec; webkitSpeechRecognition?: new () => SpeechRec };
+    const w = window as unknown as {
+      SpeechRecognition?: new () => SpeechRec;
+      webkitSpeechRecognition?: new () => SpeechRec;
+    };
     const Rec = w.SpeechRecognition ?? w.webkitSpeechRecognition;
     if (Rec) {
       const r = new Rec();
       r.continuous = true;
       r.interimResults = true;
       r.lang = document.documentElement.lang || navigator.language;
-      r.onresult = (e) => setValue(base + Array.from(e.results).map((x) => x[0]?.transcript ?? '').join(' '));
+      r.onresult = (e) =>
+        setValue(
+          base +
+            Array.from(e.results)
+              .map((x) => x[0]?.transcript ?? '')
+              .join(' '),
+        );
       r.onend = () => setListening(false);
-      stopMic.current = () => { r.onend = null; r.stop(); };
+      stopMic.current = () => {
+        r.onend = null;
+        r.stop();
+      };
       r.start();
     } else {
       const words = dictation.split(' ');
@@ -282,40 +311,40 @@ export function Composer({
   const sx = stylex.props(styles.root, xstyle);
   const tray = variant === 'tray';
   const effortEl = (
-      <PopoverTrigger>
-        <Button
-          variant="ghost"
-          size="sm"
-          isDisabled={isDisabled}
-          aria-label={`Effort: ${effortLabel[effort]}`}
-          startIcon={<Gauge size={14} aria-hidden="true" />}
-        >
-          {effortLabel[effort]}
-        </Button>
-        <Popover aria-label="Effort" placement="top start">
-          <div {...stylex.props(styles.effort)}>
-            <span {...stylex.props(styles.effortTitle)}>Effort</span>
-            <Slider
-              aria-label="Effort"
-              hideOutput
-              minValue={0}
-              maxValue={2}
-              step={1}
-              value={efforts.indexOf(effort)}
-              onChange={(v) => {
-                const e = efforts[v as number] ?? 'balanced';
-                setEffortInner(e);
-                onEffortChange?.(e);
-              }}
-            />
-            <div {...stylex.props(styles.effortLabels)} aria-hidden="true">
-              <span>Faster</span>
-              <span>Smarter</span>
-            </div>
+    <PopoverTrigger>
+      <Button
+        variant="ghost"
+        size="sm"
+        isDisabled={isDisabled}
+        aria-label={`Effort: ${effortLabel[effort]}`}
+        startIcon={<GaugeIcon size={14} aria-hidden="true" />}
+      >
+        {effortLabel[effort]}
+      </Button>
+      <Popover aria-label="Effort" placement="top start">
+        <div {...stylex.props(styles.effort)}>
+          <span {...stylex.props(styles.effortTitle)}>Effort</span>
+          <Slider
+            aria-label="Effort"
+            hideOutput
+            minValue={0}
+            maxValue={2}
+            step={1}
+            value={efforts.indexOf(effort)}
+            onChange={(v) => {
+              const e = efforts[v as number] ?? 'balanced';
+              setEffortInner(e);
+              onEffortChange?.(e);
+            }}
+          />
+          <div {...stylex.props(styles.effortLabels)} aria-hidden="true">
+            <span>Faster</span>
+            <span>Smarter</span>
           </div>
-        </Popover>
-      </PopoverTrigger>
-    );
+        </div>
+      </Popover>
+    </PopoverTrigger>
+  );
 
   return (
     <div ref={ref} {...mergeSx(sx, className)}>
@@ -327,7 +356,11 @@ export function Composer({
           }}
         >
           <AnimatedHeight isOpen={attachments.length > 0}>
-            {shownFiles.length > 0 && <ComposerAttachments files={shownFiles} onRemove={onRemoveAttachment} />}
+            {shownFiles.length > 0 && (
+              <div {...stylex.props(styles.files)}>
+                <ComposerAttachments files={shownFiles} onRemove={onRemoveAttachment} />
+              </div>
+            )}
           </AnimatedHeight>
           <AriaTextArea
             ref={area}
@@ -370,7 +403,11 @@ export function Composer({
                     isDisabled={isDisabled}
                     onPress={() => file.current?.click()}
                   >
-                    {tray ? <Plus size={18} aria-hidden="true" /> : <Paperclip size={16} aria-hidden="true" />}
+                    {tray ? (
+                      <PlusIcon size={18} aria-hidden="true" />
+                    ) : (
+                      <PaperclipIcon size={16} aria-hidden="true" />
+                    )}
                   </IconButton>
                 </Tooltip>
               </>
@@ -396,8 +433,14 @@ export function Composer({
                   size="sm"
                   isDisabled={isDisabled}
                   aria-label={`Permission mode: ${currentMode.label}`}
-                  startIcon={tray ? <Hand size={14} aria-hidden="true" /> : <ShieldCheck size={14} aria-hidden="true" />}
-                  endIcon={tray ? undefined : <ChevronDown size={14} aria-hidden="true" />}
+                  startIcon={
+                    tray ? (
+                      <HandIcon size={14} aria-hidden="true" />
+                    ) : (
+                      <ShieldCheckIcon size={14} aria-hidden="true" />
+                    )
+                  }
+                  endIcon={tray ? undefined : <ChevronDownIcon size={14} aria-hidden="true" />}
                 >
                   {currentMode.label}
                 </Button>
@@ -423,56 +466,71 @@ export function Composer({
             )}
             {!hideEffort && !tray && effortEl}
             {actions}
-            <span {...stylex.props(styles.spacer)} />
-            {!hideEffort && tray && effortEl}
-            {showMic && !isStreaming && (
-              <>
-                {listening && <span aria-hidden="true" {...stylex.props(styles.traceWrap)}><span {...stylex.props(m3.trace)} /></span>}
-                <span {...stylex.props(styles.micWrap)}>
-                  {listening && <span aria-hidden="true" {...stylex.props(m3.ring)} />}
-                  <IconButton
-                    size="sm"
-                    variant="ghost"
-                    aria-label={listening ? 'Stop dictation' : 'Start dictation'}
-                    aria-pressed={listening}
-                    isDisabled={isDisabled}
-                    onPress={toggleMic}
-                    xstyle={listening ? styles.micOn : undefined}
-                  >
-                    <Mic size={16} aria-hidden="true" />
-                  </IconButton>
+            <div {...stylex.props(styles.right, tray && styles.barTray)}>
+              {!hideEffort && tray && effortEl}
+              {showMic && !isStreaming && (
+                <>
+                  {listening && (
+                    <span aria-hidden="true" {...stylex.props(styles.traceWrap)}>
+                      <span {...stylex.props(m3.trace)} />
+                    </span>
+                  )}
+                  <span {...stylex.props(styles.micWrap)}>
+                    {listening && <span aria-hidden="true" {...stylex.props(m3.ring)} />}
+                    <IconButton
+                      size="sm"
+                      variant="ghost"
+                      aria-label={listening ? 'Stop dictation' : 'Start dictation'}
+                      aria-pressed={listening}
+                      isDisabled={isDisabled}
+                      onPress={toggleMic}
+                      xstyle={listening ? styles.micOn : undefined}
+                    >
+                      <MicIcon size={16} aria-hidden="true" />
+                    </IconButton>
+                  </span>
+                </>
+              )}
+              <Presence
+                isPresent={!isStreaming && !isDisabled && value.length > 0}
+                preset="fade"
+                initial={false}
+                xstyle={styles.hintWrap}
+              >
+                <span {...stylex.props(styles.hint)}>
+                  <Kbd size="sm">↵</Kbd> send
                 </span>
-              </>
-            )}
-            <Presence isPresent={!isStreaming && value.length > 0} preset="fade" initial={false} xstyle={styles.hintWrap}>
-              <span {...stylex.props(styles.hint)}>
-                <Kbd size="sm">↵</Kbd> send
-              </span>
-            </Presence>
-            {isStreaming ? (
-              <IconButton
-                size="sm"
-                variant="secondary"
-                aria-label="Stop generating"
-                onPress={onStop}
-              >
-                <CrossFade as="span" contentKey="stop" duration={200}>
-                  <Square size={14} fill="currentColor" aria-hidden="true" />
-                </CrossFade>
-              </IconButton>
-            ) : (
-              <IconButton
-                size="sm"
-                variant="primary"
-                aria-label="Send message"
-                isDisabled={!canSend}
-                onPress={submit}
-              >
-                <CrossFade as="span" contentKey="send" duration={200}>
-                  <ArrowUp key={sendCount} size={16} aria-hidden="true" {...stylex.props(sendCount > 0 && m3.launch)} />
-                </CrossFade>
-              </IconButton>
-            )}
+              </Presence>
+              {isStreaming ? (
+                <IconButton
+                  size="sm"
+                  variant="secondary"
+                  aria-label="Stop generating"
+                  onPress={onStop}
+                >
+                  <CrossFade as="span" contentKey="stop" duration={200}>
+                    <SquareIcon size={14} fill="currentColor" aria-hidden="true" />
+                  </CrossFade>
+                </IconButton>
+              ) : (
+                <IconButton
+                  size="sm"
+                  variant="primary"
+                  aria-label="Send message"
+                  isDisabled={!canSend}
+                  onPress={submit}
+                >
+                  <CrossFade as="span" contentKey="send" duration={200}>
+                    <ArrowUpIcon
+                      key={sendCount}
+                      size={16}
+                      aria-hidden="true"
+                      {...stylex.props(sendCount > 0 && m3.launch)}
+                    />
+                  </CrossFade>
+                </IconButton>
+              )}
+            </div>
           </div>
         </div>
         {footer && <div {...stylex.props(styles.footer)}>{footer}</div>}

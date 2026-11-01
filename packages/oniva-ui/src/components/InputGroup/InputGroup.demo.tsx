@@ -1,4 +1,4 @@
-import { Mail } from 'lucide-react';
+import { MailIcon } from '../../icons/IconSet';
 import type { DemoModule } from '../../internal/demo';
 import { InputGroup } from './InputGroup';
 
@@ -32,12 +32,12 @@ const demo: DemoModule = {
     },
     {
       name: 'Icon and error',
-      code: `<InputGroup label="Billing email" startAddon={<Mail size={16} />} isInvalid errorMessage="Enter a valid email." />`,
+      code: `<InputGroup label="Billing email" startAddon={<MailIcon size={16} />} isInvalid errorMessage="Enter a valid email." />`,
       Component: () => (
         <div style={col}>
           <InputGroup
             label="Billing email"
-            startAddon={<Mail size={16} />}
+            startAddon={<MailIcon size={16} />}
             defaultValue="finance@acme"
             isInvalid
             errorMessage="Enter a valid email."

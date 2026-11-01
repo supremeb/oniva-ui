@@ -32,3 +32,19 @@ describe('ThinkingLoader', () => {
     expect(screen.getByRole('status')).toHaveTextContent('Only');
   });
 });
+
+describe('ThinkingLoader (states)', () => {
+  it('reports a small elapsed time when mounted already done', () => {
+    render(<ThinkingLoader isDone doneLabel={(s) => `Took ${s}s`} />);
+    const text = screen.getByRole('status').textContent ?? '';
+    expect(Number(/Took (\d+)s/.exec(text)?.[1])).toBeLessThan(5);
+  });
+
+  it('clamps an out-of-range controlled phase and tolerates no phases', () => {
+    const { unmount } = render(<ThinkingLoader phases={['A', 'B']} phase={9} />);
+    expect(screen.getByRole('status')).toHaveTextContent('B');
+    unmount();
+    render(<ThinkingLoader phases={[]} />);
+    expect(screen.getByRole('status').textContent).toBe('');
+  });
+});

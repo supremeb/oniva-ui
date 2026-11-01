@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { ChevronDown, Minimize2, Maximize2 } from 'lucide-react';
+import { ChevronDownIcon, CollapseIcon, ExpandIcon } from '../../icons/IconSet';
 import { useMemo, useState, type Ref } from 'react';
 import { Button as AriaButton, ToggleButton as AriaToggleButton } from 'react-aria-components';
 import { accent } from '../../tokens/accent.stylex';
@@ -193,7 +193,7 @@ export function SetupGuide({ groups, title = 'Setup guide', onEdit, onClose, onC
               onPress={() => setCollapsed((c) => !c)}
               className={() => sxClass(stylex.props(styles.iconBtn, focus.ring))}
             >
-              {collapsed ? <Maximize2 size={14} aria-hidden="true" /> : <Minimize2 size={14} aria-hidden="true" />}
+              {collapsed ? <ExpandIcon size={14} aria-hidden="true" /> : <CollapseIcon size={14} aria-hidden="true" />}
             </AriaButton>
             {onClose && <CloseButton size="sm" aria-label="Close setup guide" onPress={onClose} />}
           </span>
@@ -238,7 +238,7 @@ export function SetupGuide({ groups, title = 'Setup guide', onEdit, onClose, onC
                   <span {...stylex.props(styles.gTitle)}>
                     <span {...stylex.props(w4Parts.strike, finished && w4Parts.strikeOn, finished && styles.gTitleDone)}>{g.title}</span>
                   </span>
-                  <ChevronDown size={16} aria-hidden="true" {...stylex.props(styles.chevron, isOpen && styles.chevronOpen)} />
+                  <ChevronDownIcon size={16} aria-hidden="true" {...stylex.props(styles.chevron, isOpen && styles.chevronOpen)} />
                 </AriaButton>
               </h4>
               <AnimatedHeight isOpen={isOpen} id={`${g.id}-panel`}>

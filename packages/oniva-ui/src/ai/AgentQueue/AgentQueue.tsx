@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { ArrowUpToLine, Check, Minus, Pause, Play, Plus, RotateCw, Rows3, X } from 'lucide-react';
+import { ArrowUpToLineIcon, CheckIcon, MinusIcon, PauseIcon, PlayIcon, PlusIcon, RotateCwIcon, RowsIcon, XIcon } from '../../icons/IconSet';
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode, type Ref } from 'react';
 import { Button, Dialog, Popover, ToggleButton } from 'react-aria-components';
 import { colors } from '../../tokens/colors.stylex';
@@ -69,7 +69,7 @@ const styles = stylex.create({
     animationTimingFunction: motion['--oniva-motion-ease-out'],
   },
   root: { containerType: 'inline-size', gap: 0, maxWidth: 880, overflow: 'hidden', padding: 0, position: 'relative' },
-  head: { alignItems: 'center', display: 'flex', flexWrap: 'wrap', gap: 8, minHeight: 28, padding: 14 },
+  head: { alignItems: 'center', display: 'flex', flexWrap: 'wrap', gap: 8, minHeight: { default: 56, '@media (pointer: coarse)': 64 }, padding: 14 },
   headIcon: { color: colors['--oniva-color-accent-text'], display: 'inline-flex' },
   divider: { borderTopColor: colors['--oniva-color-border'], borderTopStyle: 'solid', borderTopWidth: 1 },
   body: { display: 'grid', gap: 16, gridTemplateColumns: 'minmax(0, 0.9fr) minmax(0, 1.8fr) minmax(0, 0.6fr)', padding: 16 },
@@ -79,6 +79,8 @@ const styles = stylex.create({
   workerRow: { alignItems: 'center', borderColor: colors['--oniva-color-border'], borderRadius: radius['--oniva-radius-lg'], borderStyle: 'solid', borderWidth: 1, boxSizing: 'border-box', display: 'grid', gap: 8, gridTemplateColumns: 'minmax(72px, 0.8fr) minmax(0, 1.5fr)', padding: 6 },
   workerName: { alignItems: 'center', display: 'flex', fontWeight: font['--oniva-font-weight-medium'], gap: 8, minWidth: 0, paddingInlineStart: 4 },
   finStack: { display: 'flex', flexDirection: 'column', gap: 8 },
+  finStackNarrow: { flexDirection: 'row' },
+  finCardNarrow: { flexBasis: 0, flexGrow: 1, minWidth: 0 },
   finCard: { borderColor: colors['--oniva-color-border'], borderRadius: radius['--oniva-radius-lg'], borderStyle: 'solid', borderWidth: 1, boxSizing: 'border-box', display: 'flex', flexDirection: 'column', gap: 6, padding: 10 },
   finHead: { alignItems: 'center', display: 'flex', gap: 8 },
   finChip: { alignItems: 'center', borderRadius: radius['--oniva-radius-md'], display: 'inline-flex', height: 22, justifyContent: 'center', width: 22 },
@@ -86,6 +88,7 @@ const styles = stylex.create({
   finBad: { backgroundColor: colors['--oniva-color-danger-bg'], color: colors['--oniva-color-danger-fg'] },
   chart: { display: 'flex', flexDirection: 'column', gap: 6, padding: 16 },
   name: { color: colors['--oniva-color-text-muted'], fontWeight: font['--oniva-font-weight-regular'] },
+  statNarrow: { borderInlineStartWidth: { default: 1, ':nth-child(odd)': 0 }, borderTopColor: colors['--oniva-color-border'], borderTopStyle: 'solid', borderTopWidth: { default: 0, ':nth-child(n+3)': 1 } },
   stats: { display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))' },
   statsNarrow: { gridTemplateColumns: 'repeat(2, minmax(0, 1fr))' },
   stat: { borderInlineStartColor: colors['--oniva-color-border'], borderInlineStartStyle: 'solid', borderInlineStartWidth: { default: 1, ':first-child': 0 }, display: 'flex', flexDirection: 'column-reverse', gap: 4, paddingBlock: 12, paddingInline: 16 },
@@ -142,11 +145,12 @@ const styles = stylex.create({
   slot: {},
   slotHead: { alignItems: 'center', color: colors['--oniva-color-text-muted'], display: 'flex', fontSize: font['--oniva-font-size-11'], gap: 6 },
   idle: { alignItems: 'center', borderColor: colors['--oniva-color-border'], borderRadius: radius['--oniva-radius-md'], borderStyle: 'dashed', borderWidth: 1, color: colors['--oniva-color-text-muted'], display: 'flex', fontSize: font['--oniva-font-size-12'], minHeight: 30, paddingInline: 8 },
+  bad: { color: colors['--oniva-color-danger-fg'] },
   big: { fontSize: font['--oniva-font-size-18'], fontVariantNumeric: 'tabular-nums', fontWeight: font['--oniva-font-weight-semibold'] },
   svg: { display: 'block', height: 110, width: '100%' },
   line: { fill: 'none', stroke: colors['--oniva-color-accent-text'], strokeWidth: 1.5 },
   area: { fill: colors['--oniva-color-accent-soft'], opacity: 0.8 },
-  limitBand: { fill: colors['--oniva-color-warning-bg'] },
+  limitBand: { fill: colors['--oniva-color-warning-bg'], opacity: 0.6 },
   limitLine: { stroke: colors['--oniva-color-warning-solid'], strokeDasharray: '3 3', strokeWidth: 1 },
   step: { alignItems: 'center', display: 'inline-flex', gap: 2 },
   btn: {
@@ -164,6 +168,8 @@ const styles = stylex.create({
     minWidth: 28,
     paddingInline: 8,
   },
+  // w1.popover sits on surface-inner, which is translucent in dark mode; a floating card must be opaque.
+  popSurface: { backgroundColor: colors['--oniva-color-surface'] },
   pop: { display: 'flex', flexDirection: 'column', gap: 8 },
   popHead: { alignItems: 'center', display: 'flex', gap: 8, justifyContent: 'space-between' },
   kv: { color: colors['--oniva-color-text-muted'], display: 'grid', fontSize: font['--oniva-font-size-12'], gap: 2, gridTemplateColumns: 'auto 1fr', columnGap: 10, margin: 0 },
@@ -394,15 +400,15 @@ export function AgentQueue({
           <span aria-hidden="true" style={{ ['--p' as string]: extra.progress }} {...stylex.props(styles.bar)} />
         )}
         {j.icon && <span aria-hidden="true" {...stylex.props(styles.jobIcon)}>{j.icon}</span>}
-        <span {...stylex.props(styles.jobText, w1.ellipsis)}>{j.name}</span>
+        <span title={j.name} {...stylex.props(styles.jobText, w1.ellipsis)}>{j.name}</span>
         {j.priority === 'high' && <span aria-hidden="true" {...stylex.props(styles.jobMeta)}>High</span>}
         {(j.attempt ?? 1) > 1 && (
           <span aria-hidden="true" {...stylex.props(styles.jobMeta)}>
-            <RotateCw size={10} /> {j.attempt}
+            <RotateCwIcon size={10} /> {j.attempt}
           </span>
         )}
         <span aria-hidden="true" {...stylex.props(styles.jobMeta)}>
-          {j.status === 'queued' ? waited : j.status === 'running' && isPaused && limit ? `Paused ${formatDuration(limit.until - t)}` : ran}
+          {j.status === 'queued' ? waited : j.status === 'running' && isPaused ? (limit ? `Paused ${formatDuration(limit.until - t)}` : 'Paused') : ran}
         </span>
       </button>
     );
@@ -416,7 +422,7 @@ export function AgentQueue({
       ref={(el) => { rootRef.current = el; if (typeof ref === 'function') ref(el); else if (ref) ref.current = el; }}
     >
       <div {...stylex.props(styles.head)}>
-        <span aria-hidden="true" {...stylex.props(styles.headIcon)}><Rows3 size={16} /></span>
+        <span aria-hidden="true" {...stylex.props(styles.headIcon)}><RowsIcon size={16} /></span>
         <h3 {...stylex.props(w1.title)}>
           {title} {name && <span {...stylex.props(styles.name)}>{name}</span>}
         </h3>
@@ -425,36 +431,36 @@ export function AgentQueue({
         {onConcurrencyChange && (
           <span role="group" aria-label="Workers" {...stylex.props(styles.step)}>
             <Button aria-label="Fewer workers" isDisabled={workers.length <= minConcurrency} onPress={() => onConcurrencyChange(workers.length - 1)} className={() => sxClass(stylex.props(styles.btn, focus.ring))}>
-              <Minus size={13} aria-hidden="true" />
+              <MinusIcon size={13} aria-hidden="true" />
             </Button>
             <span aria-live="polite" {...stylex.props(styles.count)}>{workers.length}</span>
             <Button aria-label="More workers" isDisabled={workers.length >= maxConcurrency} onPress={() => onConcurrencyChange(workers.length + 1)} className={() => sxClass(stylex.props(styles.btn, focus.ring))}>
-              <Plus size={13} aria-hidden="true" />
+              <PlusIcon size={13} aria-hidden="true" />
             </Button>
           </span>
         )}
         {onPausedChange && (
           <ToggleButton isSelected={paused} onChange={onPausedChange} className={() => sxClass(stylex.props(styles.btn, focus.ring))}>
-            {paused ? <Play size={13} aria-hidden="true" /> : <Pause size={13} aria-hidden="true" />}
+            {paused ? <PlayIcon size={13} aria-hidden="true" /> : <PauseIcon size={13} aria-hidden="true" />}
             {paused ? 'Resume' : 'Pause'}
           </ToggleButton>
         )}
       </div>
       <div {...stylex.props(styles.stats, styles.divider, narrow && styles.statsNarrow)}>
-        <div {...stylex.props(styles.stat)}>
+        <div {...stylex.props(styles.stat, narrow && styles.statNarrow)}>
           <span {...stylex.props(styles.statValue, over && styles.warn)}><AnimatedNumber value={queued.length} /></span>
           <span {...stylex.props(w1.label)}>Waiting</span>
         </div>
-        <div {...stylex.props(styles.stat)}>
+        <div {...stylex.props(styles.stat, narrow && styles.statNarrow)}>
           <span {...stylex.props(styles.statValue)}>{f.number(running.length)}<span {...stylex.props(styles.statUnit)}>/{f.number(workers.length)}</span></span>
           <span {...stylex.props(w1.label)}>Running</span>
         </div>
-        <div {...stylex.props(styles.stat)}>
+        <div {...stylex.props(styles.stat, narrow && styles.statNarrow)}>
           <span {...stylex.props(styles.statValue)}><AnimatedNumber value={done} /></span>
           <span {...stylex.props(w1.label)}>Done</span>
         </div>
-        <div {...stylex.props(styles.stat)}>
-          <span {...stylex.props(styles.statValue)}><AnimatedNumber value={failed} /></span>
+        <div {...stylex.props(styles.stat, narrow && styles.statNarrow)}>
+          <span {...stylex.props(styles.statValue, failed > 0 && styles.bad)}><AnimatedNumber value={failed} /></span>
           <span {...stylex.props(w1.label)}>Failed</span>
         </div>
       </div>
@@ -470,6 +476,7 @@ export function AgentQueue({
         <section aria-label="Workers" {...stylex.props(styles.panel)}>
           <span {...stylex.props(styles.secHead)}><span {...stylex.props(w1.label)}>Workers</span><span {...stylex.props(styles.secCount)}>{f.number(running.length)}/{f.number(workers.length)}</span></span>
           <ul {...stylex.props(styles.rail)}>
+            {workers.length === 0 && <li {...stylex.props(styles.idle)}>No workers.</li>}
             {workers.map((wk) => {
               const job = running.find((j) => j.worker === wk.id);
               return (
@@ -484,14 +491,14 @@ export function AgentQueue({
             })}
           </ul>
         </section>
-        <section ref={finRef} aria-label="Finished" {...stylex.props(styles.finStack)}>
-          <div {...stylex.props(styles.finCard)}>
-            <span {...stylex.props(styles.finHead)}><span aria-hidden="true" {...stylex.props(styles.finChip, styles.finOk)}><Check size={13} /></span><span {...stylex.props(w1.label)}>Done</span></span>
+        <section ref={finRef} aria-label="Finished" {...stylex.props(styles.finStack, narrow && styles.finStackNarrow)}>
+          <div {...stylex.props(styles.finCard, narrow && styles.finCardNarrow)}>
+            <span {...stylex.props(styles.finHead)}><span aria-hidden="true" {...stylex.props(styles.finChip, styles.finOk)}><CheckIcon size={13} /></span><span {...stylex.props(w1.label)}>Done</span></span>
             <span {...stylex.props(styles.big)}>{f.number(done)}</span>
           </div>
-          <div {...stylex.props(styles.finCard)}>
-            <span {...stylex.props(styles.finHead)}><span aria-hidden="true" {...stylex.props(styles.finChip, styles.finBad)}><X size={13} /></span><span {...stylex.props(w1.label)}>Failed</span></span>
-            <span {...stylex.props(styles.big, failed > 0 && styles.warn)}>{f.number(failed)}</span>
+          <div {...stylex.props(styles.finCard, narrow && styles.finCardNarrow)}>
+            <span {...stylex.props(styles.finHead)}><span aria-hidden="true" {...stylex.props(styles.finChip, styles.finBad)}><XIcon size={13} /></span><span {...stylex.props(w1.label)}>Failed</span></span>
+            <span {...stylex.props(styles.big, failed > 0 && styles.bad)}>{f.number(failed)}</span>
           </div>
         </section>
       </div>
@@ -509,13 +516,13 @@ export function AgentQueue({
         </svg>
       </div>
       <Popover isOpen={!!pinned} onOpenChange={(o) => { if (!o) pinOpen(null); }} triggerRef={{ current: pinned ? refs.current.get(pinned.id) ?? null : null }} placement="bottom start">
-        <Dialog aria-label={pinned ? `${pinned.name} details` : 'Job details'} className={sxClass(stylex.props(w1.popover))}>
+        <Dialog aria-label={pinned ? `${pinned.name} details` : 'Job details'} className={sxClass(stylex.props(w1.popover, styles.popSurface))}>
           {pinned && (
             <div {...stylex.props(styles.pop)}>
               <div {...stylex.props(styles.popHead)}>
                 <strong>{pinned.name}</strong>
                 <Button aria-label="Close" onPress={() => pinOpen(null)} className={() => sxClass(stylex.props(w1.iconBtn, focus.ring))}>
-                  <X size={14} aria-hidden="true" />
+                  <XIcon size={14} aria-hidden="true" />
                 </Button>
               </div>
               <dl {...stylex.props(styles.kv)}>
@@ -528,7 +535,7 @@ export function AgentQueue({
               {(pinned.error ?? pinned.detail) && <span {...stylex.props(w1.muted)}>{pinned.error ?? pinned.detail}</span>}
               {pinned.status === 'queued' && (onPromote || onCancel) && (
                 <div {...stylex.props(styles.popBtns)}>
-                  {onPromote && <Button onPress={() => { onPromote(pinned); pinOpen(null); }} className={() => sxClass(stylex.props(styles.btn, focus.ring))}><ArrowUpToLine size={13} aria-hidden="true" />Move to front</Button>}
+                  {onPromote && <Button onPress={() => { onPromote(pinned); pinOpen(null); }} className={() => sxClass(stylex.props(styles.btn, focus.ring))}><ArrowUpToLineIcon size={13} aria-hidden="true" />Move to front</Button>}
                   {onCancel && <Button onPress={() => { onCancel(pinned); pinOpen(null); }} className={() => sxClass(stylex.props(styles.btn, focus.ring))}>Cancel</Button>}
                 </div>
               )}

@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { Check, ChevronDown, X } from 'lucide-react';
+import { CheckIcon, ChevronDownIcon, XIcon } from '../../icons/IconSet';
 import { useId, useState } from 'react';
 import type { HTMLAttributes, Ref } from 'react';
 import { SectionHead } from '../../internal/blocks-parts';
@@ -166,13 +166,13 @@ function PlanDetails({ plan, defaultOpen = false, compact = false }: { plan: Pri
     <div {...stylex.props(styles.mid)}>
       <button type="button" aria-expanded={open} aria-controls={id} onClick={() => setOpen((o) => !o)} {...stylex.props(styles.more, compact && styles.cMore, focus.ring)}>
         {open ? 'Hide details' : 'Show details'}
-        <ChevronDown size={14} aria-hidden="true" {...stylex.props(styles.chev, open && styles.chevOpen)} />
+        <ChevronDownIcon size={14} aria-hidden="true" {...stylex.props(styles.chev, open && styles.chevOpen)} />
       </button>
       <AnimatedHeight isOpen={open}>
         <ul id={id} inert={!open} {...stylex.props(styles.detailList)}>
           {plan.details!.map((f, i) => (
             <li key={f} data-open={open ? '' : undefined} style={{ '--i': Math.min(i, 5) } as React.CSSProperties} {...stylex.props(styles.li, styles.detailLi)}>
-              <Check size={16} aria-hidden="true" {...stylex.props(styles.check)} />
+              <CheckIcon size={16} aria-hidden="true" {...stylex.props(styles.check)} />
               {f}
             </li>
           ))}
@@ -230,13 +230,13 @@ export function Pricing({ plans = defaultPlans, defaultBilling = 'monthly', titl
                 <ul {...stylex.props(styles.cFeat)}>
                   {p.features.map((f) => (
                     <li key={f} {...stylex.props(styles.cLi)}>
-                      <Check size={14} aria-hidden="true" />
+                      <CheckIcon size={14} aria-hidden="true" />
                       {f}
                     </li>
                   ))}
                   {p.excluded?.map((f) => (
                     <li key={f} {...stylex.props(styles.cLi, styles.liOff)}>
-                      <X size={14} aria-hidden="true" />
+                      <XIcon size={14} aria-hidden="true" />
                       <span {...stylex.props(styles.sr)}>Not included: </span>
                       {f}
                     </li>
@@ -284,13 +284,13 @@ export function Pricing({ plans = defaultPlans, defaultBilling = 'monthly', titl
               <ul {...stylex.props(styles.list)}>
                 {p.features.map((f) => (
                   <li key={f} {...stylex.props(styles.li)}>
-                    <Check size={16} aria-hidden="true" {...stylex.props(styles.check)} />
+                    <CheckIcon size={16} aria-hidden="true" {...stylex.props(styles.check)} />
                     {f}
                   </li>
                 ))}
                 {p.excluded?.map((f) => (
                   <li key={f} {...stylex.props(styles.li, styles.liOff)}>
-                    <X size={16} aria-hidden="true" {...stylex.props(styles.cross)} />
+                    <XIcon size={16} aria-hidden="true" {...stylex.props(styles.cross)} />
                     <span {...stylex.props(styles.sr)}>Not included: </span>
                     {f}
                   </li>

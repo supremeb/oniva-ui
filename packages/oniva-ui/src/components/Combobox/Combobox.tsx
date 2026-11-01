@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDownIcon } from '../../icons/IconSet';
 import {
   Button,
   ComboBox as AriaComboBox,
@@ -124,7 +124,7 @@ export function Combobox<T extends object>({
           >
             <Input ref={ref} placeholder={placeholder} {...stylex.props(ff.bare)} />
             <Button {...stylex.props(fp.iconButton)}>
-              <ChevronDown size={16} aria-hidden="true" />
+              <ChevronDownIcon size={16} aria-hidden="true" />
             </Button>
           </div>
           {description != null && (

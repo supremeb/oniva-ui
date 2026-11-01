@@ -18,8 +18,8 @@ const demo: DemoModule = {
   demos: [
     {
       name: 'Data analyst session',
-      code: `<ContextMeter max={200000} model="Claude Sonnet" cost={0.42} breakdown={breakdown} />`,
-      Component: () => <ContextMeter max={200000} model="Claude Sonnet" cost={0.42} breakdown={breakdown} />,
+      code: `<ContextMeter max={200000} model="Atlas 2" cost={0.42} breakdown={breakdown} />`,
+      Component: () => <ContextMeter max={200000} model="Atlas 2" cost={0.42} breakdown={breakdown} />,
     },
     {
       name: 'Nearly full',

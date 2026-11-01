@@ -1,6 +1,6 @@
 import * as stylex from '@stylexjs/stylex';
 import { Button as AriaButton } from 'react-aria-components';
-import { BarChart3, BookOpen, FileText, FolderOpen, Image, Presentation, Table2, Telescope, UserPlus } from 'lucide-react';
+import { BarChartIcon, BookOpenIcon, FileTextIcon, FolderOpenIcon, ImageIcon, PresentationIcon, TableIcon, TelescopeIcon, UserPlusIcon } from '../../icons/IconSet';
 import { useState, type Ref } from 'react';
 import { focus } from '../../internal/focus';
 import { NORTHWIND_PROJECTS, NORTHWIND_WHATS_NEW } from '../../internal/s1-frame';
@@ -121,7 +121,7 @@ const DEFAULT_SUGGESTIONS = [
   'Research competitor onboarding',
   'Generate a hero image',
 ];
-const CHIP_ICONS = [BookOpen, FileText, Presentation, Table2, Image, Telescope, BarChart3];
+const CHIP_ICONS = [BookOpenIcon, FileTextIcon, PresentationIcon, TableIcon, ImageIcon, TelescopeIcon, BarChartIcon];
 const DEFAULT_APPS = ['Mail', 'Chat', 'Docs', 'Calendar'];
 
 export interface AssistantHomeProps extends Omit<AppShellProps, 'children' | 'title' | 'panel'> {
@@ -176,7 +176,7 @@ export function AssistantHome({
       whatsNew={whatsNew}
       actions={
         actions ?? (
-          <Button variant="ghost" size="sm" startIcon={<UserPlus size={14} />} onPress={onInvite}>
+          <Button variant="ghost" size="sm" startIcon={<UserPlusIcon size={14} />} onPress={onInvite}>
             Invite people
           </Button>
         )
@@ -205,7 +205,7 @@ export function AssistantHome({
           </div>
           <div {...stylex.props(styles.meta, m8.rise)} style={step(4)}>
             <AriaButton onPress={() => onPickFolder?.()} {...stylex.props(styles.metaBtn, focus.ring)}>
-              <FolderOpen size={14} aria-hidden="true" />
+              <FolderOpenIcon size={14} aria-hidden="true" />
               Work in a folder
             </AriaButton>
             <AriaButton onPress={() => onConnectApps?.()} {...stylex.props(styles.metaBtn, focus.ring)}>

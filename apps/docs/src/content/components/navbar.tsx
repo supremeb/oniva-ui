@@ -1,10 +1,9 @@
-import { Bell } from 'lucide-react';
-import { Button, IconButton, Navbar, NavbarLink } from 'oniva-ui';
+import { Button, IconButton, Navbar, NavbarLink, BellIcon } from 'oniva-ui';
 import type { DocPage } from '../types';
 
 const Bar = ({ floating = false, active = 'Dashboard', links = ['Dashboard', 'Reports', 'Customers'], end = true, width = 560 }: { floating?: boolean; active?: string; links?: string[]; end?: boolean; width?: number }) => (
   <div style={{ background: floating ? 'var(--oniva-color-surface-inset)' : undefined, padding: floating ? 12 : 0, width }}>
-    <Navbar floating={floating} brand="Oniva" aria-label="Primary" end={end ? <><IconButton aria-label="Notifications"><Bell size={16} /></IconButton><Button size="sm">Upgrade</Button></> : undefined}>
+    <Navbar floating={floating} brand="Oniva" aria-label="Primary" end={end ? <><IconButton aria-label="Notifications"><BellIcon size={16} /></IconButton><Button size="sm">Upgrade</Button></> : undefined}>
       {links.map((l) => <NavbarLink key={l} href="#" isActive={l === active}>{l}</NavbarLink>)}
     </Navbar>
   </div>

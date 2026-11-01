@@ -86,3 +86,25 @@ describe('ToolCallGroup', () => {
     expect(screen.getByRole('button', { name: /Using tools/ })).toBeInTheDocument();
   });
 });
+
+describe('ToolCallCard layout and structure', () => {
+  it('labels custom children as a Result group', () => {
+    render(
+      <ToolCallCard name="render_table" defaultExpanded>
+        <table>
+          <tbody>
+            <tr>
+              <td>Enterprise</td>
+            </tr>
+          </tbody>
+        </table>
+      </ToolCallCard>,
+    );
+    expect(screen.getByRole('group', { name: 'Result' })).toContainElement(screen.getByText('Enterprise'));
+  });
+
+  it('shows the fallback error message and keeps the icon out of the accessibility tree', () => {
+    render(<ToolCallCard name="send_email" status="error" />);
+    expect(screen.getByText('The tool call failed.')).toBeVisible();
+  });
+});

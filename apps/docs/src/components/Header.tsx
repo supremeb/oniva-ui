@@ -1,5 +1,4 @@
 import * as stylex from '@stylexjs/stylex';
-import { Moon, Search, Sun } from 'lucide-react';
 import { GithubIcon } from './GithubIcon';
 import { useMemo, useState } from 'react';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
@@ -12,7 +11,7 @@ import {
   accentSwatches,
   type AccentName,
   type CommandGroup,
-  type ThemeMode,
+  type ThemeMode, MoonIcon, SearchIcon, SunIcon,
 } from 'oniva-ui';
 import { accent as accentTokens } from '@oniva-tokens/accent.stylex';
 import { colors } from '@oniva-tokens/colors.stylex';
@@ -178,7 +177,7 @@ export function HeaderUtilities({ theme, onThemeChange, accent, onAccentChange }
         onClick={() => setOpen(true)}
         {...stylex.props(styles.search, styles.noShrink)}
       >
-        <Search size={16} />
+        <SearchIcon size={16} />
         <span {...stylex.props(styles.searchLabel)}>Quick search</span>
         <span {...stylex.props(styles.hideSm)}>
           <Kbd>⌘K</Kbd>
@@ -226,7 +225,7 @@ export function HeaderUtilities({ theme, onThemeChange, accent, onAccentChange }
         data-testid="theme-toggle"
         xstyle={styles.noShrink}
       >
-        {isDark ? <Sun size={16} /> : <Moon size={16} />}
+        {isDark ? <SunIcon size={16} /> : <MoonIcon size={16} />}
       </Button>
     </>
   );

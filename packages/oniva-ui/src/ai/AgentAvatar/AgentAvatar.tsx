@@ -1,5 +1,6 @@
 import * as stylex from '@stylexjs/stylex';
-import type { HTMLAttributes, Ref } from 'react';
+import { BotIcon } from '../../icons/IconSet';
+import type { CSSProperties, HTMLAttributes, Ref } from 'react';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 import { media } from '../../tokens/media.stylex';
@@ -16,7 +17,7 @@ const styles = stylex.create({
   root: {
     alignItems: 'center',
     borderRadius: radius['--oniva-radius-full'],
-    color: colors['--oniva-color-on-solid'],
+    color: colors['--oniva-color-on-chart'],
     display: 'inline-flex',
     flexShrink: 0,
     fontFamily: font['--oniva-font-sans'],
@@ -30,6 +31,7 @@ const styles = stylex.create({
     alignItems: 'center',
     borderRadius: radius['--oniva-radius-full'],
     display: 'flex',
+    fontSize: 'var(--av-fs)',
     inset: 0,
     justifyContent: 'center',
     position: 'absolute',
@@ -42,12 +44,14 @@ const styles = stylex.create({
     borderColor: colors['--oniva-color-surface-inner'],
     borderRadius: radius['--oniva-radius-full'],
     borderStyle: 'solid',
-    borderWidth: 2,
-    bottom: -1,
-    height: 10,
+    borderWidth: 'max(1px, calc(var(--av-dot) * 0.2))',
+    boxSizing: 'border-box',
+    // Centre the dot on the circle at 45 degrees: (1 - cos 45deg) / 2 of the diameter, minus half the dot.
+    bottom: 'calc(var(--av) * 0.146 - var(--av-dot) / 2)',
+    height: 'var(--av-dot)',
     position: 'absolute',
-    right: -1,
-    width: 10,
+    right: 'calc(var(--av) * 0.146 - var(--av-dot) / 2)',
+    width: 'var(--av-dot)',
   },
   idle: { backgroundColor: colors['--oniva-color-icon-subtle'] },
   working: { backgroundColor: colors['--oniva-color-success-solid'] },
@@ -60,8 +64,11 @@ const styles = stylex.create({
     animationTimingFunction: motion['--oniva-motion-ease-out'],
     backgroundColor: colors['--oniva-color-success-solid'],
     borderRadius: radius['--oniva-radius-full'],
-    inset: 0,
+    bottom: 'calc(var(--av) * 0.146 - var(--av-dot) / 2)',
+    height: 'var(--av-dot)',
     position: 'absolute',
+    right: 'calc(var(--av) * 0.146 - var(--av-dot) / 2)',
+    width: 'var(--av-dot)',
   },
 });
 
@@ -84,18 +91,26 @@ export const initials = (name: string) =>
     .split(/\s+/)
     .filter(Boolean)
     .slice(0, 2)
-    .map((w) => w[0]!.toUpperCase())
+    // Array.from keeps surrogate pairs (emoji, rare CJK) whole instead of cutting them in half.
+    .map((w) => Array.from(w)[0]!.toUpperCase())
     .join('');
 
 /** Gradient initials avatar for an agent with an optional live status dot. */
 export function AgentAvatar({ name, status, size = 36, className, xstyle, ref, ...rest }: AgentAvatarProps) {
-  const m = mergeSx(stylex.props(styles.root, xstyle), className, { ['--av' as string]: `${size}px` });
+  const label = name.trim() || 'Agent';
+  const text = initials(name);
+  const vars = {
+    '--av': `${size}px`,
+    '--av-dot': `${Math.min(16, Math.max(6, Math.round(size * 0.28)))}px`,
+    '--av-fs': `${Math.max(9, Math.round(size * 0.38))}px`,
+  } as CSSProperties;
+  const m = mergeSx(stylex.props(styles.root, xstyle), className, vars);
   return (
-    <span {...rest} ref={ref} role="img" aria-label={status ? `${name}, ${status}` : name} {...m}>
-      <span aria-hidden="true" {...stylex.props(styles.face, tints[hash(name) % tints.length])} style={{ fontSize: Math.round(size * 0.38) }}>
-        {initials(name)}
+    <span {...rest} ref={ref} role="img" aria-label={status ? `${label}, ${status}` : label} {...m}>
+      <span aria-hidden="true" {...stylex.props(styles.face, tints[hash(name) % tints.length])}>
+        {text || <BotIcon size="55%" strokeWidth={1.5} />}
       </span>
-      {status === 'working' && <span aria-hidden="true" {...stylex.props(styles.ripple)} style={{ bottom: -1, height: 10, right: -1, width: 10, inset: 'auto -1px -1px auto' }} />}
+      {status === 'working' && <span aria-hidden="true" {...stylex.props(styles.ripple)} />}
       {status && <span aria-hidden="true" {...stylex.props(styles.dot, styles[status])} />}
     </span>
   );

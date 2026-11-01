@@ -30,6 +30,7 @@ const styles = stylex.create({
     fontWeight: font['--oniva-font-weight-medium'],
     gap: 8,
     height: 26,
+    maxWidth: '100%',
     paddingInline: 10,
   },
   dot: {
@@ -55,7 +56,8 @@ const styles = stylex.create({
     inset: 0,
     position: 'absolute',
   },
-  text: { display: 'inline-block' },
+  text: { display: 'block', minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
+  shimmerText: { display: 'block', overflow: 'hidden', textOverflow: 'ellipsis' },
   muted: { color: colors['--oniva-color-text-muted'] },
   errText: { color: colors['--oniva-color-danger-fg'] },
 });
@@ -78,7 +80,7 @@ export interface AgentStatusPillProps extends Omit<HTMLAttributes<HTMLSpanElemen
 
 /** Compact agent state: colored dot (pulsing while working), label that blur-swaps on change, shimmer while working. */
 export function AgentStatusPill({ status, label, className, xstyle, ref, ...rest }: AgentStatusPillProps) {
-  const text = label ?? DEFAULT_LABEL[status];
+  const text = label || DEFAULT_LABEL[status];
   const sx = stylex.props(styles.root, xstyle);
   return (
     <span {...rest} ref={ref} role="status" {...mergeSx(sx, className)}>
@@ -86,7 +88,7 @@ export function AgentStatusPill({ status, label, className, xstyle, ref, ...rest
         {status === 'working' && <span {...stylex.props(styles.halo)} />}
       </span>
       <span key={`${status}-${text}`} data-state="entering" {...stylex.props(styles.text, enterExit.blur, status === 'idle' && styles.muted, status === 'error' && styles.errText)}>
-        {status === 'working' ? <TextShimmer>{text}</TextShimmer> : text}
+        {status === 'working' ? <TextShimmer xstyle={styles.shimmerText}>{text}</TextShimmer> : text}
       </span>
     </span>
   );

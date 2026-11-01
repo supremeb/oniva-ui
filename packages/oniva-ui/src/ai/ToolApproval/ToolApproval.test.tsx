@@ -71,4 +71,20 @@ describe('ToolApproval improvements', () => {
     render(<ToolApproval toolName="t" ref={ref} className="x" />);
     expect(ref.current).toHaveClass('x');
   });
+
+  it('row variant settles into "Approved · just now" and shows the result', () => {
+    const onApprove = vi.fn();
+    render(<ToolApproval variant="row" toolName="email.send" description="Send campaign email" onApprove={onApprove} result="Sent to 214 recipients" />);
+    fireEvent.click(screen.getByRole('button', { name: 'Approve' }));
+    expect(onApprove).toHaveBeenCalledWith({ always: false });
+    expect(screen.getByRole('status')).toHaveTextContent('Approved · just now');
+    expect(screen.getByText('Sent to 214 recipients')).toBeInTheDocument();
+  });
+
+  it('follows a controlled status and keeps the arguments region keyboard reachable', () => {
+    const { rerender } = render(<ToolApproval toolName="t" description="Do it?" args={{ a: 1 }} />);
+    expect(screen.getByLabelText('Arguments')).toHaveAttribute('tabindex', '0');
+    rerender(<ToolApproval toolName="t" description="Do it?" args={{ a: 1 }} status="denied" />);
+    expect(screen.getByRole('status')).toHaveTextContent('Denied');
+  });
 });

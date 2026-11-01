@@ -1,7 +1,6 @@
 import * as stylex from '@stylexjs/stylex';
-import { Maximize, RotateCcw } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState, type Ref } from 'react';
-import { IconButton, Kbd, ListBox, ListBoxItem, SearchField } from 'oniva-ui';
+import { IconButton, Kbd, ListBox, ListBoxItem, SearchField, MaximizeIcon, RotateCcwIcon } from 'oniva-ui';
 import { colors } from '@oniva-tokens/colors.stylex';
 import { font } from '@oniva-tokens/font.stylex';
 import { radius } from '@oniva-tokens/radius.stylex';
@@ -161,10 +160,10 @@ export function SearchBar({ items, inputRef, onSelect, onFit, onReset, onEscape 
         </div>
         <span aria-live="polite" {...stylex.props(styles.count)}>{items.length} components</span>
         <IconButton aria-label="Fit all components" variant="ghost" size="sm" onPress={onFit}>
-          <Maximize size={16} />
+          <MaximizeIcon size={16} />
         </IconButton>
         <IconButton aria-label="Reset view" variant="ghost" size="sm" onPress={onReset}>
-          <RotateCcw size={16} />
+          <RotateCcwIcon size={16} />
         </IconButton>
       </div>
     </div>

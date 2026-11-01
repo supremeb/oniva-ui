@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { Download } from 'lucide-react';
+import { DownloadIcon } from '../../icons/IconSet';
 import type { HTMLAttributes, Ref } from 'react';
 import { Badge, type BadgeVariant } from '../../components/Badge';
 import { Button } from '../../components/Button';
@@ -161,7 +161,7 @@ export function InvoiceCard({ invoice, onPay, onDownload, locale, className, xst
         </dl>
       </div>
       <div {...stylex.props(styles.actions)}>
-        <Button variant="secondary" startIcon={<Download size={16} aria-hidden="true" />} onPress={onDownload}>
+        <Button variant="secondary" startIcon={<DownloadIcon size={16} aria-hidden="true" />} onPress={onDownload}>
           Download PDF
         </Button>
         {invoice.status !== 'paid' && (

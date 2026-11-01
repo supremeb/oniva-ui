@@ -1,5 +1,4 @@
-import { BarChart3, Home, Receipt, Settings, Users } from 'lucide-react';
-import { Sidebar, SidebarAccount, SidebarContent, SidebarFooter, SidebarHeader, SidebarItem, SidebarMenu, SidebarSearch, SidebarSection } from 'oniva-ui';
+import { Sidebar, SidebarAccount, SidebarContent, SidebarFooter, SidebarHeader, SidebarItem, SidebarMenu, SidebarSearch, SidebarSection, BarChartIcon, HomeIcon, ReceiptIcon, SettingsIcon, UsersIcon } from 'oniva-ui';
 import type { DocPage } from '../types';
 
 const Nav = ({ collapsed = false, active = 'Home', compact = false }: { collapsed?: boolean; active?: string; compact?: boolean }) => (
@@ -10,14 +9,14 @@ const Nav = ({ collapsed = false, active = 'Home', compact = false }: { collapse
       <SidebarContent>
         <SidebarSection title="Workspace">
           <SidebarMenu>
-            <SidebarItem href="#" icon={<Home size={18} />} isActive={active === 'Home'} badge="12">Home</SidebarItem>
-            <SidebarItem href="#" icon={<Receipt size={18} />} isActive={active === 'Invoices'}>Invoices</SidebarItem>
-            <SidebarItem href="#" icon={<Users size={18} />} isActive={active === 'Customers'}>Customers</SidebarItem>
-            <SidebarItem href="#" icon={<BarChart3 size={18} />}>Reports</SidebarItem>
+            <SidebarItem href="#" icon={<HomeIcon size={18} />} isActive={active === 'Home'} badge="12">Home</SidebarItem>
+            <SidebarItem href="#" icon={<ReceiptIcon size={18} />} isActive={active === 'Invoices'}>Invoices</SidebarItem>
+            <SidebarItem href="#" icon={<UsersIcon size={18} />} isActive={active === 'Customers'}>Customers</SidebarItem>
+            <SidebarItem href="#" icon={<BarChartIcon size={18} />}>Reports</SidebarItem>
           </SidebarMenu>
         </SidebarSection>
         <SidebarSection title="Admin" collapsible>
-          <SidebarMenu><SidebarItem href="#" icon={<Settings size={18} />}>Settings</SidebarItem></SidebarMenu>
+          <SidebarMenu><SidebarItem href="#" icon={<SettingsIcon size={18} />}>Settings</SidebarItem></SidebarMenu>
         </SidebarSection>
       </SidebarContent>
       <SidebarFooter><SidebarAccount name="Maya Chen" email="maya@northwind.co" /></SidebarFooter>
@@ -62,7 +61,7 @@ const page: DocPage = {
     ],
     initial: { collapsed: false, active: 'Home' },
     render: (p, ev) => <div onClick={() => ev('onCollapsedChange')}><Nav compact collapsed={Boolean(p.collapsed)} active={String(p.active)} /></div>,
-    code: (p) => `<Sidebar${p.collapsed ? ' collapsed' : ''}>\n  <SidebarHeader name="Northwind" />\n  <SidebarSearch hint="⌘L" />\n  <SidebarContent>\n    <SidebarSection title="Workspace">\n      <SidebarMenu>\n        <SidebarItem href="/" icon={<Home />}${p.active === 'Home' ? ' isActive' : ''} badge="12">Home</SidebarItem>\n        <SidebarItem href="/invoices" icon={<Receipt />}${p.active === 'Invoices' ? ' isActive' : ''}>Invoices</SidebarItem>\n      </SidebarMenu>\n    </SidebarSection>\n  </SidebarContent>\n  <SidebarFooter><SidebarAccount name="Maya Chen" email="maya@northwind.co" /></SidebarFooter>\n</Sidebar>`,
+    code: (p) => `<Sidebar${p.collapsed ? ' collapsed' : ''}>\n  <SidebarHeader name="Northwind" />\n  <SidebarSearch hint="⌘L" />\n  <SidebarContent>\n    <SidebarSection title="Workspace">\n      <SidebarMenu>\n        <SidebarItem href="/" icon={<HomeIcon />}${p.active === 'Home' ? ' isActive' : ''} badge="12">Home</SidebarItem>\n        <SidebarItem href="/invoices" icon={<ReceiptIcon />}${p.active === 'Invoices' ? ' isActive' : ''}>Invoices</SidebarItem>\n      </SidebarMenu>\n    </SidebarSection>\n  </SidebarContent>\n  <SidebarFooter><SidebarAccount name="Maya Chen" email="maya@northwind.co" /></SidebarFooter>\n</Sidebar>`,
   },
   states: [
     { name: 'Expanded', description: '260px with labels and badges.', Render: () => <S><Nav compact /></S> },

@@ -1,19 +1,7 @@
 import * as stylex from '@stylexjs/stylex';
 import { Button as AriaButton } from 'react-aria-components';
 import { useMove } from 'react-aria';
-import {
-  ChevronDown,
-  FolderOpen,
-  Search,
-  Globe,
-  NotebookPen,
-  PanelLeft,
-  PanelRight,
-  Plug,
-  SquarePen,
-  SquareTerminal,
-  X,
-} from 'lucide-react';
+import { ChevronDownIcon, FolderOpenIcon, SearchIcon, GlobeIcon, NotebookPenIcon, PanelLeftIcon, PanelRightIcon, PlugIcon, SquarePenIcon, TerminalIcon, XIcon } from '../../icons/IconSet';
 import {
   useCallback,
   useEffect,
@@ -628,14 +616,14 @@ export interface AppShellProps {
 }
 
 const DEFAULT_NAV: ShellNavItem[] = [
-  { label: 'New chat', icon: <SquarePen size={16} /> },
-  { label: 'Folders', icon: <FolderOpen size={16} /> },
-  { label: 'Integrations', icon: <Plug size={16} /> },
+  { label: 'New chat', icon: <SquarePenIcon size={16} /> },
+  { label: 'Folders', icon: <FolderOpenIcon size={16} /> },
+  { label: 'Integrations', icon: <PlugIcon size={16} /> },
 ];
 const DEFAULT_TOOLS: WorkspaceTool[] = [
-  { id: 'terminal', label: 'Terminal', icon: <SquareTerminal size={16} />, shortcut: '⌘J' },
-  { id: 'browser', label: 'Browser', icon: <Globe size={16} />, shortcut: '⌘B' },
-  { id: 'notes', label: 'Notes', icon: <NotebookPen size={16} />, shortcut: '⌘E' },
+  { id: 'terminal', label: 'Terminal', icon: <TerminalIcon size={16} />, shortcut: '⌘J' },
+  { id: 'browser', label: 'Browser', icon: <GlobeIcon size={16} />, shortcut: '⌘B' },
+  { id: 'notes', label: 'Notes', icon: <NotebookPenIcon size={16} />, shortcut: '⌘E' },
 ];
 
 /* ------------------------------------------------------------ fold motion */
@@ -932,7 +920,7 @@ export function AppShell({
         {workspace.slice(0, 1).toUpperCase()}
       </span>
       <span {...stylex.props(styles.brandName)}>{workspace}</span>
-      {workspaces && <ChevronDown size={14} aria-hidden="true" {...stylex.props(styles.chevron)} />}
+      {workspaces && <ChevronDownIcon size={14} aria-hidden="true" {...stylex.props(styles.chevron)} />}
     </>
   );
 
@@ -943,12 +931,12 @@ export function AppShell({
       onPress={() => (sideNarrowOpen ? setDrawer(null) : setSide(false))}
       {...stylex.props(styles.iconBtn, styles.iconSm, focus.ring)}
     >
-      <PanelLeft size={16} aria-hidden="true" />
+      <PanelLeftIcon size={16} aria-hidden="true" />
     </AriaButton>
   );
   const searchBtn = (
     <AriaButton aria-label="Search" onPress={() => onSearch?.()} {...stylex.props(styles.iconBtn, styles.iconSm, focus.ring)}>
-      <Search size={16} aria-hidden="true" />
+      <SearchIcon size={16} aria-hidden="true" />
     </AriaButton>
   );
   const panelToggle = (
@@ -957,7 +945,7 @@ export function AppShell({
       onPress={() => (panelNarrowOpen ? setDrawer(null) : setPanel(false))}
       {...stylex.props(styles.iconBtn, styles.iconSm, focus.ring)}
     >
-      <PanelRight size={16} aria-hidden="true" />
+      <PanelRightIcon size={16} aria-hidden="true" />
     </AriaButton>
   );
 
@@ -1050,7 +1038,7 @@ export function AppShell({
                 </h2>
                 <ul {...stylex.props(styles.list)}>
                   {projects.map((p, pi) => (
-                    <NavButton index={nav.length + pi} key={p} label={p} icon={<FolderOpen size={16} />} active={active === p} onPress={() => go(p)} />
+                    <NavButton index={nav.length + pi} key={p} label={p} icon={<FolderOpenIcon size={16} />} active={active === p} onPress={() => go(p)} />
                   ))}
                 </ul>
               </section>
@@ -1062,7 +1050,7 @@ export function AppShell({
                 </h2>
                 <ul {...stylex.props(styles.list)}>
                   {g.items.map((p, pi) => (
-                    <NavButton index={nav.length + pi} key={p} label={p} icon={<FolderOpen size={16} />} active={active === p} onPress={() => go(p)} />
+                    <NavButton index={nav.length + pi} key={p} label={p} icon={<FolderOpenIcon size={16} />} active={active === p} onPress={() => go(p)} />
                   ))}
                 </ul>
               </section>
@@ -1087,7 +1075,7 @@ export function AppShell({
                 }}
                 {...stylex.props(styles.iconBtn, styles.cardClose, focus.ring)}
               >
-                <X size={14} aria-hidden="true" />
+                <XIcon size={14} aria-hidden="true" />
               </AriaButton>
             </section>
             </Presence>
@@ -1126,12 +1114,12 @@ export function AppShell({
                   focus.ring,
                 )}
               >
-                <PanelLeft size={16} aria-hidden="true" />
+                <PanelLeftIcon size={16} aria-hidden="true" />
               </AriaButton>
               {title !== undefined && (
                 <H {...stylex.props(styles.title)}>
                   {title}
-                  {titleMenu && <ChevronDown size={14} aria-hidden="true" {...stylex.props(styles.titleChevron)} />}
+                  {titleMenu && <ChevronDownIcon size={14} aria-hidden="true" {...stylex.props(styles.titleChevron)} />}
                 </H>
               )}
               {title === undefined && <span {...stylex.props(styles.title)} />}
@@ -1145,7 +1133,7 @@ export function AppShell({
                     onPress={togglePanel}
                     {...stylex.props(styles.iconBtn, !panelFolded && !panelNarrowOpen && styles.narrowOnly, focus.ring)}
                   >
-                    <PanelRight size={16} aria-hidden="true" />
+                    <PanelRightIcon size={16} aria-hidden="true" />
                   </AriaButton>
                 )}
               </div>
@@ -1160,7 +1148,7 @@ export function AppShell({
                 onPress={toggleSide}
                 {...stylex.props(styles.iconBtn, styles.iconSm, styles.floatBtn, !sideFolded && !sideNarrowOpen && styles.narrowOnly, focus.ring)}
               >
-                <PanelLeft size={16} aria-hidden="true" />
+                <PanelLeftIcon size={16} aria-hidden="true" />
               </AriaButton>
               {hasPanel && (
                 <AriaButton
@@ -1170,7 +1158,7 @@ export function AppShell({
                   onPress={togglePanel}
                   {...stylex.props(styles.iconBtn, styles.iconSm, styles.floatBtn, !panelFolded && !panelNarrowOpen && styles.narrowOnly, focus.ring)}
                 >
-                  <PanelRight size={16} aria-hidden="true" />
+                  <PanelRightIcon size={16} aria-hidden="true" />
                 </AriaButton>
               )}
             </div>
@@ -1219,7 +1207,7 @@ export function AppShell({
                 {panel === true ? (
                   <div {...stylex.props(styles.panelStack)}>
                     <label {...stylex.props(styles.searchBox)}>
-                      <Search size={14} aria-hidden="true" />
+                      <SearchIcon size={14} aria-hidden="true" />
                       <input type="text" aria-label="Search or enter URL" placeholder="Search or enter URL" {...stylex.props(styles.searchInput)} />
                     </label>
                     <section aria-labelledby={`${uid}-tools`}>

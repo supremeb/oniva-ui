@@ -37,6 +37,25 @@ describe('ModelSelector', () => {
     expect(screen.getAllByText('3.6').length).toBeGreaterThan(0);
   });
 
+  it('says Varies for a router row in the default variant too', async () => {
+    render(<ModelSelector models={[...models, { id: 'auto', name: 'Auto' }]} value="nova-pro" />);
+    fireEvent.click(screen.getByRole('button', { name: 'Model: Nova Pro' }));
+    expect(await screen.findByText('Varies')).toBeInTheDocument();
+  });
+
+  it('disables the trigger and names it when there are no models', () => {
+    render(<ModelSelector models={[]} />);
+    const btn = screen.getByRole('button', { name: 'Model: none available' });
+    expect(btn).toBeDisabled();
+    expect(btn).toHaveTextContent('No models');
+  });
+
+  it('keeps the full model name in the accessible name when the label is long', () => {
+    const name = 'Quill Reasoner Extended Context Preview (northwind-labs/quill-reasoner-long-context)';
+    render(<ModelSelector models={[{ id: 'q', name }]} />);
+    expect(screen.getByRole('button', { name: `Model: ${name}` })).toBeInTheDocument();
+  });
+
   it('forwards ref to the trigger', () => {
     const ref = createRef<HTMLButtonElement>();
     render(<ModelSelector ref={ref} models={models} />);

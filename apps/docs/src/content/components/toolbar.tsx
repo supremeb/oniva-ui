@@ -1,17 +1,16 @@
-import { Bold, Italic, Link2, Redo2, Underline, Undo2 } from 'lucide-react';
-import { Toolbar, ToolbarButton, ToolbarSeparator, ToolbarToggleButton } from 'oniva-ui';
+import { Toolbar, ToolbarButton, ToolbarSeparator, ToolbarToggleButton, BoldIcon, ItalicIcon, LinkIcon, RedoIcon, UnderlineIcon, UndoIcon } from 'oniva-ui';
 import type { DocPage } from '../types';
 
 const Bar = ({ orientation = 'horizontal', boldOn = true, disabled = false }: { orientation?: 'horizontal' | 'vertical'; boldOn?: boolean; disabled?: boolean }) => (
   <Toolbar aria-label="Text formatting" orientation={orientation}>
-    <ToolbarButton aria-label="Undo" isDisabled={disabled}><Undo2 size={16} /></ToolbarButton>
-    <ToolbarButton aria-label="Redo" isDisabled={disabled}><Redo2 size={16} /></ToolbarButton>
+    <ToolbarButton aria-label="Undo" isDisabled={disabled}><UndoIcon size={16} /></ToolbarButton>
+    <ToolbarButton aria-label="Redo" isDisabled={disabled}><RedoIcon size={16} /></ToolbarButton>
     <ToolbarSeparator />
-    <ToolbarToggleButton aria-label="Bold" isSelected={boldOn} isDisabled={disabled}><Bold size={16} /></ToolbarToggleButton>
-    <ToolbarToggleButton aria-label="Italic" isDisabled={disabled}><Italic size={16} /></ToolbarToggleButton>
-    <ToolbarToggleButton aria-label="Underline" isDisabled={disabled}><Underline size={16} /></ToolbarToggleButton>
+    <ToolbarToggleButton aria-label="Bold" isSelected={boldOn} isDisabled={disabled}><BoldIcon size={16} /></ToolbarToggleButton>
+    <ToolbarToggleButton aria-label="Italic" isDisabled={disabled}><ItalicIcon size={16} /></ToolbarToggleButton>
+    <ToolbarToggleButton aria-label="Underline" isDisabled={disabled}><UnderlineIcon size={16} /></ToolbarToggleButton>
     <ToolbarSeparator />
-    <ToolbarButton isDisabled={disabled}><Link2 size={16} /> Link</ToolbarButton>
+    <ToolbarButton isDisabled={disabled}><LinkIcon size={16} /> Link</ToolbarButton>
   </Toolbar>
 );
 
@@ -49,7 +48,7 @@ const page: DocPage = {
     ],
     initial: { orientation: 'horizontal', boldOn: true, disabled: false },
     render: (p, ev) => <div onClick={() => ev('onPress')}><Bar orientation={p.orientation as 'horizontal' | 'vertical'} boldOn={Boolean(p.boldOn)} disabled={Boolean(p.disabled)} /></div>,
-    code: (p) => `<Toolbar aria-label="Text formatting"${p.orientation === 'vertical' ? ' orientation="vertical"' : ''}>\n  <ToolbarButton aria-label="Undo"${p.disabled ? ' isDisabled' : ''}><Undo2 /></ToolbarButton>\n  <ToolbarSeparator />\n  <ToolbarToggleButton aria-label="Bold"${p.boldOn ? ' isSelected' : ''}><Bold /></ToolbarToggleButton>\n</Toolbar>`,
+    code: (p) => `<Toolbar aria-label="Text formatting"${p.orientation === 'vertical' ? ' orientation="vertical"' : ''}>\n  <ToolbarButton aria-label="Undo"${p.disabled ? ' isDisabled' : ''}><UndoIcon /></ToolbarButton>\n  <ToolbarSeparator />\n  <ToolbarToggleButton aria-label="Bold"${p.boldOn ? ' isSelected' : ''}><BoldIcon /></ToolbarToggleButton>\n</Toolbar>`,
   },
   states: [
     { name: 'Default', description: 'Bold pressed.', Render: () => <Bar /> },

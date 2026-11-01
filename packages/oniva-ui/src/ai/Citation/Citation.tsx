@@ -3,9 +3,11 @@ import type { Ref } from 'react';
 import { Link } from 'react-aria-components';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
+import { media } from '../../tokens/media.stylex';
 import { motion } from '../../tokens/motion.stylex';
 import { radius } from '../../tokens/radius.stylex';
 import { hostOf, safeUrl } from '../../internal/ai-motion';
+import { focus } from '../../internal/focus';
 import { Tooltip } from '../../components/Tooltip';
 
 const styles = stylex.create({
@@ -13,13 +15,15 @@ const styles = stylex.create({
     alignItems: 'center',
     backgroundColor: {
       default: colors['--oniva-color-surface-tertiary'],
-      ':hover': colors['--oniva-color-accent-soft'],
+      ':hover': { default: null, [media.hover]: colors['--oniva-color-accent-soft'] },
+      ':focus-visible': colors['--oniva-color-accent-soft'],
     },
     borderRadius: radius['--oniva-radius-full'],
     boxSizing: 'border-box',
     color: {
       default: colors['--oniva-color-text-on-tertiary'],
-      ':hover': colors['--oniva-color-accent-soft-fg'],
+      ':hover': { default: null, [media.hover]: colors['--oniva-color-accent-soft-fg'] },
+      ':focus-visible': colors['--oniva-color-accent-soft-fg'],
     },
     cursor: 'pointer',
     display: 'inline-flex',
@@ -29,20 +33,19 @@ const styles = stylex.create({
     fontWeight: font['--oniva-font-weight-semibold'],
     height: 18,
     justifyContent: 'center',
-    marginInline: 2,
+    marginInlineEnd: 1,
+    marginInlineStart: 3,
     minWidth: 18,
-    outlineColor: colors['--oniva-color-focus-ring'],
-    outlineOffset: 1,
-    outlineStyle: { default: 'none', ':focus-visible': 'solid' },
-    outlineWidth: 2,
     paddingInline: 5,
     textDecoration: 'none',
     transitionDuration: motion['--oniva-motion-dur-base'],
     transitionProperty: 'background-color, color',
+    transitionTimingFunction: motion['--oniva-motion-ease-out'],
     verticalAlign: 'text-top',
   },
-  tip: { display: 'flex', flexDirection: 'column', gap: 2, maxWidth: 240 },
-  tipHost: { opacity: 0.7 },
+  inert: { cursor: 'default' },
+  tip: { display: 'flex', flexDirection: 'column', gap: 2, maxWidth: 240, overflowWrap: 'anywhere' },
+  tipHost: { opacity: 0.75 },
 });
 
 export interface CitationProps {
@@ -56,22 +59,25 @@ export interface CitationProps {
 
 /** Inline numbered citation pill; hover/focus reveals the source title and host. */
 export function Citation({ index, title, url, xstyle, ref }: CitationProps) {
+  const href = safeUrl(url);
   return (
     <Tooltip
       content={
         <span {...stylex.props(styles.tip)}>
           <strong>{title}</strong>
-          <span {...stylex.props(styles.tipHost)}>{hostOf(url)}</span>
+          {href ? <span {...stylex.props(styles.tipHost)}>{hostOf(href)}</span> : null}
         </span>
       }
     >
       <Link
         ref={ref}
-        href={safeUrl(url)}
+        href={href}
         target="_blank"
         rel="noopener noreferrer"
         aria-label={`Source ${index}: ${title}`}
-        className={() => stylex.props(styles.base, xstyle).className ?? ''}
+        className={() =>
+          stylex.props(styles.base, focus.ring, !href && styles.inert, xstyle).className ?? ''
+        }
       >
         {index}
       </Link>

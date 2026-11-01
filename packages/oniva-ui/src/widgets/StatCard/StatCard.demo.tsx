@@ -1,4 +1,4 @@
-import { CreditCard, DollarSign, Users } from 'lucide-react';
+import { CreditCardIcon, DollarIcon, UsersIcon } from '../../icons/IconSet';
 import type { DemoModule } from '../../internal/demo';
 import { StatCard } from './StatCard';
 
@@ -25,7 +25,7 @@ const demo: DemoModule = {
             valueFormat={{ style: 'currency', currency: 'USD', maximumFractionDigits: 0 }}
   delta={8.2}
   deltaLabel="vs last month"
-  icon={<DollarSign size={16} />}
+  icon={<DollarIcon size={16} />}
   trend={[31, 34, 33, 38, 41, 40, 46, 48]}
 />`,
       Component: () => (
@@ -36,7 +36,7 @@ const demo: DemoModule = {
             valueFormat={{ style: 'currency', currency: 'USD', maximumFractionDigits: 0 }}
             delta={8.2}
             deltaLabel="vs last month"
-            icon={<DollarSign size={16} />}
+            icon={<DollarIcon size={16} />}
             trend={[31, 34, 33, 38, 41, 40, 46, 48]}
           />
           <StatCard
@@ -44,7 +44,7 @@ const demo: DemoModule = {
             value={2940}
             delta={-1.4}
             deltaLabel="vs last month"
-            icon={<Users size={16} />}
+            icon={<UsersIcon size={16} />}
             tone={5}
             trend={[29, 30, 31, 31, 30, 29, 30, 29]}
           />
@@ -54,7 +54,7 @@ const demo: DemoModule = {
             delta={-0.4}
             invertDelta
             deltaLabel="vs last month"
-            icon={<CreditCard size={16} />}
+            icon={<CreditCardIcon size={16} />}
             tone={3}
             trend={[24, 22, 23, 21, 20, 19, 19, 18]}
           />

@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { ArrowRight, ChevronDown, Circle } from 'lucide-react';
+import { ArrowRightIcon, ChevronDownIcon, CircleIcon } from '../../icons/IconSet';
 import { useEffect, useId, useRef, useState, type CSSProperties, type ReactNode, type Ref } from 'react';
 import {
   Button as AriaButton,
@@ -292,7 +292,7 @@ export interface ProjectCardProps {
 function Dot({ option }: { option: ProjectOption }) {
   return (
     <span aria-hidden="true" {...stylex.props(toneColor[option.tone ?? 'gray'])}>
-      {option.icon ?? <Circle size={10} fill="currentColor" />}
+      {option.icon ?? <CircleIcon size={10} fill="currentColor" />}
     </span>
   );
 }
@@ -461,7 +461,7 @@ export function ProjectCard({
             >
               {current && <Dot option={current} />}
               {current?.label}
-              <ChevronDown size={14} aria-hidden="true" {...stylex.props(styles.chevron, pickingStatus && styles.chevronOpen)} />
+              <ChevronDownIcon size={14} aria-hidden="true" {...stylex.props(styles.chevron, pickingStatus && styles.chevronOpen)} />
             </AriaButton>
             {members.length > 0 && (
               <span role="group" aria-label="Filter by person" {...stylex.props(styles.stack)}>
@@ -543,7 +543,7 @@ export function ProjectCard({
           {action && (
             <Button size="sm" variant="primary" onPress={action.onClick}>
               {action.label}
-              <ArrowRight size={14} aria-hidden="true" />
+              <ArrowRightIcon size={14} aria-hidden="true" />
             </Button>
           )}
         </div>

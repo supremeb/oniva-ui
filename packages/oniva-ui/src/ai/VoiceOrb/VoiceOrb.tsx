@@ -44,6 +44,7 @@ const styles = stylex.create({
   swirl: {
     backgroundImage: `conic-gradient(from 0deg, transparent 0 55%, ${accent['--oniva-accent-100']} 75%, transparent 100%)`,
     inset: 0,
+    maskImage: 'radial-gradient(circle, transparent 12%, black 55%)',
     mixBlendMode: 'soft-light',
     opacity: 0.8,
     position: 'absolute',
@@ -84,6 +85,10 @@ const styles = stylex.create({
     color: colors['--oniva-color-text-muted'],
     fontSize: font['--oniva-font-size-13'],
     fontWeight: font['--oniva-font-weight-medium'],
+    maxWidth: '100%',
+    overflowWrap: 'anywhere',
+    textAlign: 'center',
+    textWrap: 'balance',
   },
 });
 
@@ -143,7 +148,7 @@ export function VoiceOrb({
         </div>
       </div>
       {!hideLabel && (
-        <span {...stylex.props(styles.label)}>
+        <span aria-hidden="true" {...stylex.props(styles.label)}>
           {name ? `${name} · ` : ''}
           {captions[state]}
         </span>

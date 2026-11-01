@@ -1,5 +1,5 @@
 import type { DemoModule } from '../../internal/demo';
-import { Radar, Sparkles, Users } from 'lucide-react';
+import { RadarIcon, SparklesIcon, UsersIcon } from '../../icons/IconSet';
 import { LeadSourcing } from './LeadSourcing';
 
 const demo: DemoModule = {
@@ -23,18 +23,18 @@ const demo: DemoModule = {
       name: "Custom tools",
       code: `<LeadSourcing
   items={[
-    { name: 'Outreach bot', icon: <Sparkles /> },
-    { name: 'Directory', icon: <Radar /> },
-    { name: 'Network', icon: <Users /> },
+    { name: 'Outreach bot', icon: <SparklesIcon /> },
+    { name: 'Directory', icon: <RadarIcon /> },
+    { name: 'Network', icon: <UsersIcon /> },
   ]}
 />`,
       Component: () => (
         <div style={{ margin: '0 auto', maxWidth: 1120, width: '100%' }}>
           <LeadSourcing
             items={[
-              { name: 'Outreach bot', icon: <Sparkles /> },
-              { name: 'Directory', icon: <Radar /> },
-              { name: 'Network', icon: <Users /> },
+              { name: 'Outreach bot', icon: <SparklesIcon /> },
+              { name: 'Directory', icon: <RadarIcon /> },
+              { name: 'Network', icon: <UsersIcon /> },
             ]}
           />
         </div>

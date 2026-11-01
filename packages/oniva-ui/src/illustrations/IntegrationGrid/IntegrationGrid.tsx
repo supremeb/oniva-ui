@@ -1,8 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import {
-  BarChart3, BookOpen, Bell, CalendarDays, ClipboardList, Code, Contact, CreditCard, Database, FileText, HardDrive,
-  Kanban, LifeBuoy, Mail, MessageSquare, Rocket, Search, Share2, StickyNote, Table, Ticket, Wallet,
-} from 'lucide-react';
+import { BarChartIcon, BookOpenIcon, BellIcon, CalendarDaysIcon, ClipboardListIcon, CodeIcon, ContactIcon, CreditCardIcon, DatabaseIcon, FileTextIcon, HardDriveIcon, KanbanIcon, LifeBuoyIcon, MailIcon, MessageSquareIcon, RocketIcon, SearchIcon, ShareNodesIcon, StickyNoteIcon, TableIcon, TicketIcon, WalletIcon } from '../../icons/IconSet';
 import { accent } from '../../tokens/accent.stylex';
 import { colors } from '../../tokens/colors.stylex';
 import { media } from '../../tokens/media.stylex';
@@ -108,14 +105,14 @@ export interface IntegrationGridProps extends IllustrationProps {
   columns?: 5 | 7 | 9;
 }
 
-const ic = (I: typeof Mail) => <I {...stylex.props(fillSvg.svg)} />;
+const ic = (I: typeof MailIcon) => <I {...stylex.props(fillSvg.svg)} />;
 const DEFAULT: IllustrationItem[] = [
-  ['Docs', FileText], ['Mail', Mail], ['Chat', MessageSquare], ['Contacts', Contact], ['Calendar', CalendarDays],
-  ['Drive', HardDrive], ['Billing', CreditCard], ['Support', LifeBuoy], ['Analytics', BarChart3], ['Warehouse', Database],
-  ['Tickets', Ticket], ['Forms', ClipboardList], ['Notes', StickyNote], ['Boards', Kanban], ['Code', Code],
-  ['Sheets', Table], ['Deploys', Rocket], ['Alerts', Bell], ['Wiki', BookOpen], ['Social', Share2],
-  ['Payments', Wallet], ['Search', Search],
-].map(([name, I]) => ({ name: name as string, icon: ic(I as typeof Mail) }));
+  ['Docs', FileTextIcon], ['Mail', MailIcon], ['Chat', MessageSquareIcon], ['Contacts', ContactIcon], ['Calendar', CalendarDaysIcon],
+  ['Drive', HardDriveIcon], ['Billing', CreditCardIcon], ['Support', LifeBuoyIcon], ['Analytics', BarChartIcon], ['Warehouse', DatabaseIcon],
+  ['Tickets', TicketIcon], ['Forms', ClipboardListIcon], ['Notes', StickyNoteIcon], ['Boards', KanbanIcon], ['Code', CodeIcon],
+  ['Sheets', TableIcon], ['Deploys', RocketIcon], ['Alerts', BellIcon], ['Wiki', BookOpenIcon], ['Social', ShareNodesIcon],
+  ['Payments', WalletIcon], ['Search', SearchIcon],
+].map(([name, I]) => ({ name: name as string, icon: ic(I as typeof MailIcon) }));
 
 /** Honeycomb-like wall of integration tiles around a bright centre tile, fading out toward the edges. */
 export function IntegrationGrid({ logos = DEFAULT, mark, columns = 9, label, ...rest }: IntegrationGridProps) {
@@ -151,7 +148,7 @@ export function IntegrationGrid({ logos = DEFAULT, mark, columns = 9, label, ...
                     <span {...stylex.props(styles.heroWrap)}>
                       <span aria-hidden="true" {...stylex.props(styles.halo, loop.run)} />
                       <Tile size={tile * 1.4} xstyle={styles.hero}>
-                        {mark ?? <span {...stylex.props(fillSvg.svg)}>{ic(Rocket)}</span>}
+                        {mark ?? <span {...stylex.props(fillSvg.svg)}>{ic(RocketIcon)}</span>}
                       </Tile>
                     </span>
                   ) : (

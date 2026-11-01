@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { Check } from 'lucide-react';
+import { CheckIcon } from '../icons/IconSet';
 import {
   ListBox,
   ListBoxItem,
@@ -124,7 +124,7 @@ export function FormsItem({
             )}
           </span>
           {isSelected && !hideCheck && (
-            <Check size={16} aria-hidden="true" {...stylex.props(fp.check, popStyles.pop)} />
+            <CheckIcon size={16} aria-hidden="true" {...stylex.props(fp.check, popStyles.pop)} />
           )}
         </>
       )}

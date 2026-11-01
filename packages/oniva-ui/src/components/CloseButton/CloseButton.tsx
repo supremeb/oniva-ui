@@ -2,7 +2,7 @@ import * as stylex from '@stylexjs/stylex';
 import { media } from '../../tokens/media.stylex';
 import type { ControlSize } from '../../internal/types';
 import { Button as AriaButton, type ButtonProps as AriaButtonProps } from 'react-aria-components';
-import { X } from 'lucide-react';
+import { XIcon } from '../../icons/IconSet';
 import type { CSSProperties, Ref } from 'react';
 import { mergeSx } from '../../internal/sx';
 import { colors } from '../../tokens/colors.stylex';
@@ -68,7 +68,7 @@ export function CloseButton({
   const sx = stylex.props(styles.base, styles[size], xstyle);
   return (
     <AriaButton {...rest} ref={ref} aria-label={ariaLabel} {...mergeSx(sx, className, style)}>
-      <X size={size === 'sm' ? 14 : 16} aria-hidden="true" />
+      <XIcon size={size === 'sm' ? 14 : 16} aria-hidden="true" />
     </AriaButton>
   );
 }

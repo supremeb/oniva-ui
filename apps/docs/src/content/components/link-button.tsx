@@ -1,5 +1,4 @@
-import { ArrowUpRight } from 'lucide-react';
-import { LinkButton } from 'oniva-ui';
+import { LinkButton, ArrowUpRightIcon } from 'oniva-ui';
 import type { DocPage } from '../types';
 
 const page: DocPage = {
@@ -13,13 +12,13 @@ const page: DocPage = {
   anatomy: {
     intro: 'Four parts. The anchor and label are required. Icons are optional and sit 6px from the label.',
     Render: () => (
-      <LinkButton href="#/components/link-button" variant="primary" size="md" startIcon={<ArrowUpRight size={16} />}>
+      <LinkButton href="#/components/link-button" variant="primary" size="md" startIcon={<ArrowUpRightIcon size={16} />}>
         Open dashboard
       </LinkButton>
     ),
     parts: [
       { name: 'Anchor', description: 'Native a with href. 36px tall at md, 10px radius, 12px horizontal padding, 1px border, inline-flex.', selector: 'a' },
-      { name: 'Leading icon', description: 'startIcon slot, 16px lucide icon, aria-hidden by convention. 6px gap to the label.', selector: 'a svg' },
+      { name: 'Leading icon', description: 'startIcon slot, 16px icon, aria-hidden by convention. 6px gap to the label.', selector: 'a svg' },
       { name: 'Label', description: '14px, medium weight, nowrap. Sentence case, verb first.', selector: 'a', fallback: { x: 65, y: 50 } },
       { name: 'Variant surface', description: 'Primary: flat accent fill with a contact shadow. Secondary: surface fill, 1px border, raised. Soft: accent tint. Ghost: transparent until hover.', selector: 'a', fallback: { x: 10, y: 50 } },
     ],
@@ -42,12 +41,12 @@ const page: DocPage = {
     ],
     initial: { variant: 'primary', size: 'md', label: 'View statement', icon: false, isDisabled: false },
     render: (p, ev) => (
-      <LinkButton href="#/components/link-button" variant={p.variant as 'primary'} size={p.size as 'md'} isDisabled={Boolean(p.isDisabled)} endIcon={p.icon ? <ArrowUpRight size={16} /> : undefined} onPress={() => ev('onPress')}>
+      <LinkButton href="#/components/link-button" variant={p.variant as 'primary'} size={p.size as 'md'} isDisabled={Boolean(p.isDisabled)} endIcon={p.icon ? <ArrowUpRightIcon size={16} /> : undefined} onPress={() => ev('onPress')}>
         {String(p.label)}
       </LinkButton>
     ),
     code: (p) => {
-      const attrs = [p.variant !== 'secondary' && `variant="${p.variant}"`, p.size !== 'md' && `size="${p.size}"`, p.isDisabled && 'isDisabled', p.icon && 'endIcon={<ArrowUpRight size={16} />}'].filter(Boolean).join(' ');
+      const attrs = [p.variant !== 'secondary' && `variant="${p.variant}"`, p.size !== 'md' && `size="${p.size}"`, p.isDisabled && 'isDisabled', p.icon && 'endIcon={<ArrowUpRightIcon size={16} />}'].filter(Boolean).join(' ');
       return `<LinkButton href="/billing/statement"${attrs ? ' ' + attrs : ''}>${p.label}</LinkButton>`;
     },
   },
@@ -56,7 +55,7 @@ const page: DocPage = {
     { name: 'Secondary', description: 'The default variant.', Render: () => <LinkButton href="#/components/link-button">Download PDF</LinkButton> },
     { name: 'Soft', description: 'Accent-tinted fill.', Render: () => <LinkButton href="#/components/link-button" variant="soft">Contact sales</LinkButton> },
     { name: 'Ghost', description: 'Lowest emphasis, for toolbars.', Render: () => <LinkButton href="#/components/link-button" variant="ghost">Docs</LinkButton> },
-    { name: 'With icon', description: 'Trailing arrow signals leaving the page.', Render: () => <LinkButton href="#/components/link-button" size="sm" endIcon={<ArrowUpRight size={14} />}>Open dashboard</LinkButton> },
+    { name: 'With icon', description: 'Trailing arrow signals leaving the page.', Render: () => <LinkButton href="#/components/link-button" size="sm" endIcon={<ArrowUpRightIcon size={14} />}>Open dashboard</LinkButton> },
     { name: 'Disabled', description: '50% opacity, aria-disabled, no navigation.', Render: () => <LinkButton isDisabled>View statement</LinkButton> },
   ],
   sections: [

@@ -1,7 +1,7 @@
 import * as stylex from '@stylexjs/stylex';
 import { focus } from '../../internal/focus';
 import { Button as AriaButton } from 'react-aria-components';
-import { Check } from 'lucide-react';
+import { CheckIcon } from '../../icons/IconSet';
 import type { CSSProperties, ReactNode, Ref } from 'react';
 import { mergeSx } from '../../internal/sx';
 import { accent } from '../../tokens/accent.stylex';
@@ -154,7 +154,7 @@ export function Stepper({
         const pressable = !!onStepPress && i <= currentStep;
         const circle = (
           <span {...stylex.props(styles.circle, styles[status])}>
-            {status === 'complete' ? <Check size={16} aria-hidden="true" /> : (step.icon ?? i + 1)}
+            {status === 'complete' ? <CheckIcon size={16} aria-hidden="true" /> : (step.icon ?? i + 1)}
           </span>
         );
         const text = (

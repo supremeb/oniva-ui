@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { Check, X } from 'lucide-react';
+import { CheckIcon, XIcon } from '../icons/IconSet';
 import { useId, useMemo, useState, type KeyboardEvent } from 'react';
 import { focus } from './focus';
 import { m8 } from './m8-motion';
@@ -216,7 +216,7 @@ export function ReviewDiff({
                     onClick={() => decide(id, 'accepted')}
                     {...stylex.props(styles.mini)}
                   >
-                    <Check size={12} aria-hidden="true" />
+                    <CheckIcon size={12} aria-hidden="true" />
                   </button>
                   <button
                     type="button"
@@ -225,7 +225,7 @@ export function ReviewDiff({
                     onClick={() => decide(id, 'rejected')}
                     {...stylex.props(styles.mini)}
                   >
-                    <X size={12} aria-hidden="true" />
+                    <XIcon size={12} aria-hidden="true" />
                   </button>
                 </span>
               )}

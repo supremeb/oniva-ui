@@ -1,5 +1,4 @@
-import { Mail, Search } from 'lucide-react';
-import { Input } from 'oniva-ui';
+import { Input, MailIcon, SearchIcon } from 'oniva-ui';
 import type { DocPage } from '../types';
 
 type P = {
@@ -29,7 +28,7 @@ const Basic = (p: P) => (
       size={p.size}
       placeholder={p.placeholder ?? 'you@company.com'}
       defaultValue={p.value}
-      prefix={p.prefix ? <Mail size={16} /> : undefined}
+      prefix={p.prefix ? <MailIcon size={16} /> : undefined}
       suffix={p.suffix ? <kbd>⌘K</kbd> : undefined}
       onChange={p.onChange}
     />
@@ -90,7 +89,7 @@ const page: DocPage = {
       />
     ),
     code: (p) =>
-      `<Input label="${p.label}"${p.size !== 'md' ? ` size="${p.size}"` : ''} placeholder="${p.placeholder}"${p.prefix ? ' prefix={<Mail size={16} />}' : ''}${p.suffix ? ' suffix={<kbd>⌘K</kbd>}' : ''}${p.isInvalid ? ' isInvalid errorMessage="Enter an email like name@company.com."' : ''}${p.isDisabled ? ' isDisabled' : ''} onChange={setEmail} />`,
+      `<Input label="${p.label}"${p.size !== 'md' ? ` size="${p.size}"` : ''} placeholder="${p.placeholder}"${p.prefix ? ' prefix={<MailIcon size={16} />}' : ''}${p.suffix ? ' suffix={<kbd>⌘K</kbd>}' : ''}${p.isInvalid ? ' isInvalid errorMessage="Enter an email like name@company.com."' : ''}${p.isDisabled ? ' isDisabled' : ''} onChange={setEmail} />`,
   },
   states: [
     { name: 'Empty', description: 'Placeholder shows an example, not an instruction.', Render: () => <Basic /> },
@@ -127,7 +126,7 @@ const page: DocPage = {
       title: 'Adornments',
       items: [
         { kind: 'do', caption: 'Use an icon that reinforces the label.', example: () => <Basic label="Work email" prefix placeholder="you@company.com" /> },
-        { kind: 'dont', caption: 'Do not use a prefix instead of a label. Sighted users lose the name once they type.', example: () => <Input aria-label="Email" prefix={<Search size={16} />} placeholder="Email" /> },
+        { kind: 'dont', caption: 'Do not use a prefix instead of a label. Sighted users lose the name once they type.', example: () => <Input aria-label="Email" prefix={<SearchIcon size={16} />} placeholder="Email" /> },
       ],
     },
     {

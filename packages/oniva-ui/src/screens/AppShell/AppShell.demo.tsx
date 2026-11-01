@@ -1,4 +1,4 @@
-import { Ellipsis, Share2 } from 'lucide-react';
+import { MoreIcon, ShareNodesIcon } from '../../icons/IconSet';
 import type { DemoModule } from '../../internal/demo';
 import { NORTHWIND_PROJECTS, NORTHWIND_WHATS_NEW, ScreenFrame } from '../../internal/s1-frame';
 import { Button } from '../../components/Button';
@@ -24,8 +24,8 @@ const Page = ({ text }: { text: string }) => (
 const text = 'The shell brings the sidebar and the scroll container. Put any screen inside; below 720px the sidebar becomes a drawer.';
 const actions = (
   <>
-    <Button variant='ghost' size='sm' aria-label="Share" startIcon={<Share2 size={14} />} />
-    <Button variant='ghost' size='sm' aria-label="More" startIcon={<Ellipsis size={14} />} />
+    <Button variant='ghost' size='sm' aria-label="Share" startIcon={<ShareNodesIcon size={14} />} />
+    <Button variant='ghost' size='sm' aria-label="More" startIcon={<MoreIcon size={14} />} />
   </>
 );
 const sources = [

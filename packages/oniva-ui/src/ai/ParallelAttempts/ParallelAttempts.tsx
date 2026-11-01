@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { Check, CircleAlert, Trophy } from 'lucide-react';
+import { CheckIcon, CircleAlertIcon, TrophyIcon } from '../../icons/IconSet';
 import { useState, type HTMLAttributes, type ReactNode, type Ref } from 'react';
 import { Radio, RadioGroup } from 'react-aria-components';
 import { colors } from '../../tokens/colors.stylex';
@@ -37,7 +37,7 @@ const styles = stylex.create({
   },
   lineSwap: { display: 'block' },
   lineMuted: { color: colors['--oniva-color-text-muted'] },
-  rowBack: { opacity: { default: 0.6, ':hover': 1, ':focus-within': 1 } },
+  dim: { opacity: 0.55, transitionDuration: motion['--oniva-motion-dur-base'], transitionProperty: 'opacity', transitionTimingFunction: motion['--oniva-motion-ease-out'] },
   root: { containerType: 'inline-size', fontFamily: font['--oniva-font-sans'], overflow: 'hidden', width: '100%' },
   bar: {
     alignItems: 'baseline',
@@ -49,7 +49,7 @@ const styles = stylex.create({
     paddingBlock: 10,
     paddingInline: 14,
   },
-  title: { color: colors['--oniva-color-text'], fontSize: font['--oniva-font-size-14'], fontWeight: font['--oniva-font-weight-semibold'], margin: 0 },
+  title: { color: colors['--oniva-color-text'], flexShrink: 0, fontSize: font['--oniva-font-size-14'], fontWeight: font['--oniva-font-weight-semibold'], margin: 0, whiteSpace: 'nowrap' },
   barEnd: { alignItems: 'baseline', color: colors['--oniva-color-text-muted'], display: 'flex', flexShrink: 0, fontSize: font['--oniva-font-size-13'], fontVariantNumeric: 'tabular-nums', gap: 10, marginInlineStart: 'auto' },
   strong: { color: colors['--oniva-color-text'], fontWeight: font['--oniva-font-weight-medium'] },
   nameLine: { alignItems: 'baseline', display: 'flex', gap: 6, minWidth: 0 },
@@ -74,7 +74,7 @@ const styles = stylex.create({
       [NARROW]: '"who score" "bar bar" "act act"',
     },
     gridTemplateColumns: {
-      default: 'minmax(0, 2fr) minmax(80px, 1.2fr) minmax(64px, auto) auto',
+      default: 'minmax(0, 2fr) minmax(80px, 1.2fr) 108px 168px',
       [NARROW]: 'minmax(0, 1fr) auto',
     },
     opacity: 1,
@@ -104,7 +104,7 @@ const styles = stylex.create({
     width: 32,
   },
   names: { display: 'flex', flexDirection: 'column', minWidth: 0 },
-  name: { color: colors['--oniva-color-text'], fontSize: font['--oniva-font-size-13'], fontWeight: font['--oniva-font-weight-medium'], overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
+  name: { color: colors['--oniva-color-text'], flexShrink: 0, maxWidth: '100%', fontSize: font['--oniva-font-size-13'], fontWeight: font['--oniva-font-weight-medium'], overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
   approach: { color: colors['--oniva-color-text-muted'], display: { default: 'block', [NARROW]: 'none' }, fontSize: font['--oniva-font-size-12'], overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
   mid: { display: 'flex', flexDirection: 'column', gap: 4, gridArea: 'bar', minWidth: 0 },
   track: { backgroundColor: colors['--oniva-color-chart-track'], borderRadius: radius['--oniva-radius-full'], height: 6, overflow: 'hidden', position: 'relative' },
@@ -136,7 +136,7 @@ const styles = stylex.create({
   score: { alignItems: 'flex-end', display: 'flex', flexDirection: 'column', gridArea: 'score', justifySelf: 'end' },
   scoreNum: { color: colors['--oniva-color-text'], fontSize: font['--oniva-font-size-16'], fontVariantNumeric: 'tabular-nums', fontWeight: font['--oniva-font-weight-semibold'], lineHeight: 1.1 },
   sub: { color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-11'], fontVariantNumeric: 'tabular-nums', whiteSpace: 'nowrap' },
-  act: { alignItems: 'center', display: 'flex', gap: 6, gridArea: 'act', justifySelf: { default: 'end', [NARROW]: 'stretch' }, minWidth: 90 },
+  act: { alignItems: 'center', display: 'flex', gap: 6, gridArea: 'act', justifyContent: { default: 'flex-end', [NARROW]: 'flex-start' }, justifySelf: { default: 'stretch', [NARROW]: 'stretch' }, minWidth: 0 },
   use: {
     alignItems: 'center',
     backgroundColor: { default: colors['--oniva-color-surface-inner'], '[data-hovered]': colors['--oniva-color-surface-hover'], '[data-selected]': colors['--oniva-color-success-solid'] },
@@ -153,13 +153,14 @@ const styles = stylex.create({
     gap: 4,
     justifyContent: 'center',
     minHeight: { default: 28, '@media (pointer: coarse)': 40 },
-    outlineColor: colors['--oniva-color-focus-ring'],
+    outlineColor: { default: colors['--oniva-color-focus-ring'], [media.forcedColors]: 'Highlight' },
     outlineOffset: 2,
     outlineStyle: { default: 'none', '[data-focus-visible]': 'solid' },
-    outlineWidth: 2,
+    outlineWidth: { default: 2, [media.contrast]: 3 },
     paddingInline: 10,
     transitionDuration: motion['--oniva-motion-dur-base'],
     transitionProperty: 'background-color, color, border-color',
+    whiteSpace: 'nowrap',
   },
 });
 
@@ -213,6 +214,7 @@ export function ParallelAttempts({ attempts, task, title, picked, onPick, format
   const rows = attempts.map((a, i) => {
     const isPicked = current === a.id;
     const isBest = best?.id === a.id;
+    const dimmed = !isPicked && current != null;
     const pct = Math.max(0, Math.min(1, a.status === 'done' ? 1 : (a.progress ?? 0)));
     const line = a.status === 'running' ? (a.step ?? 'Working…') : (a.note ?? (a.status === 'done' ? 'Finished' : 'Failed'));
     return (
@@ -220,7 +222,8 @@ export function ParallelAttempts({ attempts, task, title, picked, onPick, format
         key={a.id}
         data-status={a.status}
         style={{ animationDelay: `${Math.min(i, 6) * 50}ms` }}
-        {...stylex.props(styles.row, isPicked && styles.rowPicked, !isPicked && current != null && styles.rowBack)}
+        {...(radios ? {} : { role: 'listitem' })}
+        {...stylex.props(styles.row, isPicked && styles.rowPicked)}
       >
         <div {...stylex.props(styles.who)}>
           <span aria-hidden="true" {...stylex.props(styles.tile)}>{a.icon ?? a.name.slice(0, 1)}</span>
@@ -231,12 +234,12 @@ export function ParallelAttempts({ attempts, task, title, picked, onPick, format
             </span>
             <span {...stylex.props(styles.line, styles.stepLine, a.status === 'failed' && styles.lineFailed, a.status === 'done' && styles.lineMuted)} title={line}>
               <span key={`${a.status}`} data-state="entering" {...stylex.props(styles.lineSwap, enterExit.blur)}>
-                {a.status === 'failed' && <CircleAlert size={11} aria-hidden="true" />} {line}
+                {a.status === 'failed' && <CircleAlertIcon size={11} aria-hidden="true" />} {line}
               </span>
             </span>
           </span>
         </div>
-        <div {...stylex.props(styles.mid)}>
+        <div {...stylex.props(styles.mid, dimmed && styles.dim)}>
           <div aria-hidden="true" {...stylex.props(styles.track)}>
             <div style={{ transform: `scaleX(${pct})` }} {...stylex.props(styles.fill, a.status === 'running' ? styles.fillRunning : a.status === 'done' ? styles.fillDone : styles.fillFailed)}>
               {a.status === 'running' && <span {...stylex.props(styles.shine)} />}
@@ -260,7 +263,7 @@ export function ParallelAttempts({ attempts, task, title, picked, onPick, format
           {isBest && (
             <span {...stylex.props(styles.pop)}>
               <span {...stylex.props(w2s.tag, w2s.tagSuccess)}>
-                <Trophy size={11} aria-hidden="true" /> Best
+                <TrophyIcon size={11} aria-hidden="true" /> Best
               </span>
             </span>
           )}
@@ -268,7 +271,7 @@ export function ParallelAttempts({ attempts, task, title, picked, onPick, format
             <Radio value={a.id} aria-label={`${a.name}${a.score !== undefined ? `, score ${a.score}` : ''}`} className={() => sxClass(stylex.props(styles.use))}>
               {({ isSelected }) => (
                 <>
-                  {isSelected && <Check size={12} aria-hidden="true" />}
+                  {isSelected && <CheckIcon size={12} aria-hidden="true" />}
                   {isSelected ? 'In use' : 'Use this one'}
                 </>
               )}
@@ -285,7 +288,7 @@ export function ParallelAttempts({ attempts, task, title, picked, onPick, format
         <h4 id={titleId} {...stylex.props(styles.title)}>{title ?? `Best of ${attempts.length}`}</h4>
         {task && <span {...stylex.props(styles.task)}>{task}</span>}
         <span {...stylex.props(styles.barEnd)}>
-          <span><span {...stylex.props(styles.strong)}>{done.length}</span> of {attempts.length} done</span>
+          <span role="status"><span {...stylex.props(styles.strong)}>{done.length}</span> of {attempts.length} done</span>
           <span {...stylex.props(styles.strong)}>{cost(attempts.reduce((n, a) => n + (a.cost ?? 0), 0))}</span>
         </span>
       </div>

@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { Mic, Square } from 'lucide-react';
+import { MicIcon, SquareIcon } from '../../icons/IconSet';
 import { useEffect, useRef, useState } from 'react';
 import type { HTMLAttributes, Ref } from 'react';
 import { Button as AriaButton } from 'react-aria-components';
@@ -9,6 +9,7 @@ import { media } from '../../tokens/media.stylex';
 import { motion } from '../../tokens/motion.stylex';
 import { radius } from '../../tokens/radius.stylex';
 import { aiStyles } from '../../internal/ai-styles';
+import { focus } from '../../internal/focus';
 import { mergeSx } from '../../internal/sx';
 import { AudioWaveform } from '../AudioWaveform';
 
@@ -18,7 +19,7 @@ const ring = stylex.keyframes({
 });
 
 const styles = stylex.create({
-  root: { alignItems: 'center', display: 'inline-flex', gap: 12 },
+  root: { alignItems: 'center', display: 'inline-flex', gap: 12, maxWidth: '100%' },
   wrap: { display: 'inline-flex', flexShrink: 0, position: 'relative' },
   btn: {
     alignItems: 'center',
@@ -34,17 +35,16 @@ const styles = stylex.create({
     display: 'inline-flex',
     height: 40,
     justifyContent: 'center',
-    outlineColor: colors['--oniva-color-focus-ring'],
-    outlineOffset: 2,
-    outlineStyle: { default: 'none', ':focus-visible': 'solid' },
-    outlineWidth: 2,
     position: 'relative',
-    transform: { default: 'none', ':active': 'scale(0.97)' },
+    transform: { default: 'none', ':active': `scale(${motion['--oniva-motion-press-scale']})` },
     transitionDuration: motion['--oniva-motion-dur-press'],
-    transitionProperty: 'transform, background-color',
+    transitionProperty: 'transform, background-color, border-color',
     transitionTimingFunction: motion['--oniva-motion-ease-out'],
     width: 40,
     zIndex: 1,
+  },
+  btnIdle: {
+    borderColor: { default: colors['--oniva-color-border-control'], ':hover': { default: null, [media.hover]: colors['--oniva-color-border-hover'] } },
   },
   btnRec: {
     backgroundColor: colors['--oniva-color-danger-solid'],
@@ -68,12 +68,27 @@ const styles = stylex.create({
     fontSize: font['--oniva-font-size-13'],
     fontVariantNumeric: 'tabular-nums',
     fontWeight: font['--oniva-font-weight-medium'],
+    flexShrink: 0,
     minWidth: 36,
   },
   hint: {
     color: colors['--oniva-color-text-muted'],
     fontFamily: font['--oniva-font-sans'],
     fontSize: font['--oniva-font-size-13'],
+    lineHeight: 1.35,
+    minWidth: 0,
+    overflowWrap: 'anywhere',
+  },
+  srOnly: {
+    borderWidth: 0,
+    clip: 'rect(0,0,0,0)',
+    height: 1,
+    margin: -1,
+    overflow: 'hidden',
+    padding: 0,
+    position: 'absolute',
+    whiteSpace: 'nowrap',
+    width: 1,
   },
 });
 
@@ -110,6 +125,7 @@ export function SpeechInput({
   const chunks = useRef<Blob[]>([]);
   const secondsRef = useRef(0);
   const ctx = useRef<AudioContext | null>(null);
+  const starting = useRef(false);
 
   useEffect(() => {
     if (!recording) return;
@@ -129,6 +145,8 @@ export function SpeechInput({
   );
 
   const start = async () => {
+    if (starting.current) return; // a second press while the permission prompt is open must not start another recorder
+    starting.current = true;
     secondsRef.current = 0;
     setSeconds(0);
     const canRecord =
@@ -157,6 +175,7 @@ export function SpeechInput({
         onError?.(e); // denied -> simulated recording
       }
     }
+    starting.current = false;
     setRecording(true);
   };
 
@@ -177,10 +196,13 @@ export function SpeechInput({
         <AriaButton
           aria-label={recording ? 'Stop recording' : 'Start recording'}
           onPress={() => (recording ? stop() : void start())}
-          {...stylex.props(styles.btn, recording && styles.btnRec)}
+          {...stylex.props(styles.btn, focus.ring, recording ? styles.btnRec : styles.btnIdle)}
         >
-          {recording ? <Square size={14} fill="currentColor" /> : <Mic size={18} />}
+          {recording ? <SquareIcon size={14} fill="currentColor" /> : <MicIcon size={18} />}
         </AriaButton>
+      </span>
+      <span role="status" {...stylex.props(styles.srOnly)}>
+        {recording ? 'Recording' : ''}
       </span>
       {recording ? (
         <>

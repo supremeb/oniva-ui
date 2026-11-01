@@ -1,21 +1,4 @@
-import {
-  BarChart3,
-  CalendarPlus,
-  CheckSquare,
-  Hash,
-  Mail,
-  Sparkles,
-  UserPlus,
-  BookOpen,
-  CreditCard,
-  FileText,
-  LayoutDashboard,
-  LogOut,
-  Moon,
-  Plus,
-  Settings,
-  Users,
-} from 'lucide-react';
+import { BarChartIcon, CalendarPlusIcon, SquareCheckIcon, HashIcon, MailIcon, SparklesIcon, UserPlusIcon, BookOpenIcon, CreditCardIcon, FileTextIcon, DashboardIcon, LogOutIcon, MoonIcon, PlusIcon, SettingsIcon, UsersIcon } from '../../icons/IconSet';
 import { useState, type ReactNode } from 'react';
 import { Button } from '../Button';
 import type { DemoModule } from '../../internal/demo';
@@ -26,32 +9,32 @@ const groups: CommandGroup[] = [
     id: 'nav',
     title: 'Go to',
     items: [
-      { id: 'overview', label: 'Overview', icon: <LayoutDashboard size={16} />, shortcut: 'G O' },
+      { id: 'overview', label: 'Overview', icon: <DashboardIcon size={16} />, shortcut: 'G O' },
       {
         id: 'revenue',
         label: 'Revenue report',
-        icon: <BarChart3 size={16} />,
+        icon: <BarChartIcon size={16} />,
         keywords: ['sales', 'mrr'],
       },
-      { id: 'customers', label: 'Customers', icon: <Users size={16} />, shortcut: 'G C' },
-      { id: 'invoices', label: 'Invoices', icon: <FileText size={16} />, keywords: ['billing'] },
+      { id: 'customers', label: 'Customers', icon: <UsersIcon size={16} />, shortcut: 'G C' },
+      { id: 'invoices', label: 'Invoices', icon: <FileTextIcon size={16} />, keywords: ['billing'] },
     ],
   },
   {
     id: 'actions',
     title: 'Actions',
     items: [
-      { id: 'new-invoice', label: 'Create invoice', icon: <Plus size={16} />, shortcut: '⌘N' },
-      { id: 'payment', label: 'Add payment method', icon: <CreditCard size={16} /> },
-      { id: 'dark', label: 'Toggle dark mode', icon: <Moon size={16} />, keywords: ['theme'] },
+      { id: 'new-invoice', label: 'Create invoice', icon: <PlusIcon size={16} />, shortcut: '⌘N' },
+      { id: 'payment', label: 'Add payment method', icon: <CreditCardIcon size={16} /> },
+      { id: 'dark', label: 'Toggle dark mode', icon: <MoonIcon size={16} />, keywords: ['theme'] },
     ],
   },
   {
     id: 'account',
     title: 'Account',
     items: [
-      { id: 'settings', label: 'Settings', icon: <Settings size={16} />, shortcut: '⌘,' },
-      { id: 'signout', label: 'Sign out', icon: <LogOut size={16} />, variant: 'danger' },
+      { id: 'settings', label: 'Settings', icon: <SettingsIcon size={16} />, shortcut: '⌘,' },
+      { id: 'signout', label: 'Sign out', icon: <LogOutIcon size={16} />, variant: 'danger' },
     ],
   },
 ];
@@ -63,25 +46,25 @@ const composed: CommandGroup[] = [
     id: 'suggestions',
     title: 'Suggestions',
     items: [
-      { id: 'email', label: 'Write an email', detail: 'Mail', icon: tool(<Mail size={16} />) },
-      { id: 'assistant', label: 'Ask assistant', detail: 'Summaries, drafts, answers', icon: tool(<Sparkles size={16} />) },
-      { id: 'task', label: 'Create a task', detail: 'Tasks', icon: tool(<CheckSquare size={16} />) },
-      { id: 'contact', label: 'Add contact to CRM', detail: 'CRM', icon: tool(<UserPlus size={16} />) },
-      { id: 'meeting', label: 'Schedule a meeting', detail: 'Calendar', icon: tool(<CalendarPlus size={16} />) },
+      { id: 'email', label: 'Write an email', detail: 'Mail', icon: tool(<MailIcon size={16} />) },
+      { id: 'assistant', label: 'Ask assistant', detail: 'Summaries, drafts, answers', icon: tool(<SparklesIcon size={16} />) },
+      { id: 'task', label: 'Create a task', detail: 'Tasks', icon: tool(<SquareCheckIcon size={16} />) },
+      { id: 'contact', label: 'Add contact to CRM', detail: 'CRM', icon: tool(<UserPlusIcon size={16} />) },
+      { id: 'meeting', label: 'Schedule a meeting', detail: 'Calendar', icon: tool(<CalendarPlusIcon size={16} />) },
     ],
   },
   {
     id: 'share',
     title: 'Share',
     items: [
-      { id: 'update', label: 'Post an update', detail: '#team-updates', icon: tool(<Hash size={16} />) },
-      { id: 'page', label: 'Save as page', detail: 'Notes · Meeting notes', icon: tool(<BookOpen size={16} />) },
+      { id: 'update', label: 'Post an update', detail: '#team-updates', icon: tool(<HashIcon size={16} />) },
+      { id: 'page', label: 'Save as page', detail: 'Notes · Meeting notes', icon: tool(<BookOpenIcon size={16} />) },
     ],
   },
   {
     id: 'general',
     title: 'General',
-    items: [{ id: 'doc', label: 'New document', icon: tool(<FileText size={16} />), shortcut: 'N' }],
+    items: [{ id: 'doc', label: 'New document', icon: tool(<FileTextIcon size={16} />), shortcut: 'N' }],
   },
 ];
 

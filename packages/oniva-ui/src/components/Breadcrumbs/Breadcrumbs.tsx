@@ -7,7 +7,7 @@ import {
   type BreadcrumbProps as AriaBreadcrumbProps,
   type BreadcrumbsProps as AriaBreadcrumbsProps,
 } from 'react-aria-components';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRightIcon } from '../../icons/IconSet';
 import type { CSSProperties, ReactNode, Ref } from 'react';
 import { sxClass } from '../../internal/sx';
 import { colors } from '../../tokens/colors.stylex';
@@ -134,7 +134,7 @@ export function Breadcrumb({
           </AriaLink>
           {!isCurrent && (
             <span aria-hidden="true" {...stylex.props(styles.sep)}>
-              {separator ?? <ChevronRight size={14} />}
+              {separator ?? <ChevronRightIcon size={14} />}
             </span>
           )}
         </>

@@ -1,4 +1,4 @@
-import { Bell, Shield, User } from 'lucide-react';
+import { BellIcon, ShieldIcon, UserIcon } from '../../icons/IconSet';
 import { useState } from 'react';
 import { Button } from '../../components/Button';
 import { Input } from '../../components/Input';
@@ -12,7 +12,7 @@ const pages: SettingsPage[] = [
   {
     id: 'profile',
     label: 'Profile',
-    icon: <User size={16} />,
+    icon: <UserIcon size={16} />,
     content: (
       <div style={col}>
         <Input label="Display name" defaultValue="Ana Lindqvist" />
@@ -26,7 +26,7 @@ const pages: SettingsPage[] = [
   {
     id: 'notifications',
     label: 'Notifications',
-    icon: <Bell size={16} />,
+    icon: <BellIcon size={16} />,
     content: (
       <div style={col}>
         <Switch defaultSelected>Weekly digest email</Switch>
@@ -38,7 +38,7 @@ const pages: SettingsPage[] = [
   {
     id: 'security',
     label: 'Security',
-    icon: <Shield size={16} />,
+    icon: <ShieldIcon size={16} />,
     heading: 'Sign-in & security',
     content: (
       <div style={col}>

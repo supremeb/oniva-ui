@@ -18,7 +18,7 @@ const demo: DemoModule = {
             from={{ name: 'Triage Bot', role: 'Support intake' }}
             to={{ name: 'Billing Specialist', role: 'Refunds & invoices' }}
             reason="Customer requests a $740 refund, which needs finance tool access."
-            context="Acme Corp reports a duplicate charge on invoice INV-20418 (Oct 3). Card ending 4242. Customer is on the Scale plan."
+            context="Northwind Labs reports a duplicate charge on invoice INV-20418 (Oct 3). Card ending 4242. Customer is on the Scale plan."
             carried={['ticket-4821.json', 'INV-20418.pdf']}
           />
         </div>

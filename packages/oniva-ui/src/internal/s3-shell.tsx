@@ -1,14 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import {
-  Activity,
-  BarChart3,
-  Bot,
-  FlaskConical,
-  Home,
-  MessageSquare,
-  Plug,
-  Settings,
-} from 'lucide-react';
+import { ActivityIcon, BarChartIcon, BotIcon, FlaskIcon, HomeIcon, MessageSquareIcon, PlugIcon, SettingsIcon } from '../icons/IconSet';
 import type { ReactNode, Ref } from 'react';
 import { AppShell } from '../screens/AppShell';
 import { colors } from '../tokens/colors.stylex';
@@ -23,14 +14,14 @@ export interface ScreenUser {
 }
 
 const NAV = [
-  { label: 'Home', icon: Home },
-  { label: 'Chat', icon: MessageSquare },
-  { label: 'Agents', icon: Bot },
-  { label: 'Runs', icon: Activity },
-  { label: 'Evals', icon: FlaskConical },
-  { label: 'Integrations', icon: Plug },
-  { label: 'Analytics', icon: BarChart3 },
-  { label: 'Settings', icon: Settings },
+  { label: 'Home', icon: HomeIcon },
+  { label: 'Chat', icon: MessageSquareIcon },
+  { label: 'Agents', icon: BotIcon },
+  { label: 'Runs', icon: ActivityIcon },
+  { label: 'Evals', icon: FlaskIcon },
+  { label: 'Integrations', icon: PlugIcon },
+  { label: 'Analytics', icon: BarChartIcon },
+  { label: 'Settings', icon: SettingsIcon },
 ] as const;
 
 export type ScreenNavLabel = (typeof NAV)[number]['label'];

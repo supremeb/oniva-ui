@@ -33,6 +33,7 @@ const styles = stylex.create({
     fontFamily: font['--oniva-font-sans'],
     fontWeight: font['--oniva-font-weight-medium'],
     gap: 6,
+    maxWidth: '100%',
     verticalAlign: 'middle',
   },
   md: { fontSize: font['--oniva-font-size-13'], height: 32, paddingInlineEnd: 10, paddingInlineStart: 8 },
@@ -95,6 +96,7 @@ const styles = stylex.create({
   text: {
     display: 'inline-grid',
     lineHeight: 1.4,
+    minWidth: 0,
     overflow: 'hidden',
     paddingBlock: 1,
     transitionDuration: motion['--oniva-motion-dur-slow'],
@@ -102,7 +104,14 @@ const styles = stylex.create({
     transitionTimingFunction: motion['--oniva-motion-ease-in-out'],
     width: 'var(--oniva-tl-w, auto)',
   },
-  label: { gridArea: '1 / 1', justifySelf: 'start', whiteSpace: 'nowrap' },
+  label: {
+    gridArea: '1 / 1',
+    justifySelf: 'start',
+    maxWidth: '100%',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
   in: {
     animationDuration: motion['--oniva-motion-dur-enter'],
     animationFillMode: 'both',
@@ -169,7 +178,7 @@ export function ThinkingLoader({
 }: ThinkingLoaderProps) {
   const [step, setStep] = useState(0);
   const [seconds, setSeconds] = useState(0);
-  const startedAt = useRef(0);
+  const startedAt = useRef(Date.now());
 
   useEffect(() => {
     if (isDone) return;
@@ -205,8 +214,14 @@ export function ThinkingLoader({
   const textRef = useRef<HTMLSpanElement>(null);
   const labelRef = useRef<HTMLSpanElement>(null);
   useLayoutEffect(() => {
-    const w = labelRef.current?.offsetWidth;
-    if (w) textRef.current?.style.setProperty('--oniva-tl-w', `${w}px`);
+    const el = labelRef.current;
+    if (!el) return;
+    // scrollWidth is the natural text width even when the label is clipped by a narrow container. It rounds
+    // down, so add a pixel or the ellipsis kicks in on short labels.
+    const w = el.scrollWidth;
+    if (w) textRef.current?.style.setProperty('--oniva-tl-w', `${w + 1}px`);
+    if (el.scrollWidth > el.clientWidth + 1) el.title = shown.text;
+    else el.removeAttribute('title');
   }, [shown.text, size]);
   const sx = stylex.props(styles.root, size === 'sm' ? styles.sm : styles.md, variant === 'pill' ? styles.pill : styles.plain, xstyle);
   return (

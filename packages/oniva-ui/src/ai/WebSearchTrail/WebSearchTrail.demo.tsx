@@ -47,8 +47,8 @@ const demo: DemoModule = {
               },
             ]}
             sources={[
-              { title: 'SaaS growth benchmarks', url: 'https://www.bvp.com/atlas' },
-              { title: 'NRR by segment', url: 'https://www.saastr.com/nrr' },
+              { title: 'SaaS growth benchmarks', url: 'https://benchmarks.example/saas-growth' },
+              { title: 'NRR by segment', url: 'https://metrics.example/nrr' },
             ]}
           />
         </div>

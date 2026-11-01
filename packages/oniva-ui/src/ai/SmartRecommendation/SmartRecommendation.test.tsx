@@ -35,6 +35,25 @@ describe('SmartRecommendation', () => {
     expect(screen.getByRole('button', { name: 'Accept incremental sync' })).toBeInTheDocument();
   });
 
+  it('keeps one polite live region mounted and announces accept and undo', () => {
+    render(<SmartRecommendation options={options} />);
+    const status = screen.getByRole('status');
+    expect(status).toHaveTextContent('');
+    fireEvent.click(screen.getByRole('button', { name: 'Accept incremental sync' }));
+    expect(screen.getByRole('status')).toBe(status);
+    expect(status).toHaveAttribute('aria-live', 'polite');
+    expect(status).toHaveTextContent('Incremental sync accepted');
+    fireEvent.click(screen.getByRole('button', { name: 'Undo' }));
+    expect(status).toHaveTextContent('Incremental sync undone');
+  });
+
+  it('keeps the full label as the accessible name of a long accept button', () => {
+    const label = 'Migrate northwind-orders-archive-2024-q3 to the cold storage tier';
+    render(<SmartRecommendation options={[{ id: 'a', label, reason: 'Unread for 94 days.', signal: 2 }]} />);
+    expect(screen.getByRole('button', { name: `Accept m${label.slice(1)}` })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /Alternatives/ })).not.toBeInTheDocument();
+  });
+
   it('switches to an alternative from the menu', async () => {
     render(<SmartRecommendation options={options} />);
     fireEvent.click(screen.getByRole('button', { name: /Alternatives/ }));

@@ -14,7 +14,7 @@ import {
   type TableBodyProps as AriaTableBodyProps,
   type TableProps as AriaTableProps,
 } from 'react-aria-components';
-import { ChevronUp } from 'lucide-react';
+import { ChevronUpIcon } from '../../icons/IconSet';
 import { createContext, useContext, type ReactNode, type Ref } from 'react';
 import { DataCheckbox } from '../../internal/data-checkbox';
 import { tableStyles as s } from '../../internal/data-table-styles';
@@ -120,7 +120,7 @@ export function Column({ children, xstyle, ...rest }: ColumnProps) {
         <span {...stylex.props(s.columnInner)}>
           {children}
           {allowsSorting && (
-            <ChevronUp
+            <ChevronUpIcon
               size={14}
               aria-hidden="true"
               {...stylex.props(

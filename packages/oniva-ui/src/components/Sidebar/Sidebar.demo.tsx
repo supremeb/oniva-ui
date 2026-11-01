@@ -1,14 +1,4 @@
-import {
-  Bot,
-  Calendar,
-  Columns3,
-  Home,
-  Landmark,
-  Megaphone,
-  Settings,
-  LifeBuoy,
-  UserRound,
-} from 'lucide-react';
+import { BotIcon, CalendarIcon, ColumnsIcon, HomeIcon, LandmarkIcon, MegaphoneIcon, SettingsIcon, LifeBuoyIcon, UserRoundIcon } from '../../icons/IconSet';
 import * as stylex from '@stylexjs/stylex';
 import type { DemoModule } from '../../internal/demo';
 import { colors } from '../../tokens/colors.stylex';
@@ -52,15 +42,15 @@ const demo: DemoModule = {
   <SidebarSearch hint="⌘L" />
   <SidebarContent>
     <SidebarSection>
-      <SidebarItem href="#" icon={<Home size={18} />} isActive badge="152">Home</SidebarItem>
-      <SidebarItem href="#" icon={<Columns3 size={18} />}>Project board</SidebarItem>
+      <SidebarItem href="#" icon={<HomeIcon size={18} />} isActive badge="152">Home</SidebarItem>
+      <SidebarItem href="#" icon={<ColumnsIcon size={18} />}>Project board</SidebarItem>
       …
     </SidebarSection>
   </SidebarContent>
   <SidebarFooter>
     <SidebarMenu>
-      <SidebarItem href="#" icon={<LifeBuoy size={18} />}>Support</SidebarItem>
-      <SidebarItem href="#" icon={<Settings size={18} />}>Settings</SidebarItem>
+      <SidebarItem href="#" icon={<LifeBuoyIcon size={18} />}>Support</SidebarItem>
+      <SidebarItem href="#" icon={<SettingsIcon size={18} />}>Settings</SidebarItem>
     </SidebarMenu>
     <SidebarAccount name="Aylin Demir" email="aylin@acme.co" />
   </SidebarFooter>
@@ -72,35 +62,35 @@ const demo: DemoModule = {
             <SidebarSearch hint="⌘L" />
             <SidebarContent>
               <SidebarSection>
-                <SidebarItem href="#" icon={<Home size={18} />} isActive badge="152">
+                <SidebarItem href="#" icon={<HomeIcon size={18} />} isActive badge="152">
                   Home
                 </SidebarItem>
-                <SidebarItem href="#" icon={<Columns3 size={18} />}>
+                <SidebarItem href="#" icon={<ColumnsIcon size={18} />}>
                   Project board
                 </SidebarItem>
-                <SidebarItem href="#" icon={<Megaphone size={18} />}>
+                <SidebarItem href="#" icon={<MegaphoneIcon size={18} />}>
                   Marketing
                 </SidebarItem>
-                <SidebarItem href="#" icon={<Calendar size={18} />}>
+                <SidebarItem href="#" icon={<CalendarIcon size={18} />}>
                   Calendar
                 </SidebarItem>
-                <SidebarItem href="#" icon={<Landmark size={18} />}>
+                <SidebarItem href="#" icon={<LandmarkIcon size={18} />}>
                   Finance
                 </SidebarItem>
-                <SidebarItem href="#" icon={<Bot size={18} />} badge="NEW">
+                <SidebarItem href="#" icon={<BotIcon size={18} />} badge="NEW">
                   AI Chat
                 </SidebarItem>
-                <SidebarItem href="#" icon={<UserRound size={18} />}>
+                <SidebarItem href="#" icon={<UserRoundIcon size={18} />}>
                   Profile
                 </SidebarItem>
               </SidebarSection>
             </SidebarContent>
             <SidebarFooter>
               <SidebarMenu>
-                <SidebarItem href="#" icon={<LifeBuoy size={18} />}>
+                <SidebarItem href="#" icon={<LifeBuoyIcon size={18} />}>
                   Support
                 </SidebarItem>
-                <SidebarItem href="#" icon={<Settings size={18} />}>
+                <SidebarItem href="#" icon={<SettingsIcon size={18} />}>
                   Settings
                 </SidebarItem>
               </SidebarMenu>
@@ -120,18 +110,18 @@ const demo: DemoModule = {
             <SidebarHeader name="Acme Finance" />
             <SidebarContent>
               <SidebarSection title="Getting started" collapsible>
-                <SidebarItem href="#" icon={<Home size={18} />} isActive>
+                <SidebarItem href="#" icon={<HomeIcon size={18} />} isActive>
                   Overview
                 </SidebarItem>
-                <SidebarItem href="#" icon={<Landmark size={18} />}>
+                <SidebarItem href="#" icon={<LandmarkIcon size={18} />}>
                   Accounts
                 </SidebarItem>
               </SidebarSection>
               <SidebarSection title="Team" collapsible>
-                <SidebarItem href="#" icon={<UserRound size={18} />} badge="8">
+                <SidebarItem href="#" icon={<UserRoundIcon size={18} />} badge="8">
                   Members
                 </SidebarItem>
-                <SidebarItem href="#" icon={<Calendar size={18} />}>
+                <SidebarItem href="#" icon={<CalendarIcon size={18} />}>
                   Schedule
                 </SidebarItem>
               </SidebarSection>
@@ -142,13 +132,13 @@ const demo: DemoModule = {
             <SidebarSearch />
             <SidebarContent>
               <SidebarSection>
-                <SidebarItem href="#" icon={<Home size={18} />} isActive badge="152">
+                <SidebarItem href="#" icon={<HomeIcon size={18} />} isActive badge="152">
                   Home
                 </SidebarItem>
-                <SidebarItem href="#" icon={<Columns3 size={18} />}>
+                <SidebarItem href="#" icon={<ColumnsIcon size={18} />}>
                   Project board
                 </SidebarItem>
-                <SidebarItem href="#" icon={<Calendar size={18} />}>
+                <SidebarItem href="#" icon={<CalendarIcon size={18} />}>
                   Calendar
                 </SidebarItem>
               </SidebarSection>

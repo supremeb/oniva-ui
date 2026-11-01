@@ -8,7 +8,7 @@ import {
   Popover as AriaPopover,
   type LinkProps as AriaLinkProps,
 } from 'react-aria-components';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDownIcon } from '../../icons/IconSet';
 import type { CSSProperties, HTMLAttributes, ReactNode, Ref } from 'react';
 import { mergeSx, sxClass } from '../../internal/sx';
 import { media } from '../../tokens/media.stylex';
@@ -218,7 +218,7 @@ export function NavigationMenuTrigger({
           {({ isPressed }) => (
             <>
               {label}
-              <ChevronDown
+              <ChevronDownIcon
                 size={14}
                 aria-hidden="true"
                 {...stylex.props(styles.chevron, isPressed && styles.chevronOpen)}

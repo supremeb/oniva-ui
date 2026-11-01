@@ -69,6 +69,30 @@ describe('PermissionRequest', () => {
     vi.useRealTimers();
   });
 
+  it('shows the model alone without an empty target, and keeps the key icon decorative', () => {
+    const { container } = render(<PermissionRequest agent={{ name: 'Coder', model: 'Atlas 2' }} action="send an email" />);
+    expect(screen.getByText('Atlas 2')).toBeInTheDocument();
+    expect(screen.getByText('Atlas 2').textContent).toBe('Atlas 2');
+    expect(container.querySelector('code, .mono')).toBeNull();
+    expect(screen.getByRole('dialog').querySelector('svg[aria-hidden="true"]')).not.toBeNull();
+  });
+
+  it('keeps long preview labels in their own truncating element next to the meta', () => {
+    const label = 'packages/northwind-queue/src/workers/scheduler/strategies/exponential-backoff-with-decorrelated-jitter.worker.ts';
+    render(<PermissionRequest {...base} preview={[{ id: 'x', label, meta: '+204 −0', icon: <svg data-testid="ic" /> }]} />);
+    const text = screen.getByText(label);
+    expect(text.tagName).toBe('SPAN');
+    expect(text.children).toHaveLength(0);
+    expect(screen.getByTestId('ic')).toBeInTheDocument();
+    expect(screen.getByText('+204 −0')).toBeInTheDocument();
+  });
+
+  it('formats the end of a timed grant through the locale formatter', () => {
+    const at = Date.UTC(2026, 9, 31, 14, 30);
+    render(<PermissionRequest {...base} now={at} defaultDecision={{ allow: true, scope: 'timed', at, until: at + 3_600_000 }} />);
+    expect(screen.getByText(/^60:00 left · until \d/)).toBeInTheDocument();
+  });
+
   it('forwards ref and className', () => {
     const ref = createRef<HTMLDivElement>();
     render(<PermissionRequest {...base} ref={ref} className="x" />);

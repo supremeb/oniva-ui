@@ -47,6 +47,24 @@ describe('AutonomyDial', () => {
     expect(screen.getByRole('radio', { name: 'Full auto' })).toBeChecked();
   });
 
+  it('shows one empty message when there are no actions', () => {
+    render(<AutonomyDial actions={[]} />);
+    expect(screen.getByText('No actions to configure yet.')).toBeInTheDocument();
+    expect(screen.queryByRole('region', { name: 'Runs on its own' })).toBeNull();
+  });
+
+  it('explains an empty group at the current level', () => {
+    render(<AutonomyDial actions={actions} defaultLevel={0} />);
+    expect(screen.getByRole('region', { name: 'Runs on its own' })).toHaveTextContent('Nothing runs without asking at this level.');
+  });
+
+  it('gives long labels and details a title so truncated text stays readable', () => {
+    const long = 'Rewrite every customer-facing renewal reminder template across all regions';
+    render(<AutonomyDial actions={[{ id: 'l', label: long, detail: 'workspaces/northwind-labs/templates', risk: 'risky' }]} />);
+    expect(screen.getByText(long)).toHaveAttribute('title', long);
+    expect(screen.getByText('workspaces/northwind-labs/templates')).toHaveAttribute('title', 'workspaces/northwind-labs/templates');
+  });
+
   it('forwards ref and className and has no a11y violations', async () => {
     const ref = createRef<HTMLDivElement>();
     const { container } = render(<AutonomyDial ref={ref} className="x" actions={actions} />);

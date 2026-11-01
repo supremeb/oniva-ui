@@ -28,8 +28,8 @@ const demo: DemoModule = {
   toolName="repo.merge_pull_request"
   description="Merge pull request #482 into main?"
   risk="medium"
-  details={[{ label: 'Repository', value: 'acme/web' }, { label: 'Checks', value: '14 of 14 passed' }]}
-  args={{ repo: 'acme/web', number: 482, method: 'squash' }}
+  details={[{ label: 'Repository', value: 'northwind-labs/web' }, { label: 'Checks', value: '14 of 14 passed' }]}
+  args={{ repo: 'northwind-labs/web', number: 482, method: 'squash' }}
   result="Merged #482 into main"
 />`,
       Component: () => (
@@ -38,10 +38,10 @@ const demo: DemoModule = {
           description="Merge pull request #482 into main?"
           risk="medium"
           details={[
-            { label: 'Repository', value: 'acme/web' },
+            { label: 'Repository', value: 'northwind-labs/web' },
             { label: 'Checks', value: '14 of 14 passed' },
           ]}
-          args={{ repo: 'acme/web', number: 482, method: 'squash' }}
+          args={{ repo: 'northwind-labs/web', number: 482, method: 'squash' }}
           result="Merged #482 into main"
         />
       ),

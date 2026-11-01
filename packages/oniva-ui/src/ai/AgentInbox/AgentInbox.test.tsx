@@ -57,3 +57,35 @@ describe('AgentInbox', () => {
     await expectNoA11yViolations(container);
   });
 });
+
+describe('AgentInbox content', () => {
+  const big: InboxTask = {
+    id: 'b',
+    title: 'packages/northwind-queue/src/workers/scheduler/strategies/exponential-backoff-with-decorrelated-jitter.worker.ts',
+    agent: 'Atlas 2',
+    status: 'running',
+    startedAt: NOW - 1000,
+    sources: 91_000,
+    tools: 1,
+  };
+
+  it('formats counts and exposes them as text, not aria-label on a generic span', () => {
+    render(<AgentInbox tasks={[big]} now={NOW} />);
+    const trigger = screen.getByRole('button', { name: /exponential-backoff/ });
+    expect(trigger).toHaveTextContent('91,000');
+    expect(trigger).toHaveTextContent('91,000 sources');
+    expect(trigger).toHaveTextContent('1 tool call');
+    expect(trigger.querySelector('[aria-label]')).toBeNull();
+  });
+
+  it('renders no empty action row when a finished task has no Open handler', () => {
+    const done: InboxTask = { id: 'd', title: 'Weekly digest', agent: 'Lumen Fast', status: 'done', elapsed: 1000 };
+    const { container, rerender } = render(<AgentInbox tasks={[done]} now={NOW} defaultOpen={['d']} />);
+    expect(screen.queryByRole('button', { name: 'Open' })).toBeNull();
+    const panel = container.querySelector('[role="group"]') as HTMLElement;
+    expect(panel.querySelectorAll('button').length).toBe(0);
+    expect(panel.children[0]!.children.length).toBe(1);
+    rerender(<AgentInbox tasks={[done]} now={NOW} defaultOpen={['d']} onOpen={() => undefined} />);
+    expect(screen.getByRole('button', { name: 'Open' })).toBeInTheDocument();
+  });
+});

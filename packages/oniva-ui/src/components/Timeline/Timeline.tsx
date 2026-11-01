@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDownIcon } from '../../icons/IconSet';
 import { useId, useState } from 'react';
 import { useFormatters } from '../../internal/format';
 import type { HTMLAttributes, ReactNode, Ref } from 'react';
@@ -152,7 +152,7 @@ function Item({ ev, last }: { ev: TimelineEvent; last: boolean }) {
               {...stylex.props(dash.reset, styles.toggle, focus.ring)}
             >
               {open ? 'Hide details' : 'Show details'}
-              <ChevronDown size={14} aria-hidden="true" data-open={open || undefined} {...stylex.props(styles.chev)} />
+              <ChevronDownIcon size={14} aria-hidden="true" data-open={open || undefined} {...stylex.props(styles.chev)} />
             </button>
             <div data-open={open || undefined} {...stylex.props(styles.panelWrap)}>
               <div id={id} role="region" aria-label={`Details for ${ev.actor}`} inert={!open} {...stylex.props(styles.panelInner)}>

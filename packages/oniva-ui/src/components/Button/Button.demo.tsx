@@ -1,4 +1,4 @@
-import { ArrowRight, Copy, Plus, Settings, Trash2, Upload } from 'lucide-react';
+import { ArrowRightIcon, CopyIcon, PlusIcon, SettingsIcon, TrashIcon, UploadIcon } from '../../icons/IconSet';
 import type { DemoModule } from '../../internal/demo';
 import { Button } from './Button';
 
@@ -19,10 +19,10 @@ const demo: DemoModule = {
     {
       name: 'Styles, sizes and states',
       code: `<Button>Save changes</Button> <Button variant="secondary">Secondary</Button>
-<Button variant="ghost">Ghost</Button> <Button variant="danger" startIcon={<Trash2 size={16} />}>Delete</Button>
-<Button variant="secondary" size="sm" startIcon={<Plus size={16} />}>Add item</Button>
-<Button endIcon={<ArrowRight size={16} />}>Continue</Button>
-<Button variant="secondary" startIcon={<Copy size={16} />}>Copy link</Button>
+<Button variant="ghost">Ghost</Button> <Button variant="danger" startIcon={<TrashIcon size={16} />}>Delete</Button>
+<Button variant="secondary" size="sm" startIcon={<PlusIcon size={16} />}>Add item</Button>
+<Button endIcon={<ArrowRightIcon size={16} />}>Continue</Button>
+<Button variant="secondary" startIcon={<CopyIcon size={16} />}>Copy link</Button>
 <Button isDisabled>Disabled</Button>`,
       Component: () => (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 24, alignItems: 'center' }}>
@@ -32,7 +32,7 @@ const demo: DemoModule = {
               <Button>Save changes</Button>
               <Button variant="secondary">Secondary</Button>
               <Button variant="ghost">Ghost</Button>
-              <Button variant="danger" startIcon={<Trash2 size={16} />}>
+              <Button variant="danger" startIcon={<TrashIcon size={16} />}>
                 Delete
               </Button>
             </div>
@@ -40,12 +40,12 @@ const demo: DemoModule = {
           <div style={group}>
             <span style={label}>Icons and sizes</span>
             <div style={{ ...row, justifyContent: 'center' }}>
-              <Button variant="secondary" size="sm" startIcon={<Plus size={16} />}>
+              <Button variant="secondary" size="sm" startIcon={<PlusIcon size={16} />}>
                 Add item
               </Button>
-              <Button endIcon={<ArrowRight size={16} />}>Continue</Button>
+              <Button endIcon={<ArrowRightIcon size={16} />}>Continue</Button>
               <Button isIconOnly variant="ghost" aria-label="More">
-                <Settings size={16} />
+                <SettingsIcon size={16} />
               </Button>
               <Button variant="secondary" size="lg">
                 Large
@@ -55,13 +55,13 @@ const demo: DemoModule = {
           <div style={group}>
             <span style={label}>Feedback and states</span>
             <div style={{ ...row, justifyContent: 'center' }}>
-              <Button variant="secondary" startIcon={<Copy size={16} />}>
+              <Button variant="secondary" startIcon={<CopyIcon size={16} />}>
                 Copy link
               </Button>
               <Button isIconOnly variant="secondary" aria-label="Copy">
-                <Copy size={16} />
+                <CopyIcon size={16} />
               </Button>
-              <Button variant="secondary" startIcon={<Upload size={16} />}>
+              <Button variant="secondary" startIcon={<UploadIcon size={16} />}>
                 Upload file
               </Button>
               <Button isDisabled>Disabled</Button>
@@ -119,20 +119,20 @@ const demo: DemoModule = {
     },
     {
       name: 'With icons',
-      code: `<Button startIcon={<Plus size={16} />}>New project</Button>
-<Button variant="secondary" endIcon={<ArrowRight size={16} />}>Continue</Button>
-<Button isIconOnly variant="secondary" aria-label="Settings"><Settings size={16} /></Button>`,
+      code: `<Button startIcon={<PlusIcon size={16} />}>New project</Button>
+<Button variant="secondary" endIcon={<ArrowRightIcon size={16} />}>Continue</Button>
+<Button isIconOnly variant="secondary" aria-label="Settings"><SettingsIcon size={16} /></Button>`,
       Component: () => (
         <div style={row}>
-          <Button startIcon={<Plus size={16} />}>New project</Button>
-          <Button variant="secondary" endIcon={<ArrowRight size={16} />}>
+          <Button startIcon={<PlusIcon size={16} />}>New project</Button>
+          <Button variant="secondary" endIcon={<ArrowRightIcon size={16} />}>
             Continue
           </Button>
           <Button isIconOnly variant="secondary" aria-label="Settings">
-            <Settings size={16} />
+            <SettingsIcon size={16} />
           </Button>
           <Button isIconOnly variant="ghost" aria-label="Add">
-            <Plus size={16} />
+            <PlusIcon size={16} />
           </Button>
         </div>
       ),

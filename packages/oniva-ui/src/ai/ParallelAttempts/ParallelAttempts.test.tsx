@@ -34,6 +34,20 @@ describe('ParallelAttempts', () => {
     expect(screen.getAllByRole('radio')).toHaveLength(2);
   });
 
+  it('renders a valid list with no a11y violations while nothing is finished', async () => {
+    const running: Attempt[] = [attempts[0]!, { ...attempts[0]!, id: 'e', name: 'Nova Pro' }];
+    const { container } = render(<ParallelAttempts attempts={running} />);
+    expect(screen.getAllByRole('listitem')).toHaveLength(2);
+    expect(screen.queryAllByRole('radio')).toHaveLength(0);
+    await expectNoA11yViolations(container);
+  });
+
+  it('announces progress as a status region and keeps text undimmed for unpicked rows', async () => {
+    const { container } = render(<ParallelAttempts attempts={attempts} />);
+    expect(screen.getByRole('status')).toHaveTextContent('2 of 4 done');
+    await expectNoA11yViolations(container);
+  });
+
   it('forwards ref and className', () => {
     const ref = createRef<HTMLDivElement>();
     render(<ParallelAttempts attempts={attempts} ref={ref} className="x" />);

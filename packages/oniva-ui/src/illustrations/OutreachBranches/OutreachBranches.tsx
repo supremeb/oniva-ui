@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { Mail, MessageSquare, FileText, Send } from 'lucide-react';
+import { MailIcon, MessageSquareIcon, FileTextIcon, SendIcon } from '../../icons/IconSet';
 import { BeamPath, Tile, fillSvg, type IllustrationItem } from '../../internal/w7-parts';
 import { useReducedMotion } from '../../internal/motion-hooks';
 import { NodeMotion } from '../../internal/w7-node';
@@ -27,12 +27,12 @@ export interface OutreachBranchesProps extends IllustrationProps {
   channels?: [IllustrationItem, IllustrationItem, IllustrationItem];
 }
 
-const ic = (I: typeof Mail) => <I {...stylex.props(fillSvg.svg)} />;
-const DEFAULT_SOURCE: IllustrationItem = { name: 'Campaign', icon: ic(Send) };
+const ic = (I: typeof MailIcon) => <I {...stylex.props(fillSvg.svg)} />;
+const DEFAULT_SOURCE: IllustrationItem = { name: 'Campaign', icon: ic(SendIcon) };
 const DEFAULT_CHANNELS: [IllustrationItem, IllustrationItem, IllustrationItem] = [
-  { name: 'Email', icon: ic(Mail) },
-  { name: 'Chat', icon: ic(MessageSquare) },
-  { name: 'Docs', icon: ic(FileText) },
+  { name: 'Email', icon: ic(MailIcon) },
+  { name: 'Chat', icon: ic(MessageSquareIcon) },
+  { name: 'Docs', icon: ic(FileTextIcon) },
 ];
 
 const XS = [34.6, 50, 65.4];

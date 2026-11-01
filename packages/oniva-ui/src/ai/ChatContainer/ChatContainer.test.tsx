@@ -1,5 +1,5 @@
 import { act, fireEvent, render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { ChatContainer } from './ChatContainer';
 
 function setMetrics(
@@ -38,5 +38,45 @@ describe('ChatContainer', () => {
     setMetrics(log, { scrollHeight: 2000, clientHeight: 400, scrollTop: 1600 });
     fireEvent.scroll(log);
     expect(screen.queryByRole('button', { name: 'Scroll to bottom' })).toBeNull();
+  });
+
+  describe('resize observation', () => {
+    afterEach(() => vi.unstubAllGlobals());
+
+    it('drops a stale jump button once nothing overflows any more', () => {
+      let trigger: () => void = () => undefined;
+      const observed: Element[] = [];
+      class RO {
+        constructor(cb: () => void) {
+          trigger = cb;
+        }
+        observe(el: Element) {
+          observed.push(el);
+        }
+        disconnect() {}
+        unobserve() {}
+      }
+      vi.stubGlobal('ResizeObserver', RO);
+      render(
+        <ChatContainer>
+          <p>Hello</p>
+        </ChatContainer>,
+      );
+      const log = screen.getByRole('log');
+      // Both the content and the scroll viewport are watched.
+      expect(observed).toContain(log);
+      expect(observed).toHaveLength(2);
+      setMetrics(log, { scrollHeight: 2000, clientHeight: 400, scrollTop: 100 });
+      fireEvent.scroll(log);
+      expect(screen.getByRole('button', { name: 'Scroll to bottom' })).toBeTruthy();
+      setMetrics(log, { scrollHeight: 300, clientHeight: 400, scrollTop: 0 });
+      act(() => trigger());
+      expect(screen.queryByRole('button', { name: 'Scroll to bottom' })).toBeNull();
+    });
+  });
+
+  it('makes the scroller keyboard-focusable', () => {
+    render(<ChatContainer />);
+    expect(screen.getByRole('log')).toHaveAttribute('tabindex', '0');
   });
 });

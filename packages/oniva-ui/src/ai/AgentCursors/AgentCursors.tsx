@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { Check, FileText, MessageSquare, MousePointer2, X } from 'lucide-react';
+import { CheckIcon, FileTextIcon, MessageSquareIcon, PointerIcon, XIcon } from '../../icons/IconSet';
 import { Fragment, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode, type Ref } from 'react';
 import { Button, Dialog, DialogTrigger, Popover, ToggleButton } from 'react-aria-components';
 import { accent } from '../../tokens/accent.stylex';
@@ -118,9 +118,9 @@ const styles = stylex.create({
   title: { fontSize: font['--oniva-font-size-24'], fontWeight: font['--oniva-font-weight-semibold'], lineHeight: 1.25 },
   heading: { fontSize: font['--oniva-font-size-16'], fontWeight: font['--oniva-font-weight-semibold'], marginBlockStart: 14 },
   ul: { margin: 0, marginBlockEnd: 10, paddingInlineStart: 20 },
-  code: { backgroundColor: colors['--oniva-color-surface-inset'], borderRadius: radius['--oniva-radius-md'], fontFamily: font['--oniva-font-mono'], fontSize: font['--oniva-font-size-12'], overflowX: 'auto', padding: 10, whiteSpace: 'pre' },
+  code: { backgroundColor: colors['--oniva-color-surface-inset'], borderRadius: radius['--oniva-radius-md'], fontFamily: font['--oniva-font-mono'], fontSize: font['--oniva-font-size-12'], overflowWrap: 'anywhere', padding: 10, whiteSpace: 'pre-wrap' },
   figure: { margin: 0, marginBlockEnd: 10 },
-  img: { aspectRatio: 'var(--ratio, 1.6)', maxWidth: 360, backgroundColor: colors['--oniva-color-surface-tertiary'], borderRadius: radius['--oniva-radius-md'], objectFit: 'cover', position: 'relative', width: '100%' },
+  img: { aspectRatio: 'var(--ratio, 1.6)', maxWidth: 360, backgroundColor: colors['--oniva-color-surface-tertiary'], borderRadius: radius['--oniva-radius-md'], objectFit: 'cover', overflow: 'hidden', position: 'relative', width: '100%' },
   caption: { color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-12'], marginBlockStart: 4 },
   sugg: {
     appearance: 'none',
@@ -136,11 +136,22 @@ const styles = stylex.create({
     font: 'inherit',
     padding: 0,
     paddingInline: 1,
+    whiteSpace: 'pre-wrap',
   },
   del: { color: colors['--oniva-color-text-muted'], textDecorationLine: 'line-through', textDecorationColor: 'var(--ink, currentColor)' },
   ins: { textDecorationColor: 'var(--ink, currentColor)', textDecorationLine: 'underline', textDecorationThickness: 2, textUnderlineOffset: 3 },
   sel: { backgroundColor: 'color-mix(in srgb, var(--ink, currentColor) 20%, transparent)', borderRadius: 2, position: 'absolute', transitionDuration: motion['--oniva-motion-dur-slow'], transitionProperty: 'opacity', animationName: { default: fadeIn, [media.reducedMotion]: 'none' }, animationDuration: motion['--oniva-motion-dur-slow'] },
   layer: { inset: 0, pointerEvents: 'none', position: 'absolute' },
+  empty: { color: colors['--oniva-color-text-muted'], margin: 0 },
+  fade: {
+    backgroundImage: `linear-gradient(to bottom, transparent, ${colors['--oniva-color-surface-inner']})`,
+    bottom: 0,
+    height: 56,
+    left: 0,
+    pointerEvents: 'none',
+    position: 'absolute',
+    right: 0,
+  },
   pointer: {
     left: 0,
     position: 'absolute',
@@ -193,20 +204,26 @@ const styles = stylex.create({
     flexDirection: 'column',
     fontSize: font['--oniva-font-size-12'],
     gap: 2,
-    insetInlineStart: 10,
+    left: { default: 10, '[data-flip-x]': 'auto' },
     lineHeight: '16px',
+    maxWidth: 240,
     paddingBlock: 6,
     paddingInline: 10,
     position: 'absolute',
-    top: 'calc(var(--h, 18px) + 4px)',
+    right: { default: 'auto', '[data-flip-x]': -6 },
+    top: { default: 'calc(var(--h, 18px) + 4px)', '[data-flip-y]': 'auto' },
+    bottom: { default: 'auto', '[data-flip-y]': 'calc(100% + 4px)' },
     whiteSpace: 'nowrap',
+    width: 'max-content',
   },
   flagHead: { alignItems: 'center', display: 'flex', gap: 10, justifyContent: 'space-between' },
-  flagName: { fontWeight: font['--oniva-font-weight-semibold'] },
+  flagName: { fontWeight: font['--oniva-font-weight-semibold'], minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis' },
   flagCost: { backgroundColor: colors['--oniva-color-surface-tertiary'], borderRadius: radius['--oniva-radius-sm'], color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-11'], fontVariantNumeric: 'tabular-nums', paddingInline: 5 },
-  flagDoing: { color: colors['--oniva-color-text-muted'] },
+  flagDoing: { color: colors['--oniva-color-text-muted'], overflowWrap: 'anywhere', whiteSpace: 'normal' },
   arrow: { color: 'var(--ink, currentColor)', fill: 'currentColor', left: -4, position: 'absolute', top: 'calc(var(--h, 18px) - 6px)' },
-  crumb: { alignItems: 'center', color: colors['--oniva-color-text-muted'], display: 'inline-flex', gap: 8 },
+  crumb: { alignItems: 'center', color: colors['--oniva-color-text-muted'], display: 'flex', gap: 8, minWidth: 0 },
+  crumbIcon: { flexShrink: 0 },
+  titleBox: { flexBasis: 120, flexGrow: 1, flexShrink: 1, minWidth: 0 },
   pin: {
     alignItems: 'center',
     backgroundColor: colors['--oniva-color-text'],
@@ -218,7 +235,7 @@ const styles = stylex.create({
     height: 22,
     justifyContent: 'center',
     marginInlineStart: 6,
-    transform: { default: 'scale(1)', ':active': 'scale(0.94)', ':hover': { default: null, [media.hover]: 'scale(1.18)' } },
+    transform: { default: 'scale(1)', ':active': `scale(${motion['--oniva-motion-press-scale']})`, ':hover': { default: null, [media.hover]: 'scale(1.18)' } },
     transitionDuration: motion['--oniva-motion-dur-press'],
     transitionProperty: 'transform, box-shadow',
     transitionTimingFunction: motion['--oniva-motion-ease-spring'],
@@ -233,7 +250,14 @@ const styles = stylex.create({
   who: { color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-12'] },
 });
 
-interface Place { x: number; y: number; h: number; rects: { x: number; y: number; w: number; h: number }[] }
+interface Place { x: number; y: number; h: number; rects: { x: number; y: number; w: number; h: number }[]; flipX: boolean; flipY: boolean }
+
+/** Rough size of a flag, so it can open away from the page edge it would otherwise be cut off by. */
+function flagSize(name: string, doing: string | undefined, hasCost: boolean): { w: number; h: number } {
+  const w = Math.min(240, Math.max(name.length + (hasCost ? 9 : 0), Math.min(doing?.length ?? 0, 40)) * 7 + 22);
+  const lines = doing ? Math.ceil((doing.length * 6.4) / Math.max(1, w - 22)) : 0;
+  return { w, h: 14 + 16 * (1 + lines) };
+}
 
 export interface AgentCursorsProps {
   /** Everyone who can be in the document. */
@@ -284,6 +308,7 @@ export function AgentCursors({
 }: AgentCursorsProps) {
   const f = useFormatters();
   const pageRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
   const width = useWidth(pageRef);
   const [follow, setFollow] = useControlled<string | null>(following, defaultFollowing, onFollowingChange);
   const [places, setPlaces] = useState<Record<string, Place>>({});
@@ -355,7 +380,12 @@ export function AgentCursors({
       r.setEnd(a.node, a.o);
       if (typeof r.getClientRects !== 'function') continue;
       const rect = r.getClientRects()[0] ?? host.getBoundingClientRect();
-      const place: Place = { x: rect.left - pr.left, y: rect.top - pr.top, h: rect.height || 18, rects: [] };
+      const ag = agents.find((x) => x.id === id);
+      const fs = flagSize(ag?.name ?? '', c.doing, ag?.cost != null);
+      const px = rect.left - pr.left;
+      const py = rect.top - pr.top;
+      const ph = rect.height || 18;
+      const place: Place = { x: px, y: py, h: ph, rects: [], flipX: pr.width > 0 && px + 10 + fs.w > pr.width - 4, flipY: pr.height > 0 && py + ph + 4 + fs.h > pr.height - 4 };
       if (c.select) {
         const b = locate((c.at ?? 0) + c.select);
         if (b) {
@@ -369,7 +399,19 @@ export function AgentCursors({
     }
     setPlaces((prev) => (JSON.stringify(prev) === JSON.stringify(next) ? prev : next));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cursorKey, blocks, suggestions, width]);
+  }, [cursorKey, blocks, suggestions, width, height]);
+
+  // With a fixed height, fade the bottom edge only when the document actually runs past it.
+  const [clipped, setClipped] = useState(false);
+  useLayoutEffect(() => {
+    const page = pageRef.current;
+    const content = contentRef.current;
+    if (!page || !content || !height) {
+      setClipped(false);
+      return;
+    }
+    setClipped(content.offsetTop + content.offsetHeight > page.clientHeight + 1);
+  }, [blocks, suggestions, width, height]);
 
   const renderText = (b: DocBlock): ReactNode => {
     const text = b.text ?? '';
@@ -397,8 +439,8 @@ export function AgentCursors({
                   <span {...stylex.props(styles.who)}>{agentOf(s.agent)?.name} suggests {describe(s)}</span>
                   {s.note && <span>{s.note}</span>}
                   <div {...stylex.props(styles.btns)}>
-                    <Button autoFocus onPress={() => { onAccept?.(s); close(); }} className={() => sxClass(stylex.props(styles.btn, styles.btnPrimary, focus.ring))}><Check size={13} aria-hidden="true" />Accept</Button>
-                    <Button onPress={() => { onReject?.(s); close(); }} className={() => sxClass(stylex.props(styles.btn, focus.ring))}><X size={13} aria-hidden="true" />Reject</Button>
+                    <Button autoFocus onPress={() => { onAccept?.(s); close(); }} className={() => sxClass(stylex.props(styles.btn, styles.btnPrimary, focus.ring))}><CheckIcon size={13} aria-hidden="true" />Accept</Button>
+                    <Button onPress={() => { onReject?.(s); close(); }} className={() => sxClass(stylex.props(styles.btn, focus.ring))}><XIcon size={13} aria-hidden="true" />Reject</Button>
                   </div>
                 </div>
               )}
@@ -416,7 +458,7 @@ export function AgentCursors({
     comments.filter((c) => c.block === blockId).map((c) => (
       <DialogTrigger key={c.id}>
         <Button aria-label={`Comment from ${agentOf(c.agent)?.name ?? 'agent'}`} className={() => sxClass(stylex.props(styles.pin, focus.ring))}>
-          <MessageSquare size={11} aria-hidden="true" />
+          <MessageSquareIcon size={11} aria-hidden="true" />
         </Button>
         <Popover placement="bottom start">
           <Dialog aria-label={`Comment from ${agentOf(c.agent)?.name ?? 'agent'}`} className={sxClass(stylex.props(w1.popover))}>
@@ -426,7 +468,7 @@ export function AgentCursors({
                 <span>{c.text}</span>
                 {onResolveComment && (
                   <div {...stylex.props(styles.btns)}>
-                    <Button autoFocus onPress={() => { onResolveComment(c); close(); }} className={() => sxClass(stylex.props(styles.btn, focus.ring))}><Check size={13} aria-hidden="true" />Resolve</Button>
+                    <Button autoFocus onPress={() => { onResolveComment(c); close(); }} className={() => sxClass(stylex.props(styles.btn, focus.ring))}><CheckIcon size={13} aria-hidden="true" />Resolve</Button>
                   </div>
                 )}
               </div>
@@ -481,8 +523,12 @@ export function AgentCursors({
       ref={ref}
     >
       <div {...stylex.props(w1.bar)}>
-        <h3 {...stylex.props(w1.title)}><span {...stylex.props(styles.crumb)}><FileText size={15} aria-hidden="true" />{title}</span></h3>
-        <span {...stylex.props(w1.grow)} />
+        <h3 {...stylex.props(w1.title, styles.titleBox)}>
+          <span {...stylex.props(styles.crumb)}>
+            <FileTextIcon size={15} aria-hidden="true" {...stylex.props(styles.crumbIcon)} />
+            <span title={title} {...stylex.props(w1.ellipsis)}>{title}</span>
+          </span>
+        </h3>
         <div role="group" aria-label="Agents in the document" {...stylex.props(styles.faces)}>
           {agents.map((a) => {
             const c = cursors[a.id];
@@ -512,7 +558,11 @@ export function AgentCursors({
           ...(height ? { ['--ph' as string]: `${height}px` } : {}),
         })}
       >
-        {rendered}
+        <div ref={contentRef}>
+          {rendered}
+          {blocks.length === 0 && <p {...stylex.props(styles.empty)}>This document is empty.</p>}
+        </div>
+        {clipped && <div aria-hidden="true" data-fade="" {...stylex.props(styles.fade)} />}
         <div aria-hidden="true" {...stylex.props(styles.layer)}>
           {Object.entries(ghosts).map(([id, g]) =>
             places[id] ? null : (
@@ -539,8 +589,8 @@ export function AgentCursors({
                     <span {...stylex.props(styles.caret, c.typing && styles.caretTyping)} style={{ display: 'block' }} />
                     {dim === undefined && (
                       <>
-                        <MousePointer2 size={16} aria-hidden="true" {...stylex.props(styles.arrow)} />
-                        <span {...stylex.props(styles.flag)}>
+                        <PointerIcon size={16} aria-hidden="true" {...stylex.props(styles.arrow)} />
+                        <span data-flip-x={p.flipX ? '' : undefined} data-flip-y={p.flipY ? '' : undefined} {...stylex.props(styles.flag)}>
                           <span {...stylex.props(styles.flagHead)}>
                             <span {...stylex.props(styles.flagName)}>{a.name}</span>
                             {a.cost != null && <span {...stylex.props(styles.flagCost)}>{cost(a.cost)}</span>}

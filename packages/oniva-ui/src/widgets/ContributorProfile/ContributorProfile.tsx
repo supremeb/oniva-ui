@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { Pencil, Share2 } from 'lucide-react';
+import { PencilIcon, ShareNodesIcon } from '../../icons/IconSet';
 import { useState, type Ref } from 'react';
 import { ContributionHeatmap, type ContributionDay } from '../../charts/Heatmap';
 import { Avatar } from '../../components/Avatar';
@@ -108,10 +108,10 @@ export function ContributorProfile({
           </div>
         </div>
         <div {...stylex.props(styles.actions)}>
-          <Button variant="secondary" size="sm" startIcon={<Share2 size={14} />} onPress={onShare}>
+          <Button variant="secondary" size="sm" startIcon={<ShareNodesIcon size={14} />} onPress={onShare}>
             Share
           </Button>
-          <Button variant="secondary" size="sm" startIcon={<Pencil size={14} />} onPress={onEdit}>
+          <Button variant="secondary" size="sm" startIcon={<PencilIcon size={14} />} onPress={onEdit}>
             Edit
           </Button>
         </div>

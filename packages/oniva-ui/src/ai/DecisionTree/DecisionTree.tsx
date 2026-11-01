@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { ChevronLeft, ChevronRight, GitBranch, Sparkles } from 'lucide-react';
+import { ChevronLeftIcon, ChevronRightIcon, BranchIcon, SparklesIcon } from '../../icons/IconSet';
 import { useEffect, useRef, useState, type HTMLAttributes, type KeyboardEvent, type ReactNode, type Ref } from 'react';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
@@ -24,20 +24,20 @@ const draw = stylex.keyframes({ from: { transform: 'scaleX(0)' }, to: { transfor
 const styles = stylex.create({
   root: { containerType: 'inline-size', fontFamily: font['--oniva-font-sans'], overflow: 'hidden', width: '100%' },
   bar: { alignItems: 'center', borderBottomColor: colors['--oniva-color-border'], borderBottomStyle: 'solid', borderBottomWidth: 1, display: 'flex', gap: 8, paddingBlock: 8, paddingInline: 14 },
-  title: { alignItems: 'center', color: colors['--oniva-color-text'], display: 'inline-flex', fontSize: font['--oniva-font-size-14'], fontWeight: font['--oniva-font-weight-semibold'], gap: 6, margin: 0 },
-  count: { color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-12'], fontVariantNumeric: 'tabular-nums' },
-  waiting: { color: colors['--oniva-color-text-muted'], flexGrow: 1, fontSize: font['--oniva-font-size-13'], fontWeight: font['--oniva-font-weight-regular'] },
-  dots: { alignItems: 'center', display: 'inline-flex', gap: 3 },
+  title: { alignItems: 'center', color: colors['--oniva-color-text'], display: 'inline-flex', fontSize: font['--oniva-font-size-14'], fontWeight: font['--oniva-font-weight-semibold'], gap: 6, margin: 0, whiteSpace: 'nowrap' },
+  count: { color: colors['--oniva-color-text-muted'], flexShrink: 0, fontSize: font['--oniva-font-size-12'], fontVariantNumeric: 'tabular-nums', whiteSpace: 'nowrap' },
+  waiting: { color: colors['--oniva-color-text-muted'], flexGrow: 1, fontSize: font['--oniva-font-size-13'], fontVariantNumeric: 'tabular-nums', fontWeight: font['--oniva-font-weight-regular'], minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
+  dots: { alignItems: 'center', display: { default: 'none', '@container (min-width: 480px)': 'inline-flex' }, flexShrink: 0, gap: 3 },
   dot: { backgroundColor: colors['--oniva-color-border-control'], borderRadius: radius['--oniva-radius-full'], height: 5, transitionDuration: motion['--oniva-motion-dur-base'], transitionProperty: 'width, background-color', width: 5 },
   dotOn: { backgroundColor: colors['--oniva-color-text'], width: 10 },
   qcard: { backgroundColor: colors['--oniva-color-surface-inner'], borderColor: colors['--oniva-color-border'], borderRadius: radius['--oniva-radius-lg'], borderStyle: 'solid', borderWidth: 1, display: 'flex', flexDirection: 'column', gap: 8, padding: 12 },
   agentTile: { alignItems: 'center', backgroundColor: colors['--oniva-color-surface-inset'], borderColor: colors['--oniva-color-border'], borderRadius: radius['--oniva-radius-md'], borderStyle: 'solid', borderWidth: 1, color: colors['--oniva-color-text-muted'], display: 'flex', flexShrink: 0, height: 32, justifyContent: 'center', width: 32 },
   agentRow: { alignItems: 'center', display: 'flex', gap: 8 },
   agentNames: { display: 'flex', flexDirection: 'column', minWidth: 0 },
-  agentName: { color: colors['--oniva-color-text'], fontSize: font['--oniva-font-size-13'], fontWeight: font['--oniva-font-weight-medium'] },
+  agentName: { overflowWrap: 'anywhere', color: colors['--oniva-color-text'], fontSize: font['--oniva-font-size-13'], fontWeight: font['--oniva-font-weight-medium'] },
   agentModel: { color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-12'] },
   riskRow: { display: 'flex' },
-  labelCol: { display: 'flex', flexDirection: 'column', flexGrow: 1, gap: 2, minWidth: 0 },
+  labelCol: { overflowWrap: 'anywhere', display: 'flex', flexDirection: 'column', flexGrow: 1, gap: 2, minWidth: 0 },
   pickLine: { alignItems: 'center', color: colors['--oniva-color-accent-text'], display: 'inline-flex', fontSize: font['--oniva-font-size-12'], fontWeight: font['--oniva-font-weight-regular'], gap: 4 },
   footer: { alignItems: 'center', color: colors['--oniva-color-text-muted'], display: 'flex', flexWrap: 'wrap', fontSize: font['--oniva-font-size-12'], gap: 6, paddingBlockEnd: 12, paddingInline: 14 },
   body: {
@@ -62,8 +62,8 @@ const styles = stylex.create({
     animationTimingFunction: motion['--oniva-motion-ease-out'],
   },
   q: { display: 'flex', flexDirection: 'column', gap: 6, minWidth: 0, paddingInlineEnd: { default: 0, [WIDE]: 16 } },
-  question: { color: colors['--oniva-color-text'], fontSize: font['--oniva-font-size-16'], fontWeight: font['--oniva-font-weight-semibold'], lineHeight: font['--oniva-font-lh-20'], margin: 0 },
-  context: { color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-13'], lineHeight: font['--oniva-font-lh-18'], margin: 0 },
+  question: { overflowWrap: 'anywhere', color: colors['--oniva-color-text'], fontSize: font['--oniva-font-size-16'], fontWeight: font['--oniva-font-weight-semibold'], lineHeight: font['--oniva-font-lh-20'], margin: 0 },
+  context: { overflowWrap: 'anywhere', color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-13'], lineHeight: font['--oniva-font-lh-18'], margin: 0 },
   branches: {
     borderInlineStartColor: colors['--oniva-color-border-control'],
     borderInlineStartStyle: 'solid',
@@ -108,8 +108,8 @@ const styles = stylex.create({
   btn: {
     alignItems: 'center',
     appearance: 'none',
-    backgroundColor: { default: colors['--oniva-color-surface-inner'], ':hover': colors['--oniva-color-surface-hover'] },
-    borderColor: { default: colors['--oniva-color-border'], ':hover': colors['--oniva-color-border-hover'] },
+    backgroundColor: { default: colors['--oniva-color-surface-inner'], ':hover': { default: null, [media.hover]: colors['--oniva-color-surface-hover'] } },
+    borderColor: { default: colors['--oniva-color-border'], ':hover': { default: null, [media.hover]: colors['--oniva-color-border-hover'] } },
     borderRadius: radius['--oniva-radius-md'],
     borderStyle: 'solid',
     borderWidth: 1,
@@ -133,8 +133,8 @@ const styles = stylex.create({
   btnPick: { backgroundColor: colors['--oniva-color-accent-soft'], borderColor: colors['--oniva-color-border-active'] },
   btnChosen: { backgroundColor: colors['--oniva-color-accent-soft'], borderColor: colors['--oniva-color-border-active'] },
   key: { display: { default: 'inline-flex', '@media (pointer: coarse)': 'none' }, flexShrink: 0 },
-  label: { flexGrow: 1, minWidth: 0 },
-  effects: { color: colors['--oniva-color-text-muted'], display: 'flex', flexDirection: 'column', fontSize: font['--oniva-font-size-12'], gap: 3, lineHeight: font['--oniva-font-lh-16'], listStyle: 'none', margin: 0, minWidth: 0, padding: 0 },
+  label: { flexGrow: 1, minWidth: 0, overflowWrap: 'anywhere' },
+  effects: { overflowWrap: 'anywhere', color: colors['--oniva-color-text-muted'], display: 'flex', flexDirection: 'column', fontSize: font['--oniva-font-size-12'], gap: 3, lineHeight: font['--oniva-font-lh-16'], listStyle: 'none', margin: 0, minWidth: 0, padding: 0 },
   effect: { alignItems: 'flex-start', display: 'flex', gap: 6 },
   bullet: { backgroundColor: colors['--oniva-color-border-control'], borderRadius: radius['--oniva-radius-full'], flexShrink: 0, height: 4, marginBlockStart: 6, width: 4 },
   other: {
@@ -153,7 +153,7 @@ const styles = stylex.create({
     padding: 8,
     resize: 'none',
     transitionDuration: motion['--oniva-motion-dur-enter'],
-    transitionProperty: 'height, border-color',
+    transitionProperty: 'border-color',
     transitionTimingFunction: motion['--oniva-motion-ease-out'],
     width: '100%',
   },
@@ -210,7 +210,7 @@ export interface DecisionTreeProps extends Omit<HTMLAttributes<HTMLDivElement>, 
   ref?: Ref<HTMLDivElement>;
 }
 
-type Picked = { id: string; label: string; answer?: string };
+type Picked = { id: string; label: string; index?: number; answer?: string };
 
 /** An agent stuck on a decision lays out its options as a tree with consequences, marks the risky parts and its own pick; you choose a path or write your own. */
 export function DecisionTree({ decisions, onChoose, allowOther = true, title = 'Decisions', settleMs = 1200, className, xstyle, ref, onKeyDown, ...rest }: DecisionTreeProps) {
@@ -232,8 +232,8 @@ export function DecisionTree({ decisions, onChoose, allowOther = true, title = '
   const idx = Math.min(view, Math.max(0, pending.length - 1));
   const d = pending[idx];
 
-  const settle = (dec: Decision, label: string, answer?: string) => {
-    setPicked({ id: dec.id, label, answer });
+  const settle = (dec: Decision, label: string, answer?: string, index?: number) => {
+    setPicked({ id: dec.id, label, answer, index });
     announce(answer ? `Instruction sent. Agent: ${answer}` : `Chosen: ${label}`);
     const finish = () => {
       setDone((x) => [...x, dec.id]);
@@ -253,10 +253,10 @@ export function DecisionTree({ decisions, onChoose, allowOther = true, title = '
   const choose = async (dec: Decision, i: number) => {
     if (picked) return;
     const option = dec.options[i]!;
-    setPicked({ id: dec.id, label: option.label });
+    setPicked({ id: dec.id, label: option.label, index: i });
     window.clearTimeout(timer.current);
     await onChoose?.(dec, { index: i, option });
-    settle(dec, option.label);
+    settle(dec, option.label, undefined, i);
   };
   const send = async (dec: Decision) => {
     const text = draft.trim();
@@ -303,7 +303,7 @@ export function DecisionTree({ decisions, onChoose, allowOther = true, title = '
     <div {...rest} ref={setRefs} onKeyDown={onKey} {...mergeSx(sx, className)}>
       <div {...stylex.props(styles.bar)}>
         <h4 {...stylex.props(styles.title)}>
-          <GitBranch size={14} aria-hidden="true" /> {title}
+          <BranchIcon size={14} aria-hidden="true" /> {title}
         </h4>
         {pending.length > 0 && <span {...stylex.props(styles.waiting)}>{pending.length} waiting for you</span>}
         {pending.length > 1 && (
@@ -312,11 +312,11 @@ export function DecisionTree({ decisions, onChoose, allowOther = true, title = '
               {pending.map((p, k) => <span key={p.id} {...stylex.props(styles.dot, k === idx && styles.dotOn)} />)}
             </span>
             <IconButton size="sm" variant="ghost" aria-label="Previous decision" aria-keyshortcuts="ArrowLeft K" onPress={() => move(-1)}>
-              <ChevronLeft size={14} aria-hidden="true" />
+              <ChevronLeftIcon size={14} aria-hidden="true" />
             </IconButton>
             <span {...stylex.props(styles.count)}>{idx + 1} of {pending.length}</span>
             <IconButton size="sm" variant="ghost" aria-label="Next decision" aria-keyshortcuts="ArrowRight J" onPress={() => move(1)}>
-              <ChevronRight size={14} aria-hidden="true" />
+              <ChevronRightIcon size={14} aria-hidden="true" />
             </IconButton>
           </>
         )}
@@ -333,7 +333,7 @@ export function DecisionTree({ decisions, onChoose, allowOther = true, title = '
             )}
             <div {...stylex.props(styles.qcard)}>
               <div {...stylex.props(styles.agentRow)}>
-                <span aria-hidden="true" {...stylex.props(styles.agentTile)}>{d.icon ?? <Sparkles size={14} />}</span>
+                <span aria-hidden="true" {...stylex.props(styles.agentTile)}>{d.icon ?? <SparklesIcon size={14} />}</span>
                 <span {...stylex.props(styles.agentNames)}>
                   <span {...stylex.props(styles.agentName)}>{d.agent}</span>
                   {d.model && <span {...stylex.props(styles.agentModel)}>{d.model}</span>}
@@ -345,10 +345,10 @@ export function DecisionTree({ decisions, onChoose, allowOther = true, title = '
           </div>
           <ul aria-label={`Ways to proceed: ${d.question}`} {...stylex.props(styles.branches)}>
             {d.options.map((o, i) => {
-              const chosen = picked?.label === o.label && !picked.answer;
+              const chosen = picked?.index === i;
               const fade = (picked && !chosen) || (hot !== null && hot !== i && !picked);
               return (
-                <li key={o.label} data-hot={hot === i ? '' : undefined} style={{ animationDelay: `${100 + i * 70}ms` }} {...stylex.props(styles.branch, styles.stage, fade && styles.branchFaded, hot === i && !picked && styles.branchHot)} onMouseEnter={() => setHot(i)} onMouseLeave={() => setHot(null)}>
+                <li key={`${i}-${o.label}`} data-hot={hot === i ? '' : undefined} style={{ animationDelay: `${100 + i * 70}ms` }} {...stylex.props(styles.branch, styles.stage, fade && styles.branchFaded, hot === i && !picked && styles.branchHot)} onPointerEnter={(e) => e.pointerType === 'mouse' && setHot(i)} onPointerLeave={() => setHot(null)}>
                   <span aria-hidden="true" style={{ animationDelay: `${160 + i * 70}ms` }} {...stylex.props(styles.tick, (hot === i || chosen) && styles.tickHot)} />
                   <div>
                     <button
@@ -382,7 +382,7 @@ export function DecisionTree({ decisions, onChoose, allowOther = true, title = '
               );
             })}
             {allowOther && (
-              <li style={{ animationDelay: `${100 + d.options.length * 70}ms` }} {...stylex.props(styles.branch, styles.stage, picked && picked.label !== 'Your instruction' && picked.label !== 'Instruction' && styles.branchFaded)}>
+              <li style={{ animationDelay: `${100 + d.options.length * 70}ms` }} {...stylex.props(styles.branch, styles.stage, picked && picked.index !== undefined && styles.branchFaded)}>
                 <span aria-hidden="true" {...stylex.props(styles.tick)} />
                 <div>
                   {otherOpen ? (

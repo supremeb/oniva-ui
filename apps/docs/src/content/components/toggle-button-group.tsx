@@ -1,5 +1,4 @@
-import { AlignCenter, AlignLeft, AlignRight, Bold, Italic } from 'lucide-react';
-import { ToggleButton, ToggleButtonGroup } from 'oniva-ui';
+import { ToggleButton, ToggleButtonGroup, AlignCenterIcon, AlignLeftIcon, AlignRightIcon, BoldIcon, ItalicIcon } from 'oniva-ui';
 import type { DocPage } from '../types';
 
 const Range = ({ variant, size }: { variant?: 'segmented' | 'secondary' | 'ghost' | 'soft'; size?: 'xs' | 'sm' | 'md' | 'lg' }) => (
@@ -74,8 +73,8 @@ const page: DocPage = {
       description: 'Independent toggles. Each selected one draws its own tile.',
       Render: () => (
         <ToggleButtonGroup aria-label="Text style" selectionMode="multiple" defaultSelectedKeys={['b']} size="sm">
-          <ToggleButton id="b" isIconOnly aria-label="Bold"><Bold size={14} /></ToggleButton>
-          <ToggleButton id="i" isIconOnly aria-label="Italic"><Italic size={14} /></ToggleButton>
+          <ToggleButton id="b" isIconOnly aria-label="Bold"><BoldIcon size={14} /></ToggleButton>
+          <ToggleButton id="i" isIconOnly aria-label="Italic"><ItalicIcon size={14} /></ToggleButton>
         </ToggleButtonGroup>
       ),
     },
@@ -84,9 +83,9 @@ const page: DocPage = {
       description: 'Single select with icon options at sm (32px).',
       Render: () => (
         <ToggleButtonGroup aria-label="Alignment" selectionMode="single" defaultSelectedKeys={['l']} size="sm">
-          <ToggleButton id="l" isIconOnly aria-label="Left"><AlignLeft size={14} /></ToggleButton>
-          <ToggleButton id="c" isIconOnly aria-label="Center"><AlignCenter size={14} /></ToggleButton>
-          <ToggleButton id="r" isIconOnly aria-label="Right"><AlignRight size={14} /></ToggleButton>
+          <ToggleButton id="l" isIconOnly aria-label="Left"><AlignLeftIcon size={14} /></ToggleButton>
+          <ToggleButton id="c" isIconOnly aria-label="Center"><AlignCenterIcon size={14} /></ToggleButton>
+          <ToggleButton id="r" isIconOnly aria-label="Right"><AlignRightIcon size={14} /></ToggleButton>
         </ToggleButtonGroup>
       ),
     },

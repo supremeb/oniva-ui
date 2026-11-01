@@ -1,5 +1,4 @@
-import { AlertTriangle, Info } from 'lucide-react';
-import { Button, DialogDescription, DialogTitle } from 'oniva-ui';
+import { Button, DialogDescription, DialogTitle, TriangleAlertIcon, InfoIcon } from 'oniva-ui';
 import { Dialog as AriaDialog } from 'react-aria-components';
 import type { DocPage } from '../types';
 
@@ -10,7 +9,7 @@ const Panel = ({ variant = 'danger', title = 'Delete invoice INV-1042?', body = 
     <AriaDialog role="alertdialog" aria-label={title} style={{ display: 'flex', flexDirection: 'column', gap: 16, outline: 'none', padding: 24 }}>
       <div style={{ alignItems: 'flex-start', display: 'flex', gap: 14 }}>
         <span data-part="badge" aria-hidden="true" style={{ alignItems: 'center', background: variant === 'danger' ? 'var(--oniva-color-danger-bg)' : 'var(--oniva-color-info-bg)', borderRadius: 9999, color: variant === 'danger' ? 'var(--oniva-color-danger-fg)' : 'var(--oniva-color-info-fg)', display: 'inline-flex', flexShrink: 0, height: 40, justifyContent: 'center', width: 40 }}>
-          {variant === 'danger' ? <AlertTriangle size={20} /> : <Info size={20} />}
+          {variant === 'danger' ? <TriangleAlertIcon size={20} /> : <InfoIcon size={20} />}
         </span>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 6, minWidth: 0, paddingTop: 2 }}>
           <DialogTitle>{title}</DialogTitle>

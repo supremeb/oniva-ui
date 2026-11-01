@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { ThumbsDown, ThumbsUp } from 'lucide-react';
+import { ThumbsDownIcon, ThumbsUpIcon } from '../../icons/IconSet';
 import { useState, type HTMLAttributes, type Ref } from 'react';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
@@ -16,6 +16,7 @@ const styles = stylex.create({
     fontSize: font['--oniva-font-size-13'],
     gap: 8,
   },
+  text: { minWidth: 0, overflowWrap: 'anywhere' },
   reasons: { display: 'flex', flexWrap: 'wrap', gap: 6 },
 });
 
@@ -60,7 +61,7 @@ export function FeedbackBar({
         <span role="status">Thanks for the feedback.</span>
       ) : rating === 'down' ? (
         <>
-          <span>What went wrong?</span>
+          <span {...stylex.props(styles.text)}>What went wrong?</span>
           <div role="group" aria-label="Reasons" {...stylex.props(styles.reasons)}>
             {reasons.map((r) => (
               <Button
@@ -76,11 +77,11 @@ export function FeedbackBar({
         </>
       ) : (
         <>
-          <span>{question}</span>
+          <span {...stylex.props(styles.text)}>{question}</span>
           <Button
             size="xs"
             variant="secondary"
-            startIcon={<ThumbsUp size={12} aria-hidden="true" />}
+            startIcon={<ThumbsUpIcon size={12} aria-hidden="true" />}
             onPress={() => {
               setRating('up');
               finish({ rating: 'up' });
@@ -91,7 +92,7 @@ export function FeedbackBar({
           <Button
             size="xs"
             variant="secondary"
-            startIcon={<ThumbsDown size={12} aria-hidden="true" />}
+            startIcon={<ThumbsDownIcon size={12} aria-hidden="true" />}
             onPress={() => setRating('down')}
           >
             No

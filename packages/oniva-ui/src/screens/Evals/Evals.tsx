@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { Play } from 'lucide-react';
+import { PlayIcon } from '../../icons/IconSet';
 import { useEffect, useMemo, useRef, useState, type CSSProperties, type Ref } from 'react';
 import type { Selection } from 'react-aria-components';
 import { Badge } from '../../components/Badge';
@@ -309,7 +309,7 @@ export function Evals({
               </SelectItem>
             ))}
           </Select>
-          <Button size="sm" startIcon={<Play size={14} />} isLoading={running} onPress={run}>
+          <Button size="sm" startIcon={<PlayIcon size={14} />} isLoading={running} onPress={run}>
             Run eval
           </Button>
         </>

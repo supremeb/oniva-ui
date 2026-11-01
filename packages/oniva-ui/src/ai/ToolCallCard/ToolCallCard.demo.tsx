@@ -1,4 +1,4 @@
-import { Database, Mail, Search } from 'lucide-react';
+import { DatabaseIcon, MailIcon, SearchIcon } from '../../icons/IconSet';
 import { useEffect, useState } from 'react';
 import type { DemoModule } from '../../internal/demo';
 import { ToolCallCard, ToolCallGroup } from './ToolCallCard';
@@ -16,7 +16,7 @@ function Retry() {
   return (
     <ToolCallCard
       name="send_email"
-      icon={<Mail size={13} />}
+      icon={<MailIcon size={13} />}
       summary={status === 'running' ? 'Sending the renewal reminder…' : status === 'success' ? 'Sent the renewal reminder' : 'Could not send the renewal reminder'}
       status={status}
       args={{ to: 'dana@northwind.example', subject: 'Your plan renews on Nov 3' }}
@@ -38,12 +38,12 @@ const demo: DemoModule = {
   demos: [
     {
       name: 'States',
-      code: `<ToolCallCard name="query_warehouse" icon={<Database size={13} />} summary="Queried closed-won deals" status="success" durationMs={1240} args={args} result={result} />
-<ToolCallCard name="web_search" icon={<Search size={13} />} summary="Searching competitor pricing…" status="running" args={{ q: 'crm pricing 2026' }} />`,
+      code: `<ToolCallCard name="query_warehouse" icon={<DatabaseIcon size={13} />} summary="Queried closed-won deals" status="success" durationMs={1240} args={args} result={result} />
+<ToolCallCard name="web_search" icon={<SearchIcon size={13} />} summary="Searching competitor pricing…" status="running" args={{ q: 'crm pricing 2026' }} />`,
       Component: () => (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8, maxWidth: 640 }}>
-          <ToolCallCard name="query_warehouse" icon={<Database size={13} />} summary="Queried closed-won deals" status="success" durationMs={1240} args={args} result={result} defaultExpanded />
-          <ToolCallCard name="web_search" icon={<Search size={13} />} summary="Searching competitor pricing…" status="running" args={{ q: 'crm pricing 2026' }} />
+          <ToolCallCard name="query_warehouse" icon={<DatabaseIcon size={13} />} summary="Queried closed-won deals" status="success" durationMs={1240} args={args} result={result} defaultExpanded />
+          <ToolCallCard name="web_search" icon={<SearchIcon size={13} />} summary="Searching competitor pricing…" status="running" args={{ q: 'crm pricing 2026' }} />
           <ToolCallCard name="read_file" status="success" duration="80ms" args={{ path: 'notes/q3.md' }}>
             {'Q3 retention held at 91%.\nTop mover: self-serve annual plans.'}
           </ToolCallCard>
@@ -69,9 +69,9 @@ const demo: DemoModule = {
       Component: () => (
         <div style={{ maxWidth: 640 }}>
           <ToolCallGroup defaultOpen>
-            <ToolCallCard name="query_warehouse" icon={<Database size={13} />} summary="Queried closed-won deals" status="success" durationMs={1240} args={args} result={result} />
-            <ToolCallCard name="web_search" icon={<Search size={13} />} summary="Searched competitor pricing" status="success" durationMs={900} args={{ q: 'crm pricing 2026' }} />
-            <ToolCallCard name="send_email" icon={<Mail size={13} />} summary="Could not send the summary" status="error" args={{ to: 'dana@northwind.example', timeout_ms: 8000 }} error="SMTP 550: mailbox unavailable" onRetry={() => {}} />
+            <ToolCallCard name="query_warehouse" icon={<DatabaseIcon size={13} />} summary="Queried closed-won deals" status="success" durationMs={1240} args={args} result={result} />
+            <ToolCallCard name="web_search" icon={<SearchIcon size={13} />} summary="Searched competitor pricing" status="success" durationMs={900} args={{ q: 'crm pricing 2026' }} />
+            <ToolCallCard name="send_email" icon={<MailIcon size={13} />} summary="Could not send the summary" status="error" args={{ to: 'dana@northwind.example', timeout_ms: 8000 }} error="SMTP 550: mailbox unavailable" onRetry={() => {}} />
           </ToolCallGroup>
         </div>
       ),

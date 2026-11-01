@@ -1,8 +1,7 @@
 import * as stylex from '@stylexjs/stylex';
-import { ChevronDown, Menu, Search, X } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { Kbd, type AccentName, type ThemeMode } from 'oniva-ui';
+import { Kbd, type AccentName, type ThemeMode, ChevronDownIcon, MenuIcon, SearchIcon, XIcon } from 'oniva-ui';
 import { Link } from 'react-router-dom';
 import { accent as accentTokens } from '@oniva-tokens/accent.stylex';
 import { HeaderUtilities } from '../components/Header';
@@ -104,7 +103,7 @@ function Nav({ onNavigate, q, setQ, inputRef }: { onNavigate: () => void; q: str
         <span><span {...stylex.props(s.brandName)}>oniva/ui</span><span {...stylex.props(s.brandSub)}>Design system docs</span></span>
       </Link>
       <div {...stylex.props(s.searchWrap)}>
-        <Search size={14} {...stylex.props(s.searchIcon)} aria-hidden="true" />
+        <SearchIcon size={14} {...stylex.props(s.searchIcon)} aria-hidden="true" />
         <input
           ref={inputRef} type="search" aria-label="Search docs" placeholder="Search docs" value={q} {...stylex.props(s.search)}
           onChange={(e) => setQ(e.target.value)}
@@ -123,7 +122,7 @@ function Nav({ onNavigate, q, setQ, inputRef }: { onNavigate: () => void; q: str
             <div key={g.id}>
               <button type="button" aria-expanded={open} aria-controls={`nav-${g.id}`} {...stylex.props(s.groupBtn)} onClick={() => toggle(g.id)}>
                 {g.label}
-                <ChevronDown size={14} aria-hidden="true" {...stylex.props(s.chev)} style={{ transform: open ? undefined : 'rotate(-90deg)' }} />
+                <ChevronDownIcon size={14} aria-hidden="true" {...stylex.props(s.chev)} style={{ transform: open ? undefined : 'rotate(-90deg)' }} />
               </button>
               {open ? (
                 <div id={`nav-${g.id}`}>
@@ -172,7 +171,7 @@ export function DocsShell({ children, theme, onThemeChange, accent, onAccentChan
       </aside>
       <div style={{ minWidth: 0 }}>
         <div {...stylex.props(s.topbar)} data-testid="docs-utilities">
-          <button type="button" {...stylex.props(s.menuBtn, s.mobileOnly)} aria-expanded={open} aria-label="Open navigation" onClick={() => setOpen(true)}><Menu size={16} /> Menu</button>
+          <button type="button" {...stylex.props(s.menuBtn, s.mobileOnly)} aria-expanded={open} aria-label="Open navigation" onClick={() => setOpen(true)}><MenuIcon size={16} /> Menu</button>
           <HeaderUtilities theme={theme} onThemeChange={onThemeChange} accent={accent} onAccentChange={onAccentChange} />
         </div>
         <main id="main" {...stylex.props(s.content)}>
@@ -187,7 +186,7 @@ export function DocsShell({ children, theme, onThemeChange, accent, onAccentChan
           <div {...stylex.props(s.scrim)} onClick={() => setOpen(false)} aria-hidden="true" />
           <div role="dialog" aria-modal="true" aria-label="Navigation" {...stylex.props(s.drawerPanel)}>
             <div {...stylex.props(s.drawer)}>
-              <button type="button" {...stylex.props(s.menuBtn)} style={{ margin: 12, alignSelf: 'flex-end' }} aria-label="Close navigation" onClick={() => setOpen(false)}><X size={16} /></button>
+              <button type="button" {...stylex.props(s.menuBtn)} style={{ margin: 12, alignSelf: 'flex-end' }} aria-label="Close navigation" onClick={() => setOpen(false)}><XIcon size={16} /></button>
               <Nav onNavigate={() => setOpen(false)} q={q} setQ={setQ} inputRef={input} />
             </div>
           </div>

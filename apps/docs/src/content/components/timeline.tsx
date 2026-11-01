@@ -1,12 +1,11 @@
-import { GitMerge, MessageSquare, Rocket, TriangleAlert } from 'lucide-react';
-import { Timeline, type TimelineEvent } from 'oniva-ui';
+import { Timeline, type TimelineEvent, MergeIcon, MessageSquareIcon, RocketIcon, TriangleAlertIcon } from 'oniva-ui';
 import type { DocPage } from '../types';
 
 const events: TimelineEvent[] = [
-  { id: '1', time: '2026-10-12T14:20:00Z', actor: 'Priya Nair', action: 'deployed v2.8.0 to production', icon: <Rocket size={14} />, tone: 'success', details: 'Rolled out to 100% of traffic. No errors in the first 15 minutes.' },
-  { id: '2', time: '2026-10-12T11:05:00Z', actor: 'Marcus Okafor', action: 'merged pull request #482', icon: <GitMerge size={14} />, tone: 'info' },
-  { id: '3', time: '2026-10-11T16:40:00Z', actor: 'CI', action: 'failed on webhook retry tests', icon: <TriangleAlert size={14} />, tone: 'danger', details: '3 of 214 tests failed in webhook-retry.spec.ts.' },
-  { id: '4', time: '2026-10-11T09:12:00Z', actor: 'Lena Schmidt', action: 'commented on the launch checklist', icon: <MessageSquare size={14} /> },
+  { id: '1', time: '2026-10-12T14:20:00Z', actor: 'Priya Nair', action: 'deployed v2.8.0 to production', icon: <RocketIcon size={14} />, tone: 'success', details: 'Rolled out to 100% of traffic. No errors in the first 15 minutes.' },
+  { id: '2', time: '2026-10-12T11:05:00Z', actor: 'Marcus Okafor', action: 'merged pull request #482', icon: <MergeIcon size={14} />, tone: 'info' },
+  { id: '3', time: '2026-10-11T16:40:00Z', actor: 'CI', action: 'failed on webhook retry tests', icon: <TriangleAlertIcon size={14} />, tone: 'danger', details: '3 of 214 tests failed in webhook-retry.spec.ts.' },
+  { id: '4', time: '2026-10-11T09:12:00Z', actor: 'Lena Schmidt', action: 'commented on the launch checklist', icon: <MessageSquareIcon size={14} /> },
 ];
 
 const Demo = (p: { events?: TimelineEvent[]; today?: string }) => (

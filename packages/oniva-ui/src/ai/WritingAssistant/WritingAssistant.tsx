@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { ArrowUp, Mic, Sparkles, SquarePen } from 'lucide-react';
+import { ArrowUpIcon, MicIcon, SparklesIcon, SquarePenIcon } from '../../icons/IconSet';
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type HTMLAttributes, type Ref } from 'react';
 import { accent } from '../../tokens/accent.stylex';
 import { colors } from '../../tokens/colors.stylex';
@@ -8,6 +8,7 @@ import { media } from '../../tokens/media.stylex';
 import { motion } from '../../tokens/motion.stylex';
 import { radius } from '../../tokens/radius.stylex';
 import { IconButton } from '../../components/IconButton';
+import { focus } from '../../internal/focus';
 import { mergeSx } from '../../internal/sx';
 import { useResponseStream } from '../ResponseStream';
 import { TypingIndicator } from '../TypingIndicator';
@@ -73,11 +74,11 @@ const styles = stylex.create({
     paddingBlock: 12,
     paddingInline: 16,
   },
-  nameRow: { alignItems: 'center', color: colors['--oniva-color-text'], display: 'flex', gap: 6 },
-  spark: { color: accent['--oniva-accent-solid'], flexShrink: 0 },
+  nameRow: { alignItems: 'flex-start', color: colors['--oniva-color-text'], display: 'flex', gap: 6 },
+  spark: { color: accent['--oniva-accent-solid'], flexShrink: 0, marginBlockStart: 3 },
   titles: { flexGrow: 1, minWidth: 0 },
-  name: { color: colors['--oniva-color-text'], fontSize: font['--oniva-font-size-14'], fontWeight: font['--oniva-font-weight-medium'], margin: 0 },
-  tagline: { color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-12'], margin: 0 },
+  name: { color: colors['--oniva-color-text'], fontSize: font['--oniva-font-size-14'], fontWeight: font['--oniva-font-weight-medium'], margin: 0, minWidth: 0, overflowWrap: 'anywhere' },
+  tagline: { color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-12'], margin: 0, overflowWrap: 'anywhere' },
   scroll: { display: 'flex', flexDirection: 'column', flexGrow: 1, gap: 10, minHeight: 0, overflowY: 'auto', paddingBlock: 4, paddingInline: 16 },
   welcome: {
     alignItems: 'flex-start',
@@ -90,19 +91,22 @@ const styles = stylex.create({
     justifyContent: 'center',
     flexGrow: 1,
   },
-  greeting: { color: colors['--oniva-color-text'], fontSize: font['--oniva-font-size-16'], fontWeight: font['--oniva-font-weight-medium'], lineHeight: 1.25, margin: 0 },
-  chips: { display: 'flex', flexWrap: 'wrap', gap: 6 },
+  greeting: { color: colors['--oniva-color-text'], fontSize: font['--oniva-font-size-16'], fontWeight: font['--oniva-font-weight-medium'], lineHeight: 1.25, margin: 0, maxWidth: '100%', overflowWrap: 'anywhere' },
+  chips: { display: 'flex', flexWrap: 'wrap', gap: 6, maxWidth: '100%' },
   chip: {
     appearance: 'none',
-    backgroundColor: { default: colors['--oniva-color-surface-hover'], ':hover': colors['--oniva-color-surface-active'] },
+    backgroundColor: { default: colors['--oniva-color-surface-hover'], ':hover': { default: null, [media.hover]: colors['--oniva-color-surface-active'] } },
     borderRadius: radius['--oniva-radius-md'],
     borderWidth: 0,
     color: colors['--oniva-color-text'],
     cursor: 'pointer',
     fontFamily: font['--oniva-font-sans'],
     fontSize: font['--oniva-font-size-13'],
+    maxWidth: '100%',
+    overflowWrap: 'anywhere',
     paddingBlock: 7,
     paddingInline: 12,
+    textAlign: 'start',
   },
   msg: {
     animationDuration: motion['--oniva-motion-dur-enter'],
@@ -135,9 +139,10 @@ const styles = stylex.create({
     fontFamily: font['--oniva-font-sans'],
     fontSize: font['--oniva-font-size-14'],
     lineHeight: '20px',
+    marginInlineStart: -4,
     maxHeight: 80,
     minHeight: 28,
-    outlineStyle: 'none',
+    minWidth: 0,
     overflowY: 'auto',
     padding: 4,
     resize: 'none',
@@ -246,6 +251,8 @@ export function WritingAssistant({
   const transcript = useRef('');
   const stopListen = useRef<(() => void) | null>(null);
   const alive = useRef(true);
+  const chat = useRef(0);
+  const announced = useRef(0);
   useEffect(() => () => { alive.current = false; stopListen.current?.(); }, []);
 
   useLayoutEffect(() => {
@@ -258,17 +265,31 @@ export function WritingAssistant({
     end.current?.scrollIntoView?.({ block: 'end' });
   }, [messages, pending]);
 
+  const announce = (text: string) => {
+    announced.current += 1;
+    // Alternate a trailing no-break space so identical consecutive messages are announced again.
+    setLive(announced.current % 2 ? text : `${text}\u00a0`);
+  };
+
   const send = async (text: string) => {
     const t = text.trim();
     if (!t || pending) return;
+    const session = chat.current;
     setMessages((m) => [...m, { id: ++idRef.current, role: 'user', text: t }]);
     setDraft('');
     setPending(true);
-    const reply = await respond(t);
-    if (!alive.current) return;
+    let reply: string;
+    let failed = false;
+    try {
+      reply = await respond(t);
+    } catch {
+      reply = 'Sorry, I could not write that. Try again.';
+      failed = true;
+    }
+    if (!alive.current || session !== chat.current) return;
     setPending(false);
     setMessages((m) => [...m, { id: ++idRef.current, role: 'assistant', text: reply }]);
-    setLive(`${name} replied`);
+    announce(failed ? `${name} could not reply` : `${name} replied`);
   };
 
   const finish = () => {
@@ -288,7 +309,7 @@ export function WritingAssistant({
     }
     transcript.current = '';
     setListening(true);
-    setLive('Listening');
+    announce('Listening');
     const w = window as unknown as { SpeechRecognition?: new () => Recognition; webkitSpeechRecognition?: new () => Recognition };
     const Rec = speech === 'auto' ? (w.SpeechRecognition ?? w.webkitSpeechRecognition) : undefined;
     if (Rec) {
@@ -331,7 +352,7 @@ export function WritingAssistant({
       <div {...stylex.props(styles.head)}>
         <div {...stylex.props(styles.titles)}>
           <div {...stylex.props(styles.nameRow)}>
-            <Sparkles size={14} aria-hidden="true" {...stylex.props(styles.spark)} />
+            <SparklesIcon size={14} aria-hidden="true" {...stylex.props(styles.spark)} />
             <h3 {...stylex.props(styles.name)}>{name}</h3>
           </div>
           <p {...stylex.props(styles.tagline)}>{tagline}</p>
@@ -342,22 +363,23 @@ export function WritingAssistant({
             variant="ghost"
             aria-label="New chat"
             onPress={() => {
+              chat.current += 1;
               setMessages([]);
               setPending(false);
             }}
           >
-            <SquarePen size={16} aria-hidden="true" />
+            <SquarePenIcon size={16} aria-hidden="true" />
           </IconButton>
         </Presence>
       </div>
-      <div {...stylex.props(styles.scroll)}>
+      <div role="region" aria-label="Conversation" tabIndex={0} {...stylex.props(styles.scroll, focus.inset)}>
         {fresh ? (
           <div {...stylex.props(styles.welcome, m3.rise)}>
             <p {...stylex.props(styles.greeting)}>{greeting}</p>
             {suggestions && suggestions.length > 0 && (
               <div {...stylex.props(styles.chips)}>
                 {suggestions.map((s, si) => (
-                  <button key={s} type="button" onClick={() => void send(s)} style={{ '--oniva-i': si + 1 } as CSSProperties} {...stylex.props(styles.chip, m3.rise, m3.press)}>
+                  <button key={`${si}-${s}`} type="button" onClick={() => void send(s)} style={{ '--oniva-i': si + 1 } as CSSProperties} {...stylex.props(styles.chip, focus.ring, m3.rise, m3.press)}>
                     {s}
                   </button>
                 ))}
@@ -399,7 +421,7 @@ export function WritingAssistant({
               void send(draft);
             }
           }}
-          {...stylex.props(styles.field)}
+          {...stylex.props(styles.field, focus.inset)}
         />
         <IconButton
           size="sm"
@@ -420,13 +442,13 @@ export function WritingAssistant({
               </span>
             </>
           ) : (
-            <Mic size={16} aria-hidden="true" />
+            <MicIcon size={16} aria-hidden="true" />
           )}
           </CrossFade>
         </IconButton>
         <Presence isPresent={!!draft.trim() && !listening} preset="scale" initial={false} xstyle={styles.inl}>
           <IconButton size="sm" variant="primary" aria-label="Send message" type="submit" isDisabled={pending}>
-            <ArrowUp size={16} aria-hidden="true" />
+            <ArrowUpIcon size={16} aria-hidden="true" />
           </IconButton>
         </Presence>
       </form>

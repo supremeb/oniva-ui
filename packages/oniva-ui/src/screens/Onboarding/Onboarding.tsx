@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { ArrowRight, Check, X } from 'lucide-react';
+import { ArrowRightIcon, CheckIcon, XIcon } from '../../icons/IconSet';
 import { useId, useRef, useState, type CSSProperties, type KeyboardEvent, type Ref } from 'react';
 import { Badge } from '../../components/Badge';
 import { Button } from '../../components/Button';
@@ -345,7 +345,7 @@ export function Onboarding({
                 sent. Where next?
               </p>
               <div {...stylex.props(styles.nextRow)}>
-                <Button endIcon={<ArrowRight size={14} />} onPress={() => onNavigate?.('Chat')}>
+                <Button endIcon={<ArrowRightIcon size={14} />} onPress={() => onNavigate?.('Chat')}>
                   Chat
                 </Button>
                 <Button variant="secondary" onPress={() => onNavigate?.('Integrations')}>
@@ -449,7 +449,7 @@ export function Onboarding({
                             onClick={() => setInvites(invites.filter((x) => x !== m))}
                             {...stylex.props(styles.chipX, focus.ring)}
                           >
-                            <X size={12} aria-hidden="true" />
+                            <XIcon size={12} aria-hidden="true" />
                           </button>
                         </li>
                       ))}
@@ -530,7 +530,7 @@ export function Onboarding({
                       aria-hidden="true"
                       {...stylex.props(styles.dot, isDone && styles.dotDone)}
                     >
-                      {isDone ? <Check size={12} /> : n}
+                      {isDone ? <CheckIcon size={12} /> : n}
                     </span>
                     <span>
                       {s.short}

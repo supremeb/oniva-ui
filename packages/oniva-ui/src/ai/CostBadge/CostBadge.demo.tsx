@@ -12,8 +12,8 @@ function Live() {
         budget={500}
         period="Oct 1 - Oct 31"
         breakdown={[
-          { label: 'Sonnet 4.5', value: spent * 0.62 },
-          { label: 'GPT-5', value: spent * 0.28 },
+          { label: 'Atlas 2', value: spent * 0.62 },
+          { label: 'Nova Pro', value: spent * 0.28 },
           { label: 'Embeddings', value: spent * 0.1 },
         ]}
       />

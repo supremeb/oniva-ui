@@ -1,4 +1,4 @@
-import { Bell } from 'lucide-react';
+import { BellIcon } from '../../icons/IconSet';
 import type { DemoModule } from '../../internal/demo';
 import { Button } from '../Button';
 import { VisuallyHidden } from './VisuallyHidden';
@@ -14,12 +14,12 @@ const demo: DemoModule = {
     {
       name: 'Icon-only label',
       code: `<Button variant="secondary" isIconOnly>
-  <Bell size={16} />
+  <BellIcon size={16} />
   <VisuallyHidden>3 unread notifications</VisuallyHidden>
 </Button>`,
       Component: () => (
         <Button variant="secondary" isIconOnly>
-          <Bell size={16} />
+          <BellIcon size={16} />
           <VisuallyHidden>3 unread notifications</VisuallyHidden>
         </Button>
       ),

@@ -1,4 +1,4 @@
-import { CreditCard, Shield, Truck } from 'lucide-react';
+import { CreditCardIcon, ShieldIcon, TruckIcon } from '../../icons/IconSet';
 import type { DemoModule } from '../../internal/demo';
 import { Accordion, AccordionItem } from './Accordion';
 
@@ -36,9 +36,9 @@ const demo: DemoModule = {
     {
       name: 'Cards with icons, multiple open',
       code: `<Accordion variant="cards" allowsMultipleExpanded defaultExpandedKeys={['billing', 'security']}>
-  <AccordionItem id="billing" icon={<CreditCard size={16} />} title="Billing">...</AccordionItem>
-  <AccordionItem id="security" icon={<Shield size={16} />} title="Security">...</AccordionItem>
-  <AccordionItem id="delivery" icon={<Truck size={16} />} title="Delivery">...</AccordionItem>
+  <AccordionItem id="billing" icon={<CreditCardIcon size={16} />} title="Billing">...</AccordionItem>
+  <AccordionItem id="security" icon={<ShieldIcon size={16} />} title="Security">...</AccordionItem>
+  <AccordionItem id="delivery" icon={<TruckIcon size={16} />} title="Delivery">...</AccordionItem>
 </Accordion>`,
       Component: () => (
         <Accordion
@@ -46,13 +46,13 @@ const demo: DemoModule = {
           allowsMultipleExpanded
           defaultExpandedKeys={['billing', 'security']}
         >
-          <AccordionItem id="billing" icon={<CreditCard size={16} />} title="Billing">
+          <AccordionItem id="billing" icon={<CreditCardIcon size={16} />} title="Billing">
             Invoices are issued on the 1st of each month. Update your card under Settings, Billing.
           </AccordionItem>
-          <AccordionItem id="security" icon={<Shield size={16} />} title="Security">
+          <AccordionItem id="security" icon={<ShieldIcon size={16} />} title="Security">
             Two-factor authentication is enforced for every admin on the Scale plan.
           </AccordionItem>
-          <AccordionItem id="delivery" icon={<Truck size={16} />} title="Delivery">
+          <AccordionItem id="delivery" icon={<TruckIcon size={16} />} title="Delivery">
             Track every shipment from the Orders page.
           </AccordionItem>
         </Accordion>

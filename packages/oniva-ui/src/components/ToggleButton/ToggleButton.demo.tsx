@@ -1,4 +1,4 @@
-import { Bell, BellOff, Star } from 'lucide-react';
+import { BellIcon, BellOffIcon, StarIcon } from '../../icons/IconSet';
 import { useState } from 'react';
 import type { DemoModule } from '../../internal/demo';
 import { ToggleButton } from './ToggleButton';
@@ -11,7 +11,7 @@ function Mute() {
     <ToggleButton
       isSelected={on}
       onChange={setOn}
-      startIcon={on ? <BellOff size={16} /> : <Bell size={16} />}
+      startIcon={on ? <BellOffIcon size={16} /> : <BellIcon size={16} />}
     >
       {on ? 'Muted' : 'Mute alerts'}
     </ToggleButton>
@@ -48,21 +48,21 @@ const demo: DemoModule = {
       name: 'Controlled with icon',
       code: `const [on, setOn] = useState(false);
 <ToggleButton isSelected={on} onChange={setOn}
-  startIcon={on ? <BellOff size={16} /> : <Bell size={16} />}>
+  startIcon={on ? <BellOffIcon size={16} /> : <BellIcon size={16} />}>
   {on ? 'Muted' : 'Mute alerts'}
 </ToggleButton>`,
       Component: Mute,
     },
     {
       name: 'Icon only',
-      code: `<ToggleButton isIconOnly aria-label="Favorite" defaultSelected><Star size={16} /></ToggleButton>`,
+      code: `<ToggleButton isIconOnly aria-label="Favorite" defaultSelected><StarIcon size={16} /></ToggleButton>`,
       Component: () => (
         <div style={row}>
           <ToggleButton isIconOnly aria-label="Favorite" defaultSelected>
-            <Star size={16} />
+            <StarIcon size={16} />
           </ToggleButton>
           <ToggleButton isIconOnly aria-label="Favorite 2" size="sm">
-            <Star size={14} />
+            <StarIcon size={14} />
           </ToggleButton>
         </div>
       ),

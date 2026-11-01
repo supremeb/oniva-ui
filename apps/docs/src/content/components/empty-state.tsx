@@ -1,13 +1,12 @@
-import { FileText, Inbox, SearchX } from 'lucide-react';
-import { Button, EmptyState } from 'oniva-ui';
+import { Button, EmptyState, FileTextIcon, InboxIcon, SearchXIcon } from 'oniva-ui';
 import type { DocPage } from '../types';
 
 const Demo = (p: { bordered?: boolean; icon?: boolean; actions?: boolean; title?: string; description?: string; kind?: 'first' | 'search' | 'error' }) => {
   const kind = p.kind ?? 'first';
   const copy = {
-    first: { title: 'No invoices yet', description: 'Invoices you send appear here. Create your first one to start tracking payments.', icon: <FileText size={20} />, primary: 'Create invoice', secondary: 'Import from CSV' },
-    search: { title: 'No invoices match "Harbor"', description: 'Nothing found in Paid or Pending. Try a shorter search, or clear the filters.', icon: <SearchX size={20} />, primary: 'Clear filters', secondary: 'Search all invoices' },
-    error: { title: 'Couldn\'t load invoices', description: 'The connection dropped before we got your invoices. Your data is safe.', icon: <Inbox size={20} />, primary: 'Try again', secondary: '' },
+    first: { title: 'No invoices yet', description: 'Invoices you send appear here. Create your first one to start tracking payments.', icon: <FileTextIcon size={20} />, primary: 'Create invoice', secondary: 'Import from CSV' },
+    search: { title: 'No invoices match "Harbor"', description: 'Nothing found in Paid or Pending. Try a shorter search, or clear the filters.', icon: <SearchXIcon size={20} />, primary: 'Clear filters', secondary: 'Search all invoices' },
+    error: { title: 'Couldn\'t load invoices', description: 'The connection dropped before we got your invoices. Your data is safe.', icon: <InboxIcon size={20} />, primary: 'Try again', secondary: '' },
   }[kind];
   return (
     <div style={{ width: 460 }}>
@@ -58,7 +57,7 @@ const page: DocPage = {
     ],
     initial: { kind: 'first', bordered: false, icon: true, actions: true },
     render: (p) => <Demo kind={p.kind as 'first' | 'search' | 'error'} bordered={Boolean(p.bordered)} icon={Boolean(p.icon)} actions={Boolean(p.actions)} />,
-    code: (p) => `<EmptyState${p.bordered ? ' bordered' : ''}\n  ${p.icon ? 'icon={<FileText size={20} />}\n  ' : ''}title="No invoices yet"\n  description="Invoices you send appear here."${p.actions ? '\n  actions={<Button size="sm">Create invoice</Button>}' : ''}\n/>`,
+    code: (p) => `<EmptyState${p.bordered ? ' bordered' : ''}\n  ${p.icon ? 'icon={<FileTextIcon size={20} />}\n  ' : ''}title="No invoices yet"\n  description="Invoices you send appear here."${p.actions ? '\n  actions={<Button size="sm">Create invoice</Button>}' : ''}\n/>`,
   },
   states: [
     { name: 'First use', description: 'Nothing created yet: explain the value and offer the first step.', Render: () => <Demo kind="first" /> },

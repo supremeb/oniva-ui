@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { BarChart3, CheckSquare, Database, KeyRound, LifeBuoy, MessageSquare } from 'lucide-react';
+import { BarChartIcon, SquareCheckIcon, DatabaseIcon, KeyIcon, LifeBuoyIcon, MessageSquareIcon } from '../../icons/IconSet';
 import { accent } from '../../tokens/accent.stylex';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
@@ -182,13 +182,13 @@ export interface IntegrationFlowProps extends IllustrationProps {
   kind?: string;
 }
 
-const ic = (I: typeof KeyRound) => <I {...stylex.props(fillSvg.svg)} />;
+const ic = (I: typeof KeyIcon) => <I {...stylex.props(fillSvg.svg)} />;
 const DEFAULT: IntegrationFlowItem[] = [
-  { name: 'Identity', icon: ic(KeyRound) },
-  { name: 'Data', icon: ic(Database) },
-  { name: 'Chat', icon: ic(MessageSquare) },
-  { name: 'Tasks', icon: ic(CheckSquare) },
-  { name: 'Support', icon: ic(LifeBuoy) },
+  { name: 'Identity', icon: ic(KeyIcon) },
+  { name: 'Data', icon: ic(DatabaseIcon) },
+  { name: 'Chat', icon: ic(MessageSquareIcon) },
+  { name: 'Tasks', icon: ic(SquareCheckIcon) },
+  { name: 'Support', icon: ic(LifeBuoyIcon) },
 ];
 
 const SLOTS = [-2, -1, 0, 1, 2];
@@ -287,7 +287,7 @@ function FlowBody({ items, hubLabel, hubDescription, kind }: { items: Integratio
       <span key={`glow-${tick}`} aria-hidden="true" {...stylex.props(styles.hubGlow, loop.once)} />
       <span key={`hub-${tick}`} aria-hidden="true" {...stylex.props(surface.pill, styles.pill, styles.hub, loop.once)}>
         <span {...stylex.props(styles.glyph)}>
-          <BarChart3 {...stylex.props(styles.glyphIcon)} />
+          <BarChartIcon {...stylex.props(styles.glyphIcon)} />
         </span>
         <span {...stylex.props(styles.texts)}>
           <span {...stylex.props(styles.name)}>{hubLabel}</span>

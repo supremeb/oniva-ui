@@ -1,6 +1,6 @@
 import * as stylex from '@stylexjs/stylex';
 import { VisuallyHidden } from '../../components/VisuallyHidden/VisuallyHidden';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRightIcon } from '../../icons/IconSet';
 import { useId, useState } from 'react';
 import type { FormEvent, HTMLAttributes, Ref } from 'react';
 import { bs } from '../../internal/blocks-styles';
@@ -110,7 +110,7 @@ export function Waitlist({ onJoin, className, xstyle, ref, ...rest }: WaitlistPr
               <p {...stylex.props(bs.lead)}>Join 4,200 teams waiting for Oniva Agents. Invites go out weekly.</p>
               <form {...stylex.props(styles.form)} onSubmit={submit}>
                 <Input xstyle={styles.grow} type="email" name="email" autoComplete="email" inputMode="email" aria-label="Email address" aria-describedby={error ? errId : undefined} isInvalid={error ? true : undefined} placeholder="you@company.com" isRequired value={email} onChange={setEmail} />
-                <Button type="submit" isLoading={state === 'loading'} xstyle={styles.btn} endIcon={<ArrowRight size={16} />}>
+                <Button type="submit" isLoading={state === 'loading'} xstyle={styles.btn} endIcon={<ArrowRightIcon size={16} />}>
                   Join waitlist
                 </Button>
                 {error && (

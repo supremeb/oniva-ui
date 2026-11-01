@@ -37,6 +37,18 @@ describe('DecisionInbox', () => {
     expect(screen.queryByRole('button', { name: 'Approve refund for order 4821?' })).toBeNull();
   });
 
+  it('marks a folded decision as collapsed and honors collapsed on decisions added later', () => {
+    const { rerender } = render(<DecisionInbox decisions={[decisions[0]!]} />);
+    rerender(<DecisionInbox decisions={decisions} />);
+    expect(screen.getByRole('button', { name: 'Approve refund for order 4821?' })).toHaveAttribute('aria-expanded', 'false');
+    expect(screen.queryByRole('button', { name: 'Approve' })).toBeNull();
+  });
+
+  it('shows a custom title instead of the count', () => {
+    render(<DecisionInbox decisions={decisions} title="Waiting on you" />);
+    expect(screen.getByRole('heading', { name: 'Waiting on you' })).toBeInTheDocument();
+  });
+
   it('shows all caught up and forwards ref/className', () => {
     vi.useFakeTimers();
     const ref = createRef<HTMLElement>();

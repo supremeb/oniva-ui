@@ -17,7 +17,7 @@ const pulse = stylex.keyframes({
 });
 
 const styles = stylex.create({
-  root: { alignItems: 'center', display: 'inline-flex', gap: 4, height: 16 },
+  root: { alignItems: 'center', display: 'inline-flex', gap: 4, height: 16, position: 'relative' },
   dot: {
     animationDelay: 'calc(var(--oniva-i, 0) * 140ms)',
     animationDuration: '1200ms',

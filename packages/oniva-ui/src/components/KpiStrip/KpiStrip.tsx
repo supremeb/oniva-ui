@@ -1,6 +1,6 @@
 import * as stylex from '@stylexjs/stylex';
 import { media } from '../../tokens/media.stylex';
-import { ArrowDownRight, ArrowUpRight } from 'lucide-react';
+import { ArrowDownRightIcon, ArrowUpRightIcon } from '../../icons/IconSet';
 import type { HTMLAttributes, Ref } from 'react';
 import { Sparkline } from '../../charts/Sparkline';
 import { AnimatedNumber } from '../../motion/AnimatedNumber';
@@ -103,7 +103,7 @@ export function KpiStrip({ items, onDrilldown, className, xstyle, ref, ...rest }
             <span {...stylex.props(styles.foot)}>
               {it.delta != null ? (
                 <span {...stylex.props(styles.delta, good ? styles.good : styles.bad)}>
-                  {up ? <ArrowUpRight size={14} aria-hidden="true" /> : <ArrowDownRight size={14} aria-hidden="true" />}
+                  {up ? <ArrowUpRightIcon size={14} aria-hidden="true" /> : <ArrowDownRightIcon size={14} aria-hidden="true" />}
                   <span {...stylex.props(dash.sr)}>{up ? 'Up' : 'Down'}</span>
                   <span {...stylex.props(dash.num)}>{percent(Math.abs(it.delta), 1)}</span>
                 </span>

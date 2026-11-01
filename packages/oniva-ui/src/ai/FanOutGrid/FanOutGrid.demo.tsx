@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react';
 import type { DemoModule } from '../../internal/demo';
 import { FanOutGrid, type FanoutTask } from './FanOutGrid';
 
-const domains = ['acme.io', 'globex.com', 'initech.dev', 'umbrella.co', 'hooli.net', 'stark.org', 'wayne.biz', 'wonka.app'];
+const domains = ['northwind-labs.example', 'harbor-freight.example', 'lumen-works.example', 'quill-press.example', 'atlas-cargo.example', 'meridian-bio.example', 'cobalt-grid.example', 'juniper-tea.example'];
 const make = (n: number, elapsed: number): FanoutTask[] =>
   Array.from({ length: n }, (_, i) => {
     const start = i * 450;
     const dur = 2500 + ((i * 937) % 3000);
     const end = start + dur;
-    const label = `${domains[i % domains.length]!.replace('.', `${i}.`)}`;
+    const label = `${domains[i % domains.length]!.replace('.example', `-${i + 1}.example`)}`;
     if (elapsed < start) return { id: `t${i}`, label, status: 'queued' as const };
     if (elapsed < end) return { id: `t${i}`, label, status: i % 11 === 4 ? ('retrying' as const) : ('running' as const), start, worker: `W${(i % 8) + 1}`, attempts: i % 11 === 4 ? 2 : 1 };
     if (i % 13 === 6) return { id: `t${i}`, label, status: 'failed' as const, start, end, worker: `W${(i % 8) + 1}`, cost: 0.01, attempts: 3, error: 'Page blocked the crawler (403).' };

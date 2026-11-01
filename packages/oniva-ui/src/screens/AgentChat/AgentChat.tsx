@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { BarChart3, Mail, Search } from 'lucide-react';
+import { BarChartIcon, MailIcon, SearchIcon } from '../../icons/IconSet';
 import { useEffect, useRef, useState, type Ref } from 'react';
 import { AgentAvatar } from '../../ai/AgentAvatar';
 import { type AgentStatus } from '../../ai/AgentStatusPill';
@@ -218,7 +218,7 @@ export function AgentChatScreen({
             <ToolCallCard
               xstyle={m8.rise}
               name="query_usage"
-              icon={<BarChart3 size={13} />}
+              icon={<BarChartIcon size={13} />}
               summary="Pulled 12 months of usage"
               status="success"
               durationMs={1180}
@@ -228,7 +228,7 @@ export function AgentChatScreen({
             <ToolCallCard
               xstyle={m8.rise}
               name="search_tickets"
-              icon={<Search size={13} />}
+              icon={<SearchIcon size={13} />}
               summary="Found 2 open support tickets"
               status="success"
               durationMs={640}
@@ -238,7 +238,7 @@ export function AgentChatScreen({
             <ToolCallCard
               xstyle={m8.rise}
               name="draft_email"
-              icon={<Mail size={13} />}
+              icon={<MailIcon size={13} />}
               summary={streaming ? 'Updating the draft…' : 'Drafted the renewal email'}
               status={streaming ? 'running' : 'success'}
               args={{ to: 'ops@harborvale.example', template: 'renewal' }}

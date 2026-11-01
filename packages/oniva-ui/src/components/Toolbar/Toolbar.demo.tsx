@@ -1,14 +1,4 @@
-import {
-  AlignCenter,
-  AlignLeft,
-  AlignRight,
-  Bold,
-  Italic,
-  Link2,
-  Redo2,
-  Underline,
-  Undo2,
-} from 'lucide-react';
+import { AlignCenterIcon, AlignLeftIcon, AlignRightIcon, BoldIcon, ItalicIcon, LinkIcon, RedoIcon, UnderlineIcon, UndoIcon } from '../../icons/IconSet';
 import type { DemoModule } from '../../internal/demo';
 import { Toolbar, ToolbarButton, ToolbarSeparator, ToolbarToggleButton } from './Toolbar';
 
@@ -24,33 +14,33 @@ const demo: DemoModule = {
     {
       name: 'Text formatting',
       code: `<Toolbar aria-label="Text formatting">
-  <ToolbarButton aria-label="Undo"><Undo2 size={16} /></ToolbarButton>
-  <ToolbarButton aria-label="Redo"><Redo2 size={16} /></ToolbarButton>
+  <ToolbarButton aria-label="Undo"><UndoIcon size={16} /></ToolbarButton>
+  <ToolbarButton aria-label="Redo"><RedoIcon size={16} /></ToolbarButton>
   <ToolbarSeparator />
-  <ToolbarToggleButton aria-label="Bold"><Bold size={16} /></ToolbarToggleButton>
+  <ToolbarToggleButton aria-label="Bold"><BoldIcon size={16} /></ToolbarToggleButton>
   …
 </Toolbar>`,
       Component: () => (
         <Toolbar aria-label="Text formatting">
           <ToolbarButton aria-label="Undo">
-            <Undo2 size={16} />
+            <UndoIcon size={16} />
           </ToolbarButton>
           <ToolbarButton aria-label="Redo">
-            <Redo2 size={16} />
+            <RedoIcon size={16} />
           </ToolbarButton>
           <ToolbarSeparator />
           <ToolbarToggleButton aria-label="Bold" defaultSelected>
-            <Bold size={16} />
+            <BoldIcon size={16} />
           </ToolbarToggleButton>
           <ToolbarToggleButton aria-label="Italic">
-            <Italic size={16} />
+            <ItalicIcon size={16} />
           </ToolbarToggleButton>
           <ToolbarToggleButton aria-label="Underline">
-            <Underline size={16} />
+            <UnderlineIcon size={16} />
           </ToolbarToggleButton>
           <ToolbarSeparator />
           <ToolbarButton aria-label="Insert link">
-            <Link2 size={16} />
+            <LinkIcon size={16} />
           </ToolbarButton>
         </Toolbar>
       ),
@@ -61,13 +51,13 @@ const demo: DemoModule = {
       Component: () => (
         <Toolbar orientation="vertical" aria-label="Alignment">
           <ToolbarToggleButton aria-label="Align left" defaultSelected>
-            <AlignLeft size={16} />
+            <AlignLeftIcon size={16} />
           </ToolbarToggleButton>
           <ToolbarToggleButton aria-label="Align center">
-            <AlignCenter size={16} />
+            <AlignCenterIcon size={16} />
           </ToolbarToggleButton>
           <ToolbarToggleButton aria-label="Align right">
-            <AlignRight size={16} />
+            <AlignRightIcon size={16} />
           </ToolbarToggleButton>
         </Toolbar>
       ),

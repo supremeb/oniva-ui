@@ -1,10 +1,9 @@
-import { Bell, CreditCard, ShieldCheck, TriangleAlert } from 'lucide-react';
-import { Icon } from 'oniva-ui';
+import { Icon, BellIcon, CreditCardIcon, ShieldCheckIcon, TriangleAlertIcon } from 'oniva-ui';
 import type { DocPage } from '../types';
 
-const icons = { Bell, CreditCard, ShieldCheck, TriangleAlert };
+const icons = { Bell: BellIcon, CreditCard: CreditCardIcon, ShieldCheck: ShieldCheckIcon, TriangleAlert: TriangleAlertIcon };
 
-const Sample = () => <Icon icon={TriangleAlert} tone="warning" size="lg" label="Payment overdue" />;
+const Sample = () => <Icon icon={TriangleAlertIcon} tone="warning" size="lg" label="Payment overdue" />;
 
 const page: DocPage = {
   slug: 'icon',
@@ -13,12 +12,12 @@ const page: DocPage = {
   importName: 'Icon',
   group: ['Components', 'Primitives'],
   sourcePath: 'components/Icon',
-  lede: 'A lucide wrapper with size and tone tokens. It handles two cases: decorative glyphs hidden from assistive tech, and meaningful glyphs with an accessible label.',
+  lede: 'A glyph wrapper with size and tone tokens. It handles two cases: decorative glyphs hidden from assistive tech, and meaningful glyphs with an accessible label.',
   anatomy: {
     intro: 'Two parts. The SVG is always present. The label is optional: with it the icon is an image, without it the icon is hidden.',
     Render: Sample,
     parts: [
-      { name: 'Glyph', description: 'Lucide SVG, 2px stroke by default. Sizes: xs 12, sm 14, md 16, lg 20, xl 24px. flex-shrink 0, inline-block.', selector: 'svg' },
+      { name: 'Glyph', description: 'Oniva glyph on an 18-unit grid, 1.5 stroke by default (outline, duo, fill or fill-duo). Sizes: xs 12, sm 14, md 16, lg 20, xl 24px. flex-shrink 0, inline-block.', selector: 'svg' },
       { name: 'Accessible label', description: 'label sets role="img" and aria-label. Without it the SVG gets aria-hidden="true".', selector: 'svg[role="img"]' },
       { name: 'Tone', description: 'Colour from tokens: muted, subtle, accent, success, warning, danger, info. Default inherits currentColor.', selector: 'svg', fallback: { x: 50, y: 50 } },
     ],
@@ -46,12 +45,12 @@ const page: DocPage = {
     },
   },
   states: [
-    { name: 'Decorative', description: 'No label. aria-hidden, skipped by screen readers.', Render: () => <Icon icon={CreditCard} tone="muted" size="lg" /> },
+    { name: 'Decorative', description: 'No label. aria-hidden, skipped by screen readers.', Render: () => <Icon icon={CreditCardIcon} tone="muted" size="lg" /> },
     { name: 'Labelled', description: 'role="img" with aria-label. Announced as "Payment overdue, image".', Render: Sample },
-    { name: 'Success', description: 'Success solid colour for confirmed states.', Render: () => <Icon icon={ShieldCheck} tone="success" size="lg" label="Verified" /> },
-    { name: 'Accent', description: 'Accent soft foreground.', Render: () => <Icon icon={Bell} tone="accent" size="lg" /> },
-    { name: 'Inherits colour', description: 'Default tone is currentColor, so it follows the parent text.', Render: () => <span style={{ color: 'var(--oniva-color-text-error)', display: 'inline-flex', gap: 6, alignItems: 'center' }}><Icon icon={TriangleAlert} size="md" /> Declined</span> },
-    { name: 'Thin stroke', description: 'strokeWidth={1.5} for large xl glyphs.', Render: () => <Icon icon={Bell} size="xl" strokeWidth={1.5} /> },
+    { name: 'Success', description: 'Success solid colour for confirmed states.', Render: () => <Icon icon={ShieldCheckIcon} tone="success" size="lg" label="Verified" /> },
+    { name: 'Accent', description: 'Accent soft foreground.', Render: () => <Icon icon={BellIcon} tone="accent" size="lg" /> },
+    { name: 'Inherits colour', description: 'Default tone is currentColor, so it follows the parent text.', Render: () => <span style={{ color: 'var(--oniva-color-text-error)', display: 'inline-flex', gap: 6, alignItems: 'center' }}><Icon icon={TriangleAlertIcon} size="md" /> Declined</span> },
+    { name: 'Thin stroke', description: 'strokeWidth={1.5} for large xl glyphs.', Render: () => <Icon icon={BellIcon} size="xl" strokeWidth={1.5} /> },
   ],
   sections: [
     {
@@ -59,7 +58,7 @@ const page: DocPage = {
       items: (['xs', 'sm', 'md', 'lg', 'xl'] as const).map((s) => ({
         name: `${s}, ${{ xs: 12, sm: 14, md: 16, lg: 20, xl: 24 }[s]}px`,
         description: { xs: 'Inside tags and dense tables.', sm: 'Inline with 13px text.', md: 'Default. Buttons and inputs.', lg: 'Empty states and cards.', xl: 'Feature headers.' }[s],
-        Render: () => <Icon icon={Bell} size={s} />,
+        Render: () => <Icon icon={BellIcon} size={s} />,
       })),
     },
     {
@@ -88,11 +87,11 @@ const page: DocPage = {
     reducedMotion: 'No motion.',
   },
   props: [
-    { name: 'icon', type: 'LucideIcon', description: 'The lucide component, for example Bell.' },
+    { name: 'icon', type: 'IconGlyph', description: 'An oniva glyph component, for example BellIcon.' },
     { name: 'size', type: "'xs' | 'sm' | 'md' | 'lg' | 'xl'", default: "'md'", description: '12, 14, 16, 20, 24px.' },
     { name: 'tone', type: "'default' | 'muted' | 'subtle' | 'accent' | 'success' | 'warning' | 'danger' | 'info'", default: "'default'", description: 'Colour token.' },
     { name: 'label', type: 'string', description: 'Accessible name. Omit for decorative.' },
-    { name: 'strokeWidth', type: 'number', default: '2', description: 'Lucide stroke width.' },
+    { name: 'strokeWidth', type: 'number', default: '1.5', description: 'Stroke width in grid units (the grid is 18).' },
     { name: 'xstyle', type: 'StyleXStyles', description: 'StyleX overrides, applied last.' },
     { name: 'ref', type: 'Ref<SVGSVGElement>', description: 'Forwarded to the svg.' },
   ],

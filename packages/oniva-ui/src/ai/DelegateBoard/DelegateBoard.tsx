@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { GripVertical, Loader2, Sparkles } from 'lucide-react';
+import { GripIcon, LoaderIcon, SparklesIcon } from '../../icons/IconSet';
 import { useEffect, useId, useMemo, useRef, useState, type ReactNode, type Ref } from 'react';
 import { useDrag, useDrop } from 'react-aria';
 import { Switch } from 'react-aria-components';
@@ -48,8 +48,8 @@ const styles = stylex.create({
   root: { containerType: 'inline-size', gap: 0, maxWidth: 860, padding: 0 },
   hdr: { alignItems: 'center', borderColor: colors['--oniva-color-border'], borderStyle: 'solid', borderWidth: 0, borderBlockEndWidth: 1, display: 'flex', gap: 10, paddingBlock: 14, paddingInline: 20 },
   hdrIcon: { color: colors['--oniva-color-accent-text'], flexShrink: 0 },
-  hdrSub: { color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-13'] },
-  layout: { alignItems: 'start', display: 'grid', gap: 12, gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 2.1fr)', padding: 16 },
+  hdrSub: { color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-13'], minWidth: 0 },
+  layout: { alignItems: 'start', display: 'grid', gap: 12, gridTemplateColumns: { default: 'minmax(0, 1fr) minmax(0, 2.1fr)', '@container (max-width: 560px)': 'minmax(0, 1fr)' }, padding: 16 },
   panel: { backgroundColor: colors['--oniva-color-surface-tertiary'], borderRadius: radius['--oniva-radius-lg'], padding: 10 },
   agentsHead: { alignItems: 'center', display: 'flex', justifyContent: 'space-between', paddingInline: 4 },
   sectionLabel: { color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-13'] },
@@ -61,7 +61,9 @@ const styles = stylex.create({
   chipNew: { backgroundColor: colors['--oniva-color-accent-soft'], color: colors['--oniva-color-accent-soft-fg'] },
   chipFree: { backgroundColor: colors['--oniva-color-success-bg'], color: colors['--oniva-color-success-fg'] },
   topRight: { alignItems: 'center', display: 'inline-flex', gap: 6 },
-  qchip: { alignItems: 'center', backgroundColor: colors['--oniva-color-accent-soft'], borderRadius: radius['--oniva-radius-md'], color: colors['--oniva-color-accent-soft-fg'], cursor: 'grab', display: 'inline-flex', gap: 6, minHeight: 28, minWidth: 0, paddingInline: 10 },
+  qchip: { alignItems: 'center', backgroundColor: colors['--oniva-color-accent-soft'], borderRadius: radius['--oniva-radius-md'], color: colors['--oniva-color-accent-soft-fg'], cursor: 'grab', display: 'inline-flex', gap: 6, maxWidth: '100%', minHeight: 28, minWidth: 0, paddingInline: 10 },
+  qchipSoft: { backgroundColor: colors['--oniva-color-surface-inner'] },
+  queueItem: { maxWidth: '100%', minWidth: 0 },
   cardBody: { display: 'flex', flexDirection: 'column', flexGrow: 1, gap: 2, minWidth: 0 },
   cardMeta: { alignItems: 'center', color: colors['--oniva-color-text-muted'], display: 'flex', fontSize: font['--oniva-font-size-12'], gap: 6 },
   cardTitle: { fontSize: font['--oniva-font-size-14'], fontWeight: font['--oniva-font-weight-medium'] },
@@ -167,6 +169,8 @@ const styles = stylex.create({
 interface CardProps {
   task: DelegateTask;
   variant?: 'card' | 'chip';
+  /** Chip sits on the highlighted agent row, so it needs its own surface. */
+  raised?: boolean;
   marked?: boolean;
   agents: DelegateAgent[];
   onAssign: (taskId: string, agentId: string | null) => void;
@@ -175,8 +179,9 @@ interface CardProps {
   minutes: string;
 }
 
-function TaskCard({ task, variant = 'card', marked, agents, onAssign, onDragging, dragging, minutes, active }: CardProps & { active?: boolean }) {
+function TaskCard({ task, variant = 'card', raised, marked, agents, onAssign, onDragging, dragging, minutes, active }: CardProps & { active?: boolean }) {
   const hint = useId();
+  const assignee = agents.find((a) => a.id === task.agentId);
   const { dragProps } = useDrag({
     getItems: () => [{ [MIME]: task.id, 'text/plain': task.title }],
     onDragStart: () => onDragging(task.id),
@@ -193,7 +198,7 @@ function TaskCard({ task, variant = 'card', marked, agents, onAssign, onDragging
       data-glide-enter=""
       data-glide-land=""
       data-dragging={dragging || undefined}
-      aria-label={`${task.title}, ${minutes}${task.agentId ? `, assigned to ${agents.find((a) => a.id === task.agentId)?.name}` : ', unassigned'}`}
+      aria-label={`${task.title}, ${minutes}${assignee ? `, assigned to ${assignee.name}` : ', unassigned'}`}
       onKeyDown={(e) => {
         dragProps.onKeyDownCapture?.(e as never);
         const n = Number(e.key);
@@ -202,16 +207,16 @@ function TaskCard({ task, variant = 'card', marked, agents, onAssign, onDragging
           onAssign(task.id, agents[n - 1]!.id);
         }
       }}
-      {...stylex.props(variant === 'chip' ? styles.qchip : styles.card, dragging && styles.dragging, marked && styles.marked, focus.ring)}
+      {...stylex.props(variant === 'chip' ? styles.qchip : styles.card, variant === 'chip' && raised && styles.qchipSoft, dragging && styles.dragging, marked && styles.marked, focus.ring)}
     >
       {variant === 'chip' ? (
         <>
-          {active && <Loader2 size={13} aria-hidden="true" {...stylex.props(w1.spin)} />}
+          {active && <LoaderIcon size={13} aria-hidden="true" {...stylex.props(w1.spin)} />}
           <span {...stylex.props(w1.ellipsis)}>{task.title}</span>
         </>
       ) : (
         <>
-          <GripVertical size={14} aria-hidden="true" {...stylex.props(styles.grip)} />
+          <GripIcon size={14} aria-hidden="true" {...stylex.props(styles.grip)} />
           <span {...stylex.props(styles.cardBody)}>
             <span {...stylex.props(styles.cardTitle, w1.ellipsis)}>{task.title}</span>
             <span {...stylex.props(styles.cardMeta, w1.num)}>
@@ -222,7 +227,9 @@ function TaskCard({ task, variant = 'card', marked, agents, onAssign, onDragging
         </>
       )}
       <span id={hint} {...stylex.props(w1.srOnly)}>
-        Press Enter to pick up, then choose an agent. Or press 1 to {Math.min(9, agents.length)} to hand it over at once.
+        {agents.length === 0
+          ? 'No agents to hand this to yet.'
+          : `Press Enter to pick up, then choose an agent. Or press 1${agents.length > 1 ? ` to ${Math.min(9, agents.length)}` : ''} to hand it over at once.`}
       </span>
     </div>
   );
@@ -246,6 +253,7 @@ interface ZoneProps {
 }
 
 function AgentZone({ agent, index, tasks, dragId, suggestion, mins, busyUntil, minutesOf, cost, taskById, onAssign, setDrag, agents, suggestedTask }: ZoneProps) {
+  const f = useFormatters();
   const ref = useRef<HTMLDivElement>(null);
   const [over, setOver] = useState(false);
   const { dropProps } = useDrop({
@@ -299,7 +307,7 @@ function AgentZone({ agent, index, tasks, dragId, suggestion, mins, busyUntil, m
               <span {...stylex.props(styles.chipBadge, styles.chipFree)}>Free</span>
             ) : (
               <span {...stylex.props(styles.chipBadge, preview && styles.chipNew)}>
-                {preview ? `+${preview.estimate}m until ` : 'Busy until '}
+                {preview ? `+${f.number(preview.estimate)}m until ` : 'Busy until '}
                 <span key={preview ? busyUntil(agent, preview) : busyUntil(agent)} {...stylex.props(styles.timeKey)}>
                   {preview ? busyUntil(agent, preview) : busyUntil(agent)}
                 </span>
@@ -314,8 +322,8 @@ function AgentZone({ agent, index, tasks, dragId, suggestion, mins, busyUntil, m
         <ul aria-label={`${agent.name} queue`} {...stylex.props(w1.list, styles.queue)}>
           {tasks.length === 0 && dragId && <li {...stylex.props(styles.empty)}>Drop a task here.</li>}
           {tasks.map((t, i) => (
-            <li key={t.id}>
-              <TaskCard task={t} variant="chip" active={i === 0 && (agent.current ?? 0) > 0} agents={agents} onAssign={onAssign} onDragging={setDrag} dragging={dragId === t.id} minutes={mins(t)} />
+            <li key={t.id} {...stylex.props(styles.queueItem)}>
+              <TaskCard task={t} variant="chip" raised={over || suggestion} active={i === 0 && (agent.current ?? 0) > 0} agents={agents} onAssign={onAssign} onDragging={setDrag} dragging={dragId === t.id} minutes={mins(t)} />
             </li>
           ))}
         </ul>
@@ -430,9 +438,9 @@ export function DelegateBoard({
       }}
     >
       <div {...stylex.props(styles.hdr)}>
-        <Sparkles size={15} aria-hidden="true" {...stylex.props(styles.hdrIcon)} />
+        <SparklesIcon size={15} aria-hidden="true" {...stylex.props(styles.hdrIcon)} />
         <h3 {...stylex.props(w1.title)}>{title}</h3>
-        <span {...stylex.props(styles.hdrSub)}>{subtitle}</span>
+        <span {...stylex.props(styles.hdrSub, w1.ellipsis)}>{subtitle}</span>
         <span {...stylex.props(w1.grow)} />
         <Switch isSelected={m === 'auto'} onChange={(on) => setM(on ? 'auto' : 'manual')} className={() => sxClass(stylex.props(styles.sw, focus.ring))}>
           <span>Auto</span>
@@ -448,7 +456,7 @@ export function DelegateBoard({
             <span {...stylex.props(styles.countChip, w1.num)}>{f.number(unassigned.length)}</span>
           </div>
           <div ref={pileRef} {...pileDrop} {...stylex.props(styles.pile, pileOver && styles.agentOver)}>
-            {unassigned.length === 0 && <div {...stylex.props(styles.empty)}>Everything is handed out.</div>}
+            {unassigned.length === 0 && <div {...stylex.props(styles.empty)}>{items.length === 0 ? 'No tasks yet.' : 'Everything is handed out.'}</div>}
             {unassigned.map((x) => (
               <TaskCard key={x.id} task={x} agents={agents} onAssign={assign} onDragging={setDragId} dragging={dragId === x.id} marked={suggestion?.taskId === x.id} minutes={mins(x)} />
             ))}
@@ -458,11 +466,12 @@ export function DelegateBoard({
           <div {...stylex.props(styles.agentsHead)}>
             <span {...stylex.props(styles.head)}>
               <span {...stylex.props(styles.sectionLabel)}>Agents</span>
-              {m === 'auto' && <span {...stylex.props(styles.modeTag)}><Tag tone="info" icon={<Sparkles size={11} aria-hidden="true" />}>Auto routing</Tag></span>}
+              {m === 'auto' && <span {...stylex.props(styles.modeTag)}><Tag tone="info" icon={<SparklesIcon size={11} aria-hidden="true" />}>Auto routing</Tag></span>}
             </span>
             {queuedCost != null && <span {...stylex.props(styles.sectionLabel, w1.num)}>{cost(queuedCost)} in queues</span>}
           </div>
           <div {...stylex.props(styles.agents)}>
+            {agents.length === 0 && <div {...stylex.props(styles.empty)}>No agents yet. Add one to start handing out tasks.</div>}
             {agents.map((a, i) => (
               <AgentZone
                 key={a.id}

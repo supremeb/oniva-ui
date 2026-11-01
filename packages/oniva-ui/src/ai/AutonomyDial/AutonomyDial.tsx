@@ -1,11 +1,12 @@
 import * as stylex from '@stylexjs/stylex';
-import { AlertTriangle, Lock, LockOpen, ShieldAlert, Sparkles } from 'lucide-react';
+import { TriangleAlertIcon, LockIcon, LockOpenIcon, ShieldAlertIcon, SparklesIcon } from '../../icons/IconSet';
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode, type Ref } from 'react';
 import { AnimatedNumber } from '../../motion/AnimatedNumber';
 import { useFlip } from '../../internal/w1-flip';
 import { Radio, RadioGroup, Text, ToggleButton } from 'react-aria-components';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
+import { media } from '../../tokens/media.stylex';
 import { motion } from '../../tokens/motion.stylex';
 import { radius } from '../../tokens/radius.stylex';
 import { focus } from '../../internal/focus';
@@ -83,7 +84,7 @@ const styles = stylex.create({
     position: 'absolute',
     top: 0,
     transitionDuration: motion['--oniva-motion-dur-slow'],
-    transitionProperty: 'transform, width, height',
+    transitionProperty: 'transform',
     transitionTimingFunction: motion['--oniva-motion-ease-in-out'],
   },
   pillStill: { transitionDuration: '0ms' },
@@ -98,10 +99,14 @@ const styles = stylex.create({
     display: 'flex',
     gap: 10,
     minHeight: 44,
+    paddingBlock: 6,
     paddingInline: 0,
   },
   icon: { alignItems: 'center', color: colors['--oniva-color-icon-muted'], display: 'inline-flex', flexShrink: 0, justifyContent: 'center', width: 24 },
-  text: { alignItems: 'center', display: 'flex', flexGrow: 1, flexWrap: 'wrap', gap: 4, minWidth: 0 },
+  text: { alignItems: 'center', display: 'flex', flexGrow: 1, flexWrap: 'nowrap', gap: 6, minWidth: 0 },
+  nameShrink: { flexShrink: 1, minWidth: 0 },
+  detailShrink: { flexShrink: 2, minWidth: 0 },
+  tag: { flexShrink: 0 },
   detail: { color: colors['--oniva-color-text-muted'], fontSize: font['--oniva-font-size-12'] },
   lock: {
     alignItems: 'center',
@@ -117,7 +122,7 @@ const styles = stylex.create({
     flexShrink: 0,
     height: 28,
     justifyContent: 'center',
-    opacity: { default: 0.45, ':hover': 1, '[data-selected]': 1, ':focus-visible': 1 },
+    opacity: { default: 0.7, ':hover': { default: null, [media.hover]: 1 }, '[data-selected]': 1, ':focus-visible': 1 },
     transitionDuration: motion['--oniva-motion-dur-base'],
     transitionProperty: 'background-color, color, opacity',
     width: 28,
@@ -193,13 +198,13 @@ export function AutonomyDial({
   };
   const current = LEVELS[lvl]!;
 
-  const renderGroup = (heading: string, list: AgentAction[], _key: string) => (
+  const renderGroup = (heading: string, list: AgentAction[], emptyText: string) => (
     <section aria-label={heading} {...stylex.props(styles.group)}>
       <div {...stylex.props(styles.groupHead)}>
         <span {...stylex.props(styles.label)}>{heading}</span>
         <span {...stylex.props(styles.count)}><AnimatedNumber value={list.length} /></span>
       </div>
-      {list.length === 0 && <span {...stylex.props(styles.empty)}>Nothing here.</span>}
+      {list.length === 0 && <span {...stylex.props(styles.empty)}>{emptyText}</span>}
       <ul {...stylex.props(w1.list)}>
         {list.map((a, i) => {
           const locked = pins.includes(a.id);
@@ -212,16 +217,18 @@ export function AutonomyDial({
             >
               {a.icon && <span aria-hidden="true" {...stylex.props(styles.icon)}>{a.icon}</span>}
               <span {...stylex.props(styles.text)}>
-                <span {...stylex.props(styles.name, w1.ellipsis)}>{a.label}</span>
+                <span title={a.label} {...stylex.props(styles.name, styles.nameShrink, w1.ellipsis)}>{a.label}</span>
                 {a.risk !== 'safe' && (
-                <Tag
-                  tone={a.risk === 'risky' ? 'warning' : 'danger'}
-                  icon={a.risk === 'risky' ? <AlertTriangle size={11} aria-hidden="true" /> : <ShieldAlert size={11} aria-hidden="true" />}
-                >
-                  {a.risk === 'risky' ? 'Risky' : 'Destructive'}
-                </Tag>
-              )}
-                {a.detail && <span {...stylex.props(styles.detail, w1.ellipsis)}>{a.detail}</span>}
+                  <span {...stylex.props(styles.tag)}>
+                    <Tag
+                      tone={a.risk === 'risky' ? 'warning' : 'danger'}
+                      icon={a.risk === 'risky' ? <TriangleAlertIcon size={11} aria-hidden="true" /> : <ShieldAlertIcon size={11} aria-hidden="true" />}
+                    >
+                      {a.risk === 'risky' ? 'Risky' : 'Destructive'}
+                    </Tag>
+                  </span>
+                )}
+                {a.detail && <span title={a.detail} {...stylex.props(styles.detail, styles.detailShrink, w1.ellipsis)}>{a.detail}</span>}
               </span>
               <ToggleButton
                 aria-label={`Always ask before: ${a.label}`}
@@ -233,7 +240,7 @@ export function AutonomyDial({
                 }}
                 className={() => sxClass(stylex.props(styles.lock, focus.ring))}
               >
-                {locked ? <Lock size={14} aria-hidden="true" /> : <LockOpen size={14} aria-hidden="true" />}
+                {locked ? <LockIcon size={14} aria-hidden="true" /> : <LockOpenIcon size={14} aria-hidden="true" />}
               </ToggleButton>
             </li>
           );
@@ -245,7 +252,7 @@ export function AutonomyDial({
   return (
     <div {...mergeSx(stylex.props(w1.root, styles.root, xstyle), className)} ref={(el) => { boxRef.current = el; if (typeof ref === 'function') ref(el); else if (ref) ref.current = el; }}>
       <div {...stylex.props(styles.head)}>
-        <Sparkles size={16} aria-hidden="true" {...stylex.props(styles.headIcon)} />
+        <SparklesIcon size={16} aria-hidden="true" {...stylex.props(styles.headIcon)} />
         <div>
           <h3 {...stylex.props(w1.title)}>{title}</h3>
           <p {...stylex.props(styles.sub)}>{subtitle}</p>
@@ -282,8 +289,14 @@ export function AutonomyDial({
       </RadioGroup>
       </div>
       <div {...stylex.props(styles.lists)}>
-      {renderGroup('Runs on its own', auto, `a${lvl}`)}
-      {renderGroup('Asks you first', ask, `b${lvl}`)}
+      {actions.length === 0 ? (
+        <span {...stylex.props(styles.empty)}>No actions to configure yet.</span>
+      ) : (
+        <>
+          {renderGroup('Runs on its own', auto, 'Nothing runs without asking at this level.')}
+          {renderGroup('Asks you first', ask, 'Nothing asks first at this level.')}
+        </>
+      )}
       </div>
       <LiveRegion message={msg} />
     </div>

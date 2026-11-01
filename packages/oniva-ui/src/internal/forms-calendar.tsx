@@ -1,6 +1,6 @@
 import * as stylex from '@stylexjs/stylex';
 import { getLocalTimeZone, isSameDay, today } from '@internationalized/date';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeftIcon, ChevronRightIcon } from '../icons/IconSet';
 import {
   Button,
   CalendarCell,
@@ -116,11 +116,11 @@ export function CalendarBody({
     <>
       <header {...stylex.props(fc.header)}>
         <Button slot="previous" aria-label="Previous month" {...stylex.props(fp.iconButton)}>
-          <ChevronLeft size={16} aria-hidden="true" />
+          <ChevronLeftIcon size={16} aria-hidden="true" />
         </Button>
         <Heading {...stylex.props(fc.heading)} />
         <Button slot="next" aria-label="Next month" {...stylex.props(fp.iconButton)}>
-          <ChevronRight size={16} aria-hidden="true" />
+          <ChevronRightIcon size={16} aria-hidden="true" />
         </Button>
       </header>
       <div {...stylex.props(fc.gridWrap)}>

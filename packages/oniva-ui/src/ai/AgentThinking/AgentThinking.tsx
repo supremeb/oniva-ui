@@ -1,6 +1,6 @@
 import * as stylex from '@stylexjs/stylex';
-import { ChevronRight, Sparkles } from 'lucide-react';
-import { useEffect, useState, type ReactNode, type Ref } from 'react';
+import { ChevronRightIcon, SparklesIcon } from '../../icons/IconSet';
+import { useEffect, useRef, useState, type ReactNode, type Ref } from 'react';
 import {
   Button as AriaButton,
   Disclosure,
@@ -12,6 +12,7 @@ import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 import { aiStyles } from '../../internal/ai-styles';
 import { formatDuration } from '../../internal/ai-motion';
+import { VisuallyHidden } from '../../components/VisuallyHidden';
 import { AnimatedHeight } from '../../motion/AnimatedHeight/AnimatedHeight';
 import { Shimmer } from '../../motion/Shimmer/Shimmer';
 
@@ -23,6 +24,9 @@ const styles = stylex.create({
     paddingBlock: 2,
     width: 'auto',
   },
+  triggerDisabled: { color: colors['--oniva-color-text-disabled'], cursor: 'default' },
+  // Nothing to expand: the label stays at full strength but is not clickable.
+  triggerStatic: { cursor: 'default' },
   // RAC hides the collapsed panel with [hidden]; keep it rendered so AnimatedHeight can animate.
   panelHost: { contentVisibility: 'visible', display: 'block' },
   elapsed: { fontVariantNumeric: 'tabular-nums', fontWeight: font['--oniva-font-weight-regular'] },
@@ -36,6 +40,8 @@ const styles = stylex.create({
     marginBlockStart: 2,
     marginInlineStart: 9,
     paddingBlock: 2,
+    minWidth: 0,
+    overflowWrap: 'anywhere',
     paddingInlineStart: 14,
     whiteSpace: 'pre-line',
   },
@@ -73,39 +79,64 @@ export function AgentThinking({
     return () => clearInterval(id);
   }, [isThinking, seconds]);
   const elapsed = seconds ?? auto;
+  // Announce the hand-off from "Thinking…" to "Thought for Ns" once, not every timer tick.
+  const [announcement, setAnnouncement] = useState('');
+  const wasThinking = useRef(isThinking);
+  useEffect(() => {
+    if (wasThinking.current && !isThinking) setAnnouncement(`Thought for ${formatDuration(elapsed)}`);
+    if (isThinking) setAnnouncement('');
+    wasThinking.current = isThinking;
+  }, [isThinking, elapsed]);
+  const content = typeof children === 'string' ? children.trim() : children;
+  const isEmpty = content === undefined || content === null || content === false || content === '';
+  const label = (
+    <>
+      <SparklesIcon size={14} aria-hidden="true" />
+      {isThinking ? <Shimmer>Thinking…</Shimmer> : <span>Thought for {formatDuration(elapsed)}</span>}
+      {isThinking && <span {...stylex.props(styles.elapsed)}>{formatDuration(elapsed)}</span>}
+    </>
+  );
   const sx = stylex.props(styles.root, xstyle);
   return (
     <Disclosure {...rest} ref={ref} className={[sx.className, className].filter(Boolean).join(' ')}>
       {({ isExpanded }) => (
         <>
           <Heading level={3} {...stylex.props(aiStyles.heading)}>
-            <AriaButton
-              slot="trigger"
-              className={() => stylex.props(aiStyles.triggerReset, styles.trigger).className ?? ''}
-            >
-              <Sparkles size={14} aria-hidden="true" />
-              {isThinking ? (
-                <Shimmer>Thinking…</Shimmer>
-              ) : (
-                <span>Thought for {formatDuration(elapsed)}</span>
-              )}
-              {isThinking && (
-                <span {...stylex.props(styles.elapsed)}>{formatDuration(elapsed)}</span>
-              )}
-              <ChevronRight
-                size={14}
-                aria-hidden="true"
-                {...stylex.props(aiStyles.chevron, isExpanded && aiStyles.chevronOpen)}
-              />
-            </AriaButton>
-          </Heading>
-          <DisclosurePanel {...stylex.props(styles.panelHost)}>
-            <AnimatedHeight isOpen={isExpanded}>
-              <div {...stylex.props(styles.panel)}>
-                {typeof children === 'string' ? children.trim() : children}
+            {isEmpty ? (
+              // Nothing to expand: a static label, not a button pointing at a missing panel.
+              <div {...stylex.props(aiStyles.triggerReset, styles.trigger, styles.triggerStatic)}>
+                {label}
               </div>
-            </AnimatedHeight>
-          </DisclosurePanel>
+            ) : (
+              <AriaButton
+                slot="trigger"
+                className={() =>
+                  stylex.props(
+                    aiStyles.triggerReset,
+                    styles.trigger,
+                    rest.isDisabled && styles.triggerDisabled,
+                  ).className ?? ''
+                }
+              >
+                {label}
+                <ChevronRightIcon
+                  size={14}
+                  aria-hidden="true"
+                  {...stylex.props(aiStyles.chevron, isExpanded && aiStyles.chevronOpen)}
+                />
+              </AriaButton>
+            )}
+          </Heading>
+          {!isEmpty && (
+            <DisclosurePanel {...stylex.props(styles.panelHost)}>
+              <AnimatedHeight isOpen={isExpanded}>
+                <div {...stylex.props(styles.panel)}>{content}</div>
+              </AnimatedHeight>
+            </DisclosurePanel>
+          )}
+          <VisuallyHidden>
+            <span role="status">{announcement}</span>
+          </VisuallyHidden>
         </>
       )}
     </Disclosure>

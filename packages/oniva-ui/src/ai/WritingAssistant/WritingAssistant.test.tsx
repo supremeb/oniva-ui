@@ -41,6 +41,44 @@ describe('WritingAssistant', () => {
     expect(respond).toHaveBeenCalledWith('Two words');
   });
 
+  it('recovers when respond rejects: shows a fallback reply and re-enables sending', async () => {
+    const respond = vi.fn().mockRejectedValue(new Error('network'));
+    render(<WritingAssistant respond={respond} />);
+    const box = screen.getByRole('textbox', { name: 'Message' });
+    fireEvent.change(box, { target: { value: 'Draft a note' } });
+    await act(async () => {
+      fireEvent.keyDown(box, { key: 'Enter' });
+    });
+    expect(screen.getByText(/Quill could not reply/)).toHaveAttribute('role', 'status');
+    respond.mockResolvedValue('ok');
+    fireEvent.change(box, { target: { value: 'Try again' } });
+    await act(async () => {
+      fireEvent.keyDown(box, { key: 'Enter' });
+    });
+    expect(respond).toHaveBeenCalledTimes(2);
+  });
+
+  it('drops a reply that arrives after New chat', async () => {
+    let resolve: (v: string) => void = () => undefined;
+    const respond = vi.fn().mockImplementation(() => new Promise<string>((r) => { resolve = r; }));
+    render(<WritingAssistant respond={respond} suggestions={['Shorten this']} />);
+    await act(async () => {
+      fireEvent.click(screen.getByRole('button', { name: 'Shorten this' }));
+    });
+    await act(async () => {
+      fireEvent.click(screen.getByRole('button', { name: 'New chat' }));
+    });
+    await act(async () => resolve('Late reply'));
+    expect(screen.queryByText('Late reply')).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Shorten this' })).toBeInTheDocument();
+  });
+
+  it('renders duplicate suggestions and a keyboard-reachable conversation region', () => {
+    render(<WritingAssistant suggestions={['Same', 'Same']} />);
+    expect(screen.getAllByRole('button', { name: 'Same' })).toHaveLength(2);
+    expect(screen.getByRole('region', { name: 'Conversation' })).toHaveAttribute('tabindex', '0');
+  });
+
   it('forwards ref and className', () => {
     const ref = createRef<HTMLDivElement>();
     render(<WritingAssistant ref={ref} className="extra" />);

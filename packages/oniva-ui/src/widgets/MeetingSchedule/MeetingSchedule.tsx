@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { CalendarPlus, Clock } from 'lucide-react';
+import { CalendarPlusIcon, ClockIcon } from '../../icons/IconSet';
 import { useState, type Ref } from 'react';
 import { Avatar, AvatarGroup } from '../../components/Avatar';
 import { Button } from '../../components/Button';
@@ -197,7 +197,7 @@ export function MeetingSchedule({
                       <div>
                         <p {...stylex.props(styles.mTitle)}>{m.title}</p>
                         <span {...stylex.props(styles.mMeta)}>
-                          <Clock size={12} aria-hidden="true" />
+                          <ClockIcon size={12} aria-hidden="true" />
                           {label12(m.start)} – {label12(m.end)}
                         </span>
                       </div>
@@ -215,7 +215,7 @@ export function MeetingSchedule({
                       <Button
                         size="xs"
                         variant="ghost"
-                        startIcon={<CalendarPlus size={14} />}
+                        startIcon={<CalendarPlusIcon size={14} />}
                         aria-label={`Book ${label12(hh(h))}`}
                         onPress={() => book(h)}
                       >

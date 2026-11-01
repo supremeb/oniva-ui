@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { Settings } from 'lucide-react';
+import { SettingsIcon } from '../../icons/IconSet';
 import { describe, expect, it, vi } from 'vitest';
 import { IconButton } from './IconButton';
 
@@ -9,7 +9,7 @@ describe('IconButton', () => {
     const onPress = vi.fn();
     render(
       <IconButton aria-label="Settings" onPress={onPress} className="c">
-        <Settings size={16} />
+        <SettingsIcon size={16} />
       </IconButton>,
     );
     const b = screen.getByRole('button', { name: 'Settings' });

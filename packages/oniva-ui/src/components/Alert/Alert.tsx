@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { CircleAlert, CircleCheck, Info, TriangleAlert } from 'lucide-react';
+import { CircleAlertIcon, CircleCheckIcon, InfoIcon, TriangleAlertIcon } from '../../icons/IconSet';
 import type { HTMLAttributes, ReactNode, Ref } from 'react';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
@@ -91,10 +91,10 @@ const styles = stylex.create({
 });
 
 const icons = {
-  info: Info,
-  success: CircleCheck,
-  warning: TriangleAlert,
-  danger: CircleAlert,
+  info: InfoIcon,
+  success: CircleCheckIcon,
+  warning: TriangleAlertIcon,
+  danger: CircleAlertIcon,
 } as const;
 const bannerStyle = {
   info: 'bannerInfo',

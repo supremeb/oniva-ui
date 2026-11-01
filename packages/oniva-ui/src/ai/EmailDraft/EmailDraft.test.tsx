@@ -65,4 +65,19 @@ describe('EmailDraft', () => {
     expect(onDiscard).toHaveBeenCalled();
     expect(screen.getByRole('status')).toHaveTextContent('Draft discarded');
   });
+
+  it('does not leave a dangling greeting without a recipient', () => {
+    render(<EmailDraft contacts={[]} />);
+    expect(screen.getByText(/^Hi, a heads-up/)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'No recipient' })).toBeDisabled();
+  });
+
+  it('shows the full long attachment name as a tooltip and hides the tone group without tones', () => {
+    const name = 'Northwind-Logistics-Growth-plan-renewal-quote-with-seat-adjustments-FY2027-v3-final.pdf';
+    const { unmount } = render(<EmailDraft attachment={name} />);
+    expect(screen.getByTitle(name)).toBeInTheDocument();
+    unmount();
+    render(<EmailDraft tones={[]} />);
+    expect(screen.queryByRole('group', { name: 'Tone' })).toBeNull();
+  });
 });

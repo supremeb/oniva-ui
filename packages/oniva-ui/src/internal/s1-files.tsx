@@ -1,6 +1,6 @@
 import * as stylex from '@stylexjs/stylex';
 import { Button as AriaButton } from 'react-aria-components';
-import { Folder as FolderIcon, Lock, Users } from 'lucide-react';
+import { FolderIcon, LockIcon, UsersIcon } from '../icons/IconSet';
 import type { ReactNode } from 'react';
 import { focus } from './focus';
 import { useFormatters } from './format';
@@ -193,7 +193,7 @@ export function FolderCard({ folder, onOpen }: { folder: FolderItem; onOpen?: (n
       <span {...stylex.props(styles.text)}>
         <span {...stylex.props(styles.name)}>{folder.name}</span>
         <span {...stylex.props(styles.sub)}>
-          {folder.shared ? <Users size={12} aria-hidden="true" /> : <Lock size={12} aria-hidden="true" />}
+          {folder.shared ? <UsersIcon size={12} aria-hidden="true" /> : <LockIcon size={12} aria-hidden="true" />}
           {folder.shared ? 'Shared' : 'Private'} · {count}
         </span>
       </span>

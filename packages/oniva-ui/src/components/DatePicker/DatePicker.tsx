@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { CalendarDays } from 'lucide-react';
+import { CalendarDaysIcon } from '../../icons/IconSet';
 import {
   Button,
   DatePicker as AriaDatePicker,
@@ -65,7 +65,7 @@ export function DatePicker<T extends DateValue>({
           >
             <Segments />
             <Button aria-label="Open calendar" {...stylex.props(fp.iconButton)}>
-              <CalendarDays size={16} aria-hidden="true" />
+              <CalendarDaysIcon size={16} aria-hidden="true" />
             </Button>
           </Group>
           {description != null && (

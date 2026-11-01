@@ -1,4 +1,4 @@
-import { CreditCard, LayoutGrid, Users } from 'lucide-react';
+import { CreditCardIcon, LayoutGridIcon, UsersIcon } from '../../icons/IconSet';
 import * as stylex from '@stylexjs/stylex';
 import type { DemoModule } from '../../internal/demo';
 import { demoStyles } from '../../internal/nav-demo';
@@ -51,21 +51,21 @@ const demo: DemoModule = {
       name: 'Pill / segmented with icons',
       code: `<Tabs variant="pill">
   <TabList aria-label="View">
-    <Tab id="board" icon={<LayoutGrid size={16} />}>Board</Tab>
-    <Tab id="billing" icon={<CreditCard size={16} />}>Billing</Tab>
-    <Tab id="team" icon={<Users size={16} />}>Team</Tab>
+    <Tab id="board" icon={<LayoutGridIcon size={16} />}>Board</Tab>
+    <Tab id="billing" icon={<CreditCardIcon size={16} />}>Billing</Tab>
+    <Tab id="team" icon={<UsersIcon size={16} />}>Team</Tab>
   </TabList>
 </Tabs>`,
       Component: () => (
         <Tabs variant="pill">
           <TabList aria-label="View">
-            <Tab id="board" icon={<LayoutGrid size={16} />}>
+            <Tab id="board" icon={<LayoutGridIcon size={16} />}>
               Board
             </Tab>
-            <Tab id="billing" icon={<CreditCard size={16} />}>
+            <Tab id="billing" icon={<CreditCardIcon size={16} />}>
               Billing
             </Tab>
-            <Tab id="team" icon={<Users size={16} />}>
+            <Tab id="team" icon={<UsersIcon size={16} />}>
               Team
             </Tab>
           </TabList>

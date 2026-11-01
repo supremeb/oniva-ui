@@ -1,6 +1,6 @@
 import * as stylex from '@stylexjs/stylex';
 import type { ColumnDef } from '@tanstack/react-table';
-import { Building2 } from 'lucide-react';
+import { BuildingIcon } from '../../icons/IconSet';
 import { useMemo, useState, type Ref } from 'react';
 import { DataTable } from '../../components/DataTable';
 import { Tab, TabList, TabPanel, Tabs } from '../../components/Tabs';
@@ -145,7 +145,7 @@ export function CrmScreen({
               key={view}
               aria-label={`${current.label} table`}
               layout="sheet"
-              icon={<Building2 size={14} />}
+              icon={<BuildingIcon size={14} />}
               title={current.label}
               data={visible}
               columns={columns}

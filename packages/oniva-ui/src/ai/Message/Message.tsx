@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { Check, Copy, RotateCcw, ThumbsDown, ThumbsUp } from 'lucide-react';
+import { CheckIcon, CopyIcon, RotateCcwIcon, ThumbsDownIcon, ThumbsUpIcon } from '../../icons/IconSet';
 import { useEffect, useRef, useState, type HTMLAttributes, type ReactNode, type Ref } from 'react';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
@@ -26,6 +26,8 @@ const styles = stylex.create({
     color: colors['--oniva-color-text'],
     fontSize: font['--oniva-font-size-14'],
     lineHeight: font['--oniva-font-lh-16'],
+    maxWidth: '100%',
+    overflowWrap: 'anywhere',
     paddingBlock: 8,
     paddingInline: 14,
     whiteSpace: 'pre-wrap',
@@ -35,6 +37,7 @@ const styles = stylex.create({
     fontSize: font['--oniva-font-size-14'],
     lineHeight: font['--oniva-font-lh-16'],
     minWidth: 0,
+    overflowWrap: 'anywhere',
   },
   meta: {
     color: colors['--oniva-color-text-muted'],
@@ -42,6 +45,17 @@ const styles = stylex.create({
     fontVariantNumeric: 'tabular-nums',
   },
   actions: { alignItems: 'center', display: 'flex', gap: 2, marginInlineStart: -6 },
+  srOnly: {
+    borderWidth: 0,
+    clipPath: 'inset(50%)',
+    height: 1,
+    margin: -1,
+    overflow: 'hidden',
+    padding: 0,
+    position: 'absolute',
+    whiteSpace: 'nowrap',
+    width: 1,
+  },
   ok: { color: colors['--oniva-color-success-solid'] },
   pressed: { color: colors['--oniva-color-accent-soft-fg'] },
 });
@@ -109,7 +123,10 @@ export function Message({
         )}
         {timestamp && <span {...stylex.props(styles.meta)}>{timestamp}</span>}
         {hasActions && (
-          <div {...stylex.props(styles.actions)}>
+          <div role="group" aria-label="Message actions" {...stylex.props(styles.actions)}>
+            <span role="status" {...stylex.props(styles.srOnly)}>
+              {copied ? 'Copied to clipboard' : ''}
+            </span>
             {copyText != null && (
               <Tooltip content={copied ? 'Copied' : 'Copy'}>
                 <IconButton
@@ -117,16 +134,21 @@ export function Message({
                   size="xs"
                   aria-label={copied ? 'Copied' : 'Copy message'}
                   onPress={() => {
-                    void navigator.clipboard?.writeText(copyText);
-                    setCopied(true);
-                    clearTimeout(t.current);
-                    t.current = setTimeout(() => setCopied(false), 1600);
+                    // Only confirm when the write actually succeeded (it rejects without permission or a secure context).
+                    Promise.resolve(navigator.clipboard?.writeText(copyText)).then(
+                      () => {
+                        setCopied(true);
+                        clearTimeout(t.current);
+                        t.current = setTimeout(() => setCopied(false), 1600);
+                      },
+                      () => undefined,
+                    );
                   }}
                 >
                   {copied ? (
-                    <Check size={14} aria-hidden="true" {...stylex.props(styles.ok)} />
+                    <CheckIcon size={14} aria-hidden="true" {...stylex.props(styles.ok)} />
                   ) : (
-                    <Copy size={14} aria-hidden="true" />
+                    <CopyIcon size={14} aria-hidden="true" />
                   )}
                 </IconButton>
               </Tooltip>
@@ -134,38 +156,42 @@ export function Message({
             {onRetry && (
               <Tooltip content="Retry">
                 <IconButton variant="ghost" size="xs" aria-label="Regenerate response" onPress={onRetry}>
-                  <RotateCcw size={14} aria-hidden="true" />
+                  <RotateCcwIcon size={14} aria-hidden="true" />
                 </IconButton>
               </Tooltip>
             )}
             {onFeedback && (
               <>
-                <IconButton
-                  variant="ghost"
-                  size="xs"
-                  aria-label="Mark response as good"
-                  aria-pressed={feedback === 'up'}
-                  onPress={() => onFeedback('up')}
-                >
-                  <ThumbsUp
-                    size={14}
-                    aria-hidden="true"
-                    {...stylex.props(feedback === 'up' && styles.pressed)}
-                  />
-                </IconButton>
-                <IconButton
-                  variant="ghost"
-                  size="xs"
-                  aria-label="Mark response as bad"
-                  aria-pressed={feedback === 'down'}
-                  onPress={() => onFeedback('down')}
-                >
-                  <ThumbsDown
-                    size={14}
-                    aria-hidden="true"
-                    {...stylex.props(feedback === 'down' && styles.pressed)}
-                  />
-                </IconButton>
+                <Tooltip content="Good response">
+                  <IconButton
+                    variant="ghost"
+                    size="xs"
+                    aria-label="Mark response as good"
+                    aria-pressed={feedback === 'up'}
+                    onPress={() => onFeedback('up')}
+                  >
+                    <ThumbsUpIcon
+                      size={14}
+                      aria-hidden="true"
+                      {...stylex.props(feedback === 'up' && styles.pressed)}
+                    />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip content="Bad response">
+                  <IconButton
+                    variant="ghost"
+                    size="xs"
+                    aria-label="Mark response as bad"
+                    aria-pressed={feedback === 'down'}
+                    onPress={() => onFeedback('down')}
+                  >
+                    <ThumbsDownIcon
+                      size={14}
+                      aria-hidden="true"
+                      {...stylex.props(feedback === 'down' && styles.pressed)}
+                    />
+                  </IconButton>
+                </Tooltip>
               </>
             )}
           </div>

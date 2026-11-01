@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { ArrowDownRight, ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowDownRightIcon, ArrowUpRightIcon, ChevronLeftIcon, ChevronRightIcon } from '../../icons/IconSet';
 import type { ReactNode, Ref } from 'react';
 import { Button, ToggleButton, ToggleButtonGroup, type Key } from 'react-aria-components';
 import { AnimatedNumber } from '../../motion/AnimatedNumber/AnimatedNumber';
@@ -161,9 +161,9 @@ export function ChartCard({
               {delta && (
                 <Badge variant={good ? 'success' : 'danger'} size="sm">
                   {delta.trend === 'up' ? (
-                    <ArrowUpRight aria-hidden="true" {...stylex.props(styles.deltaIcon)} />
+                    <ArrowUpRightIcon aria-hidden="true" {...stylex.props(styles.deltaIcon)} />
                   ) : (
-                    <ArrowDownRight aria-hidden="true" {...stylex.props(styles.deltaIcon)} />
+                    <ArrowDownRightIcon aria-hidden="true" {...stylex.props(styles.deltaIcon)} />
                   )}
 
                   {delta.label}
@@ -213,7 +213,7 @@ export function ChartPeriodSwitcher({
         onPress={onPrevious}
         {...stylex.props(styles.navBtn)}
       >
-        <ChevronLeft size={16} aria-hidden="true" />
+        <ChevronLeftIcon size={16} aria-hidden="true" />
       </Button>
       <span aria-live="polite" {...stylex.props(styles.navLabel)}>
         {label}
@@ -224,7 +224,7 @@ export function ChartPeriodSwitcher({
         onPress={onNext}
         {...stylex.props(styles.navBtn)}
       >
-        <ChevronRight size={16} aria-hidden="true" />
+        <ChevronRightIcon size={16} aria-hidden="true" />
       </Button>
     </div>
   );

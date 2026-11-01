@@ -1,4 +1,4 @@
-import { ArrowUp } from 'lucide-react';
+import { ArrowUpIcon } from '../../icons/IconSet';
 import { useState } from 'react';
 import { IconButton } from '../../components/IconButton';
 import type { DemoModule } from '../../internal/demo';
@@ -29,7 +29,7 @@ const demo: DemoModule = {
             <span style={{ color: 'var(--oniva-color-text-muted)', fontSize: 14, paddingInline: 6, paddingBlockStart: 4 }}>Ask anything…</span>
             <span style={{ alignItems: 'center', display: 'flex', justifyContent: 'space-between' }}>
               <ModelSelector variant="detailed" models={models} value={model} onChange={setModel} onThinkingChange={() => {}} onWebSearchChange={() => {}} />
-              <IconButton variant="primary" size="sm" aria-label="Send"><ArrowUp size={16} /></IconButton>
+              <IconButton variant="primary" size="sm" aria-label="Send"><ArrowUpIcon size={16} /></IconButton>
             </span>
           </div>
         );

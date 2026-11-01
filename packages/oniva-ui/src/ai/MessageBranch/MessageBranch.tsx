@@ -1,10 +1,11 @@
 import * as stylex from '@stylexjs/stylex';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeftIcon, ChevronRightIcon } from '../../icons/IconSet';
 import { useRef, useState, type HTMLAttributes, type ReactNode, type Ref } from 'react';
 import { colors } from '../../tokens/colors.stylex';
 import { font } from '../../tokens/font.stylex';
 import { media } from '../../tokens/media.stylex';
 import { motion } from '../../tokens/motion.stylex';
+import { space } from '../../tokens/space.stylex';
 import { IconButton } from '../../components/IconButton';
 import { mergeSx } from '../../internal/sx';
 
@@ -19,8 +20,8 @@ const fromLeft = stylex.keyframes({
 const fade = stylex.keyframes({ from: { opacity: 0 }, to: { opacity: 1 } });
 
 const styles = stylex.create({
-  root: { display: 'flex', flexDirection: 'column', fontFamily: font['--oniva-font-sans'], gap: 8 },
-  stage: { overflow: 'hidden' },
+  root: { display: 'flex', flexDirection: 'column', fontFamily: font['--oniva-font-sans'], gap: space['--oniva-space-8'] },
+  stage: { overflowX: 'clip' },
   slide: {
     animationDuration: motion['--oniva-motion-dur-slow'],
     animationFillMode: 'backwards',
@@ -28,7 +29,7 @@ const styles = stylex.create({
   },
   next: { animationName: { default: fromRight, [media.reducedMotion]: fade } },
   prev: { animationName: { default: fromLeft, [media.reducedMotion]: fade } },
-  switcher: { alignItems: 'center', alignSelf: 'flex-start', display: 'inline-flex', gap: 2 },
+  switcher: { alignItems: 'center', alignSelf: 'flex-start', display: 'inline-flex', gap: space['--oniva-space-2'] },
   count: {
     color: colors['--oniva-color-text-muted'],
     fontSize: font['--oniva-font-size-12'],
@@ -70,13 +71,13 @@ export function MessageBranch({ branches, index, defaultIndex = 0, onIndexChange
       {branches.length > 1 && (
         <div role="group" aria-label="Response versions" {...stylex.props(styles.switcher)}>
           <IconButton size="xs" variant="ghost" aria-label="Previous version" isDisabled={cur === 0} onPress={() => go(cur - 1)}>
-            <ChevronLeft size={14} />
+            <ChevronLeftIcon size={14} />
           </IconButton>
           <span aria-live="polite" {...stylex.props(styles.count)}>
             {cur + 1}/{branches.length}
           </span>
           <IconButton size="xs" variant="ghost" aria-label="Next version" isDisabled={cur === branches.length - 1} onPress={() => go(cur + 1)}>
-            <ChevronRight size={14} />
+            <ChevronRightIcon size={14} />
           </IconButton>
         </div>
       )}

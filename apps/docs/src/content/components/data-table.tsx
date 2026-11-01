@@ -1,6 +1,5 @@
 import type { ColumnDef } from '@tanstack/react-table';
-import { CustomerCell, DataTable, DateCell, PriceCell, StatusBadgeCell } from 'oniva-ui';
-import { AlignLeft, CalendarDays, Hash, LayoutGrid, Link2, Table2 } from 'lucide-react';
+import { CustomerCell, DataTable, DateCell, PriceCell, StatusBadgeCell, AlignLeftIcon, CalendarDaysIcon, HashIcon, LayoutGridIcon, LinkIcon, TableIcon } from 'oniva-ui';
 import type { DocPage } from '../types';
 
 interface Row { id: string; name: string; fulfilment: 'Shipped' | 'Delivery failed' | 'Waiting'; updated: string; total: number; product: string }
@@ -28,11 +27,11 @@ const tools: Tool[] = [
   { id: 't5', tool: 'Reelbox', category: 'Video', website: 'reelbox.example', seats: 9, renews: '2026-11-18' },
 ];
 const toolColumns: ColumnDef<Tool>[] = [
-  { accessorKey: 'tool', header: 'Tool', meta: { sheet: { type: 'title', icon: <AlignLeft size={14} /> } } },
-  { accessorKey: 'category', header: 'Category', meta: { sheet: { type: 'tag', icon: <LayoutGrid size={14} />, options: ['Design', 'Issue tracking', 'Hosting', 'Website', 'Video'] } } },
-  { accessorKey: 'website', header: 'Website', meta: { sheet: { type: 'link', icon: <Link2 size={14} /> } } },
-  { accessorKey: 'seats', header: 'Seats', meta: { sheet: { type: 'number', icon: <Hash size={14} /> } } },
-  { accessorKey: 'renews', header: 'Renews', meta: { sheet: { type: 'date', icon: <CalendarDays size={14} /> } } },
+  { accessorKey: 'tool', header: 'Tool', meta: { sheet: { type: 'title', icon: <AlignLeftIcon size={14} /> } } },
+  { accessorKey: 'category', header: 'Category', meta: { sheet: { type: 'tag', icon: <LayoutGridIcon size={14} />, options: ['Design', 'Issue tracking', 'Hosting', 'Website', 'Video'] } } },
+  { accessorKey: 'website', header: 'Website', meta: { sheet: { type: 'link', icon: <LinkIcon size={14} /> } } },
+  { accessorKey: 'seats', header: 'Seats', meta: { sheet: { type: 'number', icon: <HashIcon size={14} /> } } },
+  { accessorKey: 'renews', header: 'Renews', meta: { sheet: { type: 'date', icon: <CalendarDaysIcon size={14} /> } } },
 ];
 const tagTones = { Design: 'violet', 'Issue tracking': 'blue', Hosting: 'gray', Website: 'pink', Video: 'green' } as const;
 
@@ -42,7 +41,7 @@ const SheetDemo = (p: { editable?: boolean; onEvent?: (n: string) => void }) => 
       layout="sheet"
       aria-label="Design stack"
       title="Design Stack"
-      icon={<Table2 size={14} />}
+      icon={<TableIcon size={14} />}
       data={tools}
       columns={toolColumns}
       tagTones={tagTones}

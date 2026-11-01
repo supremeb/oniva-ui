@@ -1,4 +1,4 @@
-import { Bell } from 'lucide-react';
+import { BellIcon } from '../../icons/IconSet';
 import type { DemoModule } from '../../internal/demo';
 import { Avatar } from '../Avatar';
 import { Button } from '../Button';
@@ -32,7 +32,7 @@ const demo: DemoModule = {
     },
     {
       name: 'Floating with actions',
-      code: `<Navbar floating brand="Acme Finance" end={<><Button isIconOnly variant="ghost" aria-label="Notifications"><Bell size={16}/></Button><Avatar name="Aylin Demir" size="sm" /></>}>…</Navbar>`,
+      code: `<Navbar floating brand="Acme Finance" end={<><Button isIconOnly variant="ghost" aria-label="Notifications"><BellIcon size={16}/></Button><Avatar name="Aylin Demir" size="sm" /></>}>…</Navbar>`,
       Component: () => (
         <Navbar
           floating
@@ -40,7 +40,7 @@ const demo: DemoModule = {
           end={
             <>
               <Button isIconOnly variant="ghost" aria-label="Notifications">
-                <Bell size={16} />
+                <BellIcon size={16} />
               </Button>
               <Avatar name="Aylin Demir" size="sm" />
             </>

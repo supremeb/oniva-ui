@@ -1,4 +1,4 @@
-import { Bell, Download, MoreHorizontal, Plus, Trash2 } from 'lucide-react';
+import { BellIcon, DownloadIcon, MoreIcon, PlusIcon, TrashIcon } from '../../icons/IconSet';
 import type { DemoModule } from '../../internal/demo';
 import { IconButton } from './IconButton';
 
@@ -14,50 +14,50 @@ const demo: DemoModule = {
   demos: [
     {
       name: 'Variants',
-      code: `<IconButton aria-label="Add" variant="primary"><Plus size={16} /></IconButton>
-<IconButton aria-label="Download invoice"><Download size={16} /></IconButton>
-<IconButton aria-label="Notifications" variant="soft"><Bell size={16} /></IconButton>
-<IconButton aria-label="More" variant="ghost"><MoreHorizontal size={16} /></IconButton>
-<IconButton aria-label="Delete" variant="danger"><Trash2 size={16} /></IconButton>`,
+      code: `<IconButton aria-label="Add" variant="primary"><PlusIcon size={16} /></IconButton>
+<IconButton aria-label="Download invoice"><DownloadIcon size={16} /></IconButton>
+<IconButton aria-label="Notifications" variant="soft"><BellIcon size={16} /></IconButton>
+<IconButton aria-label="More" variant="ghost"><MoreIcon size={16} /></IconButton>
+<IconButton aria-label="Delete" variant="danger"><TrashIcon size={16} /></IconButton>`,
       Component: () => (
         <div style={row}>
           <IconButton aria-label="Add" variant="primary">
-            <Plus size={16} />
+            <PlusIcon size={16} />
           </IconButton>
           <IconButton aria-label="Download invoice">
-            <Download size={16} />
+            <DownloadIcon size={16} />
           </IconButton>
           <IconButton aria-label="Notifications" variant="soft">
-            <Bell size={16} />
+            <BellIcon size={16} />
           </IconButton>
           <IconButton aria-label="More" variant="ghost">
-            <MoreHorizontal size={16} />
+            <MoreIcon size={16} />
           </IconButton>
           <IconButton aria-label="Delete" variant="danger">
-            <Trash2 size={16} />
+            <TrashIcon size={16} />
           </IconButton>
         </div>
       ),
     },
     {
       name: 'Sizes',
-      code: `<IconButton aria-label="Add" size="xs"><Plus size={12} /></IconButton>
-<IconButton aria-label="Add" size="sm"><Plus size={16} /></IconButton>
-<IconButton aria-label="Add" size="md"><Plus size={16} /></IconButton>
-<IconButton aria-label="Add" size="lg"><Plus size={18} /></IconButton>`,
+      code: `<IconButton aria-label="Add" size="xs"><PlusIcon size={12} /></IconButton>
+<IconButton aria-label="Add" size="sm"><PlusIcon size={16} /></IconButton>
+<IconButton aria-label="Add" size="md"><PlusIcon size={16} /></IconButton>
+<IconButton aria-label="Add" size="lg"><PlusIcon size={18} /></IconButton>`,
       Component: () => (
         <div style={row}>
           <IconButton aria-label="Add" size="xs">
-            <Plus size={12} />
+            <PlusIcon size={12} />
           </IconButton>
           <IconButton aria-label="Add" size="sm">
-            <Plus size={16} />
+            <PlusIcon size={16} />
           </IconButton>
           <IconButton aria-label="Add" size="md">
-            <Plus size={16} />
+            <PlusIcon size={16} />
           </IconButton>
           <IconButton aria-label="Add" size="lg">
-            <Plus size={18} />
+            <PlusIcon size={18} />
           </IconButton>
         </div>
       ),

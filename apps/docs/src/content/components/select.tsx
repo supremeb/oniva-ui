@@ -28,7 +28,7 @@ const page: DocPage = {
       { name: 'Label', description: '14px medium, text color. Always visible. Never use the placeholder as the label.', selector: 'label' },
       { name: 'Trigger', description: 'Full-width button. 38px tall at md, 10px padding, 1px border and a recessed inner top shadow. Border darkens on hover.', selector: 'button' },
       { name: 'Selected value', description: 'The chosen option text, truncated with an ellipsis. Placeholder uses text-placeholder.', selector: 'button [slot="label"]', fallback: { x: 22, y: 50 } },
-      { name: 'Chevron', description: '16px lucide ChevronDown in icon-muted. Decorative, aria-hidden.', selector: 'button svg:last-of-type' },
+      { name: 'Chevron', description: '16px ChevronDownIcon in icon-muted. Decorative, aria-hidden.', selector: 'button svg:last-of-type' },
       { name: 'Description', description: 'Help text under the field, 12px muted, linked through aria-describedby.', selector: '[slot="description"]', fallback: { x: 50, y: 78 } },
       { name: 'Error message', description: 'Replaces nothing: shows under the description when isInvalid. Border turns error-border.', selector: '[slot="errorMessage"]', fallback: { x: 50, y: 92 } },
       { name: 'Status dot', description: 'Optional dot on an option (success, warning, danger, neutral). Repeated in the trigger.', selector: 'button span[aria-hidden="true"]:not(:has(svg))', fallback: { x: 8, y: 50 } },
